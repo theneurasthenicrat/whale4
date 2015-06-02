@@ -4,26 +4,42 @@
 
 from django.db import models
 
+
 # models #####################################################################
 
 class User(models.Model):
-    ident = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     nickname = models.CharField(max_length=50)
 
 class Poll(models.Model):
-    ident = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=250)
     description = models.CharField(max_length=800)
     creation_date = models.DateField(auto_now_add=True)
-    closing_date = models.DateField()
+    closing_date = models.DateField(null=True)
     admin_password = models.CharField(max_length=50)
 
 class VotingPoll(Poll):
-    preferenceModel = models.CharField(max_length=50)
+    PREFERENCE_MODELS = (
+        ('PositiveNegative', 'Positive Negative scale (--, -, 0, +, ++)'),
+        ('Approval', 'Approval Voting (Yes / No)'),
+        ('RankingTies', 'Ranking with ties'),
+        ('Ranking', 'Ranking (no ties)'),
+        ('Numbers', 'Scores')
+        )
+    preference_model = models.CharField(max_length=50,
+                                       choices=PREFERENCE_MODELS,
+                                       default='PositiveNegative')
 
-class Vote(models.Model):
+class Candidate(models.Model):
+    poll = models.ForeignKey(VotingPoll, related_name='candidates')
+    label = models.CharField(max_length=50)
+    number = models.IntegerField()
+
+class VotingScore(models.Model):
+    candidate = models.ForeignKey(Candidate)
     voter = models.ForeignKey(User)
-    vote = models.CharField(max_length=1000)
+    value = models.IntegerField()
 
 
 #  preference models ########################################################
@@ -73,6 +89,8 @@ def preference_model_from_text(desc):
     if parts[0] == "approval":
         return Approval()
     raise Exception("Unknown preference model: %s" % desc)
+
+
 
 
 
