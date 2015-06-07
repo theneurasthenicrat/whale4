@@ -31,3 +31,16 @@ class AddCandidateForm(forms.Form):
         
         return label
 
+class VotingForm(forms.Form):
+    nickname = forms.CharField(max_length=250, required=True, label='Nickname')
+
+    def __init__(self, candidates, preference_model, params = {}):
+        forms.Form.__init__(self, params)
+        for c in candidates:
+            self.fields['score-' + str(c.number)] = forms.ChoiceField(
+                choices = list(zip(preference_model.values, preference_model.texts)),
+                required=True, label=c.label
+                )
+        
+                
+

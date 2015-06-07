@@ -4,8 +4,8 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from whale4.forms import CreateVotingPollForm, AddCandidateForm
-from whale4.models import VotingPoll, Candidate
+from whale4.forms import CreateVotingPollForm, AddCandidateForm, VotingForm
+from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_model_from_text
 from django.core.exceptions import ObjectDoesNotExist
 
 # decora######################################################################
@@ -88,6 +88,35 @@ def add_candidate(request, poll):
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
     
     return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'message': message, 'candidates': candidates})
+
+@with_valid_poll
+def vote(request, poll):
+    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    preference_model = preference_model_from_text(poll.preference_model)
+
+    if request.method == 'POST':
+        form = VotingForm(candidates, preference_model, request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            user = User.objects.create(
+                nickname = data['nickname']
+                )
+            for c in candidates:
+                score = VotingScore.objects.create(
+                    candidate = c,
+                    voter = user,
+                    value = data['score-' + str(c.number)]
+                    )
+
+            return redirect('/poll/' + str(poll.id) + '?msg=1')
+
+    else:
+        form = VotingForm(candidates, preference_model)
+
+    
+    return render(request, 'whale4/vote.html', {'form': form, 'poll_id': poll.id})
+
 
 
     

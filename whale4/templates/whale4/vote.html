@@ -1,0 +1,13 @@
+{% extends "whale4/base.html" %}
+
+{% block content %}
+
+<h1>Vote for this poll</h1>
+<form action="/vote?poll={{ poll_id }}" method="post">
+    {% csrf_token %}
+    <table>
+	{{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

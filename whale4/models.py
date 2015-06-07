@@ -80,13 +80,13 @@ class Approval(PreferenceModel):
         
 def preference_model_from_text(desc):
     parts = desc.split('#')
-    if parts[0] == "positiveNegative":
+    if parts[0] == "PositiveNegative":
         return PositiveNegative()
-    if parts[0] == "ranks":
+    if parts[0] == "Ranks":
         return Ranking(int(parts[1]), int(parts[2]))
-    if parts[0] == "numbers":
+    if parts[0] == "Numbers":
         return Numbers(int(parts[1]), int(parts[2]))
-    if parts[0] == "approval":
+    if parts[0] == "Approval":
         return Approval()
     raise Exception("Unknown preference model: %s" % desc)
 
