@@ -1,0 +1,30 @@
+{% extends "whale4/base.html" %}
+
+{% block content %}
+
+{% if success != '' %}
+<div class="label label-success">
+    {{ success }}
+</div>
+{% endif %}
+
+
+<h1>{{ poll.title }}</h1>
+<pre>{{ poll.description }}</pre>
+<table>
+    <tr>
+	<th></th>
+	{% for c in candidates %}
+	<th>{{ c.label }}</th>
+	{% endfor %}
+    </tr>
+    {% for v in tab %}
+    <tr>
+	<td>{{ v.nickname }}</td>
+	{% for s in v.scores %}
+	<td>{{ s }}</td>
+	{% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

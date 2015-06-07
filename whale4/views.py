@@ -30,13 +30,31 @@ def with_valid_poll(fn):
 
 # views ######################################################################
 
-
-def view_poll(request, id_poll):
+@with_valid_poll
+def view_poll(request, poll):
     """Displays a specific poll."""
 
-    text = "You have requested poll number {0}.".format(id_poll)
+    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    votes = VotingScore.objects.filter(candidate__poll__id = 1).order_by('voter')
+    scores = {}
+    for v in votes:
+        if v.voter.id not in scores:
+            scores[v.voter.id] = {}
+        scores[v.voter.id][v.candidate.number] = v.value
+        
+    tab = {}
+    for v in votes:
+        id = v.voter.id
+        tab[id] = {}
+        tab[id]['nickname'] = v.voter.nickname
+        tab[id]['scores'] = []
+        for c in candidates:
+            if c.number in scores[id]:
+                tab[id]['scores'].append(scores[id][c.number])
+            else:
+                tab[id]['scores'].append('undefined')
 
-    return HttpResponse(text)
+    return render(request, 'whale4/poll.html', {'poll': poll, 'candidates': candidates, 'votes': votes, 'tab': tab.values()})
 
 def home(request):
     return render(request, 'whale4/index.html', {})
