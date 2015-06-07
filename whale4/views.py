@@ -20,7 +20,7 @@ def with_valid_poll(fn):
             poll = VotingPoll.objects.get(id = poll_id)
         except ObjectDoesNotExist:
             return render(request, 'whale4/error.html', {
-                'title': "Error",
+                'title': "Damned...",
                 'message': 'Unknown poll number {0}.'.format(poll_id)
                 })
         return fn(request, poll)
@@ -34,8 +34,13 @@ def with_valid_poll(fn):
 def view_poll(request, poll):
     """Displays a specific poll."""
 
+    success = None
+    if 'success' in request.GET:
+        if request.GET['success'] == '1':
+            success = "Your vote has been added to the poll, thank you!"
+
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
-    votes = VotingScore.objects.filter(candidate__poll__id = 1).order_by('voter')
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('voter')
     scores = {}
     for v in votes:
         if v.voter.id not in scores:
@@ -54,7 +59,9 @@ def view_poll(request, poll):
             else:
                 tab[id]['scores'].append('undefined')
 
-    return render(request, 'whale4/poll.html', {'poll': poll, 'candidates': candidates, 'votes': votes, 'tab': tab.values()})
+    values = None if tab == {} else tab.values()
+
+    return render(request, 'whale4/poll.html', {'poll': poll, 'candidates': candidates, 'tab': values, 'success': success})
 
 def home(request):
     return render(request, 'whale4/index.html', {})
@@ -72,7 +79,7 @@ def create_voting_poll(request):
 
             poll.save()
 
-            return redirect('/add-candidate?poll=' + str(poll.id) + '&msg=0')
+            return redirect('/add-candidate?poll=' + str(poll.id) + '&success=0')
 
     else:
         form = CreateVotingPollForm()
@@ -81,10 +88,12 @@ def create_voting_poll(request):
 
 @with_valid_poll
 def add_candidate(request, poll):
-    message = ''
-    if 'msg' in request.GET:
-        if request.GET['msg'] == '0':
-            message = "Voting poll successfully created!"
+    success = None
+    if 'success' in request.GET:
+        if request.GET['success'] == '0':
+            success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
+        elif request.GET['success'] == '1':
+            success = "Candidate successfully added!"
             
     if request.method == 'POST':
         form = AddCandidateForm(request.POST)
@@ -104,8 +113,10 @@ def add_candidate(request, poll):
         form = AddCandidateForm()
 
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    if candidates == []:
+        candidates = None
     
-    return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'message': message, 'candidates': candidates})
+    return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates})
 
 @with_valid_poll
 def vote(request, poll):
@@ -127,7 +138,7 @@ def vote(request, poll):
                     value = data['score-' + str(c.number)]
                     )
 
-            return redirect('/poll/' + str(poll.id) + '?msg=1')
+            return redirect('/poll?poll=' + str(poll.id) + '&success=1')
 
     else:
         form = VotingForm(candidates, preference_model)

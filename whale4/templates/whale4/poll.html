@@ -2,29 +2,43 @@
 
 {% block content %}
 
-{% if success != '' %}
-<div class="label label-success">
-    {{ success }}
+{% if success %}
+<div class="alert alert-dismissable alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ success|safe }}
 </div>
 {% endif %}
 
 
 <h1>{{ poll.title }}</h1>
-<pre>{{ poll.description }}</pre>
-<table>
-    <tr>
-	<th></th>
-	{% for c in candidates %}
-	<th>{{ c.label }}</th>
+<pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
+<table class="table">
+    <thead>
+	<tr>
+	    <th></th>
+	    {% for c in candidates %}
+	    <th>{{ c.label }}</th>
+	    {% endfor %}
+	</tr>
+    </thead>
+    {% if tab %}
+    <tbody>
+	{% for v in tab %}
+	<tr>
+	    <th>{{ v.nickname }}</th>
+	    {% for s in v.scores %}
+	    <td>{{ s }}</td>
+	    {% endfor %}
+	</tr>
 	{% endfor %}
-    </tr>
-    {% for v in tab %}
-    <tr>
-	<td>{{ v.nickname }}</td>
-	{% for s in v.scores %}
-	<td>{{ s }}</td>
-	{% endfor %}
-    </tr>
-    {% endfor %}
+    </tbody>
 </table>
+    {% else %}
+</table>
+<div style="margin-bottom: 30px;"><i>No vote yet... Do you want to be the first one?</i></div>
+{% endif %}
+
+<p>
+    <a href="vote?poll={{ poll.id }}" class="btn btn-default">Vote</a>
+</p>
 {% endblock %}

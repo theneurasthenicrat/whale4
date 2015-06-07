@@ -2,25 +2,38 @@
 
 {% block content %}
 
-{% if message != '' %}
-<div class="label label-success">
-    {{ message }}
+{% if success %}
+<div class="alert alert-dismissable alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ success|safe }}
 </div>
 {% endif %}
 
 
 <h1>Add candidates</h1>
-<p>Here is the current list of candidates:</p>
-<ol>
+{% if candidates %}
+<p class="lead">Here is the current list of candidates:</p>
+<ol class="list-group">
     {% for c in candidates %}
-    <li>{{ c.label }}</li>
+    <li class="list-group-item">{{ c.label }}</li>
     {% endfor %}
 </ol>
-<form action="/add-candidate?poll={{ poll_id }}" method="post">
-    {% csrf_token %}
-    <table>
-	{{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit" />
+{% else %}
+<p>No candidate yet</p>
+{% endif %}
+
+<div style="margin-bottom: 30px;"">
+<form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
+    <div class="input-group">
+	<input type="text" class="form-control" placeholder="Candidate name" name="label"/>
+	<span class="input-group-btn">
+            <button type="submit" class="btn btn-info" >Add</button>
+	</span>
+    </div>
 </form>
+</div>
+
+<div class="btn-group" role="group">
+    <a href="poll?poll={{ poll_id }}" class="btn btn-default" role="button">Back to the poll</a>
+</div>
 {% endblock %}
