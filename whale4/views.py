@@ -39,6 +39,7 @@ def view_poll(request, poll):
         if request.GET['success'] == '1':
             success = "Your vote has been added to the poll, thank you!"
 
+    preference_model = preference_model_from_text(poll.preference_model)
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('voter')
     scores = {}
@@ -53,11 +54,14 @@ def view_poll(request, poll):
         tab[id] = {}
         tab[id]['nickname'] = v.voter.nickname
         tab[id]['scores'] = []
+        tab[id]['texts'] = []
         for c in candidates:
             if c.number in scores[id]:
                 tab[id]['scores'].append(scores[id][c.number])
+                tab[id]['texts'].append(preference_model.value2text[scores[id][c.number]])
             else:
                 tab[id]['scores'].append('undefined')
+                tab[id]['texts'].append('undefined')
 
     values = None if tab == {} else tab.values()
 
