@@ -2,17 +2,18 @@
 
 # imports ####################################################################
 
+import uuid
 from django.db import models
 
 
 # models #####################################################################
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     nickname = models.CharField(max_length=50)
 
 class Poll(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250)
     description = models.CharField(max_length=800)
     creation_date = models.DateField(auto_now_add=True)
