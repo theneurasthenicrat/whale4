@@ -115,6 +115,12 @@ def create_voting_poll(request):
 
 @with_valid_poll
 @with_admin_rights
+def admin_poll(request, poll, admin_password):
+    return render(request, 'whale4/admin-poll.html', {'poll_id': poll.id, 'poll': poll, 'admin_password': admin_password})
+
+
+@with_valid_poll
+@with_admin_rights
 def add_candidate(request, poll, admin_password):
     success = None
     if 'success' in request.GET:

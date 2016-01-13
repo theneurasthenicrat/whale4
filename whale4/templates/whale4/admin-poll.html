@@ -1,0 +1,22 @@
+{% extends "whale4/base.html" %}
+
+{% block content %}
+
+<h1>{{ poll.title }}</h1>
+<h2>Administration page</h2>
+
+<div style="margin-bottom: 30px;">
+<form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
+    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
+    <div class="input-group">
+	<span class="input-group-btn">
+            <button type="submit" class="btn btn-info" >Add candidates</button>
+	</span>
+    </div>
+</form>
+</div>
+
+<div class="btn-group" role="group">
+    <a href="poll?poll={{ poll_id }}" class="btn btn-default" role="button">Back to the poll</a>
+</div>
+{% endblock %}
