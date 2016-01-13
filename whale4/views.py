@@ -79,7 +79,7 @@ def create_voting_poll(request):
             poll = VotingPoll()
             poll.title = data['title']
             poll.description = data['description']
-            poll.admin_password = data['admin_password']
+            poll.admin_password = make_password(data['admin_password'], salt='whale4salt')
             poll.preference_model = data['preference_model']
 
             poll.save()
