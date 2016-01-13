@@ -24,6 +24,7 @@
 
 <div style="margin-bottom: 30px;"">
 <form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
+    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
     <div class="input-group">
 	<input type="text" class="form-control" placeholder="Candidate name" name="label"/>
 	<span class="input-group-btn">

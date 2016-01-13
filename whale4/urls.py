@@ -7,6 +7,7 @@ urlpatterns = patterns('',
                        url(r'^$', 'whale4.views.home', name='home'),
                        url(r'^create-voting-poll/$', 'whale4.views.create_voting_poll', name='create voting poll'),
                        url(r'^add-candidate$', 'whale4.views.add_candidate', name='add candidate'),
+                       url(r'^authenticate-admin$', 'whale4.views.authenticate_admin', name='authenticate admin'),
                        url(r'^vote$', 'whale4.views.vote', name='vote'),
                        # Examples:
                        # url(r'^blog/', include('blog.urls')),

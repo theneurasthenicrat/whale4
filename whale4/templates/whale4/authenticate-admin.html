@@ -1,0 +1,37 @@
+{% extends "whale4/base.html" %}
+
+{% block content %}
+
+{% if error %}
+<div class="alert alert-dismissable alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ error|safe }}
+</div>
+{% endif %}
+
+
+<h1>Authentication</h1>
+
+<p>
+    This action requires administration rights. Please confirm
+    that you are really the poll administrator by typing the poll
+    password below...
+</p>
+    
+<div style="margin-bottom: 30px;">
+<form class="form-inline" action="/{{ referer }}?poll={{ poll_id }}"  method="post">{% csrf_token %}
+    <div class="form-group">	
+	<input type="password" class="form-control" placeholder="Password" name="admin_password" autofocus="autofocus"/>
+    </div>
+    <button type="submit" class="btn btn-default" >Submit</button>
+</form>
+</div>
+
+<p>
+    <small>Password forgotten? We cannot do anything for you <emph>yet</emph>.</small>
+</p>
+    
+<div class="btn-group" role="group">
+    <a href="poll?poll={{ poll_id }}" class="btn btn-default" role="button">Back to the poll</a>
+</div>
+{% endblock %}

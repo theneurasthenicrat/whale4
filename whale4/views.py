@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from whale4.forms import CreateVotingPollForm, AddCandidateForm, VotingForm
 from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_model_from_text
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.hashers import make_password, check_password
 
 # decora######################################################################
 
@@ -101,27 +102,46 @@ def add_candidate(request, poll):
             success = "Candidate successfully added!"
             
     if request.method == 'POST':
-        form = AddCandidateForm(request.POST)
+        if 'admin_password' in request.POST:
+            admin_password = request.POST['admin_password']
+            if (check_password(admin_password, poll.admin_password)):
+                form = AddCandidateForm(request.POST)
 
-        if form.is_valid():
-            data = form.cleaned_data
-            n = Candidate.objects.filter(poll=poll.id).count()
-            cand = Candidate.objects.create(
-                label = data['label'],
-                number = n,
-                poll = poll
-                )
+                if form.is_valid():
+                    data = form.cleaned_data
+                    n = Candidate.objects.filter(poll=poll.id).count()
+                    cand = Candidate.objects.create(
+                        label = data['label'],
+                        number = n,
+                        poll = poll
+                        )
 
-            return redirect('/add-candidate?poll=' + str(poll.id) + '')
+                candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+                if candidates == []:
+                    candidates = None
 
-    else:
-        form = AddCandidateForm()
+                return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
+            else:
+                return redirect('/authenticate-admin?referer=add-candidate&error=1&poll=' + str(poll.id) + '')
 
-    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
-    if candidates == []:
-        candidates = None
+    return redirect('/authenticate-admin?referer=add-candidate&error=0&poll=' + str(poll.id) + '')
+
+
+
+@with_valid_poll
+def authenticate_admin(request, poll):
+    error = None
+    if 'referer' not in request.GET: # Redirect to home...
+        return redirect('/')
+    referer = request.GET['referer']
     
-    return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates})
+    if 'error' in request.GET:
+        if request.GET['error'] == '1':
+            error = "<strong>Whoops...</strong><br/>It seems that you have supplied an incorrect administration password for this poll..."
+
+    return render(request, 'whale4/authenticate-admin.html', {'poll_id': poll.id, 'error': error, 'referer': referer})
+
+
 
 @with_valid_poll
 def vote(request, poll):
