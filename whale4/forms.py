@@ -33,6 +33,15 @@ class AddCandidateForm(forms.Form):
         
         return label
 
+class RemoveCandidateForm(forms.Form):
+    number = forms.CharField(max_length=50, required=True, label='Candidate Number')
+
+    def clean_label(self):
+        number = self.cleaned_data["number"]
+        
+        return number
+
+
 class VotingForm(forms.Form):
     nickname = forms.CharField(max_length=250, required=True, label='Nickname')
 

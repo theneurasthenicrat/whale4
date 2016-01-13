@@ -15,7 +15,15 @@
 <p class="lead">Here is the current list of candidates:</p>
 <ol class="list-group">
     {% for c in candidates %}
-    <li class="list-group-item">{{ c.label }}</li>
+    <li class="list-group-item">
+	<form action="/add-candidate?poll={{ poll_id }}" method="post">{% csrf_token %}
+	    <input type="hidden" name="action" value="remove"/>
+	    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
+	    <input type="hidden" name="number" value="{{ c.number }}"/>
+	    {{ c.label }}
+	    <button type="submit" class="close">&times;</button>
+	</form>
+    </li>
     {% endfor %}
 </ol>
 {% else %}
@@ -26,6 +34,7 @@
 <form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
     <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
     <div class="input-group">
+	<input type="hidden" name="action" value="add"/>
 	<input type="text" class="form-control" placeholder="Candidate name" name="label" autofocus="autofocus"/>
 	<span class="input-group-btn">
             <button type="submit" class="btn btn-info" >Add</button>

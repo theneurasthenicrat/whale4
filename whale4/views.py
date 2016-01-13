@@ -4,7 +4,8 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from whale4.forms import CreateVotingPollForm, AddCandidateForm, VotingForm
+from django.db.models import Max
+from whale4.forms import CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm, VotingForm
 from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_model_from_text
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password, check_password
@@ -134,22 +135,38 @@ def admin_poll(request, poll, admin_password):
 @with_admin_rights
 def add_candidate(request, poll, admin_password):
     success = None
+    form = None
     if 'success' in request.GET:
         if request.GET['success'] == '1':
             success = "Candidate successfully added!"
 
     # If we are here, we already know that the request method is POST
     # (thanks to admin_rights)
-    form = AddCandidateForm(request.POST)
+    if 'action' in request.POST and request.POST['action'] == 'add':
+        form = AddCandidateForm(request.POST)
 
-    if form.is_valid():
-        data = form.cleaned_data
-        n = Candidate.objects.filter(poll=poll.id).count()
-        cand = Candidate.objects.create(
-            label = data['label'],
-            number = n,
-            poll = poll
-            )
+        if form.is_valid():
+            data = form.cleaned_data
+            n = Candidate.objects.filter(poll=poll.id).aggregate(Max('number'))['number__max'] + 1
+            
+            cand = Candidate.objects.create(
+                label = data['label'],
+                number = n,
+                poll = poll
+                )
+
+    if 'action' in request.POST and request.POST['action'] == 'remove':
+        form = RemoveCandidateForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            n = request.POST['number']
+            cand = Candidate.objects.get(
+                number = n,
+                poll = poll
+                )
+            cand.delete()
+
         
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
     if candidates == []:
