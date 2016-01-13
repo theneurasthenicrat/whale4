@@ -19,6 +19,7 @@
 	<form action="/manage-candidates?poll={{ poll_id }}" method="post">{% csrf_token %}
 	    <input type="hidden" name="action" value="remove"/>
 	    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
+	    <input type="hidden" name="label" value="{{ c.label }}"/>
 	    <input type="hidden" name="number" value="{{ c.number }}"/>
 	    {{ c.label }}
 	    <button type="submit" class="close">&times;</button>

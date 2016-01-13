@@ -156,16 +156,20 @@ def manage_candidates(request, poll, admin_password):
                 )
 
     if 'action' in request.POST and request.POST['action'] == 'remove':
-        form = RemoveCandidateForm(request.POST)
+        if 'confirm' not in request.POST:
+            return render(request, 'whale4/confirm-delete-candidate.html', {'poll_id': poll.id, 'number': request.POST['number'], 'label': request.POST['label'], 'admin_password': admin_password})
 
-        if form.is_valid():
-            data = form.cleaned_data
-            n = request.POST['number']
-            cand = Candidate.objects.get(
-                number = n,
-                poll = poll
-                )
-            cand.delete()
+        if request.POST['confirm'] == '1':
+            form = RemoveCandidateForm(request.POST)
+
+            if form.is_valid():
+                data = form.cleaned_data
+                n = request.POST['number']
+                cand = Candidate.objects.get(
+                    number = n,
+                    poll = poll
+                    )
+                cand.delete()
 
         
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
