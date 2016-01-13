@@ -26,7 +26,7 @@ class VotingPoll(Poll):
         ('Approval', 'Approval Voting (Yes / No)'),
         ('RankingTies', 'Ranking with ties'),
         ('Ranking', 'Ranking (no ties)'),
-        ('Numbers', 'Scores')
+        ('Numbers#0#10', 'Scores')
         )
     preference_model = models.CharField(max_length=50,
                                        choices=PREFERENCE_MODELS,
