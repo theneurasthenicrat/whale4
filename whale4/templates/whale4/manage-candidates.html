@@ -10,13 +10,13 @@
 {% endif %}
 
 
-<h1>Add candidates</h1>
+<h1>Manage candidates</h1>
 {% if candidates %}
 <p class="lead">Here is the current list of candidates:</p>
 <ol class="list-group">
     {% for c in candidates %}
     <li class="list-group-item">
-	<form action="/add-candidate?poll={{ poll_id }}" method="post">{% csrf_token %}
+	<form action="/manage-candidates?poll={{ poll_id }}" method="post">{% csrf_token %}
 	    <input type="hidden" name="action" value="remove"/>
 	    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
 	    <input type="hidden" name="number" value="{{ c.number }}"/>
@@ -31,7 +31,7 @@
 {% endif %}
 
 <div style="margin-bottom: 30px;">
-<form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
+<form class="form-horizontal"  action="/manage-candidates?poll={{ poll_id }}"  method="post">{% csrf_token %}
     <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
     <div class="input-group">
 	<input type="hidden" name="action" value="add"/>

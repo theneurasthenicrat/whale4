@@ -118,7 +118,7 @@ def create_voting_poll(request):
             poll.save()
 
             success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
-            return render(request, 'whale4/add-candidate.html', {'form': None, 'poll_id': poll.id, 'success': success, 'candidates': [], 'admin_password': admin_password})
+            return render(request, 'whale4/manage-candidates.html', {'form': None, 'poll_id': poll.id, 'success': success, 'candidates': [], 'admin_password': admin_password})
 
     else:
         form = CreateVotingPollForm()
@@ -133,7 +133,7 @@ def admin_poll(request, poll, admin_password):
 
 @with_valid_poll
 @with_admin_rights
-def add_candidate(request, poll, admin_password):
+def manage_candidates(request, poll, admin_password):
     success = None
     form = None
     if 'success' in request.GET:
@@ -172,7 +172,7 @@ def add_candidate(request, poll, admin_password):
     if candidates == []:
         candidates = None
 
-    return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
+    return render(request, 'whale4/manage-candidates.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
 
 
 

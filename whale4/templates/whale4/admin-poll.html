@@ -6,11 +6,11 @@
 <h2>Administration page</h2>
 
 <div style="margin-bottom: 30px;">
-<form class="form-horizontal"  action="/add-candidate?poll={{ poll_id }}"  method="post">{% csrf_token %}
+<form class="form-horizontal"  action="/manage-candidates?poll={{ poll_id }}"  method="post">{% csrf_token %}
     <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
     <div class="input-group">
 	<span class="input-group-btn">
-            <button type="submit" class="btn btn-info" >Add candidates</button>
+            <button type="submit" class="btn btn-info" >Add / Remove candidates</button>
 	</span>
     </div>
 </form>
