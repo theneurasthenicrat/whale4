@@ -11,6 +11,8 @@ class CreateVotingPollForm(forms.Form):
     title = forms.CharField(max_length=250, required=True, label='Title')
     description = forms.CharField(max_length=800, widget=forms.Textarea(),
                                   label='Description (max. 800 characters)')
+    preference_model = forms.ChoiceField(choices=VotingPoll.PREFERENCE_MODELS,
+                                         required=True, label='Preference model')
     admin_password = forms.CharField(widget=forms.PasswordInput(render_value=True))
     confirm_password = forms.CharField(widget=forms.PasswordInput(render_value=True))
 

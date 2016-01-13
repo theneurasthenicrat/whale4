@@ -80,6 +80,7 @@ def create_voting_poll(request):
             poll.title = data['title']
             poll.description = data['description']
             poll.admin_password = data['admin_password']
+            poll.preference_model = data['preference_model']
 
             poll.save()
 
