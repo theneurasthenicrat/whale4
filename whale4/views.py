@@ -28,6 +28,22 @@ def with_valid_poll(fn):
     
     return wrapped
 
+def with_admin_rights(fn):
+    def wrapped(request, poll):
+        referer = request.get_full_path()
+        if 'referer' in request.GET:
+            referer = request.GET['referer']
+
+        if request.method != 'POST' or "admin_password" not in request.POST:
+            return render(request, 'whale4/authenticate-admin.html', {'error': 0, 'referer': referer})
+
+        admin_password = request.POST['admin_password']
+        if not check_password(admin_password, poll.admin_password):
+            return render(request, 'whale4/authenticate-admin.html', {'error': 1, 'referer': referer})
+        return fn(request, poll, admin_password)
+
+    return wrapped
+
 
 # views ######################################################################
 
@@ -98,38 +114,33 @@ def create_voting_poll(request):
     return render(request, 'whale4/create-voting-poll.html', {'form': form})
 
 @with_valid_poll
-def add_candidate(request, poll):
+@with_admin_rights
+def add_candidate(request, poll, admin_password):
     success = None
     if 'success' in request.GET:
         if request.GET['success'] == '0':
             success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
         elif request.GET['success'] == '1':
             success = "Candidate successfully added!"
-            
-    if request.method == 'POST':
-        if 'admin_password' in request.POST:
-            admin_password = request.POST['admin_password']
-            if (check_password(admin_password, poll.admin_password)):
-                form = AddCandidateForm(request.POST)
 
-                if form.is_valid():
-                    data = form.cleaned_data
-                    n = Candidate.objects.filter(poll=poll.id).count()
-                    cand = Candidate.objects.create(
-                        label = data['label'],
-                        number = n,
-                        poll = poll
-                        )
+    # If we are here, we already know that the request method is POST
+    # (thanks to admin_rights)
+    form = AddCandidateForm(request.POST)
 
-                candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
-                if candidates == []:
-                    candidates = None
+    if form.is_valid():
+        data = form.cleaned_data
+        n = Candidate.objects.filter(poll=poll.id).count()
+        cand = Candidate.objects.create(
+            label = data['label'],
+            number = n,
+            poll = poll
+            )
+        
+    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    if candidates == []:
+        candidates = None
 
-                return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
-            else:
-                return redirect('/authenticate-admin?referer=add-candidate&error=1&poll=' + str(poll.id) + '')
-
-    return redirect('/authenticate-admin?referer=add-candidate&error=0&poll=' + str(poll.id) + '')
+    return render(request, 'whale4/add-candidate.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
 
 
 
