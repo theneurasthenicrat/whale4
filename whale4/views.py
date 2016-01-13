@@ -9,7 +9,7 @@ from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_m
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password, check_password
 
-# decora######################################################################
+# decorators #################################################################
 
 def with_valid_poll(fn):
     def wrapped(request):
@@ -66,7 +66,12 @@ def view_poll(request, poll):
 
     values = None if tab == {} else tab.values()
 
-    return render(request, 'whale4/poll.html', {'poll': poll, 'candidates': candidates, 'tab': values, 'success': success})
+    return render(request, 'whale4/poll.html', {
+        'poll': poll,
+        'candidates': candidates,
+        'tab': values,
+        'success': success}
+                  )
 
 def home(request):
     return render(request, 'whale4/index.html', {})
