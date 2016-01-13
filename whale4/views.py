@@ -86,7 +86,7 @@ def view_poll(request, poll):
                     {
                         'value': 'undefined',
                         'class': 'poll-undefined',
-                        'text': 'undefined'
+                        'text': '?'
                         }
                     )
 
