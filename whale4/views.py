@@ -110,12 +110,14 @@ def create_voting_poll(request):
             poll = VotingPoll()
             poll.title = data['title']
             poll.description = data['description']
-            poll.admin_password = make_password(data['admin_password'], salt='whale4salt')
+            admin_password = data['admin_password']
+            poll.admin_password = make_password(admin_password, salt='whale4salt')
             poll.preference_model = data['preference_model']
 
             poll.save()
 
-            return redirect('/add-candidate?poll=' + str(poll.id) + '&success=0')
+            success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
+            return render(request, 'whale4/add-candidate.html', {'form': None, 'poll_id': poll.id, 'success': success, 'candidates': [], 'admin_password': admin_password})
 
     else:
         form = CreateVotingPollForm()
@@ -133,9 +135,7 @@ def admin_poll(request, poll, admin_password):
 def add_candidate(request, poll, admin_password):
     success = None
     if 'success' in request.GET:
-        if request.GET['success'] == '0':
-            success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
-        elif request.GET['success'] == '1':
+        if request.GET['success'] == '1':
             success = "Candidate successfully added!"
 
     # If we are here, we already know that the request method is POST
