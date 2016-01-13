@@ -71,21 +71,30 @@ def view_poll(request, poll):
         tab[id] = {}
         tab[id]['nickname'] = v.voter.nickname
         tab[id]['scores'] = []
-        tab[id]['texts'] = []
         for c in candidates:
             if c.number in scores[id]:
-                tab[id]['scores'].append(scores[id][c.number])
-                tab[id]['texts'].append(preference_model.value2text[scores[id][c.number]])
+                tab[id]['scores'].append(
+                    {
+                        'value': scores[id][c.number],
+                        'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(scores[id][c.number]), 1) * 100)),
+                        'text': preference_model.value2text[scores[id][c.number]]
+                        }
+                    )
             else:
-                tab[id]['scores'].append('undefined')
-                tab[id]['texts'].append('undefined')
+                tab[id]['scores'].append(
+                    {
+                        'value': 'undefined',
+                        'class': 'poll-undefined',
+                        'text': 'undefined'
+                        }
+                    )
 
     values = None if tab == {} else tab.values()
 
     return render(request, 'whale4/poll.html', {
         'poll': poll,
         'candidates': candidates,
-        'tab': values,
+        'votes': values,
         'success': success}
                   )
 

@@ -59,6 +59,9 @@ class PreferenceModel:
         self.max = max(values)
         self.nb_values = len(values)
 
+    def evaluate(self, value):
+        return (value - self.min) / (self.max - self.min)
+        
 class PositiveNegative(PreferenceModel):
     def __init__(self):
         PreferenceModel.__init__(self, ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])

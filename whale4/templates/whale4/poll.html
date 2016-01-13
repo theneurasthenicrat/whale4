@@ -15,22 +15,22 @@
 </div>
 <h1>{{ poll.title }}</h1>
 <pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
-<table class="table">
+<table class="table pollTable">
     <thead>
 	<tr>
-	    <th></th>
+	    <th class="emptyCell"></th>
 	    {% for c in candidates %}
 	    <th>{{ c.label }}</th>
 	    {% endfor %}
 	</tr>
     </thead>
-    {% if tab %}
+    {% if votes %}
     <tbody>
-	{% for v in tab %}
+	{% for v in votes %}
 	<tr>
 	    <th>{{ v.nickname }}</th>
-	    {% for s in v.texts %}
-	    <td>{{ s }}</td>
+	    {% for s in v.scores %}
+	    <td class="{{ s.class }}">{{ s.text }}</td>
 	    {% endfor %}
 	</tr>
 	{% endfor %}
