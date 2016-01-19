@@ -55,7 +55,7 @@ class VotingForm(forms.Form):
         forms.Form.__init__(self, params)
         for c in candidates:
             self.fields['score-' + str(c.number)] = forms.ChoiceField(
-                choices = list(zip(preference_model.values, preference_model.texts)),
+                choices = [('undefined', '--')] + list(zip(preference_model.values, preference_model.texts)),
                 required=True, label=c.label
                 )
         

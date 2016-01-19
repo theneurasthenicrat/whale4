@@ -231,11 +231,12 @@ def vote(request, poll):
                 nickname = data['nickname']
                 )
             for c in candidates:
-                score = VotingScore.objects.create(
-                    candidate = c,
-                    voter = user,
-                    value = data['score-' + str(c.number)]
-                    )
+                if data['score-' + str(c.number)] != 'undefined':
+                    score = VotingScore.objects.create(
+                        candidate = c,
+                        voter = user,
+                        value = data['score-' + str(c.number)]
+                        )
 
             return redirect('/poll?poll=' + str(poll.id) + '&success=1')
 
