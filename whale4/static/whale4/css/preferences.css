@@ -1,5 +1,5 @@
 
-.pollTable tbody tr, .pollTable tbody tr td {
+.pollTable tbody tr td {
 	background: #ccc;
 	border: 2px solid #fff;
 }
@@ -14,6 +14,14 @@
 .pollTable thead tr th.emptyCell {
 	padding: 0px;
 	background: #fff;
+}
+
+table.pollTable tbody tr td.controls {
+	background: #aaa;
+	color: #fff;
+	width: 64px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
 }
 
 .pollTable tr td.poll-100percent {

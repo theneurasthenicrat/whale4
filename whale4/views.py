@@ -5,7 +5,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Max
-from whale4.forms import CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm, VotingForm
+from whale4.forms import (CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm,
+                          VotingForm, RemoveVoterForm)
 from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_model_from_text
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password, check_password
@@ -28,6 +29,24 @@ def with_valid_poll(fn):
         return fn(request, poll)
     
     return wrapped
+
+def with_valid_voter(fn):
+    def wrapped(request, poll):
+        if "voter" not in request.GET:
+            return render(request, 'whale4/error.html', {'title': "Error",
+                                                         'message': 'Missing voter id.'})
+        voter_id = request.GET['voter']
+        try:
+            voter = User.objects.get(id = voter_id)
+        except ObjectDoesNotExist:
+            return render(request, 'whale4/error.html', {
+                'title': "Damned...",
+                'message': 'Unknown user number {0}.'.format(voter_id)
+                })
+        return fn(request, poll, voter)
+    
+    return wrapped
+
 
 def with_admin_rights(fn):
     def wrapped(request, poll):
@@ -56,6 +75,8 @@ def view_poll(request, poll):
     if 'success' in request.GET:
         if request.GET['success'] == '1':
             success = "Your vote has been added to the poll, thank you!"
+        if request.GET['success'] == '2':
+            success = "The ballot has been deleted."
 
     preference_model = preference_model_from_text(poll.preference_model)
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
@@ -70,6 +91,7 @@ def view_poll(request, poll):
     for v in votes:
         id = v.voter.id
         tab[id] = {}
+        tab[id]['id'] = id
         tab[id]['nickname'] = v.voter.nickname
         tab[id]['scores'] = []
         for c in candidates:
@@ -223,6 +245,23 @@ def vote(request, poll):
     
     return render(request, 'whale4/vote.html', {'form': form, 'poll_id': poll.id})
 
-
+@with_valid_poll
+@with_valid_voter
+def delete_vote(request, poll, voter):
+    if (request.method != 'POST' or 'confirm' not in request.POST
+        or request.POST['confirm'] != '1'):
+        return render(request, 'whale4/confirm-delete-vote.html', {
+            'poll_id': poll.id,
+            'voter_id': voter.id,
+            'name': voter.nickname})
+    
+    form = RemoveVoterForm(request.GET)
+        
+    if form.is_valid():
+        data = form.cleaned_data
+        votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+        votes.delete()
+    return redirect('/poll?poll=' + str(poll.id) + '&success=2')
+    
 
     

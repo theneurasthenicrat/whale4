@@ -18,9 +18,11 @@
 <table class="table pollTable">
     <thead>
 	<tr>
-	    <th class="emptyCell"></th>
+	    <td class="emptyCell" colspan="2" ></td>
 	    {% for c in candidates %}
-	    <th>{{ c.label }}</th>
+	    <th>
+		{{ c.label }}
+	    </th>
 	    {% endfor %}
 	</tr>
     </thead>
@@ -28,7 +30,12 @@
     <tbody>
 	{% for v in votes %}
 	<tr>
-	    <th>{{ v.nickname }}</th>
+	    <td class="controls" width="auto">
+		<a href="/delete-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/update-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-pen"></span></a>
+	    </td>
+	    <th>
+		{{ v.nickname }}
+	    </th>
 	    {% for s in v.scores %}
 	    <td class="{{ s.class }}">{{ s.text }}</td>
 	    {% endfor %}

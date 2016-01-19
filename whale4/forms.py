@@ -38,8 +38,14 @@ class RemoveCandidateForm(forms.Form):
 
     def clean_label(self):
         number = self.cleaned_data["number"]
-        
         return number
+
+class RemoveVoterForm(forms.Form):
+    voter = forms.CharField(max_length=100, required=True, label='Voter id')
+
+    def clean_label(self):
+        id = self.cleaned_data["voter"]
+        return id
 
 
 class VotingForm(forms.Form):
