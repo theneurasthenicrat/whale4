@@ -11,9 +11,10 @@
 	border: 2px solid #fff;
 }
 
-.pollTable thead tr th.emptyCell {
+.pollTable thead tr td.emptyCell, .pollTable thead tr th.emptyCell {
 	padding: 0px;
 	background: #fff;
+	border: 2px solid #fff;
 }
 
 table.pollTable tbody tr td.controls {

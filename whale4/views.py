@@ -85,6 +85,21 @@ def view_poll(request, poll):
         DateCandidate.objects.filter(poll_id=poll.id).order_by('date', 'number') if poll.poll_type == 'Date'
         else Candidate.objects.filter(poll_id=poll.id).order_by('number')
     )
+    months = []
+    days = []
+    if poll.poll_type ==  'Date':
+        for c in candidates:
+            current_month = c.date.strftime("%y/%m")
+            current_day = c.date.strftime("%y/%m/%d")
+            if len(months) > 0 and months[-1]["label"] == current_month:
+                months[-1]["value"] += 1
+            else:
+                months += [{"label": current_month, "value": 1}]
+            if len(days) > 0 and months[-1]["label"] == current_month and days[-1]["label"] == current_day:
+                days[-1]["value"] += 1
+            else:
+                days += [{"label": current_day, "value": 1}]
+                
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('voter')
     scores = {}
     for v in votes:
@@ -122,6 +137,7 @@ def view_poll(request, poll):
     return render(request, 'whale4/poll.html', {
         'poll': poll,
         'candidates': candidates,
+        'days': days,
         'votes': values,
         'success': success}
                   )
@@ -243,7 +259,10 @@ def authenticate_admin(request, poll):
 
 @with_valid_poll
 def vote(request, poll):
-    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    candidates = (
+        DateCandidate.objects.filter(poll_id=poll.id).order_by('date', 'number') if poll.poll_type == 'Date'
+        else Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    )
     preference_model = preference_model_from_text(poll.preference_model)
 
     voter = None
