@@ -11,6 +11,8 @@ class CreateVotingPollForm(forms.Form):
     title = forms.CharField(max_length=250, required=True, label='Title')
     description = forms.CharField(max_length=800, widget=forms.Textarea(),
                                   label='Description (max. 800 characters)')
+    poll_type = forms.ChoiceField(choices = VotingPoll.POLL_TYPES,
+                                  required=True, label='Poll type') 
     preference_model = forms.ChoiceField(choices=VotingPoll.PREFERENCE_MODELS,
                                          required=True, label='Preference model')
     admin_password = forms.CharField(widget=forms.PasswordInput(render_value=True))
@@ -30,8 +32,20 @@ class AddCandidateForm(forms.Form):
 
     def clean_label(self):
         label = self.cleaned_data["label"]
-        
         return label
+
+class AddDateCandidateForm(forms.Form):
+    label = forms.CharField(max_length=50, required=True, label='Label')
+    dates = forms.CharField(max_length=300, required=True, label='Dates')
+
+    def clean_label(self):
+        label = self.cleaned_data["label"]        
+        return label
+
+    def clean_dates(self):
+        dates = self.cleaned_data["dates"].split(',')
+        return dates
+
 
 class RemoveCandidateForm(forms.Form):
     number = forms.CharField(max_length=50, required=True, label='Candidate Number')

@@ -6,10 +6,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Max
 from whale4.forms import (CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm,
-                          VotingForm, RemoveVoterForm)
-from whale4.models import VotingPoll, Candidate, User, VotingScore, preference_model_from_text
+                          VotingForm, RemoveVoterForm, AddDateCandidateForm)
+from whale4.models import (VotingPoll, Candidate, User, VotingScore, preference_model_from_text,
+                           DateCandidate)
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password, check_password
+from whale4.settings import SALT
 
 # decorators #################################################################
 
@@ -134,8 +136,9 @@ def create_voting_poll(request):
             poll.title = data['title']
             poll.description = data['description']
             admin_password = data['admin_password']
-            poll.admin_password = make_password(admin_password, salt='whale4salt')
+            poll.admin_password = make_password(admin_password, salt=SALT)
             poll.preference_model = data['preference_model']
+            poll.poll_type = data['poll_type']
 
             poll.save()
 
@@ -165,17 +168,32 @@ def manage_candidates(request, poll, admin_password):
     # If we are here, we already know that the request method is POST
     # (thanks to admin_rights)
     if 'action' in request.POST and request.POST['action'] == 'add':
-        form = AddCandidateForm(request.POST)
+        if poll.poll_type == 'Date':
+            form = AddDateCandidateForm(request.POST)
 
-        if form.is_valid():
-            data = form.cleaned_data
-            n = Candidate.objects.filter(poll=poll.id).aggregate(Max('number'))['number__max'] + 1
-            
-            cand = Candidate.objects.create(
-                label = data['label'],
-                number = n,
-                poll = poll
-                )
+            if form.is_valid():
+                data = form.cleaned_data
+                for d in data['dates']:
+                    n = 1 if not DateCandidate.objects.filter(poll=poll.id) else DateCandidate.objects.filter(poll=poll.id).aggregate(Max('number'))['number__max'] + 1
+
+                    cand = DateCandidate.objects.create(
+                        label = d + '#' + data['label'],
+                        number = n,
+                        poll = poll,
+                        date = d
+                        )
+        else:
+            form = AddCandidateForm(request.POST)
+
+            if form.is_valid():
+                data = form.cleaned_data
+                n = 1 if not Candidate.objects.filter(poll=poll.id) else Candidate.objects.filter(poll=poll.id).aggregate(Max('number'))['number__max'] + 1
+
+                cand = Candidate.objects.create(
+                    label = data['label'],
+                    number = n,
+                    poll = poll
+                    )
 
     if 'action' in request.POST and request.POST['action'] == 'remove':
         if 'confirm' not in request.POST:

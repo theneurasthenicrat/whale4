@@ -28,14 +28,25 @@ class VotingPoll(Poll):
         ('Ranking', 'Ranking (no ties)'),
         ('Numbers#0#10', 'Scores')
         )
+    POLL_TYPES = (
+        ('Standard', 'Standard Poll'),
+        ('Date', 'Date Poll')
+        )
     preference_model = models.CharField(max_length=50,
                                        choices=PREFERENCE_MODELS,
                                        default='PositiveNegative')
+    poll_type = models.CharField(max_length=20,
+                                       choices=POLL_TYPES,
+                                       default='Standard')
+
 
 class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll, related_name='candidates')
     label = models.CharField(max_length=50)
     number = models.IntegerField()
+
+class DateCandidate(Candidate):
+    date = models.DateField()
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate)
