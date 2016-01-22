@@ -81,7 +81,10 @@ def view_poll(request, poll):
             success = "The ballot has been deleted."
 
     preference_model = preference_model_from_text(poll.preference_model)
-    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    candidates = (
+        DateCandidate.objects.filter(poll_id=poll.id).order_by('date', 'number') if poll.poll_type == 'Date'
+        else Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    )
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('voter')
     scores = {}
     for v in votes:
@@ -177,7 +180,7 @@ def manage_candidates(request, poll, admin_password):
                     n = 1 if not DateCandidate.objects.filter(poll=poll.id) else DateCandidate.objects.filter(poll=poll.id).aggregate(Max('number'))['number__max'] + 1
 
                     cand = DateCandidate.objects.create(
-                        label = d + '#' + data['label'],
+                        label = data['label'],
                         number = n,
                         poll = poll,
                         date = d
@@ -212,7 +215,10 @@ def manage_candidates(request, poll, admin_password):
                 cand.delete()
 
         
-    candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    candidates = (
+        DateCandidate.objects.filter(poll_id=poll.id).order_by('date', 'number') if poll.poll_type == 'Date'
+        else Candidate.objects.filter(poll_id=poll.id).order_by('number')
+    )
     if candidates == []:
         candidates = None
 

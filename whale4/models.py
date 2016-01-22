@@ -45,8 +45,15 @@ class Candidate(models.Model):
     label = models.CharField(max_length=50)
     number = models.IntegerField()
 
+    def __str__(self):
+        return str(self.label)
+
 class DateCandidate(Candidate):
     date = models.DateField()
+
+    def __str__(self):
+        return str(self.date) + "#" + str(self.label)
+
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate)

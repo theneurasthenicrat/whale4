@@ -69,7 +69,7 @@ class VotingForm(forms.Form):
             self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
         for c in candidates:
             self.fields['score-' + str(c.number)] = forms.ChoiceField(
-                choices = [('undefined', '--')] + list(zip(preference_model.values, preference_model.texts)),
+                choices = [('undefined', '(undefined)')] + list(zip(preference_model.values, preference_model.texts)),
                 required=True, label=c.label
                 )
         self.candidates = candidates
