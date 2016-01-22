@@ -31,7 +31,7 @@
 	{% for v in votes %}
 	<tr>
 	    <td class="controls" width="auto">
-		<a href="/delete-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/update-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-pen"></span></a>
+		<a href="/delete-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-pen"></span></a>
 	    </td>
 	    <th>
 		{{ v.nickname }}

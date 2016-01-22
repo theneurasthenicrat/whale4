@@ -222,29 +222,51 @@ def vote(request, poll):
     candidates = Candidate.objects.filter(poll_id=poll.id).order_by('number')
     preference_model = preference_model_from_text(poll.preference_model)
 
+    voter = None
+    initial = {}
+    if 'voter' in request.GET:
+        try:
+            voter = User.objects.get(id = request.GET['voter'])
+            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+            for v in votes:
+                initial['score-' + str(v.candidate.number)] = v.value
+        except ObjectDoesNotExist:
+            return render(request, 'whale4/error.html', {
+                'title': "Damned...",
+                'message': 'Unknown user number {0}.'.format(voter_id)
+                })
+
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model, request.POST)
+        form = VotingForm(candidates, preference_model, voter, request.POST, initial = initial)
 
         if form.is_valid():
             data = form.cleaned_data
-            user = User.objects.create(
-                nickname = data['nickname']
-                )
+            if not voter:
+                voter = User.objects.create(
+                    nickname = data['nickname']
+                    )
             for c in candidates:
-                if data['score-' + str(c.number)] != 'undefined':
-                    score = VotingScore.objects.create(
-                        candidate = c,
-                        voter = user,
-                        value = data['score-' + str(c.number)]
-                        )
+                try:
+                    score = VotingScore.objects.get(candidate = c, voter = voter)
+                    if data['score-' + str(c.number)] != 'undefined':
+                        score.value = data['score-' + str(c.number)]
+                        score.save()
+                    else:
+                        score.delete()
+                except ObjectDoesNotExist:
+                    if data['score-' + str(c.number)] != 'undefined':
+                        score = VotingScore.objects.create(
+                            candidate = c,
+                            voter = voter,
+                            value = data['score-' + str(c.number)]
+                            )
 
             return redirect('/poll?poll=' + str(poll.id) + '&success=1')
-
     else:
-        form = VotingForm(candidates, preference_model)
+        form = VotingForm(candidates, preference_model, voter, initial = initial)
 
-    
-    return render(request, 'whale4/vote.html', {'form': form, 'poll_id': poll.id})
+    return render(request, 'whale4/vote.html', {'form': form, 'poll': poll, 'voter': voter})
+
 
 @with_valid_poll
 @with_valid_voter
