@@ -58,6 +58,13 @@ class VotingForm(forms.Form):
                 choices = [('undefined', '--')] + list(zip(preference_model.values, preference_model.texts)),
                 required=True, label=c.label
                 )
+        self.candidates = candidates
 
-                
+    def clean(self):
+        cleaned_data = super(VotingForm, self).clean()
+        for c in self.candidates:
+            if cleaned_data.get('score-' + str(c.number)) != 'undefined':
+                return
+        raise forms.ValidationError("You must give a score to at least one candidate!")
+            
 
