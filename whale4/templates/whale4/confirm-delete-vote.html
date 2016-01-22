@@ -4,17 +4,17 @@
 
 <h1>Confirmation</h1>
 
-<p>Do you really want to delete ballot of voter "{{ name }}"?</p>
+<p>Do you really want to delete ballot of voter "{{ voter.name }}"?</p>
 
 <p>
-<form class="form-inline" action="/delete-vote?poll={{ poll_id }}&voter={{ voter_id }}"  method="post">{% csrf_token %}
+<form class="form-inline" action="/delete-vote?poll={{ poll.id }}&voter={{ voter.id }}"  method="post">{% csrf_token %}
     <input type="hidden" name="confirm" value="1"/>	
     <div class="form-actions">
         <button type="submit" class="btn btn-primary" >Yes</button>
     </div>
 </form>
 <div class="form-actions">
-    <a href="/poll?poll={{ poll_id }}" class="btn btn-default">No</a>
+    <a href="/poll?poll={{ poll.id }}" class="btn btn-default">No</a>
 </div>
 </p>
 

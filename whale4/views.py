@@ -140,7 +140,7 @@ def create_voting_poll(request):
             poll.save()
 
             success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
-            return render(request, 'whale4/manage-candidates.html', {'form': None, 'poll_id': poll.id, 'success': success, 'candidates': [], 'admin_password': admin_password})
+            return render(request, 'whale4/manage-candidates.html', {'form': None, 'poll': poll, 'success': success, 'candidates': [], 'admin_password': admin_password})
 
     else:
         form = CreateVotingPollForm()
@@ -150,7 +150,7 @@ def create_voting_poll(request):
 @with_valid_poll
 @with_admin_rights
 def admin_poll(request, poll, admin_password):
-    return render(request, 'whale4/admin-poll.html', {'poll_id': poll.id, 'poll': poll, 'admin_password': admin_password})
+    return render(request, 'whale4/admin-poll.html', {'poll': poll, 'poll': poll, 'admin_password': admin_password})
 
 
 @with_valid_poll
@@ -179,7 +179,7 @@ def manage_candidates(request, poll, admin_password):
 
     if 'action' in request.POST and request.POST['action'] == 'remove':
         if 'confirm' not in request.POST:
-            return render(request, 'whale4/confirm-delete-candidate.html', {'poll_id': poll.id, 'number': request.POST['number'], 'label': request.POST['label'], 'admin_password': admin_password})
+            return render(request, 'whale4/confirm-delete-candidate.html', {'poll': poll, 'number': request.POST['number'], 'label': request.POST['label'], 'admin_password': admin_password})
 
         if request.POST['confirm'] == '1':
             form = RemoveCandidateForm(request.POST)
@@ -198,7 +198,7 @@ def manage_candidates(request, poll, admin_password):
     if candidates == []:
         candidates = None
 
-    return render(request, 'whale4/manage-candidates.html', {'form': form, 'poll_id': poll.id, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
+    return render(request, 'whale4/manage-candidates.html', {'form': form, 'poll': poll, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
 
 
 
@@ -213,7 +213,7 @@ def authenticate_admin(request, poll):
         if request.GET['error'] == '1':
             error = "<strong>Whoops...</strong><br/>It seems that you have supplied an incorrect administration password for this poll..."
 
-    return render(request, 'whale4/authenticate-admin.html', {'poll_id': poll.id, 'error': error, 'referer': referer})
+    return render(request, 'whale4/authenticate-admin.html', {'poll': poll, 'error': error, 'referer': referer})
 
 
 
@@ -274,9 +274,8 @@ def delete_vote(request, poll, voter):
     if (request.method != 'POST' or 'confirm' not in request.POST
         or request.POST['confirm'] != '1'):
         return render(request, 'whale4/confirm-delete-vote.html', {
-            'poll_id': poll.id,
-            'voter_id': voter.id,
-            'name': voter.nickname})
+            'poll': poll,
+            'voter': voter})
     
     form = RemoveVoterForm(request.GET)
         

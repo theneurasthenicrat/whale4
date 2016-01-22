@@ -16,7 +16,7 @@
 <ol class="list-group">
     {% for c in candidates %}
     <li class="list-group-item">
-	<form action="/manage-candidates?poll={{ poll_id }}" method="post">{% csrf_token %}
+	<form action="/manage-candidates?poll={{ poll.id }}" method="post">{% csrf_token %}
 	    <input type="hidden" name="action" value="remove"/>
 	    <input type="hidden" name="admin_password" value="{{ admin_password }}"/>
 	    <input type="hidden" name="label" value="{{ c.label }}"/>
