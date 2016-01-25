@@ -67,7 +67,8 @@ class PreferenceModel:
     text2value = {}
     value2text = {}
     
-    def __init__(self, texts, values):
+    def __init__(self, id, texts, values):
+        self.id = id
         self.texts = texts
         self.values = values
         for (t, v) in zip(texts, values):
@@ -79,26 +80,34 @@ class PreferenceModel:
 
     def evaluate(self, value):
         return (value - self.min) / (self.max - self.min)
+
+    def as_dict(self):
+        return {"id": self.id,
+                "values": self.values,
+                "texts": self.texts}
         
 class PositiveNegative(PreferenceModel):
     def __init__(self):
-        PreferenceModel.__init__(self, ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])
+        PreferenceModel.__init__(self, "positiveNegative", ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])
 
 class Ranking(PreferenceModel):
     def __init__(self, nb_cand, ties_allowed = 0):
         texts = list(map(str, range(1, nb_cand + 1)))
         values = list(map(lambda x: nb_cand + 1 - x, range(1, nb_cand + 1)))
-        PreferenceModel.__init__(self, texts, values)
+        PreferenceModel.__init__(self,
+                                 "ranking" + ("WithTies" if ties_allowed else "NoTies"),
+                                 texts,
+                                 values)
 
 class Numbers(PreferenceModel):
     def __init__(self, nb_min, nb_max):
         texts = list(map(lambda x: str(nb_max - x), range(nb_min, nb_max + 1)))
         values = list(map(lambda x: nb_max - x, range(nb_min, nb_max + 1))) 
-        PreferenceModel.__init__(self, texts, values)
+        PreferenceModel.__init__(self, "scores", texts, values)
 
 class Approval(PreferenceModel):
     def __init__(self):
-        PreferenceModel.__init__(self, ["no", "yes"], [0, 1])
+        PreferenceModel.__init__(self, "approval", ["no", "yes"], [0, 1])
         
 def preference_model_from_text(desc):
     parts = desc.split('#')

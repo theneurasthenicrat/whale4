@@ -2,7 +2,7 @@
 
 # imports ####################################################################
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Max
 from whale4.forms import (CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm,
@@ -134,6 +134,14 @@ def view_poll(request, poll):
 
     values = None if tab == {} else tab.values()
 
+    if "format" in request.GET:
+        if request.GET['format'] == 'json':
+            return JsonResponse(__poll_as_dict(poll, candidates, values))
+        return render(request, 'whale4/error.html', {
+            'title': "Damned...",
+            'message': 'Unknown return format {0}.'.format(request.GET['format'])
+            })
+            
     return render(request, 'whale4/poll.html', {
         'poll': poll,
         'candidates': candidates,
@@ -141,6 +149,27 @@ def view_poll(request, poll):
         'votes': values,
         'success': success}
                   )
+
+def __poll_as_dict(poll, candidates, values):
+    json_object = {}
+    json_object["preferenceModel"] = preference_model_from_text(
+        poll.preference_model
+        ).as_dict()
+    json_object["type"] = 1 if poll.poll_type ==  'Date' else 0
+    json_object["candidates"] = list(map(str, candidates))
+    json_object["votes"] = list(
+        map(
+            lambda v: {"name": v['nickname'],
+                       "values": list(
+                           map(
+                               lambda s: s['value'],
+                               v['scores']
+                               )
+                           )},
+            values
+            )
+        )
+    return json_object
 
 def home(request):
     return render(request, 'whale4/index.html', {})
