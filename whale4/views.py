@@ -12,6 +12,7 @@ from whale4.models import (VotingPoll, Candidate, User, VotingScore, preference_
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.hashers import make_password, check_password
 from whale4.settings import SALT
+import whale4.voting
 
 # decorators #################################################################
 
@@ -134,6 +135,19 @@ def view_poll(request, poll):
 
     values = None if tab == {} else tab.values()
 
+    if "aggregate" in request.GET:
+        aggregates = request.GET['aggregate'].split(',')
+        new_values = {}
+        for agg in aggregates:
+            if agg not in ['borda', 'approval']:
+                return render(request, 'whale4/error.html', {
+                    'title': "Damned...",
+                    'message': 'Unknown aggregation operator "{0}".'.format(agg)
+                })        
+            new_values = dict(new_values,
+                              **__compute_aggregation(agg, poll, candidates, values))
+        values = new_values.values()
+
     if "format" in request.GET:
         if request.GET['format'] == 'json':
             return JsonResponse(__poll_as_dict(poll, candidates, values))
@@ -170,6 +184,67 @@ def __poll_as_dict(poll, candidates, values):
             )
         )
     return json_object
+
+def __poll_as_tab(poll, candidates, values):
+    tab = list(
+        map(
+            lambda v: list(
+                map(
+                    lambda s: s['value'],
+                    v['scores']
+                    )
+                ),
+            values
+            )
+        )
+    return tab
+
+def __compute_aggregation(op, poll, candidates, values):
+    new_values = {}
+    if op == 'borda':
+        new_values['borda'] = {}
+        new_values['borda']['id'] = 'borda'
+        new_values['borda']['nickname'] = 'Borda'
+
+        scores = whale4.voting.borda(
+            __poll_as_tab(poll, candidates, values),
+            len(candidates),
+            poll.preference_model
+        )
+        min_score, max_score = min(scores), max(scores)
+
+        new_values['borda']['scores'] = list(map(
+            lambda s: {
+                'value': s,
+                'class': ('poll-100percent' if max_score == min_score else
+                          'poll-{0:d}percent'.format(int(round((s - min_score) / (max_score - min_score), 1) * 100))), 
+                'text': str(s)
+                },
+            scores
+            ))
+
+    if op == 'approval':
+        new_values['approval'] = {}
+        new_values['approval']['id'] = 'approval'
+        new_values['approval']['nickname'] = 'Approval'
+
+        scores = whale4.voting.approval(
+            __poll_as_tab(poll, candidates, values),
+            len(candidates),
+            poll.preference_model
+        )
+        min_score, max_score = min(scores), max(scores)
+
+        new_values['approval']['scores'] = [{
+            'value': s,
+            'class': ('poll-100percent' if max_score == min_score else
+                          'poll-{0:d}percent'.format(int(round((s - min_score) / (max_score - min_score), 1) * 100))),
+            'text': str(s)
+        } for s in scores]
+
+
+    return new_values
+
 
 def home(request):
     return render(request, 'whale4/index.html', {})
