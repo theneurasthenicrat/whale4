@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
 urlpatterns = patterns('',
                        # url(r'^poll/(?P<poll>[a-f0-9]+)$', 'whale4.views.view_poll', name='poll'),
@@ -15,4 +16,5 @@ urlpatterns = patterns('',
                        # url(r'^blog/', include('blog.urls')),
                        
                        url(r'^admin/', include(admin.site.urls)),
+                       url(r'^accounts/', include('django.contrib.auth.urls')),
 )
