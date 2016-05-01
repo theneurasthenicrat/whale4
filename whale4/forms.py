@@ -15,17 +15,6 @@ class CreateVotingPollForm(forms.Form):
                                   required=True, label='Poll type') 
     preference_model = forms.ChoiceField(choices=VotingPoll.PREFERENCE_MODELS,
                                          required=True, label='Preference model')
-    admin_password = forms.CharField(widget=forms.PasswordInput(render_value=True))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(render_value=True))
-
-    def clean_confirm_password(self):
-        first = self.cleaned_data["admin_password"]
-        second = self.cleaned_data["confirm_password"]
-
-        if first != second:
-            raise forms.ValidationError("The two passwords should be the same!")
-
-        return second
 
 class AddCandidateForm(forms.Form):
     label = forms.CharField(max_length=50, required=True, label='Label')

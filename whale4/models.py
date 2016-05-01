@@ -4,6 +4,7 @@
 
 import uuid
 from django.db import models
+from accounts.models import WhaleUser
 
 # models #####################################################################
 
@@ -22,7 +23,7 @@ class Poll(models.Model):
     description = models.CharField(max_length=800)
     creation_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField(null=True)
-    admin_password = models.CharField(max_length=100)
+    admin = models.ForeignKey(WhaleUser, related_name='polls')
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (
