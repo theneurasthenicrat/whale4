@@ -30,30 +30,40 @@
 	<![endif]-->
     </head>
     <body role="document">
-	<nav class="navbar navbar-inverse" role="navigation">
-	    <div class="navbar-header">
-		<a class="navbar-brand" href="/" >Whale<sup>4</sup> - WHich ALternative is Elected</a>
-	    </div>
+      <nav class="navbar navbar-inverse" role="navigation">
+	<div class="container-fluid">
+	  <div class="navbar-header">
+	    <a class="navbar-brand" href="/" >Whale<sup>4</sup></a>
+	  </div>
 
-	    <ul class="nav navbar-nav pull-right">
-		<li><a href="/">Home</a></li>
-		<li><a href="/create-voting-poll/">New poll</a></li>
-		<li class="dropdown">
-		    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret" ></b></a>
-		    <ul class="dropdown-menu">
-			<li><a href="https://github.com/theneurasthenicrat/whale4">Get the code</a></li>
-			<li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE">Code license</a></li>
-		    </ul>
-		</li>
-		<li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">Contact us</a></li>
-	    </ul>
-	</nav>
-	<div class="container theme-showcase" role="main">
-	    {% block content %}
-	    Default page
-	    {% endblock %}
+	  <ul class="nav navbar-nav">
+	    <li><a href="/">Home</a></li>
+	    <li><a href="/create-voting-poll/">New poll</a></li>
+	    <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret" ></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="https://github.com/theneurasthenicrat/whale4">Get the code</a></li>
+		<li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE">Code license</a></li>
+	      </ul>
+	    </li>
+	    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">Contact us</a></li>
+	  </ul>
+	  
+	  <p class="navbar-text navbar-right">
+	    {% if user.is_authenticated %}
+	    <a href="/logout/" class="navbar-link">
+	      <span class="icon icon-signout"></span> Déconnecter ({{ user.nickname }})
+	    </a>
+	    {% endif %}
+	  </p>
 	</div>
-	<footer></footer>
+      </nav>
+      <div class="container theme-showcase" role="main">
+	{% block content %}
+	Default page
+	{% endblock %}
+      </div>
+      <footer></footer>
     </body>
 </html>
 

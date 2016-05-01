@@ -8,7 +8,8 @@ from django.db.models import Max
 from whale4.forms import (CreateVotingPollForm, AddCandidateForm, RemoveCandidateForm,
                           VotingForm, RemoveVoterForm, AddDateCandidateForm)
 from whale4.models import (VotingPoll, Candidate, User, VotingScore, preference_model_from_text,
-                           DateCandidate, WhaleUser)
+                           DateCandidate)
+from accounts.models import WhaleUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
@@ -250,7 +251,7 @@ def __compute_aggregation(op, poll, candidates, values):
 def home(request):
     return render(request, 'whale4/index.html', {})
 
-@login_required
+@login_required(login_url='/login/')
 def create_voting_poll(request):
     if request.method == 'POST':
         form = CreateVotingPollForm(request.POST)

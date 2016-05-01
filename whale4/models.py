@@ -4,17 +4,18 @@
 
 import uuid
 from django.db import models
-from django.contrib.auth import models as auth_models
 
 # models #####################################################################
+
+# User management...
 
 class User(models.Model):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     nickname = models.CharField(max_length=50)
 
-class WhaleUser(auth_models.User):
-    nickname = models.CharField(max_length=30)
 
+# Poll management...
+    
 class Poll(models.Model):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250)
