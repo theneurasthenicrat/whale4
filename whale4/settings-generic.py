@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'whale4',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,6 +69,9 @@ DATABASES = {
     }
 }
 
+SALT = 'yourSaltHere'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
@@ -85,3 +90,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Authentication User Model
+AUTH_USER_MODEL = "accounts.WhaleUser"
