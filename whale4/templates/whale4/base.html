@@ -49,13 +49,20 @@
 	    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">Contact us</a></li>
 	  </ul>
 	  
-	  <p class="navbar-text navbar-right">
+	  <ul class="nav navbar-nav navbar-right">
 	    {% if user.is_authenticated %}
-	    <a href="/logout/" class="navbar-link">
-	      <span class="icon icon-signout"></span> Déconnecter ({{ user.nickname }})
-	    </a>
+	    <li><a href="/logout/" class="navbar-link">
+	      <span class="icon icon-signout"></span> Log out ({{ user.nickname }})
+	    </a></li>
+	    {% else %}
+	    <li><a href="/login/" class="navbar-link">
+	      <span class="icon icon-signin"></span> Log in
+	    </a></li>
+	    <li><a href="/register/" class="navbar-link">
+	      <span class="icon icon-plus"></span> Sign up
+	    </a></li>	    
 	    {% endif %}
-	  </p>
+	  </ul>
 	</div>
       </nav>
       <div class="container theme-showcase" role="main">
