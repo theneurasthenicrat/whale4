@@ -1,3 +1,5 @@
 *__pycache__*
 whale4/settings.py
+accounts/migrations/
 resetDB.sh
+whale4/migrations/

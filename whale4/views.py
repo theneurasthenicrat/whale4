@@ -9,7 +9,9 @@ from whale4.forms import (CreateVotingPollForm, AddCandidateForm, RemoveCandidat
                           VotingForm, RemoveVoterForm, AddDateCandidateForm)
 from whale4.models import (VotingPoll, Candidate, User, VotingScore, preference_model_from_text,
                            DateCandidate)
+from accounts.models import WhaleUser
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password, check_password
 from whale4.settings import SALT
 import whale4.voting
@@ -53,17 +55,12 @@ def with_valid_voter(fn):
 
 def with_admin_rights(fn):
     def wrapped(request, poll):
-        referer = request.get_full_path()
-        if 'referer' in request.GET:
-            referer = request.GET['referer']
+        next = request.get_full_path()
 
-        if request.method != 'POST' or "admin_password" not in request.POST:
-            return render(request, 'whale4/authenticate-admin.html', {'error': 0, 'referer': referer})
+        if request.user is None or request.user != poll.admin:
+            return redirect('/login?next={next}'.format(next=next))
 
-        admin_password = request.POST['admin_password']
-        if not check_password(admin_password, poll.admin_password):
-            return render(request, 'whale4/authenticate-admin.html', {'error': 1, 'referer': referer})
-        return fn(request, poll, admin_password)
+        return fn(request, poll)
 
     return wrapped
 
@@ -249,6 +246,7 @@ def __compute_aggregation(op, poll, candidates, values):
 def home(request):
     return render(request, 'whale4/index.html', {})
 
+@login_required(login_url='/login/')
 def create_voting_poll(request):
     if request.method == 'POST':
         form = CreateVotingPollForm(request.POST)
@@ -258,15 +256,14 @@ def create_voting_poll(request):
             poll = VotingPoll()
             poll.title = data['title']
             poll.description = data['description']
-            admin_password = data['admin_password']
-            poll.admin_password = make_password(admin_password, salt=SALT)
+            poll.admin = request.user
             poll.preference_model = data['preference_model']
             poll.poll_type = data['poll_type']
 
             poll.save()
 
             success = "<strong>Poll successfully created!</strong> Now add the candidates to the poll..."
-            return render(request, 'whale4/manage-candidates.html', {'form': None, 'poll': poll, 'success': success, 'candidates': [], 'admin_password': admin_password})
+            return render(request, 'whale4/manage-candidates.html', {'form': None, 'poll': poll, 'success': success, 'candidates': []})
 
     else:
         form = CreateVotingPollForm()
@@ -275,13 +272,13 @@ def create_voting_poll(request):
 
 @with_valid_poll
 @with_admin_rights
-def admin_poll(request, poll, admin_password):
-    return render(request, 'whale4/admin-poll.html', {'poll': poll, 'poll': poll, 'admin_password': admin_password})
+def admin_poll(request, poll):
+    return render(request, 'whale4/admin-poll.html', {'poll': poll, 'poll': poll})
 
 
 @with_valid_poll
 @with_admin_rights
-def manage_candidates(request, poll, admin_password):
+def manage_candidates(request, poll):
     success = None
     form = None
     if 'success' in request.GET:
@@ -320,7 +317,7 @@ def manage_candidates(request, poll, admin_password):
 
     if 'action' in request.POST and request.POST['action'] == 'remove':
         if 'confirm' not in request.POST:
-            return render(request, 'whale4/confirm-delete-candidate.html', {'poll': poll, 'number': request.POST['number'], 'label': request.POST['label'], 'admin_password': admin_password})
+            return render(request, 'whale4/confirm-delete-candidate.html', {'poll': poll, 'number': request.POST['number'], 'label': request.POST['label']})
 
         if request.POST['confirm'] == '1':
             form = RemoveCandidateForm(request.POST)
@@ -342,23 +339,7 @@ def manage_candidates(request, poll, admin_password):
     if candidates == []:
         candidates = None
 
-    return render(request, 'whale4/manage-candidates.html', {'form': form, 'poll': poll, 'success': success, 'candidates': candidates, 'admin_password': admin_password})
-
-
-
-@with_valid_poll
-def authenticate_admin(request, poll):
-    error = None
-    if 'referer' not in request.GET: # Redirect to home...
-        return redirect('/')
-    referer = request.GET['referer']
-    
-    if 'error' in request.GET:
-        if request.GET['error'] == '1':
-            error = "<strong>Whoops...</strong><br/>It seems that you have supplied an incorrect administration password for this poll..."
-
-    return render(request, 'whale4/authenticate-admin.html', {'poll': poll, 'error': error, 'referer': referer})
-
+    return render(request, 'whale4/manage-candidates.html', {'form': form, 'poll': poll, 'success': success, 'candidates': candidates})
 
 
 @with_valid_poll
