@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'accounts',
     'whale4',
+    'polls',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,7 +49,25 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.i18n',
+            ],
+        },
+    },
+]
 
 ROOT_URLCONF = 'whale4.urls'
 
@@ -85,11 +104,24 @@ USE_L10N = True
 
 USE_TZ = True
 
+gettext = lambda x: x
+
+
+LANGUAGES = (
+
+   ('fr', gettext('French')),
+
+   ('en', gettext('English')),
+
+)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'),)
+APPEND_SLASH = True
 # Authentication User Model
 AUTH_USER_MODEL = "accounts.WhaleUser"
