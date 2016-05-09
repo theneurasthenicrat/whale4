@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+	    {% block title %}
+	    Whale4 - WHich ALternative is Elected
+	    {% endblock %}
+	</title>
+	
+	<!-- Bootstrap -->
+	<link href="{% static 'polls/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'polls/css/bootstrap-theme.min.css' %}" rel="stylesheet">
+	<link href="{% static 'polls/css/mfglabs_iconset.css' %}" rel="stylesheet">
+	<link href="{% static 'polls/css/preferences.css' %}" rel="stylesheet">
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="{% static 'whale4/js/bootstrap.min.js' %}"></script>
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+    </head>
+    <body role="document">
+      <nav class="navbar navbar-inverse" role="navigation">
+	<div class="container-fluid">
+	  <div class="navbar-header">
+	    <a class="navbar-brand" href="/" >Whale<sup>4</sup></a>
+	  </div>
+
+	  <ul class="nav navbar-nav">
+	    <li><a href="/polls">Home</a></li>
+	    <li><a href="/polls/newPoll">New poll</a></li>
+	    <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret" ></b></a>
+	      <ul class="dropdown-menu">
+		<li><a href="https://github.com/theneurasthenicrat/whale4">Get the code</a></li>
+		<li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE">Code license</a></li>
+	      </ul>
+	    </li>
+	    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">Contact us</a></li>
+	  </ul>
+	  
+	  <ul class="nav navbar-nav navbar-right">
+	    {% if user.is_authenticated %}
+	    <li><a href="/logout/" class="navbar-link">
+	      <span class="icon icon-signout"></span> Log out ({{ user.nickname }})
+	    </a></li>
+	    {% else %}
+	    <li><a href="/login/" class="navbar-link">
+	      <span class="icon icon-signin"></span> Log in
+	    </a></li>
+	    <li><a href="/register/" class="navbar-link">
+	      <span class="icon icon-plus"></span> Sign up
+	    </a></li>	    
+	    {% endif %}
+	  </ul>
+	</div>
+      </nav>
+      <div class="container theme-showcase" role="main">
+	{% block content %}
+	Default page
+	{% endblock %}
+      </div>
+      <footer></footer>
+    </body>
+</html>
+

@@ -1,0 +1,34 @@
+{% extends "polls/base.html" %}
+{% block content %}
+
+<h3> Candidates</h3>
+<form action="" method="post">
+{% csrf_token %}
+{{ formset.management_form }}
+<div id="form_set">
+    {% for form in formset.forms %}
+        <table class='no_error'>
+            {{ form.as_table }}
+        </table>
+    {% endfor %}
+</div>
+<input type="button" value="Add candidate" id="add_more">
+<div id="empty_form" style="display:none">
+    <table class='no_error'>
+        {{ formset.empty_form.as_table }}
+    </table>
+</div>
+<br>
+<input type="submit" value="Save">
+</form>
+<script>
+    $('#add_more').click(function() {
+        var form_idx = $('#id_form-TOTAL_FORMS').val();
+        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    });
+    $('.delete').click( function(){ 
+         $(this).remove(); 
+    });
+</script>
+{% endblock %}
