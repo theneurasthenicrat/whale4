@@ -10,4 +10,10 @@
 	   
 	    {% endfor %}
 
+
+	    {% url 'polls:vote' pk=poll.id as the_url %}
+<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> Vote </a>
+
+
+
 {% endblock %}

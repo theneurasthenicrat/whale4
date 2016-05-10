@@ -7,4 +7,5 @@ urlpatterns = patterns('polls.views',
 	url(r'^candidateCreate/(?P<pk>[^/]+)/$', 'candidateCreate',name='candidateCreate'),
 	url(r'^newPoll/$', VotingPollCreate.as_view()),
 	url(r'^viewPoll/(?P<pk>[^/]+)/$', 'viewPoll',name='viewPoll'),
+	url(r'^vote/(?P<pk>[^/]+)/$', 'vote',name='vote'),
 )

@@ -35,12 +35,9 @@ class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
     candidate = models.CharField(max_length=50)
 
-    class Meta: 
-        ordering=['candidate']
-
 
     def __str__(self):
-        return str(self.name)
+        return str(self.candidate)
 
 class DateCandidate(Candidate):
     date = models.DateField()
@@ -50,9 +47,69 @@ class DateCandidate(Candidate):
 
 
     def __str__(self):
-        return str(self.date) + "#" + str(self.name)
+        return str(self.date) + "#" + str(self.candidate)
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
     voter = models.CharField(max_length=30,verbose_name='name')
     value = models.IntegerField()
+
+#  preference models ########################################################
+
+class PreferenceModel:
+    text2value = {}
+    value2text = {}
+    
+    def __init__(self, id, texts, values):
+        self.id = id
+        self.texts = texts
+        self.values = values
+        for (t, v) in zip(texts, values):
+            self.text2value[t] = v
+            self.value2text[v] = t
+        self.min = min(values)
+        self.max = max(values)
+        self.nb_values = len(values)
+
+    def evaluate(self, value):
+        return (value - self.min) / (self.max - self.min)
+
+    def as_dict(self):
+        return {"id": self.id,
+                "values": self.values,
+                "texts": self.texts}
+        
+class PositiveNegative(PreferenceModel):
+    def __init__(self):
+        PreferenceModel.__init__(self, "positiveNegative", ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])
+
+class Ranking(PreferenceModel):
+    def __init__(self, nb_cand, ties_allowed = 0):
+        texts = list(map(str, range(1, nb_cand + 1)))
+        values = list(map(lambda x: nb_cand + 1 - x, range(1, nb_cand + 1)))
+        PreferenceModel.__init__(self,
+                                 "ranking" + ("WithTies" if ties_allowed else "NoTies"),
+                                 texts,
+                                 values)
+
+class Numbers(PreferenceModel):
+    def __init__(self, nb_min, nb_max):
+        texts = list(map(lambda x: str(nb_max - x), range(nb_min, nb_max + 1)))
+        values = list(map(lambda x: nb_max - x, range(nb_min, nb_max + 1))) 
+        PreferenceModel.__init__(self, "scores", texts, values)
+
+class Approval(PreferenceModel):
+    def __init__(self):
+        PreferenceModel.__init__(self, "approval", ["no", "yes"], [0, 1])
+        
+def preference_model_from_text(desc):
+    parts = desc.split('#')
+    if parts[0] == "PositiveNegative":
+        return PositiveNegative()
+    if parts[0] == "Ranks":
+        return Ranking(int(parts[1]), int(parts[2]))
+    if parts[0] == "Numbers":
+        return Numbers(int(parts[1]), int(parts[2]))
+    if parts[0] == "Approval":
+        return Approval()
+    raise Exception("Unknown preference model: %s" % desc)
