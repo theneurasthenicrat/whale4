@@ -1,0 +1,6 @@
+ add  a view viewpoll
+
+ create a dict scores which has the following composition: 
+
+ key : voter 
+ value: a list of (candidate,value)
