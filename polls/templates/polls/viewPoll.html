@@ -4,12 +4,39 @@
 <h1>{{ poll.title }}</h1>
 
 
- {% for c in candidates %}
-	  
+ <table class="table pollTable">
+    <thead>
+	
+	<tr>
+	    <td class="emptyCell" colspan="2" ></td>
+	    {% for c in candidates %}
+	    <th>
 		{{ c.candidate }}
-	   
+	    </th>
 	    {% endfor %}
-
+	</tr>
+   </thead>
+    {% if votes %}
+    <tbody>
+	{% for v,y in votes.items %}
+	<tr>
+	    <td class="controls" width="auto">
+		<a href="/delete-vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/vote?poll={{ poll.id }}&voter={{ v.id }}"><span class="icon icon-pen"></span></a>
+	    </td>
+	    <th>
+		{{ v }}
+	    </th>
+	    {% for s in y %}
+	    <td> {{s}} </td>
+	    {% endfor %}
+	</tr>
+	{% endfor %}
+    </tbody>
+</table>
+    {% else %}
+</table>
+<div style="margin-bottom: 30px;"><i>No vote yet... Do you want to be the first one?</i></div>
+{% endif %}
 
 	    {% url 'polls:vote' pk=poll.id as the_url %}
 <a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> Vote </a>

@@ -51,9 +51,21 @@ class VotingPollCreate(CreateView):
 def viewPoll(request, pk):
 
 	poll = VotingPoll.objects.get(id=pk)
-	candidates = Candidate.objects.filter(poll_id=poll.id)
+	candidates = Candidate.objects.filter(poll_id=pk)
+	votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+	preference_model = preference_model_from_text(poll.preference_model)
+	users=VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+
+	scores = {}
+	for v in votes:
+		if v.voter not in scores:
+			scores[v.voter] = [(v.candidate,v.value)]
+		else:
+			scores[v.voter].append((v.candidate,v.value))
+	print(scores)
+
 	
-	return render(request, 'polls/viewPoll.html', {'poll': poll, 'candidates': candidates})
+	return render(request, 'polls/viewPoll.html', {'poll': poll,'candidates': candidates,'votes': scores})
 
 
 def vote(request, pk):
