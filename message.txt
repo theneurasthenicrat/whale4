@@ -1,5 +1,4 @@
-  Accounts applications 
+ Customize page errors
 
-  add urls and forms
-  I use django.contrib.auth system in order to authentification the users.
-  
+ create four views for 404,400,500,403 errors that we can raise in project.
+ it means that when we have a problem we will find out with the right page.
