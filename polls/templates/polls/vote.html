@@ -1,5 +1,5 @@
 {% extends "polls/base.html" %}
-
+{% load bootstrap3 %}
 {% block content %}
 
 
@@ -8,7 +8,7 @@
 <form action="" method="post">
     {% csrf_token %}
     <table>
-    {{ form.as_table}}
+    {% bootstrap_form form %}
     </table>
     <button type="submit" class="btn btn-primary" >Submit</button>
 </form> 

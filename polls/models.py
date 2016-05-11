@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 from django.db import models
-
+from django.contrib.auth.models import User
 
 
 class Poll(models.Model):
@@ -10,7 +10,7 @@ class Poll(models.Model):
     description = models.TextField(blank=True,null=True)
     creation_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField(null=True,blank=True)
-    name = models.CharField(max_length=30)
+    administrator = models.ForeignKey(User, related_name='polls')
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (

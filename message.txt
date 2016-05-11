@@ -1,4 +1,6 @@
- Customize page errors
+ Add django-bootstrap3 application 
 
- create four views for 404,400,500,403 errors that we can raise in project.
- it means that when we have a problem we will find out with the right page.
+django-bootstrapp3 application is usefull app, when we need to use bootstrap for form and formset
+add bootstrap3 in template 
+add date input by using datepicher from jquery ui
+add django User in poll model 

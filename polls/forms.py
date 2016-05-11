@@ -2,15 +2,17 @@
 
 # imports ####################################################################
 
-from django.forms import ModelForm,BaseFormSet,Form
+from django.forms import ModelForm,BaseFormSet,Form, widgets
 from polls.models import VotingPoll,Candidate,DateCandidate
 from django import forms
 
 class VotingPollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields= '__all__'
-       
+        exclude=['administrator']
+        widgets = {
+            'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
+        }
 
 class CandidateForm(ModelForm):
     class Meta:
