@@ -1,6 +1,5 @@
- add  a view viewpoll
+  Accounts applications 
 
- create a dict scores which has the following composition: 
-
- key : voter 
- value: a list of (candidate,value)
+  add urls and forms
+  I use django.contrib.auth system in order to authentification the users.
+  
