@@ -35,6 +35,8 @@ class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
     candidate = models.CharField(max_length=50)
 
+    class Meta: 
+        ordering=['id']
 
     def __str__(self):
         return str(self.candidate)
@@ -43,7 +45,7 @@ class DateCandidate(Candidate):
     date = models.DateField()
 
     class Meta: 
-        ordering=['date','candidate']
+        ordering=['date']
 
 
     def __str__(self):

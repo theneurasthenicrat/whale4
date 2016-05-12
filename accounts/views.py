@@ -9,6 +9,6 @@ from django.contrib.auth.models import User
 
 class register(CreateView):
     template_name = 'accounts/register.html'
-    success_url = '/polls/'
+    success_url = '/accounts/'
     form_class = UserCreationForm
     model = User

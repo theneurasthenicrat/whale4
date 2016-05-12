@@ -54,14 +54,14 @@
 	  
 	  <ul class="nav navbar-nav navbar-right">
 	    {% if user.is_authenticated %}
-	    <li><a href="/logout/" class="navbar-link">
+	    <li><a href="/accounts/logout/" class="navbar-link">
 	      <span class="icon icon-signout"></span> Log out ({{ user.nickname }})
 	    </a></li>
 	    {% else %}
-	    <li><a href="/login/" class="navbar-link">
+	    <li><a href="/accounts/login/" class="navbar-link">
 	      <span class="icon icon-signin"></span> Log in
 	    </a></li>
-	    <li><a href="/register/" class="navbar-link">
+	    <li><a href="/accounts/register/" class="navbar-link">
 	      <span class="icon icon-plus"></span> Sign up
 	    </a></li>	    
 	    {% endif %}

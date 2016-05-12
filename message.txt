@@ -1,5 +1,3 @@
-Using formView with VotingPollCreate view 
+display correcty the poll using view poll
 
- define fonction  save in VotingPollForm in order to include user as admin.
-
- define fonction form_valide in VotingPollCreate View in order to save the use form request.
+use the exist code but remove class css for each votes

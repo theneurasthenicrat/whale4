@@ -14,12 +14,12 @@ class VotingPollForm(ModelForm):
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
         }
 
-def save(self, user=None):
-    voting_poll= super(VotingPollForm, self).save(commit=False)
-    if user:
-        voting_poll.admin = user
-    voting_poll.save()
-    return voting_poll
+    def save(self, user=None):
+        voting_poll= super(VotingPollForm, self).save(commit=False)
+        if user:
+            voting_poll.admin = user
+        voting_poll.save()
+        return voting_poll
 
 class CandidateForm(ModelForm):
     class Meta:
