@@ -19,12 +19,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2$r6%^0#gorz!*pt%6aoc5wyw)d7ub3$k&#s1&!zp4$9(3!-+='
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -37,8 +35,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'whale4',
     'polls',
+    'whale4',
+    'bootstrap3'
+  
 )
 
 MIDDLEWARE_CLASSES = (
@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 )
+
 
 TEMPLATES = [
     {
@@ -68,6 +69,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 
 ROOT_URLCONF = 'whale4.urls'
 
@@ -88,8 +91,7 @@ DATABASES = {
     }
 }
 
-SALT = 'yourSaltHere'
-
+SALT = 'whale4salt'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -123,5 +125,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'),)
 APPEND_SLASH = True
-# Authentication User Model
-AUTH_USER_MODEL = "accounts.WhaleUser"
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
