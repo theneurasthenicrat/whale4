@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm
 from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel, PositiveNegative
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView,FormView
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms import formset_factory
 
@@ -39,14 +39,16 @@ def candidateCreate(request, pk):
 	return render(request, 'polls/candidate_form.html', {'formset': formset})
 
 
-class VotingPollCreate(CreateView):
-	model = VotingPoll
+class VotingPollCreate(FormView):
 	form_class = VotingPollForm
 	template_name = "polls/votingPoll_form.html"
+
+	def form_valid(self, form):
+		form.save(self.request.user)
+		return super(VotingPollCreate, self).form_valid(form)
 	
 	def get_success_url(self):
 		return reverse_lazy(candidateCreate, kwargs={'pk': self.object.pk, })
-
 
 def viewPoll(request, pk):
 

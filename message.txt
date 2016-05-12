@@ -1,6 +1,5 @@
- Add django-bootstrap3 application 
+Using formView with VotingPollCreate view 
 
-django-bootstrapp3 application is usefull app, when we need to use bootstrap for form and formset
-add bootstrap3 in template 
-add date input by using datepicher from jquery ui
-add django User in poll model 
+ define fonction  save in VotingPollForm in order to include user as admin.
+
+ define fonction form_valide in VotingPollCreate View in order to save the use form request.
