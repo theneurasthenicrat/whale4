@@ -23,7 +23,7 @@
         {{ v.nickname }}
         </th>
         {% for s in v.scores %}
-        <td>{{ s.text }}</td>
+        <td class="{{ s.class }}">{{ s.text }}</td>
         {% endfor %}
     </tr>
     {% endfor %}

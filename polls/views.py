@@ -94,7 +94,7 @@ def viewPoll(request, pk):
 	poll = VotingPoll.objects.get(id=pk)
 	candidates = Candidate.objects.filter(poll_id=pk)
 	votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-	preference_model1 = preference_model_from_text(poll.preference_model)
+	preference_model = preference_model_from_text(poll.preference_model)
 
 
 	scores = {}
@@ -112,10 +112,12 @@ def viewPoll(request, pk):
 		tab[id]['scores'] = []
 		for c in candidates:
 			if c.id in scores[id]:
-				a=preference_model1.value2text(scores[id][c.id]) 
+				score=scores[id][c.id]
+				a=preference_model.value2text(score) 
 				tab[id]['scores'].append({
-					'value': scores[id][c.id],
-					'text': a if a!= " I don't know" else "?"
+					'value': score,
+					'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score), 1) * 100)) if score != INDEFINED_VALUE else 'poll-undefined',
+					'text': a if score != INDEFINED_VALUE else "?"
 					})
 
 	values = None if tab == {} else tab.values()

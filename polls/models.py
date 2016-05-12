@@ -24,12 +24,9 @@ class VotingPoll(Poll):
         ('Standard', 'Standard Poll'),
         ('Date', 'Date Poll')
         )
-    preference_model = models.CharField(max_length=50,
-                                       choices=PREFERENCE_MODELS,
-                                       default='PositiveNegative')
-    poll_type = models.CharField(max_length=20,
-                                       choices=POLL_TYPES,
-                                       default='Standard')
+    poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard')
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative')
+    
 
 class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
@@ -53,7 +50,7 @@ class DateCandidate(Candidate):
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
-    voter = models.CharField(max_length=30,verbose_name='name')
+    voter = models.CharField(max_length=30)
     value = models.IntegerField()
 
 #  preference models ########################################################
@@ -75,10 +72,10 @@ class PreferenceModel:
         return len(values)
 
     def min(self): 
-        return min(self.values)
+        return min(self.values[1:])
 
     def max(self): 
-        return max(self.values)
+        return max(self.values[1:])
 
     def text2value(self,text):
         index= self.texts.index(text)
@@ -89,7 +86,7 @@ class PreferenceModel:
         return self.texts[index]
 
     def evaluate(self, value):
-        return (value - self.min) / (self.max - self.min)
+        return (value - self.min()) / (self.max() - self.min())
 
     def as_dict(self):
         return {"id": self.id,"values": self.values,"texts": self.texts}
