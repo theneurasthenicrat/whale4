@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm
-from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel, PositiveNegative
+from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel,INDEFINED_VALUE
 from django.views.generic.edit import CreateView,FormView
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms import formset_factory
@@ -94,15 +94,15 @@ def viewPoll(request, pk):
 	poll = VotingPoll.objects.get(id=pk)
 	candidates = Candidate.objects.filter(poll_id=pk)
 	votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-	preference_model = preference_model_from_text(poll.preference_model)
-	users=VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+	preference_model1 = preference_model_from_text(poll.preference_model)
+
 
 	scores = {}
 	for v in votes:
 		if v.voter not in scores:
 			scores[v.voter] = {}
 		scores[v.voter][v.candidate.id]= v.value
-
+	print(scores)
 	tab = {}
 	for v in votes:
 		id = v.voter
@@ -112,14 +112,10 @@ def viewPoll(request, pk):
 		tab[id]['scores'] = []
 		for c in candidates:
 			if c.id in scores[id]:
+				a=preference_model1.value2text(scores[id][c.id]) 
 				tab[id]['scores'].append({
 					'value': scores[id][c.id],
-					'text': preference_model.value2text[scores[id][c.id]]
-					})
-			else:
-				tab[id]['scores'].append({
-					'value': 'undefined',
-					'text': '?'
+					'text': a if a!= " I don't know" else "?"
 					})
 
 	values = None if tab == {} else tab.values()
@@ -139,7 +135,6 @@ def vote(request, pk):
 			data = form.cleaned_data
 			voter = data['nickname']
 			for c in candidates:
-				if data['value' + str(c.id)] != 'undefined':
 					VotingScore.objects.create(candidate=c, voter=voter, value=data['value'+str(c.id)])
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	else:

@@ -3,7 +3,7 @@
 # imports ####################################################################
 
 from django.forms import ModelForm,BaseFormSet,Form, widgets
-from polls.models import VotingPoll,Candidate,DateCandidate
+from polls.models import VotingPoll,Candidate,DateCandidate, PreferenceModel
 from django import forms
 
 class VotingPollForm(ModelForm):
@@ -45,7 +45,7 @@ class VotingForm(forms.Form):
         self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
         for c in candidates:
             self.fields['value'+str(c.id)] = forms.ChoiceField(
-                choices = [('undefined', "I don't know...")] + list(zip(preference_model.values, preference_model.texts)),
+                choices = preference_model.zipPreference(),
                 required=True, label= c
                 )
             self.candidates = candidates

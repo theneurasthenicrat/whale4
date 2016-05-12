@@ -1,3 +1,7 @@
-display correcty the poll using view poll
+Refactoring Model PreferenceModel
 
-use the exist code but remove class css for each votes
+It is better to use min, text2values etc.. as fonctions than objects parameters.
+positiveNegative and approval preferences  are constants they became an object.
+for each preferences, there is an option I don't know which is equivalent to -2222222.
+
+
