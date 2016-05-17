@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import WhaleUser
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -11,7 +11,7 @@ class Poll(models.Model):
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField(null=True,blank=True,verbose_name= _("closing date"))
-    admin = models.ForeignKey(User, related_name='polls')
+    admin = models.ForeignKey(WhaleUser, related_name='polls')
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (

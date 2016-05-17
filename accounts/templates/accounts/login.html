@@ -1,39 +1,30 @@
-{% extends "polls/base.html" %}
-
+{{% extends "polls/base.html" %}
+{% load bootstrap3 %}
 {% block content %}
 
 <h1>Log in</h1>
 
 
-{% if error %}
-
-  <p><strong>unknown WhaleUser or bad password.</strong></p>
-
-{% endif %}
-
 
 {% if user.is_authenticated %}
-
+ {% csrf_token %}
   you are log in , {{ user.username }} ! 
 
 {% else %}
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    <form action="" method="post" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
 
-      {% csrf_token %}
-
-      {{ form.as_p }}
-
-      
-      
-            <input class="btn btn-success " type="submit" value="login" />
-        
-    </p>
-    <input type="hidden" name="next" value="{{ next }}" />
-
-    </form>
+    <button type="submit" class="btn btn-primary">
+      <span class="glyphicon glyphicon-ok-sign"></span> Log in
+    </button>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+    
 
 {% endif %}
 
 {% endblock %}
+
 

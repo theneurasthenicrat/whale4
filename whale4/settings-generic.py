@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'accounts',
     'polls',
-    'whale4',
     'bootstrap3'
   
 )
@@ -64,7 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.i18n',
+              
             ],
         },
     },
@@ -121,9 +120,12 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 APPEND_SLASH = True
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
+LOCALE_PATHS = [os.path.join(BASE_DIR,'locale'),]
+AUTH_USER_MODEL = 'accounts.WhaleUser'
+

@@ -3,10 +3,42 @@
 # imports ####################################################################
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
 
-class WhaleUser(models.Model):
-	user = models.OneToOneField(User)  # La liaison OneToOne vers le modèle User
-	
-	def __str__(self):
-		return "WhaleUser {0}".format(self.user.username)
+# models #####################################################################
+
+class WhaleUserManager(BaseUserManager):
+    def create_user(self, email, nickname, password=None):
+        user = self.model(email=self.normalize_email(email), nickname=nickname)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, nickname, password,):
+        user = self.model(email=self.normalize_email(email), nickname=nickname,password=password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+class WhaleUser(AbstractBaseUser):
+
+    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
+    nickname = models.CharField(max_length=30)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False) 
+
+    objects = WhaleUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname']
+
+    def get_full_name(self):
+        return self.nickname
+
+    def get_short_name(self):
+        return self.nickname
+
+    def __str__(self):             
+        return self.nickname
+
