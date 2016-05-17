@@ -89,18 +89,20 @@ def dateCandidateCreate(request, pk):
 		formset = CandidateFormSet(request.POST)
 		if form.is_valid():
 			data = form.cleaned_data
-			date = data['date']
+			dates = data['dates']
 			if formset.is_valid():
 				for form in formset:
-					candidate = form.cleaned_data['candidate']
-					cand = DateCandidate.objects.create(date=date,poll=poll,candidate=candidate)
+					label = form.save(commit=False)
+					for date in dates:
+						candidate = DateCandidate.objects.create(date=date,poll=poll,candidate=label.candidate)
 				messages.success(request,_('Candidates successfully added!'))
-				return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+				return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.pk}))
 	else:
 		formset = CandidateFormSet()
 		form = DateCandidateForm()
+		candidates =DateCandidate.objects.filter(poll_id=poll.id)
 
-	return render(request, 'polls/dateCandidate_form.html', {'formset': formset, 'form': form})
+	return render(request, 'polls/dateCandidate_form.html', {'formset': formset, 'form': form,'candidates':candidates})
 
 @login_required
 def votingPollCreate(request):
@@ -118,6 +120,12 @@ def votingPollCreate(request):
 	else:
 		form = VotingPollForm()
 	return render(request, "polls/votingPoll_form.html", {'form': form})
+
+def deleteCandidate(request, pk,cand):
+	poll = VotingPoll.objects.get(id=pk)
+	candidate = DateCandidate.objects.get(id=cand)
+	candidate.delete()
+	return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id, }))
 
 
 def viewPoll(request, pk):

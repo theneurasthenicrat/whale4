@@ -20,13 +20,13 @@ class CandidateForm(ModelForm):
         model = Candidate
         exclude=['poll']
 
-class DateCandidateForm(ModelForm):
-    class Meta:
-        model = DateCandidate
-        exclude=['candidate','poll']
-        widgets = {
-            'date': widgets.TextInput(attrs={'class': 'datepicker'}),
-        }
+class DateCandidateForm(Form):
+    dates = forms.CharField(max_length=300, required=True)
+    
+    def clean_dates(self):
+        dates = self.cleaned_data["dates"].split(',')
+        return dates
+
 
 class BaseCandidateFormSet(BaseFormSet):
     def clean(self):

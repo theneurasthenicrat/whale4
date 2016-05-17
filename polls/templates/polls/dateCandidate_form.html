@@ -4,10 +4,29 @@
 {% block content %}
 
 <h3> {% trans 'Candidates' %}</h3>
+
+{% if candidates %}
+<p class="lead">Here is the current list of candidates:</p>
+<ol class="list-group">
+    {% for c in candidates %}
+    <li class="list-group-item">
+  <form action="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" method="get">{% csrf_token %}
+      {{ c }}
+      <button type="submit" class="close">&times;</button>
+  </form>
+    </li>
+    {% endfor %}
+</ol>
+{% else %}
+<p>No candidate yet</p>
+{% endif %}
+
 <form action="" method="post">
 {% csrf_token %}
-{% bootstrap_form_errors form  %}
-{% bootstrap_form form %}
+
+  <label class="control-label">First pick one or several dates</label> 
+  <input type="text" class="form-control" required="required" id="datepicker" name="dates">
+
 {{ formset.management_form }}
 {% bootstrap_formset_errors formset layout='inline' %}
 <div id="form_set" >
@@ -41,8 +60,8 @@
 
 <script>
         $(document).ready(function() {
-            $('.datepicker').datepicker({
-    
+            $('#datepicker').datepicker({
+    format: 'yyyy-mm-dd',
      multidate: true
      });
      $('#add_more').click(function() {
