@@ -5,6 +5,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
+from django.utils.translation import ugettext_lazy as _
 
 # models #####################################################################
 
@@ -23,8 +24,8 @@ class WhaleUserManager(BaseUserManager):
 
 class WhaleUser(AbstractBaseUser):
 
-    email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
-    nickname = models.CharField(max_length=30)
+    email = models.EmailField(verbose_name=_('email address'), max_length=255, unique=True)
+    nickname = models.CharField(verbose_name=_('nickname'),max_length=30)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False) 
 

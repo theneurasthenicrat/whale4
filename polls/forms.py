@@ -14,17 +14,19 @@ class VotingPollForm(ModelForm):
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
         }
 
-    def save(self, user=None):
-        voting_poll= super(VotingPollForm, self).save(commit=False)
-        if user:
-            voting_poll.admin = user
-        voting_poll.save()
-        return voting_poll
 
 class CandidateForm(ModelForm):
     class Meta:
         model = Candidate
         exclude=['poll']
+
+class DateCandidateForm(ModelForm):
+    class Meta:
+        model = DateCandidate
+        exclude=['candidate','poll']
+        widgets = {
+            'date': widgets.TextInput(attrs={'class': 'datepicker'}),
+        }
 
 class BaseCandidateFormSet(BaseFormSet):
     def clean(self):

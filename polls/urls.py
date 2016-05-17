@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
-from polls.views import VotingPollCreate
+from polls import views
 
-urlpatterns = patterns('polls.views',
-	url(r'^$','home',name='home'),
-	url(r'^candidateCreate/(?P<pk>[^/]+)/$', 'candidateCreate',name='candidateCreate'),
-	url(r'^newPoll/$', VotingPollCreate.as_view()),
-	url(r'^viewPoll/(?P<pk>[^/]+)/$', 'viewPoll',name='viewPoll'),
-	url(r'^vote/(?P<pk>[^/]+)/$', 'vote',name='vote'),
-)
+urlpatterns = [
+    url(r'^$', views.home, name='home'),
+    url(r'^candidateCreate/(?P<pk>[^/]+)/$', views.candidateCreate, name='candidateCreate'),
+    url(r'^dateCandidateCreate/(?P<pk>[^/]+)/$', views.dateCandidateCreate, name='dateCandidateCreate'),
+    url(r'^newPoll/$', views.votingPollCreate,name='newPoll'),
+    url(r'^viewPoll/(?P<pk>[^/]+)/$', views.viewPoll, name='viewPoll'),
+    url(r'^vote/(?P<pk>[^/]+)/$', views.vote, name='vote'),
+]

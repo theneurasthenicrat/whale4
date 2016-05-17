@@ -8,11 +8,9 @@
   {% bootstrap_form_errors form  %}
   {% bootstrap_form form %}
   {% buttons %}
-  
     <button type="submit" class="btn btn-primary">
-      {% bootstrap_icon "star" %} {% blocktrans %} trans Submi{% endblocktrans %}
+      {% bootstrap_icon "star" %} {% trans 'Submit' %}
     </button>
-    
   {% endbuttons %}
 </form>
     <script>

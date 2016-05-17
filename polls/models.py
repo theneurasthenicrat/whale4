@@ -25,13 +25,13 @@ class VotingPoll(Poll):
         ('Standard', _('Standard Poll')),
         ('Date', _('Date Poll'))
         )
-    poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll_type"))
-    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference_model"))
+    poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model"))
     
 
 class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
-    candidate = models.CharField(max_length=50,verbose_name= _("candidate"))
+    candidate = models.CharField(max_length=50,verbose_name= _('candidate'))
 
     class Meta: 
         ordering=['id']
@@ -96,7 +96,7 @@ class Ranking(PreferenceModel):
     def __init__(self, nb_cand, ties_allowed = 0):
         values = [range(nb_cand + 1)]
         texts = [str(x) for x in values]
-        PreferenceModel.__init__(self,_("ranking")+ (_("WithTies") if ties_allowed else _("NoTies"),texts,values))
+        PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed else "NoTies"),texts,values)
 
 class Numbers(PreferenceModel):
     def __init__(self, nb_min, nb_max):

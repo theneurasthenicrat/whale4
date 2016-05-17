@@ -1,15 +1,16 @@
 {% extends "polls/base.html" %}
+{% load i18n %}
 {% load bootstrap3 %}
 {% block content %}
 
-<h1>Create account</h1>
+<h1>{% trans 'Create account'%}</h1>
 
 <form action="" method="post" >
   {% csrf_token %}
   {% bootstrap_form form %}
 
     <button type="submit" class="btn btn-primary">
-      <span class="glyphicon glyphicon-ok-sign"></span> Create
+      <span class="glyphicon glyphicon-ok-sign"></span> {% trans 'Create '%}
     </button>
 
 </form>

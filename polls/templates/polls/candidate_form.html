@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 {% load bootstrap3 %}
-<h3> {% blocktrans %} Candidates{% endblocktrans %}</h3>
+<h3> {% trans 'Candidates' %}</h3>
 <form action="" method="post">
 {% csrf_token %}
 {{ formset.management_form }}
@@ -15,8 +15,6 @@
     {% endfor %}
 </div>
 
-<input type="button" value="Add candidate" id="add_more">
-
 <div id="empty_form" style="display:none">
     <table class='no_error'>
         {% bootstrap_form formset.empty_form layout='horizontal' %} 
@@ -24,9 +22,19 @@
 </div>
 <br>
 
-<input type="submit" value="Save">
+{% buttons %}
+    <button type="submit" class="btn btn-primary pull-right">
+      {% bootstrap_icon "star" %} {% trans 'Save' %}
+    </button>
+  {% endbuttons %}
+
 
 </form>
+{% buttons %}
+    <button  id="add_more" class="btn btn-primary">
+      {% bootstrap_icon "star" %} {% trans 'Add candidate' %}
+    </button>
+  {% endbuttons %}
 <script>
     $('#add_more').click(function() {
         var form_idx = $('#id_form-TOTAL_FORMS').val();

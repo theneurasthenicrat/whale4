@@ -1,0 +1,58 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+
+<h3> {% trans 'Candidates' %}</h3>
+<form action="" method="post">
+{% csrf_token %}
+{% bootstrap_form_errors form  %}
+{% bootstrap_form form %}
+{{ formset.management_form }}
+{% bootstrap_formset_errors formset layout='inline' %}
+<div id="form_set" >
+    {% for form in formset.forms %}
+        <table class='no_error'>
+            {% bootstrap_form form layout='horizontal' %}
+        </table>
+    {% endfor %}
+</div>
+
+<div id="empty_form" style="display:none">
+    <table class='no_error'>
+        {% bootstrap_form formset.empty_form layout='horizontal' %} 
+    </table>
+</div>
+<br>
+
+{% buttons %}
+    <button type="submit" class="btn btn-primary pull-right">
+      {% bootstrap_icon "star" %} {% trans 'Save' %}
+    </button>
+  {% endbuttons %}
+
+</form>
+
+{% buttons %}
+    <button  id="add_more" class="btn btn-primary">
+      {% bootstrap_icon "star" %} {% trans 'Add candidate' %}
+    </button>
+  {% endbuttons %}
+
+<script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+    
+     multidate: true
+     });
+     $('#add_more').click(function() {
+        var form_idx = $('#id_form-TOTAL_FORMS').val();
+        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    });
+    $('.delete').click( function(){ 
+         $(this).remove(); 
+    });
+        });
+</script>
+{% endblock %}

@@ -1,0 +1,235 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-17 20:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/forms.py:6 accounts/models.py:27
+msgid "email address"
+msgstr "Adresse email"
+
+#: accounts/forms.py:7 accounts/forms.py:10
+msgid "password"
+msgstr "Mot de passe"
+
+#: accounts/forms.py:11
+msgid "password confirmation"
+msgstr "Confirmation de mot de passe"
+
+#: accounts/models.py:28
+msgid "nickname"
+msgstr "Surnom"
+
+#: accounts/templates/accounts/login.html:6
+#: accounts/templates/accounts/login.html:21 polls/templates/polls/base.html:65
+msgid "Log in"
+msgstr "Se connecter"
+
+#: accounts/templates/accounts/login.html:12
+msgid "you are log in"
+msgstr "Vous êtes connecté"
+
+#: accounts/templates/accounts/register.html:6
+msgid "Create account"
+msgstr "Créer un compte"
+
+#: accounts/templates/accounts/register.html:13
+msgid "Create "
+msgstr "Créer"
+
+#: accounts/views.py:20
+msgid "Your account has been successfully created."
+msgstr "Votre compte a été créé avec succès"
+
+#: accounts/views.py:36
+msgid "You are successfully log in."
+msgstr "Vous êtes connecté avec succès"
+
+#: accounts/views.py:42
+msgid "unknown WhaleUser or bad password."
+msgstr "un whale utilisateur inconnu ou un mauvais mot de passe"
+
+#: accounts/views.py:49
+msgid "You have been successfully logged out."
+msgstr "Vous avez été déconnecté avec succès"
+
+#: polls/models.py:10
+msgid "tilte"
+msgstr "titre"
+
+#: polls/models.py:11
+msgid "description"
+msgstr "description"
+
+#: polls/models.py:13
+msgid "closing date"
+msgstr "date de cloture"
+
+#: polls/models.py:18
+msgid "Positive Negative scale (--, -, 0, +, ++)"
+msgstr "5 niveaux Positifs/Négatifs(--, -, 0, +, ++)"
+
+#: polls/models.py:19
+msgid "Approval Voting (Yes / No)"
+msgstr "Approbation(Oui/Non)"
+
+#: polls/models.py:20
+msgid "Ranking with ties"
+msgstr "Ordre avec ex-aequo"
+
+#: polls/models.py:21
+msgid "Ranking (no ties)"
+msgstr "Ordre sans ex-aequo"
+
+#: polls/models.py:22
+msgid "Scores"
+msgstr "Scores"
+
+#: polls/models.py:25
+msgid "Standard Poll"
+msgstr "Sondage standard"
+
+#: polls/models.py:26
+msgid "Date Poll"
+msgstr "Sondage type Date "
+
+#: polls/models.py:28
+msgid "poll type"
+msgstr "type de sondage"
+
+#: polls/models.py:29
+msgid "preference model"
+msgstr "préferences"
+
+#: polls/models.py:34
+msgid "candidate"
+msgstr "candidat"
+
+#: polls/models.py:43
+msgid "date"
+msgstr "date"
+
+#: polls/models.py:54
+msgid "voter"
+msgstr "Voteur"
+
+#: polls/models.py:55
+msgid "value"
+msgstr "valeur"
+
+#: polls/models.py:64
+msgid " I don't know"
+msgstr "Je ne sais pas"
+
+#: polls/templates/polls/base.html:12
+msgid " Whale4 - WHich ALternative is Elected"
+msgstr "Whale4 - Quelle alternative est élu"
+
+#: polls/templates/polls/base.html:46
+msgid "Home"
+msgstr "Accueil"
+
+#: polls/templates/polls/base.html:47
+msgid " New poll"
+msgstr "Nouveau Sondage"
+
+#: polls/templates/polls/base.html:49
+msgid "Developers"
+msgstr "Développeurs"
+
+#: polls/templates/polls/base.html:51
+msgid " Get the code"
+msgstr "Voir le code"
+
+#: polls/templates/polls/base.html:52
+msgid " Code license"
+msgstr "License"
+
+#: polls/templates/polls/base.html:55
+msgid "Contact us "
+msgstr "Nous contacter"
+
+#: polls/templates/polls/base.html:61
+#, fuzzy
+#| msgid "Log in"
+msgid "Log out"
+msgstr "Se connecter"
+
+#: polls/templates/polls/base.html:67
+msgid " Sign up"
+msgstr "S'inscire"
+
+#: polls/templates/polls/base.html:84
+msgid "GO"
+msgstr "GO"
+
+#: polls/templates/polls/candidate_form.html:5
+#: polls/templates/polls/dateCandidate_form.html:6
+msgid "Candidates"
+msgstr "Candidats"
+
+#: polls/templates/polls/candidate_form.html:22
+#: polls/templates/polls/dateCandidate_form.html:23
+msgid "Add candidate"
+msgstr "Ajouter un candidat"
+
+#: polls/templates/polls/candidate_form.html:35
+#: polls/templates/polls/dateCandidate_form.html:36
+msgid "Save"
+msgstr "Enregistrer"
+
+#: polls/templates/polls/home.html:4
+msgid "Welcome to Whale4"
+msgstr "Bienvenu à Whale4"
+
+#: polls/templates/polls/home.html:6
+msgid "This is the default home page (which will be customized soon)..."
+msgstr ""
+"Ceci est la page d'accueil par défaut(qui sera bientôt personnalisé)...."
+
+#: polls/templates/polls/viewPoll.html:53
+msgid "No vote yet... Do you want to be the first one? "
+msgstr "Pas de vote pour l'instant ....voulez vous être le premier?"
+
+#: polls/templates/polls/viewPoll.html:58
+msgid "Vote"
+msgstr "Voter"
+
+#: polls/templates/polls/vote.html:7
+msgid "Vote for this poll"
+msgstr "Voter pour ce sondage"
+
+#: polls/templates/polls/vote.html:15
+#: polls/templates/polls/votingPoll_form.html:12
+msgid "Submit"
+msgstr "Envoyer"
+
+#: polls/views.py:73 polls/views.py:97
+msgid "Candidates successfully added!"
+msgstr "Candidats ajouté avec succès"
+
+#: polls/views.py:113
+msgid "Poll successfully created! Now add the candidates to the poll..."
+msgstr "Sondage crée avec succès! Maintenant ajouter des candidats au sondage"
+
+#: whale4/settings-generic.py:111 whale4/settings.py:114
+msgid "French"
+msgstr "Français"
+
+#: whale4/settings-generic.py:113 whale4/settings.py:116
+msgid "English"
+msgstr "Anglais"

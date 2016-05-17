@@ -9,6 +9,7 @@ from accounts.models import WhaleUser
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.utils.translation import ugettext_lazy as _
 
 class register(CreateView):
     template_name = 'accounts/register.html'
@@ -16,7 +17,7 @@ class register(CreateView):
     model = WhaleUser
 
     def get_success_url(self):
-        messages.success(self.request, 'Your account has been successfully created.')
+        messages.success(self.request, _('Your account has been successfully created.'))
         return reverse_lazy('login')
 
 
@@ -32,18 +33,18 @@ def login_view(request):
             user = authenticate(username=username, password=password) 
             if user is not None:
                 login(request, user)
-                messages.success(request, 'You are successfully log in.')
+                messages.success(request, _('You are successfully log in.'))
                 if next != "":
                     return redirect(next)
                 else:
                     return redirect(reverse('home'))
             else:
-                messages.error(request, 'unknown WhaleUser or bad password.')
+                messages.error(request, _('unknown WhaleUser or bad password.'))
     else:
         form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form, })
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been successfully logged out.')
+    messages.success(request, _('You have been successfully logged out.'))
     return redirect(reverse('home'))

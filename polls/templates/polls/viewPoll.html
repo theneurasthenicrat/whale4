@@ -6,12 +6,30 @@
 <pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
 <table class="table pollTable">
     <thead>
+    {% if poll.poll_type == "Date" %}
+    <tr>
+        <td class="emptyCell" colspan="1" ></td>
+        {% for m in months %}
+        <th colspan="{{ m.value }}">
+        {{ m.label }}
+        </th>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td class="emptyCell" colspan="1" ></td>
+        {% for d in days %}
+        <th colspan="{{ d.value }}">
+        {{ d.label }}
+        </th>
+        {% endfor %}
+    </tr>
+        {% endif %}
  
     <tr>
         <td class="emptyCell" colspan="1" ></td>
         {% for c in candidates %}
         <th>
-        {{ c }}
+        {{ c.candidate }}
         </th>
         {% endfor %}
     </tr>
@@ -32,12 +50,12 @@
 </table>
     {% else %}
 </table>
-<div style="margin-bottom: 30px;"><i>{% blocktrans %}No vote yet... Do you want to be the first one? {% endblocktrans %}</i></div>
+<div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
 {% endif %}
 
 
 	   
-<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> {% blocktrans %}Vote {% endblocktrans %}</a>
+<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> {% trans 'Vote' %}</a>
 
 
 
