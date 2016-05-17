@@ -2,35 +2,36 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 
 class Poll(models.Model):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=250)
-    description = models.TextField(blank=True,null=True)
+    title = models.CharField(max_length=250,verbose_name= _("tilte"))
+    description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
-    closing_date = models.DateField(null=True,blank=True)
+    closing_date = models.DateField(null=True,blank=True,verbose_name= _("closing date"))
     admin = models.ForeignKey(User, related_name='polls')
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (
-        ('PositiveNegative', 'Positive Negative scale (--, -, 0, +, ++)'),
-        ('Approval', 'Approval Voting (Yes / No)'),
-        ('RankingTies', 'Ranking with ties'),
-        ('Ranking', 'Ranking (no ties)'),
-        ('Numbers#0#10', 'Scores')
+        ('PositiveNegative', _('Positive Negative scale (--, -, 0, +, ++)')),
+        ('Approval', _('Approval Voting (Yes / No)')),
+        ('RankingTies', _('Ranking with ties')),
+        ('Ranking', _('Ranking (no ties)')),
+        ('Numbers#0#10', _('Scores'))
         )
     POLL_TYPES = (
-        ('Standard', 'Standard Poll'),
-        ('Date', 'Date Poll')
+        ('Standard', _('Standard Poll')),
+        ('Date', _('Date Poll'))
         )
-    poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard')
-    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative')
+    poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll_type"))
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference_model"))
     
 
 class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
-    candidate = models.CharField(max_length=50)
+    candidate = models.CharField(max_length=50,verbose_name= _("candidate"))
 
     class Meta: 
         ordering=['id']
@@ -39,7 +40,7 @@ class Candidate(models.Model):
         return str(self.candidate)
 
 class DateCandidate(Candidate):
-    date = models.DateField()
+    date = models.DateField(verbose_name= _("date"))
 
     class Meta: 
         ordering=['date']
@@ -50,8 +51,8 @@ class DateCandidate(Candidate):
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
-    voter = models.CharField(max_length=30)
-    value = models.IntegerField()
+    voter = models.CharField(max_length=30,verbose_name= _("voter"))
+    value = models.IntegerField(verbose_name= _("value"))
 
 #  preference models ########################################################
 INDEFINED_VALUE=-222222222
@@ -60,7 +61,7 @@ class PreferenceModel:
    
     def __init__(self, id, texts, values):
         self.id = id
-        texts.insert(0," I don't know")
+        texts.insert(0,_(" I don't know"))
         values.insert(0,INDEFINED_VALUE)
         self.texts = texts
         self.values = values
@@ -95,7 +96,7 @@ class Ranking(PreferenceModel):
     def __init__(self, nb_cand, ties_allowed = 0):
         values = [range(nb_cand + 1)]
         texts = [str(x) for x in values]
-        PreferenceModel.__init__(self,"ranking" + ("WithTies" if ties_allowed else "NoTies"),texts,values)
+        PreferenceModel.__init__(self,_("ranking")+ (_("WithTies") if ties_allowed else _("NoTies"),texts,values))
 
 class Numbers(PreferenceModel):
     def __init__(self, nb_min, nb_max):

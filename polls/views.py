@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 # Create your views here.
 # decorators #################################################################
 
@@ -66,28 +67,32 @@ def candidateCreate(request, pk):
 				candidate = form.save(commit=False)
 				candidate.poll = poll
 				candidate.save()
-
+			messages.success(request,'Candidates successfully added!')
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	else:
 		formset = CandidateFormSet()
 
 	return render(request, 'polls/candidate_form.html', {'formset': formset})
 
+
 class VotingPollCreate(CreateView):
 	model = VotingPoll
 	form_class = VotingPollForm
 	template_name = "polls/votingPoll_form.html"
+	
 
 	def form_valid(self, form):
 		form.save(self.request.user)
 		return super(VotingPollCreate, self).form_valid(form)
 	
 	def get_success_url(self):
+		messages.success(self.request,'Poll successfully created! Now add the candidates to the poll...')
 		return reverse_lazy(candidateCreate, kwargs={'pk': self.object.pk, })
 
 	@method_decorator(login_required)
 	def dispatch(self, *args, **kwargs):
 		return super(VotingPollCreate, self).dispatch(*args, **kwargs)
+
 
 def viewPoll(request, pk):
 
@@ -102,22 +107,20 @@ def viewPoll(request, pk):
 		if v.voter not in scores:
 			scores[v.voter] = {}
 		scores[v.voter][v.candidate.id]= v.value
-	print(scores)
+	
 	tab = {}
 	for v in votes:
 		id = v.voter
 		tab[id] = {}
-		tab[id]['id'] = id
 		tab[id]['nickname'] = v.voter
 		tab[id]['scores'] = []
 		for c in candidates:
 			if c.id in scores[id]:
 				score=scores[id][c.id]
-				a=preference_model.value2text(score) 
 				tab[id]['scores'].append({
 					'value': score,
 					'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score), 1) * 100)) if score != INDEFINED_VALUE else 'poll-undefined',
-					'text': a if score != INDEFINED_VALUE else "?"
+					'text': preference_model.value2text(score) if score != INDEFINED_VALUE else "?"
 					})
 
 	values = None if tab == {} else tab.values()

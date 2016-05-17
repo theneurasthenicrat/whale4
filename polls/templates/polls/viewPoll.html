@@ -1,4 +1,5 @@
 {% extends "polls/base.html" %}
+{% load i18n %}
 {% block content %}
 {% csrf_token %}
 <h1>{{ poll.title }}</h1>
@@ -31,12 +32,12 @@
 </table>
     {% else %}
 </table>
-<div style="margin-bottom: 30px;"><i>No vote yet... Do you want to be the first one?</i></div>
+<div style="margin-bottom: 30px;"><i>{% blocktrans %}No vote yet... Do you want to be the first one? {% endblocktrans %}</i></div>
 {% endif %}
 
 
 	   
-<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> Vote </a>
+<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> {% blocktrans %}Vote {% endblocktrans %}</a>
 
 
 

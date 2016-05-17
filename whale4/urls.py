@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^polls/', include('polls.urls')),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^$',home, name='home'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 
 ]
 

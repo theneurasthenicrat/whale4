@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>
 	    {% block title %}
-	    Whale4 - WHich ALternative is Elected
+	    {% blocktrans %}} Whale4 - WHich ALternative is Elected {% endblocktrans %}
 	    {% endblock %}
 	</title>
 	
@@ -31,6 +32,7 @@
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+
     </head>
     <body role="document">
       <nav class="navbar navbar-inverse" role="navigation">
@@ -40,38 +42,58 @@
 	  </div>
 
 	  <ul class="nav navbar-nav">
-	    <li><a href="/polls">Home</a></li>
-	    <li><a href="/polls/newPoll">New poll</a></li>
+	    <li><a href="/polls">{% blocktrans %} Home{% endblocktrans %}</a></li>
+	    <li><a href="/polls/newPoll">{% blocktrans %} New poll {% endblocktrans %}</a></li>
 	    <li class="dropdown">
-	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Developers <b class="caret" ></b></a>
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% blocktrans %} Developers {% endblocktrans %}<b class="caret" ></b></a>
 	      <ul class="dropdown-menu">
-		<li><a href="https://github.com/theneurasthenicrat/whale4">Get the code</a></li>
-		<li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE">Code license</a></li>
+		<li><a href="https://github.com/theneurasthenicrat/whale4">{% blocktrans %} Get the code{% endblocktrans %}</a></li>
+		<li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE">{% blocktrans %} Code license {% endblocktrans %}</a></li>
 	      </ul>
 	    </li>
-	    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">Contact us</a></li>
+	    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">{% blocktrans %}Contact us {% endblocktrans %}</a></li>
 	  </ul>
 	  
 	  <ul class="nav navbar-nav navbar-right">
 	    {% if user.is_authenticated %}
 	    <li><a href="/accounts/logout/" class="navbar-link">
-	      <span class="icon icon-signout"></span> Log out ({{ user.nickname }})
+	      <span class="icon icon-signout"></span> {% blocktrans %} Log out {% endblocktrans %} ({{ user.username }})
 	    </a></li>
 	    {% else %}
 	    <li><a href="/accounts/login/" class="navbar-link">
-	      <span class="icon icon-signin"></span> Log in
-	    </a></li>
+	      <span class="icon icon-signin"></span> {% blocktrans %} Log in {% endblocktrans %}
 	    <li><a href="/accounts/register/" class="navbar-link">
-	      <span class="icon icon-plus"></span> Sign up
+	      <span class="icon icon-plus"></span> {% blocktrans %} Sign up {% endblocktrans %}
 	    </a></li>	    
 	    {% endif %}
 	  </ul>
 	</div>
       </nav>
       <div class="container theme-showcase" role="main">
+
+      {% if messages %}
+		<ul class="messages">
+      	{% for message in messages %}
+      	<li>{{ message }}</li>
+      	{% endfor %}
+      </ul>
+      {% endif %}
 	{% block content %}
 	Default page
 	{% endblock %}
+
+
+
+<form action="/i18n/setlang/" method="post">
+{% csrf_token %}
+<input name="next" type="hidden" value="/polls/" />
+<select name="language">
+{% for lang in LANGUAGES %}
+<option value="{{ lang.0 }}">{{ lang.1 }}</option>
+{% endfor %}
+</select>
+<input type="submit"/>
+</form>
 
 
       </div>

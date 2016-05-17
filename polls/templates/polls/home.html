@@ -1,8 +1,8 @@
 {% extends "polls/base.html" %}
-
+{% load i18n %}
 {% block content %}
-<h1>Welcome to Whale4</h1>
+<h1>{% blocktrans %} Welcome to Whale4 {% endblocktrans %}</h1>
 <p>
-    This is the default home page (which will be customized soon)...
+   {% blocktrans %}  This is the default home page (which will be customized soon)...{% endblocktrans %}
 </p>
 {% endblock %}
