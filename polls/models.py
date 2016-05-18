@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 from django.db import models
-from accounts.models import WhaleUser
+from accounts.models import WhaleUser,User
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -11,7 +11,7 @@ class Poll(models.Model):
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
     closing_date = models.DateField(null=True,blank=True,verbose_name= _("closing date"))
-    admin = models.ForeignKey(WhaleUser, related_name='polls')
+    admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (
@@ -51,7 +51,7 @@ class DateCandidate(Candidate):
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
-    voter = models.CharField(max_length=30,verbose_name= _("voter"))
+    voter = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name= _("voter"))
     value = models.IntegerField(verbose_name= _("value"))
 
 #  preference models ########################################################

@@ -2,14 +2,15 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from django.conf import settings
 import uuid
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('accounts', '0001_initial'),
     ]
 
     operations = [
@@ -26,25 +27,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Poll',
             fields=[
-                ('id', models.CharField(serialize=False, default=uuid.uuid4, max_length=100, editable=False, primary_key=True)),
+                ('id', models.CharField(serialize=False, editable=False, default=uuid.uuid4, primary_key=True, max_length=100)),
                 ('title', models.CharField(max_length=250, verbose_name='tilte')),
-                ('description', models.TextField(verbose_name='description', blank=True, null=True)),
+                ('description', models.TextField(null=True, verbose_name='description', blank=True)),
                 ('creation_date', models.DateField(auto_now_add=True)),
-                ('closing_date', models.DateField(verbose_name='closing date', blank=True, null=True)),
+                ('closing_date', models.DateField(null=True, verbose_name='closing date', blank=True)),
             ],
         ),
         migrations.CreateModel(
             name='VotingScore',
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
-                ('voter', models.CharField(max_length=30, verbose_name='voter')),
                 ('value', models.IntegerField(verbose_name='value')),
             ],
         ),
         migrations.CreateModel(
             name='DateCandidate',
             fields=[
-                ('candidate_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='polls.Candidate')),
+                ('candidate_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='polls.Candidate')),
                 ('date', models.DateField(verbose_name='date')),
             ],
             options={
@@ -55,9 +55,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VotingPoll',
             fields=[
-                ('poll_ptr', models.OneToOneField(serialize=False, primary_key=True, auto_created=True, parent_link=True, to='polls.Poll')),
-                ('poll_type', models.CharField(default='Standard', max_length=20, choices=[('Standard', 'Standard Poll'), ('Date', 'Date Poll')], verbose_name='poll_type')),
-                ('preference_model', models.CharField(default='PositiveNegative', max_length=50, choices=[('PositiveNegative', 'Positive Negative scale (--, -, 0, +, ++)'), ('Approval', 'Approval Voting (Yes / No)'), ('RankingTies', 'Ranking with ties'), ('Ranking', 'Ranking (no ties)'), ('Numbers#0#10', 'Scores')], verbose_name='preference_model')),
+                ('poll_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='polls.Poll')),
+                ('poll_type', models.CharField(choices=[('Standard', 'Standard Poll'), ('Date', 'Date Poll')], max_length=20, default='Standard', verbose_name='poll type')),
+                ('preference_model', models.CharField(choices=[('PositiveNegative', 'Positive Negative scale (--, -, 0, +, ++)'), ('Approval', 'Approval Voting (Yes / No)'), ('RankingTies', 'Ranking with ties'), ('Ranking', 'Ranking (no ties)'), ('Numbers#0#10', 'Scores')], max_length=50, default='PositiveNegative', verbose_name='preference model')),
             ],
             bases=('polls.poll',),
         ),
@@ -65,6 +65,11 @@ class Migration(migrations.Migration):
             model_name='votingscore',
             name='candidate',
             field=models.ForeignKey(to='polls.Candidate'),
+        ),
+        migrations.AddField(
+            model_name='votingscore',
+            name='voter',
+            field=models.ForeignKey(verbose_name='voter', to='accounts.User'),
         ),
         migrations.AddField(
             model_name='poll',

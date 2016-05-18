@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404,render_to_response
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm,DateCandidateForm
 from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel,INDEFINED_VALUE,DateCandidate
 from django.views.generic.edit import CreateView,FormView
@@ -10,35 +10,22 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from accounts.models import User
 from django.utils.translation import ugettext_lazy as _
 # Create your views here.
 # decorators #################################################################
 
 def with_valid_poll(fn): 
-	def wrapped(request):
-		if "poll" not in request.GET:
-			return render(request, 'whale4/error.html', {'title': "Error", 'message': 'Missing poll id.'})
-		poll_id = request.GET['poll']
-		try:
-			poll = VotingPoll.objects.get(id = poll_id)
-		except ObjectDoesNotExist:
-			return render(request, 'whale4/error.html', {'title': "Damned...",'message': 'Unknown poll number {0}.'.format(poll_id)})
+	def wrapped(request,poll_id):
+		poll = get_object_or_404(VotingPoll,pk = poll_id)
 		return fn(request, poll)
 	return wrapped
 
 def with_valid_voter(fn):
-	def wrapped(request, poll):
-		if "voter" not in request.GET:
-			return render(request, 'whale4/error.html', {'title': "Error",'message': 'Missing voter id.'})
-		voter_id = request.GET['voter']
-		try:
-			voter = User.objects.get(id = voter_id)
-		except ObjectDoesNotExist:
-			return render(request, 'whale4/error.html', {'title': "Damned...",'message': 'Unknown user number {0}.'.format(voter_id)})
+	def wrapped(request, poll,voter_id):
+		voter = get_object_or_404(User,pk = voter_id)
 		return fn(request, poll, voter)
 	return wrapped
-
 
 def with_admin_rights(fn):
 	def wrapped(request, poll):
@@ -102,7 +89,7 @@ def dateCandidateCreate(request, pk):
 		form = DateCandidateForm()
 		candidates =DateCandidate.objects.filter(poll_id=poll.id)
 
-	return render(request, 'polls/dateCandidate_form.html', {'formset': formset, 'form': form,'candidates':candidates})
+	return render(request, 'polls/dateCandidate_form.html', {'formset': formset, 'form': form,'candidates':candidates,'poll':poll})
 
 @login_required
 def votingPollCreate(request):
@@ -159,7 +146,7 @@ def viewPoll(request, pk):
 	for v in votes:
 		id = v.voter
 		tab[id] = {}
-		tab[id]['nickname'] = v.voter
+		tab[id]['nickname'] = v.voter.nickname
 		tab[id]['scores'] = []
 		for c in candidates:
 			if c.id in scores[id]:
@@ -177,7 +164,7 @@ def viewPoll(request, pk):
 
 def vote(request, pk):
 	poll = VotingPoll.objects.get(id=pk)
-	candidates = Candidate.objects.filter(poll_id=poll.id)
+	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
 	preference_model = preference_model_from_text(poll.preference_model)
 
 	if request.method == 'POST':
@@ -185,7 +172,7 @@ def vote(request, pk):
 
 		if form.is_valid():
 			data = form.cleaned_data
-			voter = data['nickname']
+			voter = User.objects.create(nickname=data['nickname'])
 			for c in candidates:
 					VotingScore.objects.create(candidate=c, voter=voter, value=data['value'+str(c.id)])
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
