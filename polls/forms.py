@@ -3,7 +3,7 @@
 # imports ####################################################################
 
 from django.forms import ModelForm,BaseFormSet,Form, widgets
-from polls.models import VotingPoll,Candidate,DateCandidate, PreferenceModel
+from polls.models import VotingPoll,Candidate,DateCandidate, PreferenceModel,INDEFINED_VALUE
 from django import forms
 
 class VotingPollForm(ModelForm):
@@ -29,16 +29,16 @@ class DateCandidateForm(Form):
 
 
 class BaseCandidateFormSet(BaseFormSet):
-    def clean(self):
-        
+    def clean(self):    
         if any(self.errors):
         	return
         candidates = []
         for form in self.forms:
-            candidate = form.cleaned_data['candidate']
+            candidate = form.cleaned_data.get("candidate")
             if candidate in candidates:
   	            raise forms.ValidationError("candidates must be distinct.")
             candidates.append(candidate)
+
 
 class VotingForm(forms.Form):
     def __init__(self, candidates, preference_model, *args, **kwargs):
@@ -52,11 +52,10 @@ class VotingForm(forms.Form):
                 )
             self.candidates = candidates
 
-            
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
         for c in self.candidates:
-            if cleaned_data.get('value'+str(c.id)) != 'undefined':
+            if self.cleaned_data.get('value'+str(c.id)) != str(INDEFINED_VALUE):
                 return
         raise forms.ValidationError("You must give a score to at least one candidate!")
   

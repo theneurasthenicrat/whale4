@@ -13,28 +13,6 @@ from django.template import RequestContext
 from accounts.models import User
 from django.utils.translation import ugettext_lazy as _
 # Create your views here.
-# decorators #################################################################
-
-def with_valid_poll(fn): 
-	def wrapped(request,poll_id):
-		poll = get_object_or_404(VotingPoll,pk = poll_id)
-		return fn(request, poll)
-	return wrapped
-
-def with_valid_voter(fn):
-	def wrapped(request, poll,voter_id):
-		voter = get_object_or_404(User,pk = voter_id)
-		return fn(request, poll, voter)
-	return wrapped
-
-def with_admin_rights(fn):
-	def wrapped(request, poll):
-		next = request.get_full_path()
-		if request.user is None or request.user != poll.admin:
-			return redirect('/login?next={next}'.format(next=next))
-		return fn(request, poll)
-	return wrapped
-
 
 def home(request):
 	return render(request, 'polls/home.html', {})
@@ -43,9 +21,9 @@ def home(request):
 def candidateCreate(request, pk):
 	
 	CandidateFormSet = formset_factory(
-	    CandidateForm, extra=0, min_num=2, validate_min=True)
+	    CandidateForm, formset=BaseCandidateFormSet,extra=0, min_num=2, validate_min=True)
 
-	poll = VotingPoll.objects.get(id=pk)
+	poll = get_object_or_404(VotingPoll,id=pk)
 
 	if request.method == 'POST':
 
@@ -67,7 +45,7 @@ def candidateCreate(request, pk):
 
 def dateCandidateCreate(request, pk):
 	
-	CandidateFormSet = formset_factory(CandidateForm,extra=0, min_num=1, validate_min=True)
+	CandidateFormSet = formset_factory(CandidateForm,extra=1,formset=BaseCandidateFormSet)
 
 	poll = VotingPoll.objects.get(id=pk)
 
