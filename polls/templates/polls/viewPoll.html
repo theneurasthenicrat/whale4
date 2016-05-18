@@ -2,6 +2,9 @@
 {% load i18n %}
 {% block content %}
 {% csrf_token %}
+<div class="pull-right">
+    <a href="/admin-poll?poll={{ poll.id }}" class="btn btn-default btn-lg"><span class="icon icon-settings"></span></a>
+</div>
 <h1>{{ poll.title }}</h1>
 <pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
 <table class="table pollTable">

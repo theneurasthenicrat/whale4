@@ -44,9 +44,10 @@ def candidateCreate(request, pk):
 		formset = CandidateFormSet(request.POST)
 		if formset.is_valid():
 			for form in formset:
-				candidate = form.save(commit=False)
-				candidate.poll = poll
-				candidate.save()
+				if form.has_changed():
+					candidate = form.save(commit=False)
+					candidate.poll = poll
+					candidate.save()
 			messages.success(request,_('Candidates successfully added!'))
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	else:
@@ -66,9 +67,10 @@ def dateCandidateCreate(request, pk):
 			dates = data['dates']
 			if formset.is_valid():
 				for form in formset:
-					label = form.save(commit=False)
-					for date in dates:
-						candidate = DateCandidate.objects.create(date=date,poll=poll,candidate=label.candidate)
+					if form.has_changed():
+						label = form.save(commit=False)
+						for date in dates:
+							candidate = DateCandidate.objects.create(date=date,poll=poll,candidate=label.candidate)
 				messages.success(request,_('Candidates successfully added!'))
 				return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.pk}))
 	else:
@@ -88,6 +90,10 @@ def vote(request, pk):
 	poll = get_object_or_404(VotingPoll,id=pk)
 	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
 	preference_model = preference_model_from_text(poll.preference_model)
+	months = []
+	days = []
+	if poll.poll_type ==  'Date':
+		(days,months)=daysmonth(candidates)
 
 	if request.method == 'POST':
 		form = VotingForm(candidates, preference_model, request.POST)
@@ -101,7 +107,7 @@ def vote(request, pk):
 	else:
 		form = VotingForm(candidates, preference_model)
 
-	return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
+	return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'months':months, 'days':days})
 
 def updateVote(request, pk,voter):
 	poll = VotingPoll.objects.get(id=pk)
@@ -140,6 +146,23 @@ def deleteVote(request, pk,voter):
 		return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	return render(request, 'polls/delete_vote.html', {'voter': voter, 'poll': poll})
 
+def daysmonth(candidates):
+	months = []
+	days = []
+	for c in candidates:
+		current_month = c.date.strftime("%y/%m")
+		current_day = c.date.strftime("%y/%m/%d")
+		if len(months) > 0 and months[-1]["label"] == current_month:
+			months[-1]["value"] += 1
+		else:
+			months += [{"label": current_month, "value": 1}]
+		if len(days) > 0  and days[-1]["label"] == current_day:
+			days[-1]["value"] += 1
+		else:
+			days += [{"label": current_day, "value": 1}]
+	return (days,months)
+
+
 def viewPoll(request, pk):
 	poll = get_object_or_404(VotingPoll,id=pk)
 	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
@@ -148,18 +171,7 @@ def viewPoll(request, pk):
 	months = []
 	days = []
 	if poll.poll_type ==  'Date':
-		for c in candidates:
-			current_month = c.date.strftime("%y/%m")
-			current_day = c.date.strftime("%y/%m/%d")
-			if len(months) > 0 and months[-1]["label"] == current_month:
-				months[-1]["value"] += 1
-			else:
-				months += [{"label": current_month, "value": 1}]
-			if len(days) > 0  and days[-1]["label"] == current_day:
-				days[-1]["value"] += 1
-			else:
-				days += [{"label": current_day, "value": 1}]
-
+		(days,months)=daysmonth(candidates)
 	scores = {}
 	for v in votes:
 		if v.voter.id not in scores:

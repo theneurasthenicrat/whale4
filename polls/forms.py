@@ -29,6 +29,11 @@ class DateCandidateForm(Form):
 
 
 class BaseCandidateFormSet(BaseFormSet):
+    """def __init__(self, *args, **kwargs):
+        super(BaseCandidateFormSet,self).__init__( *args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted=False"""
+            
     def clean(self):    
         if any(self.errors):
         	return
@@ -48,7 +53,7 @@ class VotingForm(forms.Form):
         for c in candidates:
             self.fields['value'+str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
                 choices = preference_model.zipPreference(),
-                required=True, label= c
+                required=True, label= c.candidate
                 )
             self.candidates = candidates
 

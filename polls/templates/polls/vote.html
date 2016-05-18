@@ -7,8 +7,26 @@
 <form action="" method="post">
     {% csrf_token %}
     {% bootstrap_form_errors form %}
-    <table class="table table-bordered"  > 
+    <table class="table"  > 
     <thead >
+    {% if poll.poll_type == "Date" %}
+    <tr>
+      <td class="emptyCell" colspan="1" ></td>
+        {% for m in months %}
+        <th colspan="{{ m.value }}">
+        {{ m.label }}
+        </th>
+        {% endfor %}
+    </tr>
+    <tr>
+      <td class="emptyCell" colspan="1" ></td>
+        {% for d in days %}
+        <th colspan="{{ d.value }}">
+        {{ d.label }}
+        </th>
+        {% endfor %}
+    </tr>
+        {% endif %}
       <tr>
             {% for field in form %}
             <th>
