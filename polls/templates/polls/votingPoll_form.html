@@ -15,7 +15,15 @@
 </form>
     <script>
         $(document).ready(function() {
-            $('.datepicker').datepicker();
+          var today = new Date();
+            $('.datepicker').datepicker( {
+              format: 'yyyy-mm-dd',
+              todayHighlight: true,
+              startDate: today,
+              autoclose: true,
+              
+            });
+
         });
     </script>
 {% endblock %}
