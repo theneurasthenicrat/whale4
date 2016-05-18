@@ -46,7 +46,7 @@ class VotingForm(forms.Form):
         
         self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
         for c in candidates:
-            self.fields['value'+str(c.id)] = forms.ChoiceField(
+            self.fields['value'+str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
                 choices = preference_model.zipPreference(),
                 required=True, label= c
                 )

@@ -1,7 +1,6 @@
-Refactoring Model PreferenceModel
+Using Javascript in file and programm deleteVote and UpdateVote 
 
-It is better to use min, text2values etc.. as fonctions than objects parameters.
-positiveNegative and approval preferences  are constants they became an object.
-for each preferences, there is an option I don't know which is equivalent to -2222222.
+ Add views deleteVote and UpdateVote 
+ Add javascript file instead of script in html
 
 

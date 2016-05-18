@@ -1,5 +1,6 @@
 {% extends "polls/base.html" %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 {% load bootstrap3 %}
 <h3> {% trans 'Candidates' %}</h3>
@@ -22,27 +23,19 @@
 </div>
 <br>
 
-{% buttons %}
+
     <button type="submit" class="btn btn-primary pull-right">
       {% bootstrap_icon "star" %} {% trans 'Save' %}
     </button>
-  {% endbuttons %}
+ 
 
 
 </form>
-{% buttons %}
+
     <button  id="add_more" class="btn btn-primary">
       {% bootstrap_icon "star" %} {% trans 'Add candidate' %}
     </button>
-  {% endbuttons %}
-<script>
-    $('#add_more').click(function() {
-        var form_idx = $('#id_form-TOTAL_FORMS').val();
-        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
-        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-    });
-    $('.delete').click( function(){ 
-         $(this).remove(); 
-    });
-</script>
+  
+<script src="{% static 'polls/js/candidate.js' %}" type="text/javascript"></script>
+
 {% endblock %}

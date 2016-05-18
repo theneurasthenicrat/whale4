@@ -17,20 +17,32 @@ from django.utils.translation import ugettext_lazy as _
 def home(request):
 	return render(request, 'polls/home.html', {})
 
+@login_required
+def votingPollCreate(request):
+	if request.method == 'POST':
+		form = VotingPollForm(request.POST)
+		if form.is_valid():
+			poll = form.save(commit=False)
+			poll.admin = request.user
+			poll.save()
+			messages.success(request, _('Poll successfully created! Now add the candidates to the poll...'))
+			if poll.poll_type != 'Date':
+				return redirect(reverse_lazy(candidateCreate, kwargs={'pk': poll.id}))
+			else:
+				return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))	
+	else:
+		form = VotingPollForm()
+	return render(request, "polls/votingPoll_form.html", {'form': form})
+
 
 def candidateCreate(request, pk):
-	
+	poll = get_object_or_404(VotingPoll,id=pk)
 	CandidateFormSet = formset_factory(
 	    CandidateForm, formset=BaseCandidateFormSet,extra=0, min_num=2, validate_min=True)
-
-	poll = get_object_or_404(VotingPoll,id=pk)
-
+	
 	if request.method == 'POST':
-
 		formset = CandidateFormSet(request.POST)
-
 		if formset.is_valid():
-
 			for form in formset:
 				candidate = form.save(commit=False)
 				candidate.poll = poll
@@ -39,16 +51,13 @@ def candidateCreate(request, pk):
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	else:
 		formset = CandidateFormSet()
-
 	return render(request, 'polls/candidate_form.html', {'formset': formset})
 
 
 def dateCandidateCreate(request, pk):
-	
+	poll = get_object_or_404(VotingPoll,id=pk)
 	CandidateFormSet = formset_factory(CandidateForm,extra=1,formset=BaseCandidateFormSet)
-
-	poll = VotingPoll.objects.get(id=pk)
-
+	
 	if request.method == 'POST':
 		form = DateCandidateForm(request.POST)
 		formset = CandidateFormSet(request.POST)
@@ -69,33 +78,70 @@ def dateCandidateCreate(request, pk):
 
 	return render(request, 'polls/dateCandidate_form.html', {'formset': formset, 'form': form,'candidates':candidates,'poll':poll})
 
-@login_required
-def votingPollCreate(request):
-	if request.method == 'POST':
-		form = VotingPollForm(request.POST)
-		if form.is_valid():
-			poll = form.save(commit=False)
-			poll.admin = request.user
-			poll.save()
-			messages.success(request, _('Poll successfully created! Now add the candidates to the poll...'))
-			if poll.poll_type != 'Date':
-				return redirect(reverse_lazy(candidateCreate, kwargs={'pk': poll.id, }))
-			else:
-				return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id, }))	
-	else:
-		form = VotingPollForm()
-	return render(request, "polls/votingPoll_form.html", {'form': form})
-
 def deleteCandidate(request, pk,cand):
-	poll = VotingPoll.objects.get(id=pk)
-	candidate = DateCandidate.objects.get(id=cand)
+	poll = get_object_or_404(VotingPoll,id=pk)
+	candidate = get_object_or_404(DateCandidate,id=cand)
 	candidate.delete()
-	return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id, }))
+	return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))
 
+def vote(request, pk):
+	poll = get_object_or_404(VotingPoll,id=pk)
+	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+	preference_model = preference_model_from_text(poll.preference_model)
+
+	if request.method == 'POST':
+		form = VotingForm(candidates, preference_model, request.POST)
+
+		if form.is_valid():
+			data = form.cleaned_data
+			voter = User.objects.create(nickname=data['nickname'])
+			for c in candidates:
+					VotingScore.objects.create(candidate=c, voter=voter, value=data['value'+str(c.id)])
+			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+	else:
+		form = VotingForm(candidates, preference_model)
+
+	return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
+
+def updateVote(request, pk,voter):
+	poll = VotingPoll.objects.get(id=pk)
+	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+	preference_model = preference_model_from_text(poll.preference_model)
+	voter = User.objects.get(id = voter)
+	votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+	initial = {}
+	initial['nickname']=voter.nickname
+	for v in votes:
+		initial['value'+ str(v.candidate.id)] = v.value
+	if request.method == 'POST':
+		form = VotingForm(candidates, preference_model, request.POST)
+
+		if form.is_valid():
+			data = form.cleaned_data
+			voter.nickname=data['nickname']
+			voter.save()
+			for v in votes:
+				v.value=data['value'+str(v.candidate.id)]
+				v.save()
+			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+	else:
+		form = VotingForm(candidates, preference_model,initial = initial)
+
+	return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
+
+def deleteVote(request, pk,voter):
+	poll = VotingPoll.objects.get(id=pk)
+	voter = User.objects.get(id = voter)
+	votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+
+	if request.method == 'POST':
+		votes.delete()
+		voter.delete()
+		return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+	return render(request, 'polls/delete_vote.html', {'voter': voter, 'poll': poll})
 
 def viewPoll(request, pk):
-	poll = VotingPoll.objects.get(id=pk)
-	
+	poll = get_object_or_404(VotingPoll,id=pk)
 	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
 	votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
 	preference_model = preference_model_from_text(poll.preference_model)
@@ -116,14 +162,15 @@ def viewPoll(request, pk):
 
 	scores = {}
 	for v in votes:
-		if v.voter not in scores:
-			scores[v.voter] = {}
-		scores[v.voter][v.candidate.id]= v.value
+		if v.voter.id not in scores:
+			scores[v.voter.id] = {}
+		scores[v.voter.id][v.candidate.id]= v.value
 	
 	tab = {}
 	for v in votes:
-		id = v.voter
+		id = v.voter.id
 		tab[id] = {}
+		tab[id]['id'] = id
 		tab[id]['nickname'] = v.voter.nickname
 		tab[id]['scores'] = []
 		for c in candidates:
@@ -138,26 +185,6 @@ def viewPoll(request, pk):
 	values = None if tab == {} else tab.values()
 	
 	return render(request, 'polls/viewPoll.html', {'poll': poll,'candidates': candidates,'votes': values,'months':months, 'days':days})
-
-
-def vote(request, pk):
-	poll = VotingPoll.objects.get(id=pk)
-	candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
-	preference_model = preference_model_from_text(poll.preference_model)
-
-	if request.method == 'POST':
-		form = VotingForm(candidates, preference_model, request.POST)
-
-		if form.is_valid():
-			data = form.cleaned_data
-			voter = User.objects.create(nickname=data['nickname'])
-			for c in candidates:
-					VotingScore.objects.create(candidate=c, voter=voter, value=data['value'+str(c.id)])
-			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
-	else:
-		form = VotingForm(candidates, preference_model)
-
-	return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
 
 
 def bad_request(request):

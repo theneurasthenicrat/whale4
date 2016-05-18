@@ -43,7 +43,7 @@ class DateCandidate(Candidate):
     date = models.DateField(verbose_name= _("date"))
 
     class Meta: 
-        ordering=['date']
+        ordering=['date','id']
 
 
     def __str__(self):

@@ -1,29 +1,17 @@
 {% extends "polls/base.html" %}
 {% load bootstrap3 %}
 {% load i18n %}
+{% load static %}
 {% block content %}
+<h1>{% trans 'Create a new voting poll' %}</h1>
+<div class="col-md-8">
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form_errors form  %}
+      {% bootstrap_form form %}
+      <button type="submit" class="btn btn-primary col-md-3 pull-right">{% bootstrap_icon "ok" %} {% trans 'Submit' %}</button>
 
-<form action="" method="post" class="form">
-  {% csrf_token %}
-  {% bootstrap_form_errors form  %}
-  {% bootstrap_form form %}
-  {% buttons %}
-    <button type="submit" class="btn btn-primary">
-      {% bootstrap_icon "star" %} {% trans 'Submit' %}
-    </button>
-  {% endbuttons %}
-</form>
-    <script>
-        $(document).ready(function() {
-          var today = new Date();
-            $('.datepicker').datepicker( {
-              format: 'yyyy-mm-dd',
-              todayHighlight: true,
-              startDate: today,
-              autoclose: true,
-              
-            });
-
-        });
-    </script>
+    </form>
+</div>
+<script src="{% static 'polls/js/votingPoll.js' %}" type="text/javascript"></script>
 {% endblock %}

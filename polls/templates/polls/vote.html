@@ -2,18 +2,36 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% block content %}
-
-
 <h1>{% trans 'Vote for this poll' %}</h1>
 
 <form action="" method="post">
     {% csrf_token %}
-    <table>
-    {% bootstrap_form form %}
+    {% bootstrap_form_errors form %}
+    <table class="table table-bordered"  > 
+    <thead >
+      <tr>
+            {% for field in form %}
+            <th>
+                {% bootstrap_label field.label %}
+            </th>
+            {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for field in form %}
+            <td>
+                {% bootstrap_field field show_label=False %}
+            </td>
+            {% endfor %}
+        </tr>
+     
+    </tbody>
+        
     </table>
     
-    <button type="submit" class="btn btn-primary" >{%trans 'Submit' %}</button>
-   
+     <button type="submit" class="btn btn-primary pull-right col-md-2" >{%trans 'Submit' %}</button>
+     
 </form> 
 
 

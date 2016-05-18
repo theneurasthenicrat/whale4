@@ -8,7 +8,7 @@
     <thead>
     {% if poll.poll_type == "Date" %}
     <tr>
-        <td class="emptyCell" colspan="1" ></td>
+        <td class="emptyCell" colspan="2" ></td>
         {% for m in months %}
         <th colspan="{{ m.value }}">
         {{ m.label }}
@@ -16,7 +16,7 @@
         {% endfor %}
     </tr>
     <tr>
-        <td class="emptyCell" colspan="1" ></td>
+        <td class="emptyCell" colspan="2" ></td>
         {% for d in days %}
         <th colspan="{{ d.value }}">
         {{ d.label }}
@@ -26,7 +26,7 @@
         {% endif %}
  
     <tr>
-        <td class="emptyCell" colspan="1" ></td>
+        <td class="emptyCell" colspan="2" ></td>
         {% for c in candidates %}
         <th>
         {{ c.candidate }}
@@ -38,6 +38,9 @@
     <tbody>
     {% for v in votes %}
     <tr>
+    <td class="controls" width="auto">
+        <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-pen"></span></a>
+        </td>
         <th>
         {{ v.nickname }}
         </th>
