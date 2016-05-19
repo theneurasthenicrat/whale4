@@ -1,4 +1,5 @@
-Update votingpoll
+ create Options model 
 
-add a top menu to be able to go back
-add also two boutons back and next 
+now we can add several options on poll
+for example the type of ballots open or sealed.
+every option is boolean options, which means that we can choice or not if we don't mind about options.

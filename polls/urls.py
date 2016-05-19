@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^candidateCreate/(?P<pk>[^/]+)/$', views.candidateCreate, name='candidateCreate'),
     url(r'^dateCandidateCreate/(?P<pk>[^/]+)/$', views.dateCandidateCreate, name='dateCandidateCreate'),
     url(r'^updateVotingPoll/(?P<pk>[^/]+)/$', views.updateVotingPoll, name='updateVotingPoll'),
+    url(r'^optionsCreate/(?P<pk>[^/]+)/$', views.optionsCreate, name='optionsCreate'),
     url(r'^deleteCandidate/(?P<pk>[^/]+)/(?P<cand>[^/]+)/$', views.deleteCandidate, name='deleteCandidate'),
     url(r'^updateVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.updateVote, name='updateVote'),
     url(r'^deleteVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.deleteVote, name='deleteVote'),

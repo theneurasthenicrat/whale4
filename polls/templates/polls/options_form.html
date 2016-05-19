@@ -1,0 +1,23 @@
+{% extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% block content %}
+
+<ul class="nav nav-pills">
+  <li role="presentation" class="active"><a href="#">1.Description {% bootstrap_icon "menu-right" %}</a></li>
+  <li role="presentation" class="disabled"><a href="#">2.Candidates {% bootstrap_icon "menu-right"%}</a></li>
+  <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
+</ul>
+<h1>{% trans 'Add parameters' %}</h1>
+
+<div class="col-md-8">
+    <form action="" method="post" class="form">
+      {% csrf_token %}
+      {% bootstrap_form_errors form  %}
+      {% bootstrap_form form %}
+      <button type="submit" class="btn btn-primary col-md-3 pull-right">{% trans 'Next ' %}{% bootstrap_icon "menu-right" %} </button>
+
+    </form>
+</div>
+
+{% endblock %}

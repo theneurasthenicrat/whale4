@@ -54,6 +54,12 @@ class VotingScore(models.Model):
     voter = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name= _("voter"))
     value = models.IntegerField(verbose_name= _("value"))
 
+class Options(models.Model):
+    poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE)
+    sealed_ballots=models.BooleanField(default=False)
+    choice_idontknow=models.BooleanField(default=False)
+
+
 #  preference models ########################################################
 INDEFINED_VALUE=-222222222
 

@@ -3,7 +3,7 @@
 # imports ####################################################################
 
 from django.forms import ModelForm,BaseFormSet,Form, widgets
-from polls.models import VotingPoll,Candidate,DateCandidate, PreferenceModel,INDEFINED_VALUE
+from polls.models import VotingPoll,Candidate,DateCandidate, PreferenceModel,INDEFINED_VALUE, Options
 from django import forms
 
 class VotingPollForm(ModelForm):
@@ -13,6 +13,11 @@ class VotingPollForm(ModelForm):
         widgets = {
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
         }
+
+class OptionsForm(ModelForm):
+    class Meta:
+        model = Options
+        exclude=['poll']
 
 
 class CandidateForm(ModelForm):
@@ -28,12 +33,7 @@ class DateCandidateForm(Form):
         return dates
 
 
-class BaseCandidateFormSet(BaseFormSet):
-    """def __init__(self, *args, **kwargs):
-        super(BaseCandidateFormSet,self).__init__( *args, **kwargs)
-        for form in self.forms:
-            form.empty_permitted=False"""
-            
+class BaseCandidateFormSet(BaseFormSet):     
     def clean(self):    
         if any(self.errors):
         	return

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404,render_to_response
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm,DateCandidateForm
-from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel,INDEFINED_VALUE,DateCandidate
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm,DateCandidateForm, OptionsForm
+from polls.models import VotingPoll, Candidate, Poll, preference_model_from_text, VotingScore, PreferenceModel,INDEFINED_VALUE,DateCandidate, Options
 from django.views.generic.edit import CreateView,FormView
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.forms import formset_factory
@@ -33,6 +33,9 @@ def votingPollCreate(request):
 	else:
 		form = VotingPollForm()
 	return render(request, "polls/votingPoll_form.html", {'form': form})
+
+
+
 	
 @login_required
 def updateVotingPoll(request, pk):
@@ -44,10 +47,11 @@ def updateVotingPoll(request, pk):
 			poll.title = data['title']
 			poll.description = data['description']
 			poll.preference_model = data['preference_model']
+			poll.admin = request.user
 			poll.closing_date=data['closing_date']
 			poll.poll_type = data['poll_type']
 			poll.save()
-			messages.success(request, _('Poll successfully updated! Now add the candidates to the poll...'))
+			messages.success(request, _('Poll successfully updated! Add the candidates to the poll...'))
 			if poll.poll_type != 'Date':
 				return redirect(reverse_lazy(candidateCreate, kwargs={'pk': poll.id}))
 			else:
@@ -57,11 +61,27 @@ def updateVotingPoll(request, pk):
 	return render(request, "polls/votingPoll_form.html", {'form': form,'poll': poll})
 
 
+def optionsCreate(request, pk):
+	poll = get_object_or_404(VotingPoll,id=pk)
+	
+	if request.method == 'POST':
+		form = OptionsForm(request.POST)
+		if form.is_valid():
+			options= form.save(commit=False)
+			options.poll=poll
+			options.save()
+			messages.success(request, _('options successfully added!'))
+			return render(request, "polls/success.html", {'poll': poll})	
+	else:
+		form = OptionsForm()
+	return render(request, "polls/options_form.html", {'form': form,'poll': poll})
+
+
 def candidateCreate(request, pk):
 	poll = get_object_or_404(VotingPoll,id=pk)
 	CandidateFormSet = formset_factory(
 	    CandidateForm, formset=BaseCandidateFormSet,extra=0, min_num=2, validate_min=True)
-	
+	candidates =  Candidate.objects.filter(poll_id=poll.id).values()
 	if request.method == 'POST':
 		formset = CandidateFormSet(request.POST)
 		if formset.is_valid():
@@ -71,16 +91,15 @@ def candidateCreate(request, pk):
 					candidate.poll = poll
 					candidate.save()
 			messages.success(request,_('Candidates successfully added!'))
-			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+			return redirect(reverse_lazy(optionsCreate, kwargs={'pk': poll.pk}))
 	else:
-		formset = CandidateFormSet()
+		formset = CandidateFormSet(initial=candidates)
 	return render(request, 'polls/candidate_form.html', {'formset': formset,'poll':poll})
 
 
 def dateCandidateCreate(request, pk):
 	poll = get_object_or_404(VotingPoll,id=pk)
 	CandidateFormSet = formset_factory(CandidateForm,extra=1,formset=BaseCandidateFormSet)
-	
 	if request.method == 'POST':
 		form = DateCandidateForm(request.POST)
 		formset = CandidateFormSet(request.POST)
