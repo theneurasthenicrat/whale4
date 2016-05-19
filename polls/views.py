@@ -33,6 +33,28 @@ def votingPollCreate(request):
 	else:
 		form = VotingPollForm()
 	return render(request, "polls/votingPoll_form.html", {'form': form})
+	
+@login_required
+def updateVotingPoll(request, pk):
+	poll = get_object_or_404(VotingPoll,id=pk)
+	if request.method == 'POST':
+		form = VotingPollForm(request.POST)
+		if form.is_valid():
+			data = form.cleaned_data
+			poll.title = data['title']
+			poll.description = data['description']
+			poll.preference_model = data['preference_model']
+			poll.closing_date=data['closing_date']
+			poll.poll_type = data['poll_type']
+			poll.save()
+			messages.success(request, _('Poll successfully updated! Now add the candidates to the poll...'))
+			if poll.poll_type != 'Date':
+				return redirect(reverse_lazy(candidateCreate, kwargs={'pk': poll.id}))
+			else:
+				return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))	
+	else:
+		form = VotingPollForm(instance = poll)
+	return render(request, "polls/votingPoll_form.html", {'form': form,'poll': poll})
 
 
 def candidateCreate(request, pk):
@@ -52,7 +74,7 @@ def candidateCreate(request, pk):
 			return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
 	else:
 		formset = CandidateFormSet()
-	return render(request, 'polls/candidate_form.html', {'formset': formset})
+	return render(request, 'polls/candidate_form.html', {'formset': formset,'poll':poll})
 
 
 def dateCandidateCreate(request, pk):

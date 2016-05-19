@@ -1,6 +1,4 @@
-Using Javascript in file and programm deleteVote and UpdateVote 
+Update votingpoll
 
- Add views deleteVote and UpdateVote 
- Add javascript file instead of script in html
-
-
+add a top menu to be able to go back
+add also two boutons back and next 

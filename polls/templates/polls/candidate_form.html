@@ -3,6 +3,11 @@
 {% load static %}
 {% block content %}
 {% load bootstrap3 %}
+<ul class="nav nav-pills">
+  <li role="presentation" ><a href="/polls/updateVotingPoll/{{ poll.id}}">1.Description {% bootstrap_icon "menu-right" %}</a></li>
+  <li role="presentation" class="active" ><a href="#">2.Candidates {% bootstrap_icon "menu-right" %}</a></li>
+  <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
+</ul>
 <h3> {% trans 'Candidates' %}</h3>
 <form action="" method="post">
 {% csrf_token %}
@@ -25,17 +30,18 @@
 
 
     <button type="submit" class="btn btn-primary pull-right">
-      {% bootstrap_icon "star" %} {% trans 'Save' %}
+       {% trans 'Next' %}{% bootstrap_icon "menu-right" %}
     </button>
- 
-
 
 </form>
 
     <button  id="add_more" class="btn btn-primary">
-      {% bootstrap_icon "star" %} {% trans 'Add candidate' %}
+      {% bootstrap_icon "plus" %} {% trans 'Add candidate' %}
     </button>
   
+  <a href="/polls/updateVotingPoll/{{ poll.id}}" class="btn btn-primary">{% bootstrap_icon "menu-left" %} {% trans 'Back' %}</a>
+
+
 <script src="{% static 'polls/js/candidate.js' %}" type="text/javascript"></script>
 
 {% endblock %}
