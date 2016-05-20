@@ -3,5 +3,5 @@ whale4/settings.py
 accounts/migrations/
 resetDB.sh
 polls/migrations/
-message.text
+message.txt
 .idea/
