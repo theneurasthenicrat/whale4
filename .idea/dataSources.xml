@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="410087335">
+    <data-source source="LOCAL" name="PostgreSQL - whale4@localhost" uuid="5bd91050-7aaf-4fb8-b1d7-a5de27b0680a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost/whale4</jdbc-url>
+    </data-source>
+  </component>
+</project>
