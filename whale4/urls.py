@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import  include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from polls.views import home
-from django.conf.urls import ( handler400, handler403, handler404, handler500)
+from django.conf.urls import handler400,handler403,handler404,handler500
 
 handler400 = 'polls.views.bad_request'
 handler403 = 'polls.views.permission_denied'
@@ -19,3 +19,4 @@ urlpatterns = [
 ]
 
 urlpatterns += staticfiles_urlpatterns()
+

@@ -1,68 +1,64 @@
 {% extends "polls/base.html" %}
 {% load i18n %}
 {% block content %}
-{% csrf_token %}
-<div class="pull-right">
-    <a href="/admin-poll?poll={{ poll.id }}" class="btn btn-default btn-lg"><span class="icon icon-settings"></span></a>
-</div>
-<h1>{{ poll.title }}</h1>
-<pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
-<table class="table pollTable">
-    <thead>
-    {% if poll.poll_type == "Date" %}
-    <tr>
-        <td class="emptyCell" colspan="2" ></td>
-        {% for m in months %}
-        <th colspan="{{ m.value }}">
-        {{ m.label }}
-        </th>
-        {% endfor %}
-    </tr>
-    <tr>
-        <td class="emptyCell" colspan="2" ></td>
-        {% for d in days %}
-        <th colspan="{{ d.value }}">
-        {{ d.label }}
-        </th>
-        {% endfor %}
-    </tr>
+    {% csrf_token %}
+    <div class="pull-right">
+        <a href="/admin-poll?poll={{ poll.id }}" class="btn btn-default btn-lg"><span class="icon icon-settings"></span></a>
+    </div>
+    <h1>{{ poll.title }}</h1>
+    <pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
+    <table class="table pollTable">
+        <thead>
+        {% if poll.poll_type == "Date" %}
+            <tr>
+                <td class="emptyCell" colspan="2" ></td>
+                {% for m in months %}
+                    <th colspan="{{ m.value }}">
+                        {{ m.label }}
+                    </th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="emptyCell" colspan="2" ></td>
+                {% for d in days %}
+                    <th colspan="{{ d.value }}">
+                        {{ d.label }}
+                    </th>
+                {% endfor %}
+            </tr>
         {% endif %}
- 
-    <tr>
-        <td class="emptyCell" colspan="2" ></td>
-        {% for c in candidates %}
-        <th>
-        {{ c.candidate }}
-        </th>
-        {% endfor %}
-    </tr>
-    </thead>
-    {% if votes %}
-    <tbody>
-    {% for v in votes %}
-    <tr>
-    <td class="controls" width="auto">
-        <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-pen"></span></a>
-        </td>
-        <th>
-        {{ v.nickname }}
-        </th>
-        {% for s in v.scores %}
-        <td class="{{ s.class }}">{{ s.text }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-    {% else %}
-</table>
-<div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
-{% endif %}
 
+        <tr>
+            <td class="emptyCell" colspan="2" ></td>
+            {% for c in candidates %}
+                <th>
+                    {{ c.candidate }}
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        {% if votes %}
+            <tbody>
+            {% for v in votes %}
+                <tr>
+                    <td class="controls" width="auto">
+                        <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-pen"></span></a>
+                    </td>
+                    <th>
+                        {{ v.nickname }}
+                    </th>
+                    {% for s in v.scores %}
+                        <td class="{{ s.class }}">{{ s.text }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% else %}
+            </table>
+            <div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
+        {% endif %}
 
-	   
-<a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> {% trans 'Vote' %}</a>
-
-
+    <a href="/polls/vote/{{ poll.id}}" class="btn btn-default"> {% trans 'Vote' %}</a>
 
 {% endblock %}

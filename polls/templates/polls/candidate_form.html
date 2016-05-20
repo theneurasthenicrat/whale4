@@ -2,69 +2,41 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-{% load bootstrap3 %}
-<ul class="nav nav-pills">
-  <li role="presentation" ><a href="/polls/updateVotingPoll/{{ poll.id}}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-  <li role="presentation" class="active" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right" %}</a></li>
-  <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
-</ul>
-
-<form action="" method="post" id="form1">
-  {% csrf_token %}
-  {{ formset.management_form }}
-  {% bootstrap_formset_errors formset layout='inline' %}
-  <div id="form_set" >
-    {% for form in formset.forms %}
-   
-
-
- 
-            {% for field in form %}
-           
-                {% bootstrap_label field.label %} 
-                {% bootstrap_field field show_label=False %}
-          
+    {% load bootstrap3 %}
+    <ul class="nav nav-pills">
+        <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+        <li role="presentation" class="active" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right" %}</a></li>
+        <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
+    </ul>
+    <form action="" method="post" id="form1">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% bootstrap_formset_errors formset layout='inline' %}
+        <div id="form_set" >
+            {% for form in formset.forms %}
+                {% for field in form %}
+                    {% bootstrap_label field.label %}
+                    {% bootstrap_field field show_label=False %}
+                {% endfor %}
             {% endfor %}
-      
-
-
-
-
-
-    {% endfor %}
-  </div>
-
-  <div id="empty_form" style="display:none">
-
-       
-       {% for field in formset.empty_form %}
-
-           
+        </div>
+        <div id="empty_form" style="display:none">
+            {% for field in formset.empty_form %}
                 {% bootstrap_label field.label %}
                 {% bootstrap_field field show_label=False %}
-          
             {% endfor %}
- 
-  </div>
-
-</form>
-
+        </div>
+    </form>
     <button  id="add_more" class="btn btn-primary">
-      {% bootstrap_icon "plus" %} {% trans 'Add' %}
+        {% bootstrap_icon "plus" %} {% trans 'Add' %}
     </button>
-
     <div class= "row">
-      <div class="col-md-offset-4 col-md-6 ">
-        <ul class="list-inline">
-          <li > <a href="/polls/updateVotingPoll/{{ poll.id}}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
-          <li><button type="submit"form="form1" class="btn btn-primary ">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button></li>
-        </ul>
-      </div>
-
+        <div class="col-md-offset-4 col-md-6 ">
+            <ul class="list-inline">
+                <li > <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+                <li><button type="submit"form="form1" class="btn btn-primary ">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button></li>
+            </ul>
+        </div>
     </div>
-
-
-
-<script src="{% static 'polls/js/candidate.js' %}" type="text/javascript"></script>
-
+    <script src="{% static 'polls/js/candidate.js' %}" type="text/javascript"></script>
 {% endblock %}

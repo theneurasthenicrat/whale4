@@ -2,22 +2,26 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% block content %}
+    <ul class="nav nav-pills">
+        <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+        <li role="presentation" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+        <li role="presentation" class="active"><a href="#">3.Options</a></li>
+    </ul>
+    <h1>{% trans 'Add parameters' %}</h1>
+    <div class="col-md-8">
+        <form action="" method="post" class="form" id="form1">
+            {% csrf_token %}
+            {% bootstrap_form_errors form  %}
+            {% bootstrap_form form %}
+        </form>
 
-<ul class="nav nav-pills">
-  <li role="presentation" class="active"><a href="#">1.Description {% bootstrap_icon "menu-right" %}</a></li>
-  <li role="presentation" class="disabled"><a href="#">2.Candidates {% bootstrap_icon "menu-right"%}</a></li>
-  <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
-</ul>
-<h1>{% trans 'Add parameters' %}</h1>
-
-<div class="col-md-8">
-    <form action="" method="post" class="form">
-      {% csrf_token %}
-      {% bootstrap_form_errors form  %}
-      {% bootstrap_form form %}
-      <button type="submit" class="btn btn-primary col-md-3 pull-right">{% trans 'Next ' %}{% bootstrap_icon "menu-right" %} </button>
-
-    </form>
-</div>
-
+        <div class= "row">
+            <div class="col-md-offset-4 col-md-6 ">
+                <ul class="list-inline">
+                    <li ><a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+                    <li><button type="submit"form="form1" class="btn btn-primary ">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}
