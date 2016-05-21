@@ -4,4 +4,5 @@
 {% load static %}
 {% block content %}
     <p>Now you can vote at this link </p>
+     <a href="{% url 'vote' poll.id %}"> vote {% bootstrap_icon "menu-right"%}</a>
 {% endblock %}

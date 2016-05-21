@@ -76,7 +76,7 @@ class PreferenceModel:
         return zip(self.values, self.texts)
 
     def nb_values(self): 
-        return len(values)
+        return len(self.values)
 
     def min(self): 
         return min(self.values[1:])

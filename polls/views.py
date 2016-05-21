@@ -20,49 +20,48 @@ def home(request):
     return render(request, 'polls/home.html', {})
 
 
-class VotingPollCreate(CreateView):
+class VotingPollMixin(object):
     model = VotingPoll
     form_class = VotingPollForm
     template_name = "polls/votingPoll_form.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(VotingPollMixin, self).dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy(manage_candidate, kwargs={'pk': self.object.pk,})
 
     def form_valid(self, form):
         poll = form.save(commit=False)
         poll.admin = self.request.user
         poll.save()
-        return super(VotingPollCreate, self).form_valid(form)
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(VotingPollCreate, self).dispatch(*args, **kwargs)
-
-    def get_success_url(self):
-        messages.success(self.request, _('Poll successfully created! Now add the candidates to the poll...'))
-        return reverse_lazy(manageCandidate, kwargs={'pk': self.object.pk,})
+        return super(VotingPollMixin, self).form_valid(form)
 
 
-class VotingPollUpdate(UpdateView):
-    model = VotingPoll
-    form_class = VotingPollForm
-    template_name = "polls/votingPoll_form.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(VotingPollUpdate, self).dispatch(*args, **kwargs)
-
-    def get_success_url(self):
-        messages.success(self.request, _('Poll successfully updated! Add the candidates to the poll..'))
-        return reverse_lazy(manageCandidate, kwargs={'pk': self.object.pk,})
+class VotingPollUpdate(VotingPollMixin, UpdateView):
+    """
+    VotingPollMixin does everything
+    """
+    pass
 
 
-def manageCandidate(request, pk):
+class VotingPollCreate(VotingPollMixin,CreateView):
+    """
+    VotingPollMixin does everything
+    """
+    pass
+
+
+def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if poll.poll_type != 'Date':
         return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
     else:
-        return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))
+        return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
-def optionsCreate(request, pk):
+def options_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
 
     if request.method == 'POST':
@@ -88,13 +87,13 @@ def candidate_create(request, pk):
         if formset.is_valid():
             formset.save()
             messages.success(request, _('Candidates successfully added!'))
-            return redirect(reverse_lazy(optionsCreate, kwargs={'pk': poll.pk}))
+            return redirect(reverse_lazy(options_create, kwargs={'pk': poll.pk}))
     else:
         formset = candidateformset(instance=poll)
     return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})
 
 
-def dateCandidateCreate(request, pk):
+def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     CandidateFormSet = formset_factory(CandidateForm, extra=1, formset=BaseCandidateFormSet)
     if request.method == 'POST':
@@ -110,7 +109,7 @@ def dateCandidateCreate(request, pk):
                         for date in dates:
                             candidate = DateCandidate.objects.create(date=date, poll=poll, candidate=label.candidate)
                 messages.success(request, _('Candidates successfully added!'))
-                return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.pk}))
+                return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
     else:
         formset = CandidateFormSet()
         form = DateCandidateForm()
@@ -120,11 +119,11 @@ def dateCandidateCreate(request, pk):
                   {'formset': formset, 'form': form, 'candidates': candidates, 'poll': poll})
 
 
-def deleteCandidate(request, pk, cand):
+def delete_candidate(request, pk, cand):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidate = get_object_or_404(DateCandidate, id=cand)
     candidate.delete()
-    return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))
+    return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
 def vote(request, pk):
