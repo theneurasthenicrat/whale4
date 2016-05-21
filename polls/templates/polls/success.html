@@ -4,5 +4,12 @@
 {% load static %}
 {% block content %}
     <p>Now you can vote at this link </p>
-     <a href="{% url 'vote' poll.id %}"> vote {% bootstrap_icon "menu-right"%}</a>
+
+    <div class= "row">
+            <div class="col-md-offset-4 col-md-6 ">
+                <ul class="list-inline">
+                    <li><a href="/polls/optionsUpdate/{{poll.id }}/{{options.id }}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+                    <li><a href="{% url 'vote' poll.id %}" class="btn btn-primary "> {% trans 'vote' %}{% bootstrap_icon "menu-right"%}</a></li>
+                </ul>
+            </div>
 {% endblock %}
