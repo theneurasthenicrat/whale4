@@ -2,7 +2,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.forms import formset_factory
+from django.forms import formset_factory, inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -57,7 +57,7 @@ class VotingPollUpdate(UpdateView):
 def manageCandidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if poll.poll_type != 'Date':
-        return redirect(reverse_lazy(candidateCreate, kwargs={'pk': poll.id}))
+        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
     else:
         return redirect(reverse_lazy(dateCandidateCreate, kwargs={'pk': poll.id}))
 
@@ -78,23 +78,19 @@ def optionsCreate(request, pk):
     return render(request, "polls/options_form.html", {'form': form, 'poll': poll})
 
 
-def candidateCreate(request, pk):
+def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    CandidateFormSet = formset_factory(
-        CandidateForm, formset=BaseCandidateFormSet, extra=0, min_num=2, validate_min=True)
-    candidates = Candidate.objects.filter(poll_id=poll.id).values()
+    candidateformset = inlineformset_factory(VotingPoll, Candidate,
+                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=1,
+                                             can_delete=False, validate_min=True)
     if request.method == 'POST':
-        formset = CandidateFormSet(request.POST)
+        formset = candidateformset(request.POST, instance=poll)
         if formset.is_valid():
-            for form in formset:
-                if form.has_changed():
-                    candidate = form.save(commit=False)
-                    candidate.poll = poll
-                    candidate.save()
+            formset.save()
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(optionsCreate, kwargs={'pk': poll.pk}))
     else:
-        formset = CandidateFormSet(initial=candidates)
+        formset = candidateformset(instance=poll)
     return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})
 
 

@@ -4,7 +4,7 @@ from polls import views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
-    url(r'^candidateCreate/(?P<pk>[^/]+)/$', views.candidateCreate, name='candidateCreate'),
+    url(r'^candidateCreate/(?P<pk>[^/]+)/$', views.candidate_create, name='candidateCreate'),
     url(r'^dateCandidateCreate/(?P<pk>[^/]+)/$', views.dateCandidateCreate, name='dateCandidateCreate'),
     url(r'^manageCandidate/(?P<pk>[^/]+)/$', views.manageCandidate, name='manageCandidate'),
     url(r'^updateVotingPoll/(?P<pk>[^/]+)/$', views.VotingPollUpdate.as_view(), name='updateVotingPoll'),

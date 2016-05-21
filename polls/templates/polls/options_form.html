@@ -4,7 +4,7 @@
 {% block content %}
     <ul class="nav nav-pills">
         <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-        <li role="presentation" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+        <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
         <li role="presentation" class="active"><a href="#">3.Options</a></li>
     </ul>
     <h1>{% trans 'Add parameters' %}</h1>
@@ -18,7 +18,7 @@
         <div class= "row">
             <div class="col-md-offset-4 col-md-6 ">
                 <ul class="list-inline">
-                    <li ><a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+                    <li ><a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
                     <li><button type="submit"form="form1" class="btn btn-primary ">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button></li>
                 </ul>
             </div>

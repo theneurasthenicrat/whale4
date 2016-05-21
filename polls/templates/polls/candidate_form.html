@@ -15,15 +15,14 @@
         <div id="form_set" >
             {% for form in formset.forms %}
                 {% for field in form %}
-                    {% bootstrap_label field.label %}
-                    {% bootstrap_field field show_label=False %}
+
+                    {% bootstrap_field field  %}
                 {% endfor %}
             {% endfor %}
         </div>
         <div id="empty_form" style="display:none">
             {% for field in formset.empty_form %}
-                {% bootstrap_label field.label %}
-                {% bootstrap_field field show_label=False %}
+                {% bootstrap_field field  %}
             {% endfor %}
         </div>
     </form>

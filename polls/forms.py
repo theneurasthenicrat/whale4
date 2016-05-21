@@ -2,7 +2,7 @@
 
 # imports ####################################################################
 
-from django.forms import ModelForm, BaseFormSet, Form, widgets
+from django.forms import ModelForm, BaseFormSet, Form, widgets,BaseInlineFormSet
 from polls.models import VotingPoll, Candidate, DateCandidate, PreferenceModel, INDEFINED_VALUE, Options
 from django import forms
 
@@ -43,7 +43,7 @@ class DateCandidateForm(Form):
         return dates
 
 
-class BaseCandidateFormSet(BaseFormSet):
+class BaseCandidateFormSet(BaseInlineFormSet):
     def clean(self):
         if any(self.errors):
             return

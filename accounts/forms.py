@@ -22,6 +22,7 @@ class UserCreationForm(forms.ModelForm):
         return password_confirmation
 
     def save(self, commit=True):
+        # type: (object) -> object
         user = super(UserCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
         if commit:
