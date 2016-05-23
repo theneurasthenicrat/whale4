@@ -10,8 +10,8 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
 
 from accounts.models import User
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, OptionsForm
-from polls.models import VotingPoll, Options, Candidate, preference_model_from_text, VotingScore, INDEFINED_VALUE, \
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm
+from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, INDEFINED_VALUE, \
     DateCandidate
 
 
@@ -23,8 +23,8 @@ def home(request):
 
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    options = get_object_or_404(Options, poll_id=poll.id)
-    return render(request, 'polls/success.html', {'poll': poll, 'options': options,})
+
+    return render(request, 'polls/success.html', {'poll': poll})
 
 
 class VotingPollMixin(object):
@@ -68,41 +68,6 @@ def manage_candidate(request, pk):
         return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
-class OptionsMixin(object):
-    model = Options
-    form_class = OptionsForm
-    template_name = "polls/options_form.html"
-
-    def form_valid(self, form):
-        options = form.save(commit=False)
-        options.poll = get_object_or_404(VotingPoll, id=self.kwargs['poll'])
-        options.save()
-        return super(OptionsMixin, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(OptionsMixin, self).get_context_data(**kwargs)
-        context['poll'] = get_object_or_404(VotingPoll, id=self.kwargs['poll'])
-        return context
-
-    def get_success_url(self):
-        poll = get_object_or_404(VotingPoll, id=self.kwargs['poll'])
-        return reverse_lazy(success, kwargs={'pk': poll.id,})
-
-
-class OptionsUpdate(OptionsMixin, UpdateView):
-    """
-    OptionsMixin does everything
-    """
-    pass
-
-
-class OptionsCreate(OptionsMixin, CreateView):
-    """
-    OptionsMixin does everything
-    """
-    pass
-
-
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidateformset = inlineformset_factory(VotingPoll, Candidate,
@@ -113,7 +78,7 @@ def candidate_create(request, pk):
         if formset.is_valid():
             formset.save()
             messages.success(request, _('Candidates successfully added!'))
-            return redirect(reverse_lazy('optionsCreate', kwargs={'poll': poll.pk}))
+            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
         formset = candidateformset(instance=poll)
     return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})

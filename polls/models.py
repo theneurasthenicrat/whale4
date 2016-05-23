@@ -27,6 +27,8 @@ class VotingPoll(Poll):
         )
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
     preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model"))
+    option_ballots=models.BooleanField(default=False)
+    option_choice=models.BooleanField(default=False)
     
 
 class Candidate(models.Model):
@@ -53,12 +55,6 @@ class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
     voter = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name= _("voter"))
     value = models.IntegerField(verbose_name= _("value"))
-
-class Options(models.Model):
-    poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE)
-    sealed_ballots=models.BooleanField(default=False)
-    choice_idontknow=models.BooleanField(default=False)
-
 
 #  preference models ########################################################
 INDEFINED_VALUE=-222222222

@@ -3,12 +3,17 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
+      <ul class="nav nav-pills">
+        <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+        <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+        <li role="presentation" class="active"><a href="#">3.Invite</a></li>
+    </ul>
     <p>Now you can vote at this link </p>
 
     <div class= "row">
             <div class="col-md-offset-4 col-md-6 ">
                 <ul class="list-inline">
-                    <li><a href="/polls/optionsUpdate/{{poll.id }}/{{options.id }}"  class="btn btn-default "> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+                    <li><a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-default ">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
                     <li><a href="{% url 'vote' poll.id %}" class="btn btn-primary "> {% trans 'vote' %}{% bootstrap_icon "menu-right"%}</a></li>
                 </ul>
             </div>

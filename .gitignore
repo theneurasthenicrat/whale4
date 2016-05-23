@@ -5,3 +5,4 @@ resetDB.sh
 polls/migrations/
 message.txt
 .idea/
+*.pyc

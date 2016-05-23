@@ -3,7 +3,7 @@
 # imports ####################################################################
 
 from django.forms import ModelForm, BaseFormSet, Form, widgets,BaseInlineFormSet
-from polls.models import VotingPoll, Candidate, DateCandidate, PreferenceModel, INDEFINED_VALUE, Options
+from polls.models import VotingPoll, Candidate, DateCandidate, PreferenceModel, INDEFINED_VALUE
 from django import forms
 
 
@@ -21,13 +21,6 @@ class VotingPollForm(ModelForm):
             voting_poll.admin = user
         voting_poll.save()
         return voting_poll"""
-
-
-class OptionsForm(ModelForm):
-    class Meta:
-        model = Options
-        exclude = ['poll']
-
 
 class CandidateForm(ModelForm):
     class Meta:

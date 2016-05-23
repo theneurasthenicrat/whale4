@@ -6,7 +6,7 @@
     <ul class="nav nav-pills">
         <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
         <li role="presentation" class="active" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right" %}</a></li>
-        <li role="presentation" class="disabled"><a href="#">3.Options</a></li>
+        <li role="presentation" class="disabled"><a href="#">3.Invite</a></li>
     </ul>
     <form action="" method="post" id="form1">
         {% csrf_token %}

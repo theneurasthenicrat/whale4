@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^dateCandidateCreate/(?P<pk>[^/]+)/$', views.date_candidate_create, name='dateCandidateCreate'),
     url(r'^manageCandidate/(?P<pk>[^/]+)/$', views.manage_candidate, name='manageCandidate'),
     url(r'^updateVotingPoll/(?P<pk>[^/]+)/$', views.VotingPollUpdate.as_view(), name='updateVotingPoll'),
-    url(r'^optionsCreate/(?P<poll>[^/]+)/$', views.OptionsCreate.as_view(), name='optionsCreate'),
     url(r'^deleteCandidate/(?P<pk>[^/]+)/(?P<cand>[^/]+)/$', views.delete_candidate, name='deleteCandidate'),
     url(r'^updateVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.updateVote, name='updateVote'),
     url(r'^deleteVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.deleteVote, name='deleteVote'),
@@ -16,5 +15,5 @@ urlpatterns = [
     url(r'^viewPoll/(?P<pk>[^/]+)/$', views.viewPoll, name='viewPoll'),
     url(r'^vote/(?P<pk>[^/]+)/$', views.vote, name='vote'),
     url(r'^success/(?P<pk>[^/]+)/$', views.success, name='success'),
-    url(r'^optionsUpdate/(?P<poll>[^/]+)/(?P<pk>[^/]+)/$', views.OptionsUpdate.as_view(), name='optionsUpdate'),
+
 ]
