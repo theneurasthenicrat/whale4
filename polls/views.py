@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
 
-from accounts.models import User
+from accounts.models import WhaleUser
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, INDEFINED_VALUE, \
     DateCandidate
@@ -134,7 +134,12 @@ def vote(request, pk):
 
         if form.is_valid():
             data = form.cleaned_data
-            voter = User.objects.create(nickname=data['nickname'])
+            users = WhaleUser.objects.count()+1
+            email = 'whale4'+str(users)+'@gmail.com'
+            voter = WhaleUser.objects.create_user(
+                                            email=email,
+                                             nickname=data['nickname'],
+                                            password='whale4')
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
             return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
@@ -150,7 +155,7 @@ def updateVote(request, pk, voter):
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
     preference_model = preference_model_from_text(poll.preference_model)
-    voter = User.objects.get(id=voter)
+    voter = WhaleUser.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     initial = {}
     initial['nickname'] = voter.nickname
@@ -162,6 +167,7 @@ def updateVote(request, pk, voter):
         if form.is_valid():
             data = form.cleaned_data
             voter.nickname = data['nickname']
+
             voter.save()
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
@@ -175,7 +181,7 @@ def updateVote(request, pk, voter):
 
 def deleteVote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
-    voter = User.objects.get(id=voter)
+    voter = WhaleUser.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
 
     if request.method == 'POST':

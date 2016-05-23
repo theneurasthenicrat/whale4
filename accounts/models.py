@@ -9,9 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 import uuid
 # models #####################################################################
 
-class User(models.Model):
-    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
-    nickname = models.CharField(max_length=50)
 
 class WhaleUserManager(BaseUserManager):
     def create_user(self, email, nickname, password=None):
