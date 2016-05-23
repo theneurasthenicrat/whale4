@@ -3,7 +3,7 @@
 # imports ####################################################################
 
 from django.forms import ModelForm, Form, widgets,BaseInlineFormSet
-from polls.models import VotingPoll, Candidate, DateCandidate, INDEFINED_VALUE
+from polls.models import VotingPoll, Candidate, DateCandidate, UNDEFINED_VALUE
 from django import forms
 
 
@@ -15,22 +15,18 @@ class VotingPollForm(ModelForm):
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
         }
 
-    """def save(self, user=None):
-        voting_poll = super(VotingPollForm, self).save(commit=False)
-        if user:
-            voting_poll.admin = user
-        voting_poll.save()
-        return voting_poll"""
 
 class CandidateForm(ModelForm):
     class Meta:
         model = Candidate
         exclude = ['poll']
 
+
 class DateCandidateForm(ModelForm):
     class Meta:
         model = DateCandidate
         exclude = ['poll','date']
+
 
 class DateForm(Form):
     dates = forms.CharField(max_length=300, required=True)
@@ -59,7 +55,7 @@ class VotingForm(forms.Form):
         self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
         for c in candidates:
             self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
-                                                                 choices=preference_model.zipPreference() if not poll.option_choice else preference_model.zipPreferenceOption() ,
+                                                                 choices=preference_model.zip_preference() if not poll.option_choice else preference_model.zip_preference_option(),
                                                                  initial=preference_model.last(),
                                                                  required=True, label=c.candidate
                                                                  )
@@ -68,6 +64,6 @@ class VotingForm(forms.Form):
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
         for c in self.candidates:
-            if cleaned_data.get('value' + str(c.id)) != str(INDEFINED_VALUE):
+            if cleaned_data.get('value' + str(c.id)) != str(UNDEFINED_VALUE):
                 return
         raise forms.ValidationError("You must give a score to at least one candidate!")

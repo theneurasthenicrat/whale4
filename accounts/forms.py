@@ -2,9 +2,11 @@ from django import forms
 from accounts.models import WhaleUser
 from django.utils.translation import ugettext_lazy as _
 
+
 class LoginForm(forms.Form):
     email = forms.EmailField(label=_('email address'), max_length=255, required=True)
     password = forms.CharField(widget=forms.PasswordInput,label=_('password'))
+
 
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput,label=_('password'))

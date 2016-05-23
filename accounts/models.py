@@ -23,6 +23,7 @@ class WhaleUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class WhaleUser(AbstractBaseUser):
 
     email = models.EmailField(verbose_name=_('email address'), max_length=255, unique=True)

@@ -13,6 +13,7 @@ class Poll(models.Model):
     closing_date = models.DateField(null=True,blank=True,verbose_name= _("closing date"))
     admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
 
+
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (
         ('PositiveNegative', _('Positive Negative scale (--, -, 0, +, ++)')),
@@ -41,6 +42,7 @@ class Candidate(models.Model):
     def __str__(self):
         return str(self.candidate)
 
+
 class DateCandidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE)
     candidate = models.CharField(max_length=50,verbose_name= _('candidate'))
@@ -49,9 +51,9 @@ class DateCandidate(models.Model):
     class Meta: 
         ordering=['date','id']
 
-
     def __str__(self):
         return str(self.date) + "#" + str(self.candidate)
+
 
 class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
@@ -59,21 +61,22 @@ class VotingScore(models.Model):
     value = models.IntegerField(verbose_name= _("value"))
 
 #  preference models ########################################################
-INDEFINED_VALUE=-222222222
+UNDEFINED_VALUE=-222222222
+
 
 class PreferenceModel:
    
     def __init__(self, id, texts, values):
         self.id = id
         texts.insert(0,_(" I don't know"))
-        values.insert(0,INDEFINED_VALUE)
+        values.insert(0, UNDEFINED_VALUE)
         self.texts = texts
         self.values = values
         
-    def zipPreference(self): 
+    def zip_preference(self):
         return zip(self.values, self.texts)
 
-    def zipPreferenceOption(self):
+    def zip_preference_option(self):
         return zip(self.values[1:], self.texts[1:])
 
     def last(self):
@@ -81,7 +84,6 @@ class PreferenceModel:
 
     def nb_values(self): 
         return len(self.values)
-
 
     def min(self): 
         return min(self.values[1:])
@@ -104,12 +106,12 @@ class PreferenceModel:
         return {"id": self.id,"values": self.values,"texts": self.texts}
 
 
-
 class Ranking(PreferenceModel):
     def __init__(self, nb_cand, ties_allowed = 0):
         values = [range(nb_cand + 1)]
         texts = [str(x) for x in values]
         PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed else "NoTies"),texts,values)
+
 
 class Numbers(PreferenceModel):
     def __init__(self, nb_min, nb_max):
@@ -118,7 +120,9 @@ class Numbers(PreferenceModel):
         PreferenceModel.__init__(self, "scores", texts, values)
 
 positiveNegative=PreferenceModel("positiveNegative", ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])
+
 approval=PreferenceModel("approval", ["no", "yes"], [0, 1])
+
         
 def preference_model_from_text(desc):
     parts = desc.split('#')

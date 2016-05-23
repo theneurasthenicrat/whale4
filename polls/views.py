@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 
 from accounts.models import WhaleUser
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm
-from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, INDEFINED_VALUE, \
+from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
 
@@ -126,15 +126,17 @@ def vote(request, pk):
     preference_model = preference_model_from_text(poll.preference_model)
     months = []
     days = []
+    initial={}
+
     if poll.poll_type == 'Date':
-        (days, months) = daysmonth(candidates)
+        (days, months) = days_month(candidates)
 
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll, request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
-            if not request.user.is_authenticated:
+            if not request.user.is_authenticated():
                 users = WhaleUser.objects.count()+1
                 email = 'whale4'+str(users)+'@gmail.com'
                 voter = WhaleUser.objects.create_user(
@@ -145,16 +147,18 @@ def vote(request, pk):
                 voter = request.user
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
-            return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
-        if request.user.is_authenticated:
-            initial={'nickname':request.user.nickname}
+        if request.user.is_authenticated():
+            initial = {'nickname': request.user.nickname}
+        else:
+            initial = {}
         form = VotingForm(candidates, preference_model,poll,initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
 
 
-def updateVote(request, pk, voter):
+def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
@@ -177,14 +181,14 @@ def updateVote(request, pk, voter):
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
                 v.save()
-            return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
         form = VotingForm(candidates, preference_model,poll, initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
 
 
-def deleteVote(request, pk, voter):
+def delete_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     voter = WhaleUser.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
@@ -192,11 +196,11 @@ def deleteVote(request, pk, voter):
     if request.method == 'POST':
         votes.delete()
         voter.delete()
-        return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
+        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     return render(request, 'polls/delete_vote.html', {'voter': voter, 'poll': poll})
 
 
-def daysmonth(candidates):
+def days_month(candidates):
     months = []
     days = []
     for c in candidates:
@@ -213,7 +217,7 @@ def daysmonth(candidates):
     return (days, months)
 
 
-def viewPoll(request, pk):
+def view_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
@@ -223,13 +227,13 @@ def viewPoll(request, pk):
     months = []
     days = []
     if poll.poll_type == 'Date':
-        (days, months) = daysmonth(candidates)
+        (days, months) = days_month(candidates)
     scores = {}
     for v in votes:
         if v.voter.id not in scores:
             scores[v.voter.id] = {}
         scores[v.voter.id][v.candidate.id] = v.value
-
+    print(scores)
     tab = {}
     for v in votes:
         id = v.voter.id
@@ -243,8 +247,8 @@ def viewPoll(request, pk):
                 tab[id]['scores'].append({
                     'value': score,
                     'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
-                                                                  1) * 100)) if score != INDEFINED_VALUE else 'poll-undefined',
-                    'text': preference_model.value2text(score) if score != INDEFINED_VALUE else "?"
+                                                                  1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
+                    'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
                 })
 
     values = None if tab == {} else tab.values()

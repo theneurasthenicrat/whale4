@@ -11,7 +11,8 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import ugettext_lazy as _
 
-class register(CreateView):
+
+class Register(CreateView):
     template_name = 'accounts/register.html'
     form_class = UserCreationForm
     model = WhaleUser
@@ -22,9 +23,9 @@ class register(CreateView):
 
 
 def login_view(request):
-    next = ""
-    if request.GET:  
-        next = request.GET['next']
+    next_url = None
+    if request.GET:
+        next_url = request.GET['next']
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -34,8 +35,8 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, _('You are successfully log in.'))
-                if next != "":
-                    return redirect(next)
+                if next_url is not None:
+                    return redirect(next_url )
                 else:
                     return redirect(reverse('home'))
             else:
@@ -43,6 +44,7 @@ def login_view(request):
     else:
         form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form, })
+
 
 def logout_view(request):
     logout(request)
