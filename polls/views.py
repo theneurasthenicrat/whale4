@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
 
 from accounts.models import User
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, INDEFINED_VALUE, \
     DateCandidate
 
@@ -23,7 +23,6 @@ def home(request):
 
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-
     return render(request, 'polls/success.html', {'poll': poll})
 
 
@@ -74,40 +73,42 @@ def candidate_create(request, pk):
                                              form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=1,
                                              can_delete=False, validate_min=True)
     if request.method == 'POST':
-        formset = candidateformset(request.POST, instance=poll)
+        formset = candidateformset(request.POST, instance=poll,prefix='form')
         if formset.is_valid():
             formset.save()
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
-        formset = candidateformset(instance=poll)
+        formset = candidateformset(instance=poll,prefix='form')
     return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})
 
 
 def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    CandidateFormSet = formset_factory(CandidateForm, extra=1, formset=BaseCandidateFormSet)
+    date_candidateformset = inlineformset_factory(VotingPoll, DateCandidate,
+                                             form=DateCandidateForm, formset=BaseCandidateFormSet, extra=1,
+                                             can_delete=False)
     if request.method == 'POST':
-        form = DateCandidateForm(request.POST)
-        formset = CandidateFormSet(request.POST)
+        form = DateForm(request.POST)
+        formset = date_candidateformset(request.POST, instance=poll,prefix='form')
         if form.is_valid():
-            data = form.cleaned_data
-            dates = data['dates']
+            dates = form.cleaned_data['dates']
             if formset.is_valid():
-                for form in formset:
-                    if form.has_changed():
-                        label = form.save(commit=False)
-                        for date in dates:
-                            candidate = DateCandidate.objects.create(date=date, poll=poll, candidate=label.candidate)
+                print(formset)
+                label = formset.save(commit=False)
+                for date in dates:
+                    for c in label:
+                        c.date=date
+                        c.save()
                 messages.success(request, _('Candidates successfully added!'))
                 return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
     else:
-        formset = CandidateFormSet()
-        form = DateCandidateForm()
-        candidates = DateCandidate.objects.filter(poll_id=poll.id)
+        formset = date_candidateformset(prefix='form')
+        form = DateForm()
+        candidates=DateCandidate.objects.filter(poll_id=poll.id)
 
-    return render(request, 'polls/dateCandidate_form.html',
-                  {'formset': formset, 'form': form, 'candidates': candidates, 'poll': poll})
+    return render(request, 'polls/candidate2.html',
+                  {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 
 
 def delete_candidate(request, pk, cand):

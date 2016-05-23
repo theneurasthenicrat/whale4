@@ -27,8 +27,12 @@ class CandidateForm(ModelForm):
         model = Candidate
         exclude = ['poll']
 
+class DateCandidateForm(ModelForm):
+    class Meta:
+        model = DateCandidate
+        exclude = ['poll','date']
 
-class DateCandidateForm(Form):
+class DateForm(Form):
     dates = forms.CharField(max_length=300, required=True)
 
     def clean_dates(self):
