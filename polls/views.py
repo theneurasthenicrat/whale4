@@ -134,17 +134,22 @@ def vote(request, pk):
 
         if form.is_valid():
             data = form.cleaned_data
-            users = WhaleUser.objects.count()+1
-            email = 'whale4'+str(users)+'@gmail.com'
-            voter = WhaleUser.objects.create_user(
+            if not request.user.is_authenticated:
+                users = WhaleUser.objects.count()+1
+                email = 'whale4'+str(users)+'@gmail.com'
+                voter = WhaleUser.objects.create_user(
                                             email=email,
                                              nickname=data['nickname'],
                                             password='whale4')
+            else:
+                voter = request.user
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
             return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
     else:
-        form = VotingForm(candidates, preference_model,poll)
+        if request.user.is_authenticated:
+            initial={'nickname':request.user.nickname}
+        form = VotingForm(candidates, preference_model,poll,initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
 

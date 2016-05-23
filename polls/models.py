@@ -98,7 +98,7 @@ class PreferenceModel:
         return self.texts[index]
 
     def evaluate(self, value):
-        return (value - self.min()) / (self.max() - self.min())
+        return (value - self.min()) / float((self.max() - self.min()))
 
     def as_dict(self):
         return {"id": self.id,"values": self.values,"texts": self.texts}
