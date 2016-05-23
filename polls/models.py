@@ -73,8 +73,15 @@ class PreferenceModel:
     def zipPreference(self): 
         return zip(self.values, self.texts)
 
+    def zipPreferenceOption(self):
+        return zip(self.values[1:], self.texts[1:])
+
+    def last(self):
+        return self.values[-1]
+
     def nb_values(self): 
         return len(self.values)
+
 
     def min(self): 
         return min(self.values[1:])
@@ -95,6 +102,8 @@ class PreferenceModel:
 
     def as_dict(self):
         return {"id": self.id,"values": self.values,"texts": self.texts}
+
+
 
 class Ranking(PreferenceModel):
     def __init__(self, nb_cand, ties_allowed = 0):

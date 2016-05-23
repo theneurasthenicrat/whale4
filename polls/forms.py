@@ -53,13 +53,14 @@ class BaseCandidateFormSet(BaseInlineFormSet):
 
 
 class VotingForm(forms.Form):
-    def __init__(self, candidates, preference_model, *args, **kwargs):
+    def __init__(self, candidates, preference_model,poll, *args, **kwargs):
         super(VotingForm, self).__init__(*args, **kwargs)
 
         self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
         for c in candidates:
             self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
-                                                                 choices=preference_model.zipPreference(),
+                                                                 choices=preference_model.zipPreference() if not poll.option_choice else preference_model.zipPreferenceOption() ,
+                                                                 initial=preference_model.last(),
                                                                  required=True, label=c.candidate
                                                                  )
             self.candidates = candidates

@@ -130,7 +130,7 @@ def vote(request, pk):
         (days, months) = daysmonth(candidates)
 
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model, request.POST)
+        form = VotingForm(candidates, preference_model,poll, request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -139,7 +139,7 @@ def vote(request, pk):
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
             return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
     else:
-        form = VotingForm(candidates, preference_model)
+        form = VotingForm(candidates, preference_model,poll)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
 
@@ -157,7 +157,7 @@ def updateVote(request, pk, voter):
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model, request.POST)
+        form = VotingForm(candidates, preference_model,poll, request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -168,7 +168,7 @@ def updateVote(request, pk, voter):
                 v.save()
             return redirect(reverse_lazy(viewPoll, kwargs={'pk': poll.pk}))
     else:
-        form = VotingForm(candidates, preference_model, initial=initial)
+        form = VotingForm(candidates, preference_model,poll, initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
 
