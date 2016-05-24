@@ -128,6 +128,21 @@ def with_admin_rights(fn):
     return wrapped
 
 
+def with_voter_rights(fn):
+    def wrapped(request, pk,voter):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        user = get_object_or_404(WhaleUser, id=voter)
+        if request.user is not None and request.user== user:
+            return fn(request, pk, voter)
+        elif "user_id" in request.session:
+            user_id=request.session["user_id"]
+            if user_id!=user.id:
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+            return fn(request,pk,voter)
+        else:
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    return wrapped
+
 @with_admin_rights
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -146,6 +161,7 @@ def vote(request, pk):
         initial = {'nickname': request.user.nickname}
         voter=request.user
         read=True
+
     else:
         initial = {}
         read=False
@@ -155,6 +171,8 @@ def vote(request, pk):
         email=email,
         nickname='',
         password='whale4')
+
+    request.session["user_id"] = voter.id
 
     if poll.poll_type == 'Date':
         (days, months) = days_month(candidates)
@@ -176,6 +194,7 @@ def vote(request, pk):
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
 
 
+@with_voter_rights
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     candidates = (
@@ -212,6 +231,7 @@ def update_vote(request, pk, voter):
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
 
 
+@with_voter_rights
 def delete_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     voter = WhaleUser.objects.get(id=voter)
