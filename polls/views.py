@@ -118,6 +118,22 @@ def delete_candidate(request, pk, cand):
     return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
+def with_admin_rights(fn):
+    def wrapped(request, pk):
+        next = request.get_full_path()
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if request.user is None or request.user != poll.admin:
+            return redirect('/accounts/login?next={next}'.format(next=next))
+        return fn(request,pk)
+    return wrapped
+
+
+@with_admin_rights
+def admin_poll(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk,}))
+
+
 def vote(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
@@ -126,34 +142,36 @@ def vote(request, pk):
     preference_model = preference_model_from_text(poll.preference_model)
     months = []
     days = []
-    initial={}
+    if request.user.is_authenticated():
+        initial = {'nickname': request.user.nickname}
+        voter=request.user
+        read=True
+    else:
+        initial = {}
+        read=False
+        users = WhaleUser.objects.count() + 1
+        email = 'whale4' + str(users) + '@gmail.com'
+        voter = WhaleUser.objects.create_user(
+        email=email,
+        nickname='',
+        password='whale4')
 
     if poll.poll_type == 'Date':
         (days, months) = days_month(candidates)
 
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model,poll, request.POST)
+        form = VotingForm(candidates, preference_model,poll,read,request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
-            if not request.user.is_authenticated():
-                users = WhaleUser.objects.count()+1
-                email = 'whale4'+str(users)+'@gmail.com'
-                voter = WhaleUser.objects.create_user(
-                                            email=email,
-                                             nickname=data['nickname'],
-                                            password='whale4')
-            else:
-                voter = request.user
+            voter.nickname = data['nickname']
+            voter.save()
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
-        if request.user.is_authenticated():
-            initial = {'nickname': request.user.nickname}
-        else:
-            initial = {}
-        form = VotingForm(candidates, preference_model,poll,initial=initial)
+
+        form = VotingForm(candidates, preference_model,poll,read,initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
 
@@ -170,20 +188,26 @@ def update_vote(request, pk, voter):
     initial['nickname'] = voter.nickname
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
+
+    if request.user.is_authenticated():
+
+        read = True
+    else:
+
+        read = False
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model,poll, request.POST)
+        form = VotingForm(candidates, preference_model,poll,read, request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
             voter.nickname = data['nickname']
-
             voter.save()
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
                 v.save()
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
-        form = VotingForm(candidates, preference_model,poll, initial=initial)
+        form = VotingForm(candidates, preference_model,poll,read, initial=initial)
 
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
 

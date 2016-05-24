@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^viewPoll/(?P<pk>[^/]+)/$', views.view_poll, name='viewPoll'),
     url(r'^vote/(?P<pk>[^/]+)/$', views.vote, name='vote'),
     url(r'^success/(?P<pk>[^/]+)/$', views.success, name='success'),
-
+    url(r'^admin/(?P<pk>[^/]+)/$', views.admin_poll, name='admin'),
 ]
