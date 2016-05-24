@@ -45,7 +45,7 @@ class Candidate(models.Model):
 
 class DateCandidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE)
-    candidate = models.CharField(max_length=50,verbose_name= _('candidate'))
+    candidate = models.CharField(max_length=50,verbose_name= _('candidate'),null=True)
     date = models.DateField(verbose_name= _("date"))
 
     class Meta: 

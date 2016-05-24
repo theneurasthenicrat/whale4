@@ -5,7 +5,7 @@
     $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
   });
 
-  $('#datepicker').datepicker({
+  $('.datepicker').datepicker({
     format: 'yyyy-mm-dd',
     multidate: true
   });

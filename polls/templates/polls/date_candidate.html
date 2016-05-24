@@ -1,0 +1,79 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+    {% load bootstrap3 %}
+    <div class="row">
+        <div class="col-md-8">
+            <p class="lead text-primary text-center"> {% trans 'Add Candidates to poll' %}</p>
+            <ul class="nav nav-pills">
+                <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+                <li role="presentation" class="active" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right" %}</a></li>
+                <li role="presentation" class="disabled"><a href="#">3.Invite</a></li>
+            </ul>
+            <div class="row">
+                <form action="" method="post" id="form1" >
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        {% bootstrap_form form  %}
+                    </div>
+                    <div class="col-md-6">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset layout='inline' %}
+                        <div id="form_set" >
+                            {% for form in formset.forms %}
+                                {% bootstrap_form form layout='horizontal'  %}
+                            {% endfor %}
+                        </div>
+                        <div id="empty_form" style="display:none">
+                            {% bootstrap_form formset.empty_form layout='horizontal'  %}
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-4 col-md-5">
+                    <button type="submit" form="form1"class="btn btn-success ">
+                        {% bootstrap_icon "ok" %} {% trans 'Save' %}
+                    </button>
+                </div>
+                <button  id="add_more" class="btn btn-default pull-right">
+                    {% bootstrap_icon "plus" %} {% trans 'Add' %}
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="pull-right">
+            {% if candidates %}
+                <p class="lead">Here is the current list of candidates:</p>
+                <ol class="list-group">
+                    {% for c in candidates %}
+                        <li class="list-group-item">
+                            <form action="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" method="get">{% csrf_token %}
+                                {{ c }}
+                                <button type="submit" class="close">&times;</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>No candidate yet</p>
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="row">
+        <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+        <a href="{% url 'success' poll.id  %}" class="btn btn-primary pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+
+    </div>
+
+
+    <script src="{% static 'polls/js/dateCandidate.js' %}" type="text/javascript"></script>
+{% endblock %}

@@ -14,6 +14,7 @@ class VotingPollForm(ModelForm):
         widgets = {
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
         }
+        labels= {'option_ballots':'Sealed ballots ', 'option_choice':'Choose "I do not know" is not allowed',}
 
 
 class CandidateForm(ModelForm):
@@ -29,7 +30,7 @@ class DateCandidateForm(ModelForm):
 
 
 class DateForm(Form):
-    dates = forms.CharField(max_length=300, required=True)
+    dates = forms.CharField(max_length=300, required=True,widget=forms.TextInput(attrs={'class': 'datepicker'}))
 
     def clean_dates(self):
         dates = self.cleaned_data["dates"].split(',')

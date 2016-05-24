@@ -72,13 +72,20 @@ def home(request):
 
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    return render(request, 'polls/success.html', {'poll': poll})
+    candidates = (
+        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+            poll_id=poll.id))
+    if candidates.count()< 2:
+        messages.error(request, _('You must add at least two candidates'))
+        return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
+    else:
+        return render(request, 'polls/success.html', {'poll': poll})
 
 
 class VotingPollMixin(object):
     model = VotingPoll
     form_class = VotingPollForm
-    template_name = "polls/votingPoll_form.html"
+    template_name = "polls/voting_poll.html"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -133,7 +140,7 @@ def candidate_create(request, pk):
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
         formset = candidateformset(instance=poll,prefix='form')
-    return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})
+    return render(request, 'polls/candidate.html', {'formset': formset, 'poll': poll})
 
 
 @login_required
@@ -143,31 +150,45 @@ def date_candidate_create(request, pk):
     date_candidateformset = inlineformset_factory(VotingPoll, DateCandidate,
                                              form=DateCandidateForm, formset=BaseCandidateFormSet, extra=1,
                                              can_delete=False)
+
+    candidates = DateCandidate.objects.filter(poll_id=poll.id)
     if request.method == 'POST':
         form = DateForm(request.POST)
         formset = date_candidateformset(request.POST, instance=poll,prefix='form')
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             dates = form.cleaned_data['dates']
-            if formset.is_valid():
-                print(formset)
-                label = formset.save(commit=False)
-                for date in dates:
-                    for c in label:
-                        c.date=date
-                        c.save()
-                messages.success(request, _('Candidates successfully added!'))
-                return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
+            label = formset.save(commit=False)
+            print(label)
+            for date in dates:
+                if label!=[]:
+                    for cand in label:
+                        cand.date=date
+                        for c in candidates:
+                            if str(c.date) == str(date) and c.candidate==cand.candidate:
+                                messages.error(request, _('candidates must be distincts'))
+                                return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
+                        cand.save()
+                else:
+                    cand=DateCandidate()
+                    cand.poll=poll
+                    cand.date=date
+                    for c in candidates:
+                        if str(c.date)==str(date):
+                            messages.error(request, _('candidates must be distincts'))
+                            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
+                    cand.save()
+
+            messages.success(request, _('Candidates successfully added!'))
+            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
     else:
         formset = date_candidateformset(prefix='form')
         form = DateForm()
-        candidates=DateCandidate.objects.filter(poll_id=poll.id)
 
-    return render(request, 'polls/candidate2.html',
+    return render(request, 'polls/date_candidate.html',
                   {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 
 
 @login_required
-@with_admin_rights
 def delete_candidate(request, pk, cand):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidate = get_object_or_404(DateCandidate, id=cand)
@@ -312,7 +333,7 @@ def view_poll(request, pk):
 
     values = None if tab == {} else tab.values()
 
-    return render(request, 'polls/viewPoll.html',
+    return render(request, 'polls/poll.html',
                   {'poll': poll, 'candidates': candidates, 'votes': values, 'months': months, 'days': days})
 
 
