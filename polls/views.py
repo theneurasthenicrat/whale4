@@ -130,16 +130,18 @@ def manage_candidate(request, pk):
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidateformset = inlineformset_factory(VotingPoll, Candidate,
-                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=0,
-                                             can_delete=False, validate_min=True)
+                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=0,can_delete=False,
+                                              validate_min=True)
     if request.method == 'POST':
         formset = candidateformset(request.POST, instance=poll,prefix='form')
+
         if formset.is_valid():
             formset.save()
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
         formset = candidateformset(instance=poll,prefix='form')
+        print(formset)
     return render(request, 'polls/candidate.html', {'formset': formset, 'poll': poll})
 
 

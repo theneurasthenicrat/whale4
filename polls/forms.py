@@ -48,6 +48,11 @@ class BaseCandidateFormSet(BaseInlineFormSet):
                 raise forms.ValidationError("candidates must be distinct.")
             candidates.append(candidate)
 
+    def add_fields(self, form, index):
+        super(BaseCandidateFormSet, self).add_fields(form, index)
+        if self.can_delete:
+            form.fields['DELETE'] = forms.BooleanField(required=False,label='x')
+
 
 class VotingForm(forms.Form):
     def __init__(self, candidates, preference_model,poll,read, *args, **kwargs):
