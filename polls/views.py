@@ -15,7 +15,56 @@ from polls.models import VotingPoll, Candidate, preference_model_from_text, Voti
     DateCandidate
 
 
-# Create your views here.
+# decorators #################################################################
+
+
+def with_admin_rights(fn):
+    def wrapped(request, pk):
+        next = request.get_full_path()
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if request.user is None or request.user != poll.admin:
+            return redirect('/accounts/login?next={next}'.format(next=next))
+        return fn(request,pk)
+    return wrapped
+
+
+def with_voter_rights(fn):
+    def wrapped(request, pk,voter):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        user = get_object_or_404(WhaleUser, id=voter)
+        if request.user is not None and request.user== user:
+            return fn(request, pk, voter)
+        elif "user_id" in request.session:
+            user_id=request.session["user_id"]
+            if user_id!=user.id:
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+            return fn(request,pk,voter)
+        else:
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    return wrapped
+
+# simple functions ######################################################################
+
+
+def days_month(candidates):
+    months = []
+    days = []
+    for c in candidates:
+        current_month = c.date.strftime("%y/%m")
+        current_day = c.date.strftime("%y/%m/%d")
+        if len(months) > 0 and months[-1]["label"] == current_month:
+            months[-1]["value"] += 1
+        else:
+            months += [{"label": current_month, "value": 1}]
+        if len(days) > 0 and days[-1]["label"] == current_day:
+            days[-1]["value"] += 1
+        else:
+            days += [{"label": current_day, "value": 1}]
+    return days, months
+
+
+# views ######################################################################
+
 
 def home(request):
     return render(request, 'polls/home.html', {})
@@ -59,6 +108,8 @@ class VotingPollCreate(VotingPollMixin, CreateView):
     pass
 
 
+@login_required
+@with_admin_rights
 def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if poll.poll_type != 'Date':
@@ -67,10 +118,12 @@ def manage_candidate(request, pk):
         return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
+@login_required
+@with_admin_rights
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidateformset = inlineformset_factory(VotingPoll, Candidate,
-                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=1,
+                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=0,
                                              can_delete=False, validate_min=True)
     if request.method == 'POST':
         formset = candidateformset(request.POST, instance=poll,prefix='form')
@@ -83,6 +136,8 @@ def candidate_create(request, pk):
     return render(request, 'polls/candidate_form.html', {'formset': formset, 'poll': poll})
 
 
+@login_required
+@with_admin_rights
 def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     date_candidateformset = inlineformset_factory(VotingPoll, DateCandidate,
@@ -111,37 +166,14 @@ def date_candidate_create(request, pk):
                   {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 
 
+@login_required
+@with_admin_rights
 def delete_candidate(request, pk, cand):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidate = get_object_or_404(DateCandidate, id=cand)
     candidate.delete()
     return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
-
-def with_admin_rights(fn):
-    def wrapped(request, pk):
-        next = request.get_full_path()
-        poll = get_object_or_404(VotingPoll, id=pk)
-        if request.user is None or request.user != poll.admin:
-            return redirect('/accounts/login?next={next}'.format(next=next))
-        return fn(request,pk)
-    return wrapped
-
-
-def with_voter_rights(fn):
-    def wrapped(request, pk,voter):
-        poll = get_object_or_404(VotingPoll, id=pk)
-        user = get_object_or_404(WhaleUser, id=voter)
-        if request.user is not None and request.user== user:
-            return fn(request, pk, voter)
-        elif "user_id" in request.session:
-            user_id=request.session["user_id"]
-            if user_id!=user.id:
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-            return fn(request,pk,voter)
-        else:
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-    return wrapped
 
 @with_admin_rights
 def admin_poll(request, pk):
@@ -242,23 +274,6 @@ def delete_vote(request, pk, voter):
         voter.delete()
         return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     return render(request, 'polls/delete_vote.html', {'voter': voter, 'poll': poll})
-
-
-def days_month(candidates):
-    months = []
-    days = []
-    for c in candidates:
-        current_month = c.date.strftime("%y/%m")
-        current_day = c.date.strftime("%y/%m/%d")
-        if len(months) > 0 and months[-1]["label"] == current_month:
-            months[-1]["value"] += 1
-        else:
-            months += [{"label": current_month, "value": 1}]
-        if len(days) > 0 and days[-1]["label"] == current_day:
-            days[-1]["value"] += 1
-        else:
-            days += [{"label": current_day, "value": 1}]
-    return (days, months)
 
 
 def view_poll(request, pk):
