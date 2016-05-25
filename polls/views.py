@@ -150,7 +150,7 @@ def candidate_create(request, pk):
 def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     date_candidateformset = inlineformset_factory(VotingPoll, DateCandidate,
-                                             form=DateCandidateForm, formset=BaseCandidateFormSet, extra=1,
+                                                  form=DateCandidateForm, formset=BaseCandidateFormSet, extra=1,
                                              can_delete=False)
 
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
@@ -160,32 +160,32 @@ def date_candidate_create(request, pk):
         if form.is_valid() and formset.is_valid():
             dates = form.cleaned_data['dates']
             label = formset.save(commit=False)
-            print(label)
             for date in dates:
-                if label!=[]:
-                    for cand in label:
-                        cand.date=date
+                if label:
+                    for candidate in label:
+                        cand = DateCandidate()
+                        cand.poll = poll
+                        cand.date = date
+                        cand.candidate=candidate.candidate
                         for c in candidates:
-                            if str(c.date) == str(date) and c.candidate==cand.candidate:
-                                messages.error(request, _('candidates must be distincts'))
+                            if str(c.date) == str(date) and c.candidate == cand.candidate:
+                                messages.error(request, _('candidates must be distinct'))
                                 return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
                         cand.save()
                 else:
-                    cand=DateCandidate()
-                    cand.poll=poll
-                    cand.date=date
+                    cand = DateCandidate()
+                    cand.poll = poll
+                    cand.date = date
                     for c in candidates:
-                        if str(c.date)==str(date):
-                            messages.error(request, _('candidates must be distincts'))
+                        if str(c.date) == str(date)and c.candidate == cand.candidate:
+                            messages.error(request, _('candidates must be distinct'))
                             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
                     cand.save()
-
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
     else:
         formset = date_candidateformset(prefix='form')
         form = DateForm()
-
     return render(request, 'polls/date_candidate.html',
                   {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 
