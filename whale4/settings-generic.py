@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'whale4.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'yourdbname',
-        'USER': 'yourusername',
-        'PASSWORD': 'yourpassword',
-        'HOST': 'yourhostname',
+        'ENGINE': 'db engine here',
+        'NAME': 'db name here',
+        'USER': 'db user here',
+        'PASSWORD': 'db password here',
+        'HOST': 'db host here',
         'PORT': '5432'        
     }
 }
