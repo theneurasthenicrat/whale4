@@ -10,11 +10,11 @@ from django import forms
 class VotingPollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        exclude = ['admin']
+        exclude = ['admin','poll_type','option_ballots','option_choice']
         widgets = {
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
+            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
         }
-        labels= {'option_ballots':'Sealed ballots ', 'option_choice':'Choose "I do not know" is not allowed',}
 
 
 class CandidateForm(ModelForm):
