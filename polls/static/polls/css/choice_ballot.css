@@ -1,0 +1,26 @@
+
+.bouton1 {
+    background-color: #009999;
+    border-color: #009e9a;
+    color: white;
+}
+
+.bouton2 {
+    background-color: #4A96AD;
+    color: white;
+}
+
+.bouton3 {
+    background-color: #f2f2f2;
+    color: black;
+    border-color: #bec6cd;
+}
+
+.bouton4 {
+    background-color: #FFFFFF;
+    color: black;
+}
+
+.margin1{
+    margin-bottom: 30px;
+}

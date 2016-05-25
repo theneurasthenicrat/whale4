@@ -70,6 +70,10 @@ def home(request):
     return render(request, 'polls/home.html', {})
 
 
+def choice(request):
+    return render(request, 'polls/choice_ballot.html', {})
+
+
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (

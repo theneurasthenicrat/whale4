@@ -20,11 +20,13 @@
     <link href="{% static 'polls/css/preferences.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/bootstrap-datepicker3.standalone.min.css' %}" rel="stylesheet">
     <link  href="{% static 'polls/css/themes_smoothness_jquery-ui.css' %}" rel="stylesheet">
+    <link  href="{% static 'polls/css/choice_ballot.css' %}" rel="stylesheet">
 
     <!-- javascript -->
     <script src="{% static 'polls/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'polls/js/jquery-1.12.3.min.js' %}"></script>
     <script src="{% static 'polls/js/bootstrap-datepicker.min.js' %}"></script>
+
 
 </head>
 <body role="document">
@@ -36,7 +38,7 @@
 
         <ul class="nav navbar-nav">
             <li><a href="/polls">{% trans 'Home' %}</a></li>
-            <li><a href="/polls/newPoll">{% trans ' New poll' %}</a></li>
+            <li><a href="/polls/choice">{% trans ' New poll' %}</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans  'Developers'  %}<b class="caret" ></b></a>
                 <ul class="dropdown-menu">
@@ -80,7 +82,7 @@
         </ul>
     </div>
 </nav>
-<div class="container theme-showcase" role="main">
+<div class="container ">
 
     {% bootstrap_messages %}
 
