@@ -30,6 +30,7 @@ class VotingPoll(Poll):
     preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model"))
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=False)
+    option_modify=models.BooleanField(default=False)
     
 
 class Candidate(models.Model):

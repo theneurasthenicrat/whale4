@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
 
 from accounts.models import WhaleUser
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -101,6 +101,11 @@ class VotingPollMixin(object):
     def form_valid(self, form):
         poll = form.save(commit=False)
         poll.admin = self.request.user
+        choice = int(self.kwargs['choice'])
+        if choice ==21:
+            poll.poll_type = 'Date'
+        if choice ==22:
+            poll.option_ballots = True
         poll.save()
         return super(VotingPollMixin, self).form_valid(form)
 
@@ -142,7 +147,7 @@ def candidate_create(request, pk):
         if formset.is_valid():
             formset.save()
             messages.success(request, _('Candidates successfully added!'))
-            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(option, kwargs={'pk': poll.id}))
     else:
         formset = candidateformset(instance=poll,prefix='form')
         print(formset)
@@ -206,6 +211,25 @@ def delete_candidate(request, pk, cand):
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk,}))
+
+
+@login_required
+@with_admin_rights
+def option(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    initial={'option_choice':poll.option_choice,
+             'option_modify':poll.option_modify}
+    if request.method == 'POST':
+        form = OptionForm(request.POST)
+        if form.is_valid():
+            poll.option_choice = form.cleaned_data['option_choice']
+            poll.option_modify = form.cleaned_data['option_modify']
+            poll.save()
+            messages.success(request, _('Options successfully added!'))
+            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+    else:
+        form = OptionForm(initial=initial)
+    return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
 def vote(request, pk):

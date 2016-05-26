@@ -9,7 +9,8 @@
             <ul class="nav nav-pills">
                 <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
                 <li role="presentation" class="active" ><a href="#">2.Add candidates {% bootstrap_icon "menu-right" %}</a></li>
-                <li role="presentation" class="disabled"><a href="#">3.Invite</a></li>
+                <li role="presentation" class="disabled"><a href="#">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
+                <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
             </ul>
             <div class="row">
                 <form action="" method="post" id="form1" >
@@ -70,7 +71,7 @@
     </div>
     <div class="row">
         <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-        <a href="{% url 'success' poll.id  %}" class="btn btn-primary pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+        <a href="{% url 'option' poll.id  %}" class="btn btn-primary pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
 
     </div>
 

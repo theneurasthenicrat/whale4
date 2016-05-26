@@ -8,12 +8,13 @@
     <ul class="nav nav-pills">
         <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
         <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
-        <li role="presentation" class="active"><a href="#">3.Invite</a></li>
+        <li role="presentation" ><a href="{% url 'option' poll.id %}">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
+        <li role="presentation" class="active"><a href="#">4.Invite</a></li>
     </ul>
     <p>Now you can vote at this link
         <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
 
-    <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-default pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+    <a href="{% url 'option' poll.id %}"  class="btn btn-default pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
 </div>
 
 {% endblock %}
