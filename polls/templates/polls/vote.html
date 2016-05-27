@@ -10,12 +10,12 @@
         </div>
 
 
-        <div class="thumbnail clearfix ">
+        <div class="form-login clearfix ">
             <form action="" method="post">
                 {% csrf_token %}
                 {% bootstrap_form_errors form %}
-                <div class="table-responsive">
-                    <table class="table  "  >
+                <div class="table-responsive ">
+                    <table class="table table-bordered "  >
                         <thead >
                         {% if poll.poll_type == "Date" %}
                             <tr>
@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td class="border text-center" ><label  > Nickname: </label></td>
+                            <td class="border text-right" ><label > Nickname: </label></td>
                             {% for field in form %}
                                 <td  class="border">
                                     {% bootstrap_field field show_label=False %}

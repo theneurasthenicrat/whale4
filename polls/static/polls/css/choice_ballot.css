@@ -17,9 +17,10 @@ border: inherit;}
 td:nth-child(2).border {
 border: inherit;}
 
-table.voteTable{
-    border: 2px solid #1344b7;
+table.table-bordered{
+     background-color: white;
 }
+
 
 .voteTable tbody tr td {
 	border: 2px solid #1344b7;
