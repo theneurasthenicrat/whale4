@@ -3,23 +3,29 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-    <div class="col-md-8">
-
-        <p class="lead text-primary text-center"> {% trans 'Create a new poll' %}</p>
-
-        <ul class="nav nav-pills">
-            <li role="presentation" class="active"><a href="#">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-            <li role="presentation" class="disabled"><a href="#">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
-            <li role="presentation" class="disabled"><a href="#">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
-            <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
-        </ul>
-        <form action="" method="post" class="form" >
-            {% csrf_token %}
-            {% bootstrap_form_errors form  %}
-            {% bootstrap_form form %}
-             <button type="submit" class="btn btn-primary pull-right ">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
-        </form>
-
+    <div class="container-fluid">
+    <div class="well">
+        <h2> {% trans 'Create a new poll' %}</h2>
+        <h3>{% trans '1.General parameters' %}</h3>
     </div>
+
+        <div class="thumbnail clearfix">
+            <div class="well-sm visible-lg visible-md visible-sm">
+                <ul class="nav nav-pills-custom">
+                    <li  class="active "><a href="#">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+                    <li class="disabled"><a href="#">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+                    <li  class="disabled"><a href="#">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
+                    <li  class="disabled"><a href="#">4.Invite</a></li>
+                </ul>
+            </div>
+            <form action="" method="post" class="form" >
+                {% csrf_token %}
+                {% bootstrap_form_errors form  %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2   pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
+            </form>
+        </div>
+     </div>
+
     <script src="{% static 'polls/js/votingPoll.js' %}" type="text/javascript"></script>
 {% endblock %}

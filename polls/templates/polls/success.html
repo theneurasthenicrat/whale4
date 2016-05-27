@@ -5,7 +5,7 @@
 {% block content %}
     <div class="col-md-8">
     <p class="lead text-primary text-center"> {% trans 'Invite voters' %}</p>
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills-custom">
         <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
         <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
         <li role="presentation" ><a href="{% url 'option' poll.id %}">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>

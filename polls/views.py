@@ -69,7 +69,7 @@ def days_month(candidates):
 def home(request):
     return render(request, 'polls/home.html', {})
 
-
+@login_required
 def choice(request):
     return render(request, 'polls/choice_ballot.html', {})
 
@@ -100,12 +100,6 @@ class VotingPollMixin(object):
 
     def form_valid(self, form):
         poll = form.save(commit=False)
-        poll.admin = self.request.user
-        choice = int(self.kwargs['choice'])
-        if choice ==21:
-            poll.poll_type = 'Date'
-        if choice ==22:
-            poll.option_ballots = True
         poll.save()
         return super(VotingPollMixin, self).form_valid(form)
 
@@ -118,10 +112,19 @@ class VotingPollUpdate(VotingPollMixin, UpdateView):
 
 
 class VotingPollCreate(VotingPollMixin, CreateView):
-    """
-    VotingPollMixin does everything
-    """
-    pass
+
+    def form_valid(self, form):
+        poll = form.save(commit=False)
+        poll.admin = self.request.user
+        choice = int(self.kwargs['choice'])
+        if choice == 21:
+            poll.poll_type = 'Date'
+        if choice == 22:
+            poll.option_ballots = True
+        poll.save()
+        return super(VotingPollCreate, self).form_valid(form)
+
+
 
 
 @login_required
