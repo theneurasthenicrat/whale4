@@ -10,6 +10,28 @@ h3{
 
 body { padding-top: 100px; }
 
+
+td:nth-child(1).border {
+border: inherit;}
+
+td:nth-child(2).border {
+border: inherit;}
+
+table.voteTable{
+    border: 2px solid #1344b7;
+}
+
+.voteTable tbody tr td {
+	border: 2px solid #1344b7;
+}
+
+.voteTable thead tr th, .pollTable tbody tr th {
+	font-weight: bold;
+	color: #000000;
+	border: 2px solid #1344b7;
+}
+
+
 .container-custom {
     padding: 25px;
     position: fixed;

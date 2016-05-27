@@ -277,7 +277,7 @@ def vote(request, pk):
 
         form = VotingForm(candidates, preference_model,poll,read,initial=initial)
 
-    return render(request, 'polls/vote.html', {'form': form, 'poll': poll, 'months': months, 'days': days})
+    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'months': months, 'days': days})
 
 
 @with_voter_rights

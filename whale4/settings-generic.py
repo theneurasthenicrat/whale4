@@ -132,3 +132,8 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 LOCALE_PATHS = [os.path.join(BASE_DIR,'locale'),]
 AUTH_USER_MODEL = 'accounts.WhaleUser'
+
+BOOTSTRAP3 = {
+    'horizontal_label_class': 'col-lg-3',
+
+    'horizontal_field_class': 'col-lg-9',}
