@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     $("#open").click(function(){
         $("#type").toggle();
-        $("#secret").toggle();
+
     });
 
 

@@ -18,11 +18,11 @@ class VotingPollForm(ModelForm):
 
 
 class OptionForm(Form):
-    option_choice = forms.BooleanField(label="vote i don't know is not allowed",required=False,
+    option_choice = forms.BooleanField(label='Vote "I don\'t know" is not allowed',required=False,
                                        help_text="Voters can choice i don't know by default."
                                                  " if you want to remove this option check the box")
-    option_modify = forms.BooleanField(label="modify candidates is allowed",required=False,
-                                       help_text="it is possible to modify the candidates later( add or remove)")
+    option_modify = forms.BooleanField(label="Modify candidates is not allowed",required=False,
+                                       help_text="It is impossible to modify the candidates later( add or remove)")
 
 
 class CandidateForm(ModelForm):

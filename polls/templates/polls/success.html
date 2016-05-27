@@ -3,18 +3,29 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-    <div class="col-md-8">
-    <p class="lead text-primary text-center"> {% trans 'Invite voters' %}</p>
-    <ul class="nav nav-pills-custom">
-        <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-        <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
-        <li role="presentation" ><a href="{% url 'option' poll.id %}">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
-        <li role="presentation" class="active"><a href="#">4.Invite</a></li>
-    </ul>
-    <p>Now you can vote at this link
-        <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
+    <div class="container-fluid col-lg-9">
+        <div class="well">
+            <h2> {% trans 'Create a new poll' %}</h2>
+            <h3>{% trans '4.Invite the voters' %}</h3>
+        </div>
 
-    <a href="{% url 'option' poll.id %}"  class="btn btn-default pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
-</div>
+        <div class="thumbnail clearfix ">
+            <div class="well-sm visible-lg visible-md visible-sm">
+                <ul class="nav nav-pills-custom">
+                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" ><a href="{% url 'option' poll.id %}">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="active"><a href="#">4.Invite</a></li>
+                </ul>
+            </div>
+            <div class="well-lg">
+                <p>Now you can vote at this link
+                    <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
+            </div>
+            <a href="{% url 'option' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+
+        </div>
+
+    </div>
 
 {% endblock %}

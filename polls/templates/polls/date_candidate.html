@@ -3,14 +3,32 @@
 {% load static %}
 {% block content %}
     {% load bootstrap3 %}
-    <div class="container-fluid">
+    <div class="container-fluid col-lg-9">
         <div class="well">
             <h2> {% trans 'Create a new poll' %}</h2>
             <h3>{% trans '2.Add candidates to poll' %}</h3>
         </div>
+        <div class="container-fluid form-login margin1">
 
+            <h2>List of current candidates</h2>
+            {% if candidates %}
 
-        <div class="thumbnail clearfix">
+                <ol class="list-group">
+                    {% for c in candidates %}
+                        <li class="list-group-item">
+                            <form action="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" method="get">{% csrf_token %}
+                                {{ c }}
+                                <button type="submit" class="close">&times;</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p class="text-center">No candidate yet</p>
+            {% endif %}
+        </div>
+
+        <div class="container-fluid form-login">
             <div class="well-sm visible-lg visible-md visible-sm">
                 <ul class="nav nav-pills-custom ">
                     <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
@@ -19,37 +37,11 @@
                     <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
                 </ul>
             </div>
-            <div class="container-fluid">
-                <div class="well-sm">
-
-                    {% if candidates %}
-                        <p class="lead">Here is the current list of candidates:</p>
-                        <ol class="list-group">
-                            {% for c in candidates %}
-                                <li class="list-group-item">
-                                    <form action="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" method="get">{% csrf_token %}
-                                        {{ c }}
-                                        <button type="submit" class="close">&times;</button>
-                                    </form>
-                                </li>
-                            {% endfor %}
-                        </ol>
-                    {% else %}
-                        <p>No candidate yet</p>
-                    {% endif %}
-
-
-                </div>
-            </div>
-        <div class="thumbnail ">
-            <div class="container-fluid margin1">
+            <div class="thumbnail ">
                 <form action="" method="post" id="form1" >
                     {% csrf_token %}
-
                     {% bootstrap_form form  %}
-
                     <div class="container-fluid margin1">
-
                         <div class=" col-lg-offset-5 col-md-offset-3 col-sm-offset-2 col-lg-7 col-md-9 col-sm-10 col-xs-12">
                             {{ formset.management_form }}
                             {% bootstrap_formset_errors formset layout='inline' %}
@@ -57,33 +49,25 @@
                                 {% for form in formset.forms %}
                                     {% bootstrap_form form   %}
                                 {% endfor %}
+
                             </div>
                             <div id="empty_form" style="display:none">
                                 {% bootstrap_form formset.empty_form   %}
                             </div>
+                            <label  id="add_more" class="btn btn-default pull-right ">{% bootstrap_icon "plus" %} {% trans 'Add' %}</label>
                         </div>
+                    </div>
                 </form>
-                <button  id="add_more" class="btn btn-default pull-right ">{% bootstrap_icon "plus" %} {% trans 'Add' %}</button>
-
-            </div>
-            <div class="container-fluid">
-                <div class="col-md-offset-6 col-md-6">
-                    <button type="submit" form="form1"class="btn btn-success ">
-                        {% bootstrap_icon "ok" %} {% trans 'Save' %}
-                    </button>
+                <div class="wrapper">
+                    <button type="submit" form="form1"class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
                 </div>
             </div>
+            <div class="margin2">
+                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'option' poll.id  %}" class="btn btn-custom pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+            </div>
         </div>
-
-
-
-
-<div class="well-sm ">
-            <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-            <a href="{% url 'option' poll.id  %}" class="btn btn-custom pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
-</div>
-        </div>
-
     </div>
+
     <script src="{% static 'polls/js/dateCandidate.js' %}" type="text/javascript"></script>
 {% endblock %}

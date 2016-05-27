@@ -26,8 +26,8 @@ class WhaleUserManager(BaseUserManager):
 
 class WhaleUser(AbstractBaseUser):
 
-    email = models.EmailField(verbose_name=_('email address'), max_length=255, unique=True)
-    nickname = models.CharField(verbose_name=_('nickname'),max_length=30)
+    email = models.EmailField(verbose_name=_('Email address'), max_length=255, unique=True)
+    nickname = models.CharField(verbose_name=_('Nickname'),max_length=30)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False) 
 

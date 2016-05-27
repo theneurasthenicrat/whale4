@@ -3,21 +3,26 @@
 {% load i18n %}
 {% load static %}
 {% block content %}
-    <div class="col-md-8">
-        <p class="lead text-primary text-center"> {% trans 'Invite voters' %}</p>
-        <ul class="nav nav-pills-custom">
-            <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-            <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
-            <li role="presentation" class="active"><a href="#">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
-            <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
-        </ul>
-        <form action="" method="post" id="form1">
-             {% csrf_token %}
-            {% bootstrap_form form  %}
-        </form>
-
-        <button type="submit"form="form1" class="btn btn-custom pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
-        <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-default pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+    <div class="container-fluid col-lg-9">
+        <div class="well">
+            <h2> {% trans 'Create a new poll' %}</h2>
+            <h3>{% trans '3.Advanced parameters' %}</h3>
+        </div>
+        <div class="thumbnail clearfix ">
+            <div class="well-sm visible-lg visible-md visible-sm">
+                <ul class="nav nav-pills-custom">
+                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="active"><a href="#">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
+                </ul>
+            </div>
+            <form action="" method="post" id="form1" class="well-lg">
+                {% csrf_token %}
+                {% bootstrap_form form  %}
+            </form>
+            <button type="submit"form="form1" class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
+            <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+        </div>
     </div>
-
 {% endblock %}
