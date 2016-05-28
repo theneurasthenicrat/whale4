@@ -319,15 +319,11 @@ def update_vote(request, pk, voter):
 
 @with_voter_rights
 def delete_vote(request, pk, voter):
-    poll = VotingPoll.objects.get(id=pk)
-    voter = WhaleUser.objects.get(id=voter)
+    poll = get_object_or_404(VotingPoll, id=pk)
+    voter = get_object_or_404(WhaleUser, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
-
-    if request.method == 'POST':
-        votes.delete()
-        voter.delete()
-        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/delete_vote.html', {'voter': voter, 'poll': poll})
+    votes.delete()
+    return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
 
 def view_poll(request, pk):

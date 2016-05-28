@@ -41,8 +41,30 @@
             <tbody>
             {% for v in votes %}
                 <tr>
-                    <td class="controls" width="auto">
-                        <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-trash_can"></span></a><a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}"><span class="icon icon-pen"></span></a>
+                    <td>
+
+                        <button type="button" data-toggle="modal" data-target="#myModal" class="close"><span class="icon icon-trash_can"></span></button>
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Delete this vote </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p> If you really want to delete this vote,click submit.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}" class="btn btn-custom ">{% trans 'Submit' %} </a >
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        <a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}" ><span class="icon icon-pen"></span></a>
+
                     </td>
                     <th>
                         {{ v.nickname }}
