@@ -134,6 +134,6 @@ LOCALE_PATHS = [os.path.join(BASE_DIR,'locale'),]
 AUTH_USER_MODEL = 'accounts.WhaleUser'
 
 BOOTSTRAP3 = {
-    'horizontal_label_class': 'col-lg-3',
+    'horizontal_label_class': 'col-md-4',
 
-    'horizontal_field_class': 'col-lg-9',}
+    'horizontal_field_class': 'col-md-8',}

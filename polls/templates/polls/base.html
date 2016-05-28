@@ -44,9 +44,9 @@
                 <a class="navbar-brand" href="/" >Whale<sup>4</sup></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse " >
-                <ul class="nav navbar-nav ">
-                    <li><a href="/">{% trans 'Home' %}</a></li>
-                    <li><a href="/polls/choice">{% trans ' New poll' %}</a></li>
+                <ul  class="nav navbar-nav ">
+                    <li><a href="/" >{% trans 'Home' %}</a></li>
+                    <li><a href="{% url 'choice' %}">{% trans ' New poll' %}</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" >{% trans  'Developers'  %} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
