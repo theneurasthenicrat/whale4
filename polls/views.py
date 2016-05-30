@@ -210,6 +210,7 @@ def date_candidate_create(request, pk):
     else:
         formset = date_candidateformset(prefix='form')
         form = DateForm()
+
     return render(request, 'polls/date_candidate.html',
                   {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 

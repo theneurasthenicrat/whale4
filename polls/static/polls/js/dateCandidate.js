@@ -13,4 +13,12 @@
   $('.delete').click( function(){ 
    $(this).remove(); 
  });
+
+     $("#candidate_formset").hide();
+
+    $("#id_dates").click(function(){
+        $("#candidate_formset").show();
+
+    });
+
 });

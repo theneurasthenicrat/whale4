@@ -38,7 +38,7 @@ class DateCandidateForm(ModelForm):
 
 
 class DateForm(Form):
-    dates = forms.CharField(max_length=300, required=True,widget=forms.TextInput(attrs={'class': 'datepicker'}))
+    dates = forms.CharField(max_length=300, label='Pick one or several dates', required=True,widget=forms.TextInput(attrs={'class': 'datepicker'}))
 
     def clean_dates(self):
         dates = self.cleaned_data["dates"].split(',')

@@ -60,11 +60,12 @@
                 <form action="" method="post" id="form1" >
                     {% csrf_token %}
                     {% bootstrap_form form  %}
-                    <div class="container-fluid margin1">
+                    <div class="container-fluid margin1" id="candidate_formset">
                         <div class=" col-lg-offset-5 col-md-offset-3 col-sm-offset-2 col-lg-7 col-md-9 col-sm-10 col-xs-12">
                             {{ formset.management_form }}
                             {% bootstrap_formset_errors formset layout='inline' %}
                             <div id="form_set" >
+                                <label>Give a label for the time slot to add <br>(e.g. Morning, 10AM-12AM,...)</label>
                                 {% for form in formset.forms %}
                                     {% bootstrap_form form   %}
                                 {% endfor %}
