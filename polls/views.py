@@ -69,21 +69,17 @@ def days_month(candidates):
 def home(request):
     return render(request, 'polls/home.html', {})
 
+
 @login_required
 def choice(request):
     return render(request, 'polls/choice_ballot.html', {})
 
 
+@login_required
+@with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidates = (
-        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
-    if candidates.count()< 2:
-        messages.error(request, _('You must add at least two candidates'))
-        return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
-    else:
-        return render(request, 'polls/success.html', {'poll': poll})
+    return render(request, 'polls/success.html', {'poll': poll})
 
 
 class VotingPollMixin(object):
@@ -105,10 +101,10 @@ class VotingPollMixin(object):
 
 
 class VotingPollUpdate(VotingPollMixin, UpdateView):
-    """
-    VotingPollMixin does everything
-    """
-    pass
+
+    @method_decorator(login_required,with_admin_rights)
+    def dispatch(self, *args, **kwargs):
+        return super(VotingPollMixin, self).dispatch(*args, **kwargs)
 
 
 class VotingPollCreate(VotingPollMixin, CreateView):
@@ -123,8 +119,6 @@ class VotingPollCreate(VotingPollMixin, CreateView):
             poll.option_ballots = True
         poll.save()
         return super(VotingPollCreate, self).form_valid(form)
-
-
 
 
 @login_required
@@ -210,6 +204,7 @@ def delete_candidate(request, pk, cand):
     return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
+@login_required
 @with_admin_rights
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -232,7 +227,14 @@ def option(request, pk):
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
         form = OptionForm(initial=initial)
-    return render(request, 'polls/option.html', {'form': form, 'poll': poll})
+        candidates = (
+            DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+                poll_id=poll.id))
+        if candidates.count() < 2:
+            messages.error(request, _('You must add at least two candidates'))
+            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
+        else:
+            return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
 def vote(request, pk):
