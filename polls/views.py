@@ -68,13 +68,14 @@ def days_month(candidates):
     months = []
     days = []
     for c in candidates:
-        current_month = c.date.strftime("%y/%m")
-        current_day = c.date.strftime("%y/%m/%d")
+
+        current_month = c.date.strftime("%B/%Y")
+        current_day = c.date.strftime("%A/%d")
         if len(months) > 0 and months[-1]["label"] == current_month:
             months[-1]["value"] += 1
         else:
             months += [{"label": current_month, "value": 1}]
-        if len(days) > 0 and days[-1]["label"] == current_day:
+        if len(days) > 0 and months[-1]["label"] == current_month and days[-1]["label"] == current_day:
             days[-1]["value"] += 1
         else:
             days += [{"label": current_day, "value": 1}]
