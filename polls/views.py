@@ -165,7 +165,6 @@ def candidate_create(request, pk):
             return redirect(reverse_lazy(option, kwargs={'pk': poll.id}))
     else:
         formset = candidateformset(instance=poll,prefix='form')
-        print(formset)
     return render(request, 'polls/candidate.html', {'formset': formset, 'poll': poll})
 
 
@@ -210,7 +209,6 @@ def date_candidate_create(request, pk):
     else:
         formset = date_candidateformset(prefix='form')
         form = DateForm()
-
     return render(request, 'polls/date_candidate.html',
                   {'formset': formset,'form':form, 'poll': poll, 'candidates':candidates})
 
@@ -299,8 +297,12 @@ def vote(request, pk):
     else:
 
         form = VotingForm(candidates, preference_model,poll,read,initial=initial)
+        cand = []
+        for c in candidates:
+            if c.candidate:
+                cand.append(c.candidate)
 
-    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'months': months, 'days': days})
+    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
 
 
 @with_voter_rights
@@ -312,6 +314,8 @@ def update_vote(request, pk, voter):
     preference_model = preference_model_from_text(poll.preference_model)
     voter = WhaleUser.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+    months = []
+    days = []
     initial = {}
     initial['nickname'] = voter.nickname
     for v in votes:
@@ -323,6 +327,10 @@ def update_vote(request, pk, voter):
     else:
 
         read = False
+
+    if poll.poll_type == 'Date':
+        (days, months) = days_month(candidates)
+
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll,read, request.POST)
 
@@ -337,8 +345,13 @@ def update_vote(request, pk, voter):
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
         form = VotingForm(candidates, preference_model,poll,read, initial=initial)
+        cand = []
+        for c in candidates:
+            if c.candidate:
+                cand.append(c.candidate)
 
-    return render(request, 'polls/vote.html', {'form': form, 'poll': poll})
+    return render(request, 'polls/vote.html',
+                  {'form': form, 'poll': poll, 'candidates': candidates, 'cand': cand, 'months': months, 'days': days})
 
 
 @with_voter_rights
@@ -386,9 +399,12 @@ def view_poll(request, pk):
                 })
 
     values = None if tab == {} else tab.values()
-
+    cand = []
+    for c in candidates:
+        if c.candidate:
+            cand.append(c.candidate)
     return render(request, 'polls/poll.html',
-                  {'poll': poll, 'candidates': candidates, 'votes': values, 'months': months, 'days': days})
+                  {'poll': poll, 'candidates': candidates, 'votes': values, 'cand':cand,'months': months, 'days': days})
 
 
 def bad_request(request):

@@ -2,16 +2,27 @@
 {% load i18n %}
 {% block content %}
     {% csrf_token %}
-    <div class="pull-right">
-        <a href="{% url 'admin' poll.id %}" class="btn btn-default btn-lg"><span class="icon icon-settings"></span></a>
-    </div>
-    <h1>{{ poll.title }}</h1>
-    <pre style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;">{{ poll.description }}</pre>
-    <table class="table pollTable">
+
+    <div class="container-fluid col-lg-9">
+        <div class="well">
+            <h2> {{ poll.title }}</h2>
+            <p> {{ poll.description }}</p>
+        </div>
+
+
+
+
+
+ <div class="form-login clearfix  ">
+ <div class=" pull-right">
+ <a href="{% url 'admin' poll.id %}" class="btn btn-default btn-lg  "><span class="icon icon-settings"></span></a>
+ </div>
+ <div class="table-responsive ">
+    <table class="table table-bordered ">
         <thead>
         {% if poll.poll_type == "Date" %}
             <tr>
-                <td class="emptyCell" colspan="2" ></td>
+                <td class="border" colspan="2" ></td>
                 {% for m in months %}
                     <th colspan="{{ m.value }}">
                         {{ m.label }}
@@ -19,29 +30,40 @@
                 {% endfor %}
             </tr>
             <tr>
-                <td class="emptyCell" colspan="2" ></td>
+                <td class="border" colspan="2" ></td>
                 {% for d in days %}
                     <th colspan="{{ d.value }}">
                         {{ d.label }}
                     </th>
                 {% endfor %}
             </tr>
-        {% endif %}
-
-        <tr>
-            <td class="emptyCell" colspan="2" ></td>
+          {% if cand %}
+            <tr>
+            <td class="border" colspan="2" ></td>
             {% for c in candidates %}
                 <th>
                     {{ c.candidate }}
                 </th>
             {% endfor %}
         </tr>
+             {% endif %}
+        {% else %}
+
+        <tr>
+            <td class="border" colspan="2" ></td>
+            {% for c in candidates %}
+                <th>
+                    {{ c.candidate }}
+                </th>
+            {% endfor %}
+        </tr>
+        {% endif %}
         </thead>
         {% if votes %}
             <tbody>
             {% for v in votes %}
                 <tr>
-                    <td>
+                    <td class="controls">
 
                         <button type="button" data-toggle="modal" data-target="#myModal" class="close"><span class="icon icon-trash_can"></span></button>
                             <div class="modal fade" id="myModal" role="dialog">
@@ -78,9 +100,10 @@
             </table>
         {% else %}
             </table>
+            </div>
             <div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
         {% endif %}
-
-
+</div>
+</div>
 
 {% endblock %}

@@ -34,15 +34,28 @@
                                     </th>
                                 {% endfor %}
                             </tr>
+                            {% if  cand %}
+                                <tr>
+                                    <td class="border" colspan="2" ></td>
+                                    {% for c in candidates %}
+
+                                        <th>
+                                            {{ c.candidate }}
+                                        </th>
+
+                                    {% endfor %}
+                                </tr>
+                            {% endif %}
+                        {% else %}
+                            <tr>
+                                <td class="border" colspan="2" ></td>
+                                {% for c in candidates %}
+                                    <th>
+                                        {{ c.candidate }}
+                                    </th>
+                                {% endfor %}
+                            </tr>
                         {% endif %}
-                        <tr>
-                            <td class="border" colspan="2" ></td>
-                            {% for c in candidates %}
-                                <th>
-                                    {{ c.candidate }}
-                                </th>
-                            {% endfor %}
-                        </tr>
                         </thead>
                         <tbody>
                         <tr>

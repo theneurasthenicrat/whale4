@@ -245,3 +245,57 @@ fieldset[disabled] .btn-custom.active {
     background-color: #ffffff;
   }
 }
+
+.table-bordered tr td.poll-100percent {
+	background: rgb(76.0%, 100.0%, 63.0%);
+}
+
+.table-bordered tr td.poll-90percent {
+	background: rgb(80.8%, 100.0%, 62.4%);
+}
+
+.table-bordered tr td.poll-80percent {
+	background: rgb(85.6%, 100.0%, 61.8%);
+}
+
+.table-bordered tr td.poll-70percent {
+	background: rgb(90.4%, 100.0%, 61.2%);
+}
+
+.table-bordered tr td.poll-60percent {
+	background: rgb(95.2%, 100.0%, 60.6%);
+}
+
+.table-bordered tr td.poll-50percent {
+	background: rgb(100.0%, 100.0%, 60.0%);
+}
+
+.table-bordered tr td.poll-40percent {
+	background: rgb(100.0%, 93.4%, 61.0%);
+}
+
+.table-bordered tr td.poll-30percent {
+	background: rgb(100.0%, 86.8%, 62.0%);
+}
+
+.table-bordered tr td.poll-20percent {
+	background: rgb(100.0%, 80.2%, 63.0%);
+}
+
+.table-bordered tr td.poll-10percent {
+	background: rgb(100.0%, 73.6%, 64.0%);
+}
+
+.table-bordered  tr td.poll-0percent {
+	background: rgb(100.0%, 67.0%, 65.0%)
+}
+
+.table-bordered tr td.poll-undefined {
+	background: rgb(85.0%, 85.0%, 85.0%)
+}
+
+.table-bordered tbody tr td.controls {
+	width: 64px;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+}

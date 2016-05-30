@@ -12,9 +12,10 @@ class VotingPollForm(ModelForm):
         model = VotingPoll
         exclude = ['admin','poll_type','option_ballots','option_choice','option_modify']
         widgets = {
-            'closing_date': widgets.DateInput(attrs={'class': 'datepicker'}),
+            'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': 'Enter closing date'}),
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
         }
+
 
 
 class OptionForm(Form):
