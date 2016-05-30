@@ -58,7 +58,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} ({{ user.nickname }})</a></li>
+                        <li><a href="{% url 'accountPoll' user.id %}" >  {{ user.nickname }}'s account</a></li>
+                        <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
                     {% else %}
                         <li><a href="{% url 'register' %}" >{% bootstrap_icon "user" %} {% trans 'Sign up' %}</a></li>
                         <li ><a href="{% url 'login' %}">{% bootstrap_icon "log-in" %}  {% trans 'Log in' %}</a></li>

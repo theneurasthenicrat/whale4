@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404, render_to_resp
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 
 from accounts.models import WhaleUser
@@ -138,6 +139,16 @@ class VotingPollCreate(VotingPollMixin, CreateView):
             poll.option_ballots = True
         poll.save()
         return super(VotingPollCreate, self).form_valid(form)
+
+
+@login_required
+@with_admin_rights
+def voting_poll_delete(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    admin=request.user.id
+    poll.delete()
+    messages.success(request, _('Your poll has been deleted!'))
+    return redirect(reverse_lazy( 'accountPoll', kwargs={'pk': admin}))
 
 
 @login_required
@@ -323,10 +334,8 @@ def update_vote(request, pk, voter):
         initial['value' + str(v.candidate.id)] = v.value
 
     if request.user.is_authenticated():
-
         read = True
     else:
-
         read = False
 
     if poll.poll_type == 'Date':
@@ -406,6 +415,21 @@ def view_poll(request, pk):
             cand.append(c.candidate)
     return render(request, 'polls/poll.html',
                   {'poll': poll, 'candidates': candidates, 'votes': values, 'cand':cand,'months': months, 'days': days})
+
+
+class WhaleUserDetail(DetailView):
+
+    model = WhaleUser
+    template_name = "polls/user_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(WhaleUserDetail, self).get_context_data(**kwargs)
+        context['poll_list'] = VotingPoll.objects.filter(admin_id= self.kwargs['pk'])
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(WhaleUserDetail, self).dispatch(*args, **kwargs)
 
 
 def bad_request(request):

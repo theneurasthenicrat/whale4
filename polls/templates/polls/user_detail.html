@@ -1,0 +1,85 @@
+{%extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid col-lg-9">
+        <div class="well">
+            <h2> {% trans 'Update or delete yours polls'  %}</h2>
+            <h3>{% trans 'List of your polls' %}</h3>
+        </div>
+
+        <div class="form-login ">
+            <h4> your owners polls </h4>
+            <div class="table-responsive ">
+                <table class="table table-bordered "  >
+                    <thead >
+                    </tr>
+                    <th >
+                        Tilte
+                    </th>
+                    <th >
+                        Description
+                    </th>
+                    <th >
+
+                    </th>
+
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    {% for poll in poll_list %}
+                        <tr>
+
+
+                            <td >
+                                {{ poll.title }}
+                            </td>
+
+                            <td >
+                                {{ poll.description }}
+                            </td>
+                            <td class="controls">
+
+                        <button type="button" data-toggle="modal" data-target="#myModal" class="close"><span class="icon icon-trash_can"></span></button>
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Delete this poll {{ poll.title }} </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p> If you really want to delete this poll,click submit.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <a href="{% url 'deleteVotingPoll' poll.id %}" class="btn btn-custom ">{% trans 'Submit' %} </a >
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        <a href="{% url 'updateVotingPoll' poll.id %}"> <span class="icon icon-pen"></span></a>
+
+                    </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+        <div class="form-login margin2">
+            <h4> The polls in which you participated </h4>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

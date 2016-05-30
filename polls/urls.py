@@ -13,9 +13,11 @@ urlpatterns = [
     url(r'^updateVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.update_vote, name='updateVote'),
     url(r'^deleteVote/(?P<pk>[^/]+)/(?P<voter>[^/]+)/$', views.delete_vote, name='deleteVote'),
     url(r'^newPoll/(?P<choice>[^/]+)/$', views.VotingPollCreate.as_view(), name='newPoll'),
+    url(r'^accountPoll/(?P<pk>[^/]+)/$', views.WhaleUserDetail.as_view(), name='accountPoll'),
     url(r'^viewPoll/(?P<pk>[^/]+)/$', views.view_poll, name='viewPoll'),
     url(r'^vote/(?P<pk>[^/]+)/$', views.vote, name='vote'),
     url(r'^success/(?P<pk>[^/]+)/$', views.success, name='success'),
     url(r'^admin/(?P<pk>[^/]+)/$', views.admin_poll, name='admin'),
     url(r'^option/(?P<pk>[^/]+)/$', views.option, name='option'),
+    url(r'^deleteVotingPoll/(?P<pk>[^/]+)/$', views.voting_poll_delete, name='deleteVotingPoll'),
 ]
