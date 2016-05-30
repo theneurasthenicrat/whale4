@@ -59,6 +59,9 @@ class VotingScore(models.Model):
     voter = models.ForeignKey(WhaleUser,on_delete=models.CASCADE, verbose_name= _("voter"))
     value = models.IntegerField(verbose_name= _("value"))
 
+    class Meta:
+        unique_together = ('candidate', 'voter')
+
 #  preference models ########################################################
 UNDEFINED_VALUE=-222222222
 

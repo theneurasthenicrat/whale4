@@ -20,10 +20,10 @@ from polls.models import VotingPoll, Candidate, preference_model_from_text, Voti
 
 def with_admin_rights(fn):
     def wrapped(request, pk):
-        next = request.get_full_path()
         poll = get_object_or_404(VotingPoll, id=pk)
         if request.user is None or request.user != poll.admin:
-            return redirect('/accounts/login?next={next}'.format(next=next))
+            messages.error(request, _('you are not admin\'s poll'))
+            return redirect(reverse_lazy(home))
         return fn(request,pk)
     return wrapped
 
@@ -32,15 +32,33 @@ def with_voter_rights(fn):
     def wrapped(request, pk,voter):
         poll = get_object_or_404(VotingPoll, id=pk)
         user = get_object_or_404(WhaleUser, id=voter)
-        if request.user is not None and request.user== user:
+        if request.user is not None and request.user.id == user.id:
             return fn(request, pk, voter)
         elif "user_id" in request.session:
             user_id=request.session["user_id"]
-            if user_id!=user.id:
+            if user_id==user.id:
+                return fn(request, pk, voter)
+            else:
+                messages.error(request, _('This is not your vote'))
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-            return fn(request,pk,voter)
         else:
+            messages.error(request, _('This is not your vote'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    return wrapped
+
+
+def yet_vote(fn):
+    def wrapped(request, pk):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if request.user.is_authenticated():
+            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=request.user.id)
+            if votes:
+                messages.error(request, _('you have already vote , now you can update your vote'))
+                return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter':request.user.id}))
+            else:
+                return fn(request, pk)
+        else:
+            return fn(request, pk)
     return wrapped
 
 # simple functions ######################################################################
@@ -237,6 +255,7 @@ def option(request, pk):
             return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
+@yet_vote
 def vote(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
@@ -274,6 +293,7 @@ def vote(request, pk):
             voter.save()
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
+            messages.success(request, _('Your vote has been added to the poll, thank you!'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
 
@@ -312,6 +332,7 @@ def update_vote(request, pk, voter):
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
                 v.save()
+            messages.success(request, _('Your vote has been updated, thank you!'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
         form = VotingForm(candidates, preference_model,poll,read, initial=initial)
@@ -325,6 +346,7 @@ def delete_vote(request, pk, voter):
     voter = get_object_or_404(WhaleUser, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     votes.delete()
+    messages.success(request, _('Your vote has been deleted!'))
     return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
 
