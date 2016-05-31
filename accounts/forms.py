@@ -1,5 +1,6 @@
 from django import forms
 from accounts.models import WhaleUser
+from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -29,3 +30,15 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    email = forms.EmailField(label='Email address', max_length=255, required=True)
+    message = forms.CharField(widget=forms.Textarea)
+
+    def send_email_contact(self):
+        data=self.cleaned_data
+
+        send_mail('message from  '+data[ 'name'],data['message'], 'mariejeanne.natete@gmail.com',
+                  [data['email']], fail_silently=False)

@@ -54,7 +54,7 @@
                             <li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE" target="_blank">{% trans ' Code license'  %}</a></li>
                         </ul>
                     </li>
-                    <li><a href="mailto:sylvain[dot]bouveret[at]imag[dot]fr?subject=[Whale4] xxx">{% trans 'Contact us '%}</a></li>
+                    <li><a href="{% url 'contact' %}">{% trans 'Contact us '%}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}

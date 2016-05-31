@@ -84,3 +84,5 @@ class VotingForm(forms.Form):
             if cleaned_data.get('value' + str(c.id)) != str(UNDEFINED_VALUE):
                 return
         raise forms.ValidationError("You must give a score to at least one candidate!")
+
+
