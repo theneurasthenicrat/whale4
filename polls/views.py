@@ -169,11 +169,21 @@ def candidate_create(request, pk):
     candidateformset = inlineformset_factory(VotingPoll, Candidate,
                                              form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=0,can_delete=False,
                                               validate_min=True)
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    candidates_initial = VotingScore.objects.values_list('candidate', flat=True).filter(candidate__poll__id=poll.id).distinct()
     if request.method == 'POST':
         formset = candidateformset(request.POST, instance=poll,prefix='form')
 
         if formset.is_valid():
             formset.save()
+            if voters:
+                candidates_final=Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
+                candidates_diff=[c for c in candidates_final if c not in candidates_initial]
+                for c in candidates_diff:
+                    c= get_object_or_404(Candidate, id=c)
+                    for voter in voters:
+                        voter = get_object_or_404(WhaleUser, id=voter)
+                        VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(option, kwargs={'pk': poll.id}))
     else:
@@ -190,6 +200,9 @@ def date_candidate_create(request, pk):
                                              can_delete=False)
 
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    candidates_initial = VotingScore.objects.values_list('candidate', flat=True).filter(
+        candidate__poll__id=poll.id).distinct()
     if request.method == 'POST':
         form = DateForm(request.POST)
         formset = date_candidateformset(request.POST, instance=poll,prefix='form')
@@ -217,6 +230,14 @@ def date_candidate_create(request, pk):
                             messages.error(request, _('candidates must be distinct'))
                             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
                     cand.save()
+            if voters:
+                candidates_final = Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
+                candidates_diff = [c for c in candidates_final if c not in candidates_initial]
+                for c in candidates_diff:
+                    c = get_object_or_404(Candidate, id=c)
+                    for voter in voters:
+                        voter = get_object_or_404(WhaleUser, id=voter)
+                        VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
             messages.success(request, _('Candidates successfully added!'))
             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
     else:
