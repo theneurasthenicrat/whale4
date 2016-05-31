@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
+from django.db.models import  Count
 
 from accounts.models import WhaleUser
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm
@@ -425,9 +426,10 @@ class WhaleUserDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(WhaleUserDetail, self).get_context_data(**kwargs)
         context['poll_list'] = VotingPoll.objects.filter(admin_id= self.kwargs['pk'])
+        context['poll_list_voter'] = VotingPoll.objects.filter(candidates__votingscore__voter_id=self.kwargs['pk']).annotate(total=Count('id'))
         return context
 
-    @method_decorator(login_required)
+    @method_decorator(login_required, with_admin_rights)
     def dispatch(self, *args, **kwargs):
         return super(WhaleUserDetail, self).dispatch(*args, **kwargs)
 
