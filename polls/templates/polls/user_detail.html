@@ -42,8 +42,8 @@
                             </td>
                             <td class="controls">
 
-                        <button type="button" data-toggle="modal" data-target="#myModal" class="close"><span class="icon icon-trash_can"></span></button>
-                            <div class="modal fade" id="myModal" role="dialog">
+                        <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close"><span class="icon icon-trash_can"></span></button>
+                            <div class="modal fade" id="myModal{{forloop.counter }}" role="dialog">
                                 <div class="modal-dialog modal-sm">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -107,8 +107,8 @@
                             </td>
                             <td class="controls">
 
-                        <button type="button" data-toggle="modal" data-target="#myModal" class="close"><span class="icon icon-trash_can"></span></button>
-                            <div class="modal fade" id="myModal" role="dialog">
+                        <button type="button" data-toggle="modal" data-target="#modal{{ forloop.counter }}" class="close"><span class="icon icon-trash_can"></span></button>
+                            <div class="modal fade" id="modal{{ forloop.counter }}" role="dialog">
                                 <div class="modal-dialog modal-sm">
                                     <div class="modal-content">
                                         <div class="modal-header">

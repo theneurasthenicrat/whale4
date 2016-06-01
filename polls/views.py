@@ -231,10 +231,10 @@ def date_candidate_create(request, pk):
                             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
                     cand.save()
             if voters:
-                candidates_final = Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
+                candidates_final = DateCandidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
                 candidates_diff = [c for c in candidates_final if c not in candidates_initial]
                 for c in candidates_diff:
-                    c = get_object_or_404(Candidate, id=c)
+                    c = get_object_or_404(DateCandidate, id=c)
                     for voter in voters:
                         voter = get_object_or_404(WhaleUser, id=voter)
                         VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
