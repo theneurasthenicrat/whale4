@@ -64,16 +64,17 @@ class VotingScore(models.Model):
 
 #  preference models ########################################################
 UNDEFINED_VALUE=-222222222
-
+UNDEFINED_TEXT="I don't know"
 
 class PreferenceModel:
    
     def __init__(self, id, texts, values):
         self.id = id
-        texts.insert(0,_(" I don't know"))
+        texts.insert(0,UNDEFINED_TEXT)
         values.insert(0, UNDEFINED_VALUE)
         self.texts = texts
         self.values = values
+
         
     def zip_preference(self):
         return zip(self.values, self.texts)
@@ -106,6 +107,9 @@ class PreferenceModel:
 
     def as_dict(self):
         return {"id": self.id,"values": self.values,"texts": self.texts}
+
+    def as_dict_option(self):
+        return {"id": self.id, "values": self.values[1:], "texts": self.texts[1:]}
 
 
 class Ranking(PreferenceModel):

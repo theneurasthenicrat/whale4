@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/(?P<pk>[^/]+)/$', views.admin_poll, name='admin'),
     url(r'^option/(?P<pk>[^/]+)/$', views.option, name='option'),
     url(r'^deleteVotingPoll/(?P<pk>[^/]+)/$', views.voting_poll_delete, name='deleteVotingPoll'),
+    url(r'^pollJson/(?P<pk>[^/]+)/$', views.view_poll_json, name='pollJson'),
 ]

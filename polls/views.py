@@ -2,7 +2,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.forms import formset_factory, inlineformset_factory
+from django.forms import  inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -10,6 +10,8 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 from django.db.models import Count
+import json, simplejson
+from django.http import HttpResponse, JsonResponse
 
 from accounts.models import WhaleUser
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm
@@ -386,6 +388,7 @@ def update_vote(request, pk, voter):
                   {'form': form, 'poll': poll, 'candidates': candidates, 'cand': cand, 'months': months, 'days': days})
 
 
+
 @with_voter_rights
 def delete_vote(request, pk, voter):
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -412,7 +415,7 @@ def view_poll(request, pk):
         if v.voter.id not in scores:
             scores[v.voter.id] = {}
         scores[v.voter.id][v.candidate.id] = v.value
-    print(scores)
+
     tab = {}
     for v in votes:
         id = v.voter.id
@@ -437,6 +440,36 @@ def view_poll(request, pk):
             cand.append(c.candidate)
     return render(request, 'polls/poll.html',
                   {'poll': poll, 'candidates': candidates, 'votes': values, 'cand':cand,'months': months, 'days': days})
+
+
+def view_poll_json(request,pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model)
+    scores = [ ]
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    for voter in voters:
+        user = get_object_or_404(WhaleUser, id=voter)
+        values = VotingScore.objects.values_list('value', flat=True).filter(candidate__poll__id=poll.id).filter(
+            voter=voter)
+        v = {}
+        v['name'] =user.nickname
+        v['values']=[value for value in values]
+        scores.append(v)
+
+    candidates = (
+        DateCandidate.objects.values_list('candidate','date').filter(poll_id=poll.id) if poll.poll_type == 'Date'else
+        Candidate.objects.values_list('candidate', flat=True).filter(poll_id=poll.id))
+
+    cand= [y.strftime("%d/%m/%Y")+'#'+c for c,y in candidates] if poll.poll_type == 'Date' else [c for c in candidates]
+
+    json_object = {}
+    json_object['preferenceModel']= preference_model.as_dict()
+    json_object['type'] = 1 if poll.poll_type == 'Date' else 0
+    json_object['candidates'] = cand
+    json_object['votes'] = scores
+
+    return HttpResponse(simplejson.dumps(json_object,indent=4, sort_keys=True),content_type="application/json")
 
 
 class WhaleUserDetail(DetailView):
