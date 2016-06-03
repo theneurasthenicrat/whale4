@@ -2,7 +2,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.forms import  inlineformset_factory
+from django.forms import  inlineformset_factory,formset_factory
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -12,10 +12,11 @@ from django.utils.decorators import method_decorator
 from django.db.models import Count
 import json, csv
 from django.http import HttpResponse
-from operator import itemgetter, attrgetter, methodcaller
+from operator import itemgetter
 
-from accounts.models import WhaleUser
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm, VotingPollUpdateForm
+from accounts.models import WhaleUser,WhaleUserAnomymous
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
+    OptionForm, VotingPollUpdateForm, InviteForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -103,7 +104,28 @@ def choice(request):
 @with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    return render(request, 'polls/success.html', {'poll': poll})
+    inviters = WhaleUserAnomymous.objects.filter(poll=poll.id)
+    inv=[]
+    for v in inviters:
+        x={}
+        x['certificat']=WhaleUserAnomymous.decodeAES(v.certificat)
+        x['email'] =WhaleUserAnomymous.decodeAES(v.email)
+        inv.append(x)
+    if poll.option_ballots:
+       inviteformset = formset_factory(InviteForm, extra=1)
+       if request.method == 'POST':
+           formset = inviteformset(request.POST, prefix='form')
+           if formset.is_valid():
+               for form in formset:
+                   email=form.cleaned_data['email']
+                   inviter= WhaleUserAnomymous.objects.create(poll= poll,
+                   email=WhaleUserAnomymous.encodeAES(email),
+                  certificat=WhaleUserAnomymous.encodeAES(WhaleUserAnomymous.id_generator() ))
+           messages.success(request, _('Inviters successfully added!'))
+           return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+       else:
+           formset = inviteformset(prefix='form')
+    return render(request, 'polls/success.html', locals())
 
 
 class VotingPollMixin(object):

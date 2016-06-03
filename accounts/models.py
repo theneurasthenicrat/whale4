@@ -6,7 +6,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
-import uuid
+
+from Crypto.Cipher import AES
+import base64
+import  string, random
+
 # models #####################################################################
 
 
@@ -44,4 +48,37 @@ class WhaleUser(AbstractBaseUser):
 
     def __str__(self):             
         return self.nickname
+
+
+CERT_SIZE = 16
+
+# one-liner to sufficiently pad the text to be encrypted
+BS = 16
+pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+unpad = lambda s: s[:-1]
+
+# the secret key
+secret = "ivwx7561u826c8i0"
+
+# create a cipher object using the secret key
+cipher = AES.new(secret)
+
+from polls.models import VotingPoll
+
+class WhaleUserAnomymous(models.Model):
+    certificat = models.CharField(max_length=100)
+    email = models.EmailField( max_length=255)
+    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
+
+    @staticmethod
+    def encodeAES(s, c=cipher):
+        return base64.b64encode(c.encrypt(pad(s)))
+
+    @staticmethod
+    def decodeAES(e, c=cipher):
+        return unpad(c.decrypt(base64.b64decode(e)))
+
+    @staticmethod
+    def id_generator(size=CERT_SIZE, chars=string.ascii_lowercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
 

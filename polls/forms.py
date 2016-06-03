@@ -95,3 +95,5 @@ class VotingForm(forms.Form):
         raise forms.ValidationError("You must give a score to at least one candidate!")
 
 
+class InviteForm(forms.Form):
+    email = forms.EmailField(label='Email address', max_length=255, required=True)
