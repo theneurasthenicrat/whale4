@@ -10,8 +10,9 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 from django.db.models import Count
-import json, simplejson
-from django.http import HttpResponse, JsonResponse
+import json, csv
+from django.http import HttpResponse
+from operator import itemgetter, attrgetter, methodcaller
 
 from accounts.models import WhaleUser
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm
@@ -469,7 +470,47 @@ def view_poll_json(request,pk):
     json_object['candidates'] = cand
     json_object['votes'] = scores
 
-    return HttpResponse(simplejson.dumps(json_object,indent=4, sort_keys=True),content_type="application/json")
+    return HttpResponse(json.dumps(json_object,indent=4, sort_keys=True),content_type="application/json")
+
+
+def view_poll_csv(request,pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+    candidates = (
+        DateCandidate.objects.values_list('candidate', 'date').filter(poll_id=poll.id) if poll.poll_type == 'Date'else
+        Candidate.objects.values_list('candidate', flat=True).filter(poll_id=poll.id))
+
+    cand = [y.strftime("%d/%m/%Y") + '#' + c for c, y in candidates] if poll.poll_type == 'Date' else [c for c in
+                                                                                                       candidates]
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+
+    writer = csv.writer(response)
+    writer.writerow([len(cand)])
+    for i , c in enumerate(cand):
+        writer.writerow([ i+1 , c ])
+    writer.writerow([len(voters),len(voters),len(voters)])
+    for i, voter in enumerate( voters):
+        values = VotingScore.objects.values_list('value', 'candidate').filter(candidate__poll__id=poll.id).filter(
+            voter=voter).order_by('candidate')
+        print(values)
+        k=[]
+        for i , v in enumerate( values):
+            v=list(v)
+            v.append(i+1)
+            v=tuple(v)
+            k.append(v)
+        print(k)
+
+        candidates= sorted(k, key=itemgetter(0), reverse=True)
+
+        print(candidates)
+        rowvoter = [i + 1]
+        for x in candidates:
+            rowvoter.append(x[2])
+
+        writer.writerow(rowvoter )
+    return response
 
 
 class WhaleUserDetail(DetailView):
