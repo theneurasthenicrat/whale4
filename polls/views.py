@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from operator import itemgetter, attrgetter, methodcaller
 
 from accounts.models import WhaleUser
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm
+from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, OptionForm, VotingPollUpdateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -126,6 +126,7 @@ class VotingPollMixin(object):
 
 class VotingPollUpdate(VotingPollMixin, UpdateView):
 
+    form_class = VotingPollUpdateForm
     @method_decorator(login_required,with_admin_rights)
     def dispatch(self, *args, **kwargs):
         return super(VotingPollMixin, self).dispatch(*args, **kwargs)
@@ -263,7 +264,11 @@ def delete_candidate(request, pk, cand):
 @with_admin_rights
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk,}))
+    if poll.option_choice or poll.option_modify:
+        messages.error(request, _('You are not allowed to update the poll'))
+        return redirect(reverse_lazy(home))
+    else:
+        return redirect(reverse_lazy('updateVotingPoll', kwargs={'pk': poll.pk,}))
 
 
 @login_required
