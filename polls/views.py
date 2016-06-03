@@ -169,16 +169,16 @@ def manage_candidate(request, pk):
 @with_admin_rights
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidateformset = inlineformset_factory(VotingPoll, Candidate,
-                                             form=CandidateForm, formset=BaseCandidateFormSet, min_num=2, extra=0,can_delete=False,
-                                              validate_min=True)
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
-    candidates_initial = VotingScore.objects.values_list('candidate', flat=True).filter(candidate__poll__id=poll.id).distinct()
-    if request.method == 'POST':
-        formset = candidateformset(request.POST, instance=poll,prefix='form')
+    candidateformset = inlineformset_factory(VotingPoll, Candidate,form=CandidateForm, formset=BaseCandidateFormSet, extra=1,can_delete=False)
+    candidates = Candidate.objects.filter(poll=poll.id)
 
+    if request.method == 'POST':
+        formset = candidateformset(request.POST, instance=poll ,prefix='form')
         if formset.is_valid():
             formset.save()
+            voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+            candidates_initial = VotingScore.objects.values_list('candidate', flat=True).filter(
+                candidate__poll__id=poll.id).distinct()
             if voters:
                 candidates_final=Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
                 candidates_diff=[c for c in candidates_final if c not in candidates_initial]
@@ -188,10 +188,11 @@ def candidate_create(request, pk):
                         voter = get_object_or_404(WhaleUser, id=voter)
                         VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
             messages.success(request, _('Candidates successfully added!'))
-            return redirect(reverse_lazy(option, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
     else:
-        formset = candidateformset(instance=poll,prefix='form')
-    return render(request, 'polls/candidate.html', {'formset': formset, 'poll': poll})
+        formset = candidateformset(prefix='form')
+        context={'formset': formset, 'poll': poll, 'candidates':candidates}
+    return render(request, 'polls/candidate.html', context)
 
 
 @login_required
@@ -253,9 +254,9 @@ def date_candidate_create(request, pk):
 @login_required
 def delete_candidate(request, pk, cand):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidate = get_object_or_404(DateCandidate, id=cand)
+    candidate = get_object_or_404(Candidate, id=cand)
     candidate.delete()
-    return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
+    return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id}))
 
 
 @login_required
