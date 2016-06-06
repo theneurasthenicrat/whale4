@@ -58,7 +58,7 @@
             </div>
             <div class="well-lg">
                 <p>Now you can vote at this link
-                    <a href="{% url 'manageVote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
+                    <a href="{% url 'manageVote' poll.id %}"> {% url 'manageVote' poll.id %}</a></p>
             </div>
             <a href="{% url 'option' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
 

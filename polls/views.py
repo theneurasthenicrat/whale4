@@ -38,15 +38,13 @@ def with_voter_rights(fn):
     def wrapped(request, pk,voter):
         poll = get_object_or_404(VotingPoll, id=pk)
         user = get_object_or_404(WhaleUser, id=voter)
+
         if request.user is not None and request.user.id == user.id:
             return fn(request, pk, voter)
         elif "user_id" in request.session:
             user_id=request.session["user_id"]
             if user_id==user.id:
                 return fn(request, pk, voter)
-            else:
-                messages.error(request, _('This is not your vote'))
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
         else:
             messages.error(request, _('This is not your vote'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
@@ -54,28 +52,23 @@ def with_voter_rights(fn):
 
 
 def yet_vote(fn):
-    def wrapped(request, pk):
+    def wrapped(request, pk,user):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if request.user.is_authenticated():
-            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=request.user.id)
+        if user:
+            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=user)
             if votes:
                 messages.error(request, _('you have already vote , now you can update your vote'))
                 return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter':request.user.id}))
             else:
-                return fn(request, pk)
+                return fn(request, pk,user)
         else:
-            return fn(request, pk)
+            return fn(request, pk,user)
     return wrapped
-
-
-
-
-
 
 # simple functions ######################################################################
 
 
-def days_month(candidates):
+def days_months(candidates):
     months = []
     days = []
     for c in candidates:
@@ -97,12 +90,12 @@ def days_month(candidates):
 
 
 def home(request):
-    return render(request, 'polls/home.html', {})
+    return render(request, 'polls/home.html')
 
 
 @login_required
 def choice(request):
-    return render(request, 'polls/choice_ballot.html', {})
+    return render(request, 'polls/choice_ballot.html')
 
 
 @login_required
@@ -328,61 +321,61 @@ def option(request, pk):
             return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
-def certificate(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    if request.method == 'POST':
-        form = BallotForm(request.POST)
-        if form.is_valid():
-            certificate = form.cleaned_data['certificate']
-            ce=WhaleUserAnomymous.encodeAES(certificate)
-            inviter = get_object_or_404(WhaleUserAnomymous,poll=poll.id,certificate=ce)
-            messages.success(request, _(' your certificate is right '))
-            return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
-    else:
-        form =BallotForm()
-    return render(request, 'polls/certificate.html', {'form': form, 'poll': poll})
-
-
 def manage_vote(request,pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if poll.option_ballots:
         return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
     else:
-        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
+        if request.user.is_authenticated():
+            user=request.user.id
+        else:
+            user=None
+        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id,'user':user}))
+
+
+def certificate(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+
+    if request.method == 'POST':
+        form = BallotForm(request.POST)
+        if form.is_valid():
+            certificate = WhaleUserAnomymous.encodeAES(form.cleaned_data['certificate'])
+            user = get_object_or_404(WhaleUserAnomymous,poll=poll.id,certificate=certificate )
+            messages.success(request, _(' your certificate is right '))
+            return redirect(reverse_lazy(vote, kwargs={'pk': poll.id,'user':user.id}))
+    else:
+        form = BallotForm()
+    return render(request, 'polls/certificate.html', {'form': form, 'poll': poll})
 
 
 @yet_vote
-def vote(request, pk):
+def vote(request, pk,user):
 
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
-    preference_model = preference_model_from_text(poll.preference_model)
     months = []
     days = []
+    if poll.poll_type == 'Date':
+        (days, months) = days_months(candidates)
 
+    preference_model = preference_model_from_text(poll.preference_model)
+
+    initial = {}
+    read = True
     if not poll.option_ballots:
         if request.user.is_authenticated():
-            initial = {'nickname': request.user.nickname}
             voter=request.user
-            read=True
-
+            initial = {'nickname': request.user.nickname}
         else:
-            initial = {}
             read=False
-            voter = WhaleUser.objects.create_user(
-            email=WhaleUser.email_generator(),
-            nickname='',
-            password=WhaleUser.password_generator())
-
-        request.session["user_id"] = voter.id
+            voter = WhaleUser.objects.create_user(email=WhaleUser.email_generator(),nickname='',
+                                                  password=WhaleUser.password_generator())
+            request.session["user_id"] = voter.id
     else:
-        initial = {'nickname': 'Anomymous'}
-        read = True
-
-    if poll.poll_type == 'Date':
-        (days, months) = days_month(candidates)
+        voter = get_object_or_404(WhaleUserAnomymous, id=user)
+        initial = {'nickname': voter.nickname}
 
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll,read,request.POST)
@@ -403,7 +396,7 @@ def vote(request, pk):
             if c.candidate:
                 cand.append(c.candidate)
 
-        return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
+    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
 
 
 @with_voter_rights
@@ -428,7 +421,7 @@ def update_vote(request, pk, voter):
         read = False
 
     if poll.poll_type == 'Date':
-        (days, months) = days_month(candidates)
+        (days, months) = days_months(candidates)
 
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll,read, request.POST)
@@ -474,7 +467,7 @@ def view_poll(request, pk):
     months = []
     days = []
     if poll.poll_type == 'Date':
-        (days, months) = days_month(candidates)
+        (days, months) = days_months(candidates)
     scores = {}
     for v in votes:
         if v.voter.id not in scores:
