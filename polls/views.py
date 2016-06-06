@@ -11,12 +11,12 @@ from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 from django.db.models import Count
 import json, csv
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from operator import itemgetter
 
 from accounts.models import WhaleUser,WhaleUserAnomymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
-    OptionForm, VotingPollUpdateForm, InviteForm
+    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -67,6 +67,11 @@ def yet_vote(fn):
             return fn(request, pk)
     return wrapped
 
+
+
+
+
+
 # simple functions ######################################################################
 
 
@@ -108,8 +113,8 @@ def success(request, pk):
     inv=[]
     for v in inviters:
         x={}
-        x['certificat']=WhaleUserAnomymous.decodeAES(v.certificat)
-        x['email'] =WhaleUserAnomymous.decodeAES(v.email)
+        x['certificat']=WhaleUserAnomymous.decodeAES(v.certificate)
+        x['email2'] =WhaleUserAnomymous.decodeAES(v.email2)
         inv.append(x)
     if poll.option_ballots:
        inviteformset = formset_factory(InviteForm, extra=1)
@@ -117,10 +122,14 @@ def success(request, pk):
            formset = inviteformset(request.POST, prefix='form')
            if formset.is_valid():
                for form in formset:
-                   email=form.cleaned_data['email']
-                   inviter= WhaleUserAnomymous.objects.create(poll= poll,
-                   email=WhaleUserAnomymous.encodeAES(email),
-                  certificat=WhaleUserAnomymous.encodeAES(WhaleUserAnomymous.id_generator() ))
+
+                   email2=form.cleaned_data.get('email2',None)
+
+                   inviter= WhaleUserAnomymous.objects.create_user(
+                       email=WhaleUser.email_generator(),nickname=WhaleUserAnomymous.nickname_generator(poll.id) ,password=WhaleUser.password_generator(),email2=WhaleUserAnomymous.encodeAES(email2),
+                       certificate=WhaleUserAnomymous.encodeAES(WhaleUserAnomymous.id_generator()),poll=poll
+                  )
+
            messages.success(request, _('Inviters successfully added!'))
            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
        else:
@@ -319,8 +328,32 @@ def option(request, pk):
             return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
+def certificate(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    if request.method == 'POST':
+        form = BallotForm(request.POST)
+        if form.is_valid():
+            certificate = form.cleaned_data['certificate']
+            ce=WhaleUserAnomymous.encodeAES(certificate)
+            inviter = get_object_or_404(WhaleUserAnomymous,poll=poll.id,certificate=ce)
+            messages.success(request, _(' your certificate is right '))
+            return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
+    else:
+        form =BallotForm()
+    return render(request, 'polls/certificate.html', {'form': form, 'poll': poll})
+
+
+def manage_vote(request,pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    if poll.option_ballots:
+        return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
+    else:
+        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
+
+
 @yet_vote
 def vote(request, pk):
+
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
@@ -328,22 +361,25 @@ def vote(request, pk):
     preference_model = preference_model_from_text(poll.preference_model)
     months = []
     days = []
-    if request.user.is_authenticated():
-        initial = {'nickname': request.user.nickname}
-        voter=request.user
-        read=True
 
+    if not poll.option_ballots:
+        if request.user.is_authenticated():
+            initial = {'nickname': request.user.nickname}
+            voter=request.user
+            read=True
+
+        else:
+            initial = {}
+            read=False
+            voter = WhaleUser.objects.create_user(
+            email=WhaleUser.email_generator(),
+            nickname='',
+            password=WhaleUser.password_generator())
+
+        request.session["user_id"] = voter.id
     else:
-        initial = {}
-        read=False
-        users = WhaleUser.objects.count() + 1
-        email = 'whale4' + str(users) + '@gmail.com'
-        voter = WhaleUser.objects.create_user(
-        email=email,
-        nickname='',
-        password='whale4')
-
-    request.session["user_id"] = voter.id
+        initial = {'nickname': 'Anomymous'}
+        read = True
 
     if poll.poll_type == 'Date':
         (days, months) = days_month(candidates)
@@ -367,7 +403,7 @@ def vote(request, pk):
             if c.candidate:
                 cand.append(c.candidate)
 
-    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
+        return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
 
 
 @with_voter_rights

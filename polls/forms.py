@@ -92,4 +92,8 @@ class VotingForm(forms.Form):
 
 
 class InviteForm(forms.Form):
-    email = forms.EmailField(label='Email address', max_length=255, required=True)
+    email2 = forms.EmailField(label='Email address', max_length=255, required=True)
+
+
+class BallotForm(forms.Form):
+    certificate =forms.CharField(max_length=16)

@@ -1,0 +1,23 @@
+{%extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid col-lg-9">
+        <div class="well">
+            <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
+            <h3>{% trans 'Secret ballot' %}</h3>
+        </div>
+        <div class="thumbnail clearfix ">
+
+            <form action="" method="post"  class="well-lg">
+                {% csrf_token %}
+                {% bootstrap_form form  %}
+                <div class="wrapper ">
+                    <button type="submit" class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
