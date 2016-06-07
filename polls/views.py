@@ -45,6 +45,8 @@ def with_voter_rights(fn):
             user_id=request.session["user_id"]
             if user_id==user.id:
                 return fn(request, pk, voter)
+        elif poll.option_ballots:
+            return fn(request, pk, voter)
         else:
             messages.error(request, _('This is not your vote'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
@@ -54,7 +56,6 @@ def with_voter_rights(fn):
 def yet_vote(fn):
     def wrapped(request, pk,*args,**kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        user_id=None
         if request.user is not None or "user" in request.session:
             user_id= request.user.id if not poll.option_ballots else request.session["user"]
             votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=user_id)
@@ -205,30 +206,40 @@ def manage_candidate(request, pk):
 @with_admin_rights
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidateformset = inlineformset_factory(VotingPoll, Candidate,form=CandidateForm, formset=BaseCandidateFormSet, extra=1,can_delete=False)
-    candidates = Candidate.objects.filter(poll=poll.id)
+    candidates = Candidate.objects.filter(poll_id=poll.id)
+    candidateformset = inlineformset_factory(VotingPoll, Candidate, form=CandidateForm,
+                                             formset=BaseCandidateFormSet, extra=1, can_delete=False)
+    formset = candidateformset(prefix='form')
 
     if request.method == 'POST':
-        formset = candidateformset(request.POST, instance=poll ,prefix='form')
+        formset = candidateformset(request.POST, instance=poll, prefix='form')
         if formset.is_valid():
-            formset.save()
-            voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
-            candidates_initial = VotingScore.objects.values_list('candidate', flat=True).filter(
-                candidate__poll__id=poll.id).distinct()
-            if voters:
-                candidates_final=Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
-                candidates_diff=[c for c in candidates_final if c not in candidates_initial]
-                for c in candidates_diff:
-                    c= get_object_or_404(Candidate, id=c)
-                    for voter in voters:
-                        voter = get_object_or_404(WhaleUser, id=voter)
-                        VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
-            messages.success(request, _('Candidates successfully added!'))
-            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
-    else:
-        formset = candidateformset(prefix='form')
-        context={'formset': formset, 'poll': poll, 'candidates':candidates}
-    return render(request, 'polls/candidate.html', context)
+            labels = formset.save(commit=False)
+            equal_label=[c for c in candidates for ca in labels  if str(c)== str(ca)]
+            if not equal_label:
+                for candidate in labels:
+                    candidate.save()
+                voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+
+                if voters:
+                    initial_candidates = VotingScore.objects.values_list('candidate', flat=True).filter(
+                    candidate__poll__id=poll.id).distinct()
+                    final_candidates=Candidate.objects.values_list('id', flat=True).filter(poll_id=poll.id)
+                    candidates_diff=list(set(final_candidates).difference(initial_candidates))
+
+                    for c in candidates_diff:
+                        c= get_object_or_404(Candidate, id=c)
+                        for voter in voters:
+                            voter = get_object_or_404(WhaleUser, id=voter)
+                            VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
+                messages.success(request, _('Candidates successfully added!'))
+            else:
+                messages.error(request, _('candidates must be distinct'))
+
+        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
+
+    return render(request, 'polls/candidate.html', locals())
+
 
 
 @login_required
@@ -412,6 +423,7 @@ def vote(request, pk):
                                                'cand':cand, 'months': months, 'days': days})
 
 
+@with_voter_rights
 @certificate_required
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
@@ -457,11 +469,14 @@ def update_vote(request, pk, voter):
 
 
 @with_voter_rights
+@certificate_required
 def delete_vote(request, pk, voter):
     poll = get_object_or_404(VotingPoll, id=pk)
     voter = get_object_or_404(WhaleUser, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     votes.delete()
+    if poll.option_ballots:
+        del request.session["user"]
     messages.success(request, _('Your vote has been deleted!'))
     return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
