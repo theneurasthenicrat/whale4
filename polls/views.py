@@ -65,6 +65,17 @@ def yet_vote(fn):
             return fn(request, pk,*args,**kwargs)
     return wrapped
 
+
+def certificate_required(fn):
+    def wrapped(request, pk, *args, **kwargs):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if poll.option_ballots and "user"  not in request.session:
+            return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
+        else:
+            return fn(request, pk, *args, **kwargs)
+    return wrapped
+
+
 # simple functions ######################################################################
 
 
@@ -321,14 +332,6 @@ def option(request, pk):
             return render(request, 'polls/option.html', {'form': form, 'poll': poll})
 
 
-def manage_vote(request,pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    if poll.option_ballots:
-        return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
-    else:
-        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
-
-
 def certificate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
 
@@ -339,8 +342,8 @@ def certificate(request, pk):
             try:
                 user= WhaleUserAnomymous.objects.get(poll=poll.id,certificate=certificate)
                 messages.success(request, _(' your certificate is right '))
-
-                return redirect('/polls/vote/' + str(poll.id) + '?user='+str(user.id))
+                request.session["user"] = str( user.id)
+                return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
             except:
                 messages.error (request, _(' your certificate is wrong'))
                 return redirect(reverse_lazy('certificate', kwargs={'pk': poll.id}))
@@ -349,6 +352,7 @@ def certificate(request, pk):
     return render(request, 'polls/certificate.html', {'form': form, 'poll': poll})
 
 
+@certificate_required
 @yet_vote
 def vote(request, pk):
 
@@ -373,10 +377,10 @@ def vote(request, pk):
             read=False
             voter = WhaleUser.objects.create_user(email=WhaleUser.email_generator(),nickname='',
                                                   password=WhaleUser.password_generator())
-            request.session["user_id"] = voter.nickname
+            request.session["user_id"] = str(voter.id)
     else:
-
-        voter = get_object_or_404(WhaleUserAnomymous, id=request.GET['user'])
+        user_id = request.session["user"]
+        voter = get_object_or_404(WhaleUserAnomymous, id= user_id)
         initial = {'nickname': voter.nickname}
 
     if request.method == 'POST':

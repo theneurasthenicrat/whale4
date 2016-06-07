@@ -59,7 +59,7 @@
             </div>
             <div class="well-lg">
                 <p>Now you can vote at this link
-                    <a href="{% url 'manageVote' poll.id %}"> {% url 'manageVote' poll.id %}</a></p>
+                    <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
                  {% if poll.option_ballots %}
                       <div class="container-fluid ">
                 <div class=" well-lg margin1">
