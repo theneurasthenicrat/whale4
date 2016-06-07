@@ -54,23 +54,23 @@ def with_voter_rights(fn):
 def yet_vote(fn):
     def wrapped(request, pk,*args,**kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if request.user is not None :
-            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=request.user.id)
+        user_id=None
+        if request.user is not None or "user" in request.session:
+            user_id= request.user.id if not poll.option_ballots else request.session["user"]
+            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=user_id)
             if votes:
-                messages.error(request, _('you have already vote , now you can update your vote'))
+                messages.info(request, _('you have already vote , now you can update your vote'))
                 return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter':request.user.id}))
-            else:
-                return fn(request, pk,*args,**kwargs)
-        else:
-            return fn(request, pk,*args,**kwargs)
+        return fn(request, pk,*args,**kwargs)
     return wrapped
 
 
 def certificate_required(fn):
     def wrapped(request, pk, *args, **kwargs):
+        path = request.get_full_path()
         poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.option_ballots and "user"  not in request.session:
-            return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
+        if poll.option_ballots and "user" not in request.session:
+            return redirect('/polls/certificate/'+str(poll.id)+ '?next=' +str(path))
         else:
             return fn(request, pk, *args, **kwargs)
     return wrapped
@@ -333,6 +333,10 @@ def option(request, pk):
 
 
 def certificate(request, pk):
+    next_url = None
+    if request.GET:
+        next_url = request.GET['next']
+
     poll = get_object_or_404(VotingPoll, id=pk)
 
     if request.method == 'POST':
@@ -343,7 +347,11 @@ def certificate(request, pk):
                 user= WhaleUserAnomymous.objects.get(poll=poll.id,certificate=certificate)
                 messages.success(request, _(' your certificate is right '))
                 request.session["user"] = str( user.id)
-                return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
+                if next_url is not None:
+                    return redirect(next_url)
+                else:
+                    return redirect(reverse_lazy('home'))
+
             except:
                 messages.error (request, _(' your certificate is wrong'))
                 return redirect(reverse_lazy('certificate', kwargs={'pk': poll.id}))
@@ -385,7 +393,8 @@ def vote(request, pk):
 
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll,read,request.POST)
-
+        if poll.option_ballots:
+            del request.session["user"]
         if form.is_valid():
             data = form.cleaned_data
             voter.nickname = data['nickname']
@@ -393,6 +402,7 @@ def vote(request, pk):
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
             messages.success(request, _('Your vote has been added to the poll, thank you!'))
+
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
 
@@ -402,7 +412,7 @@ def vote(request, pk):
                                                'cand':cand, 'months': months, 'days': days})
 
 
-@with_voter_rights
+@certificate_required
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     candidates = (
@@ -418,9 +428,8 @@ def update_vote(request, pk, voter):
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
 
-    if request.user.is_authenticated():
-        read = True
-    else:
+    read = True
+    if not poll.option_ballots and not request.user.is_authenticated():
         read = False
 
     if poll.poll_type == 'Date':
@@ -428,7 +437,8 @@ def update_vote(request, pk, voter):
 
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll,read, request.POST)
-
+        if poll.option_ballots:
+            del request.session["user"]
         if form.is_valid():
             data = form.cleaned_data
             voter.nickname = data['nickname']

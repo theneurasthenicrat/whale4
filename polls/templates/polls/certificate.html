@@ -13,6 +13,7 @@
             <form action="" method="post"  class="well-lg">
                 {% csrf_token %}
                 {% bootstrap_form form  %}
+                 <input type="hidden" name="next" value="{{ next }}" />
                 <div class="wrapper ">
                     <button type="submit" class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
                 </div>
