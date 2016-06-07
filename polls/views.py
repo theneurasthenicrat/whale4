@@ -52,17 +52,17 @@ def with_voter_rights(fn):
 
 
 def yet_vote(fn):
-    def wrapped(request, pk,user):
+    def wrapped(request, pk,*args,**kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if user:
-            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=user)
+        if request.user is not None :
+            votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=request.user.id)
             if votes:
                 messages.error(request, _('you have already vote , now you can update your vote'))
                 return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter':request.user.id}))
             else:
-                return fn(request, pk,user)
+                return fn(request, pk,*args,**kwargs)
         else:
-            return fn(request, pk,user)
+            return fn(request, pk,*args,**kwargs)
     return wrapped
 
 # simple functions ######################################################################
@@ -326,11 +326,7 @@ def manage_vote(request,pk):
     if poll.option_ballots:
         return redirect(reverse_lazy(certificate, kwargs={'pk': poll.id}))
     else:
-        if request.user.is_authenticated():
-            user=request.user.id
-        else:
-            user=None
-        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id,'user':user}))
+        return redirect(reverse_lazy(vote, kwargs={'pk': poll.id}))
 
 
 def certificate(request, pk):
@@ -340,16 +336,21 @@ def certificate(request, pk):
         form = BallotForm(request.POST)
         if form.is_valid():
             certificate = WhaleUserAnomymous.encodeAES(form.cleaned_data['certificate'])
-            user = get_object_or_404(WhaleUserAnomymous,poll=poll.id,certificate=certificate )
-            messages.success(request, _(' your certificate is right '))
-            return redirect(reverse_lazy(vote, kwargs={'pk': poll.id,'user':user.id}))
+            try:
+                user= WhaleUserAnomymous.objects.get(poll=poll.id,certificate=certificate)
+                messages.success(request, _(' your certificate is right '))
+
+                return redirect('/polls/vote/' + str(poll.id) + '?user='+str(user.id))
+            except:
+                messages.error (request, _(' your certificate is wrong'))
+                return redirect(reverse_lazy('certificate', kwargs={'pk': poll.id}))
     else:
         form = BallotForm()
     return render(request, 'polls/certificate.html', {'form': form, 'poll': poll})
 
 
 @yet_vote
-def vote(request, pk,user):
+def vote(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
@@ -372,9 +373,10 @@ def vote(request, pk,user):
             read=False
             voter = WhaleUser.objects.create_user(email=WhaleUser.email_generator(),nickname='',
                                                   password=WhaleUser.password_generator())
-            request.session["user_id"] = voter.id
+            request.session["user_id"] = voter.nickname
     else:
-        voter = get_object_or_404(WhaleUserAnomymous, id=user)
+
+        voter = get_object_or_404(WhaleUserAnomymous, id=request.GET['user'])
         initial = {'nickname': voter.nickname}
 
     if request.method == 'POST':
@@ -391,12 +393,9 @@ def vote(request, pk,user):
     else:
 
         form = VotingForm(candidates, preference_model,poll,read,initial=initial)
-        cand = []
-        for c in candidates:
-            if c.candidate:
-                cand.append(c.candidate)
-
-    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates, 'cand':cand, 'months': months, 'days': days})
+        cand = [c.candidate for c in candidates if c.candidate]
+    return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates,
+                                               'cand':cand, 'months': months, 'days': days})
 
 
 @with_voter_rights
@@ -437,14 +436,10 @@ def update_vote(request, pk, voter):
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
         form = VotingForm(candidates, preference_model,poll,read, initial=initial)
-        cand = []
-        for c in candidates:
-            if c.candidate:
-                cand.append(c.candidate)
+        cand = [c.candidate for c in candidates if c.candidate]
 
     return render(request, 'polls/vote.html',
                   {'form': form, 'poll': poll, 'candidates': candidates, 'cand': cand, 'months': months, 'days': days})
-
 
 
 @with_voter_rights
@@ -458,10 +453,12 @@ def delete_vote(request, pk, voter):
 
 
 def view_poll(request, pk):
+
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
+    cand = [ c.candidate for c in candidates if c.candidate]
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
     preference_model = preference_model_from_text(poll.preference_model)
     months = []
@@ -492,42 +489,31 @@ def view_poll(request, pk):
                 })
 
     values = None if tab == {} else tab.values()
-    cand = []
-    for c in candidates:
-        if c.candidate:
-            cand.append(c.candidate)
-    return render(request, 'polls/poll.html',
-                  {'poll': poll, 'candidates': candidates, 'votes': values, 'cand':cand,'months': months, 'days': days})
+    context={'poll': poll,
+             'candidates': candidates,
+             'votes': values,
+             'cand': cand,
+             'months': months,
+             'days': days}
 
+    list1 = list()
+    for value in values:
+        v = dict()
+        v['name'] = value['nickname']
+        v['values'] = [val['value'] for val in value['scores']]
+        list1.append(v)
 
-def view_poll_json(request,pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-    preference_model = preference_model_from_text(poll.preference_model)
-    scores = [ ]
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
-    for voter in voters:
-        user = get_object_or_404(WhaleUser, id=voter)
-        values = VotingScore.objects.values_list('value', flat=True).filter(candidate__poll__id=poll.id).filter(
-            voter=voter)
-        v = {}
-        v['name'] =user.nickname
-        v['values']=[value for value in values]
-        scores.append(v)
-
-    candidates = (
-        DateCandidate.objects.values_list('candidate','date').filter(poll_id=poll.id) if poll.poll_type == 'Date'else
-        Candidate.objects.values_list('candidate', flat=True).filter(poll_id=poll.id))
-
-    cand= [y.strftime("%d/%m/%Y")+'#'+c for c,y in candidates] if poll.poll_type == 'Date' else [c for c in candidates]
-
-    json_object = {}
-    json_object['preferenceModel']= preference_model.as_dict()
+    json_object = dict()
+    json_object['preferenceModel'] = preference_model.as_dict()
     json_object['type'] = 1 if poll.poll_type == 'Date' else 0
-    json_object['candidates'] = cand
-    json_object['votes'] = scores
+    json_object['candidates'] =  [str(c) for c in candidates]
+    json_object['votes'] = list1
 
-    return HttpResponse(json.dumps(json_object,indent=4, sort_keys=True),content_type="application/json")
+    if "format" in request.GET and request.GET['format'] == 'json':
+        return HttpResponse(json.dumps(json_object, indent=4, sort_keys=True), content_type="application/json")
+
+    else:
+        return render(request, 'polls/poll.html',context )
 
 
 def view_poll_csv(request,pk):
