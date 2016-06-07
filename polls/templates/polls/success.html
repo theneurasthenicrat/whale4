@@ -11,7 +11,7 @@
         {% if poll.option_ballots %}
             <div class="container-fluid form-login margin1">
 
-                <h4>List of current inviters</h4>
+                <h4>{% trans 'List of current inviters' %}</h4>
                 {% if inv %}
 
                     <ol class="list-group">
@@ -25,13 +25,13 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">Delete {{ c }}</h4>
+                                                <h4 class="modal-title">{% trans 'Delete ' %}{{ c }}</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <p> If you really want to delete this candidate <strong>{{ c }}</strong>, click submit.</p>
+                                                <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.' %}</p>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
                                                 <a href="" class="btn btn-custom ">{% trans 'Submit' %} </a >
 
                                             </div>
@@ -44,21 +44,21 @@
                         {% endfor %}
                     </ol>
                 {% else %}
-                    <p class="text-center">No invite yet</p>
+                    <p class="text-center">{% trans 'No invite yet' %}</p>
                 {% endif %}
             </div>
         {% endif %}
         <div class="thumbnail clearfix ">
             <div class="well-sm visible-lg visible-md visible-sm">
                 <ul class="nav nav-pills-custom">
-                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">2.Add candidates {% bootstrap_icon "menu-right"%}</a></li>
-                    <li role="presentation" ><a href="{% url 'option' poll.id %}">3.Advanced parameters {% bootstrap_icon "menu-right"%}</a></li>
-                    <li role="presentation" class="active"><a href="#">4.Invite</a></li>
+                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">{% trans '1.General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">{% trans '2.Add candidates' %}{% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" ><a href="{% url 'option' poll.id %}">{% trans '3.Advanced parameters' %}{% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="active"><a href="#">{% trans '4.Invite' %}</a></li>
                 </ul>
             </div>
             <div class="well-lg">
-                <p>Now you can vote at this link
+                <p>{% trans 'Now you can vote at this link' %}
                     <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
                  {% if poll.option_ballots %}
                       <div class="container-fluid ">

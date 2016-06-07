@@ -72,8 +72,7 @@ def certificate_required(fn):
         poll = get_object_or_404(VotingPoll, id=pk)
         if poll.option_ballots and "user" not in request.session:
             return redirect('/polls/certificate/'+str(poll.id)+ '?next=' +str(path))
-        else:
-            return fn(request, pk, *args, **kwargs)
+        return fn(request, pk, *args, **kwargs)
     return wrapped
 
 
@@ -114,6 +113,7 @@ def choice(request):
 @with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
+
     inviters = WhaleUserAnomymous.objects.filter(poll=poll.id)
     inv=[]
     for v in inviters:
@@ -163,6 +163,7 @@ class VotingPollMixin(object):
 class VotingPollUpdate(VotingPollMixin, UpdateView):
 
     form_class = VotingPollUpdateForm
+
     @method_decorator(login_required,with_admin_rights)
     def dispatch(self, *args, **kwargs):
         return super(VotingPollMixin, self).dispatch(*args, **kwargs)
@@ -239,7 +240,6 @@ def candidate_create(request, pk):
         return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
 
     return render(request, 'polls/candidate.html', locals())
-
 
 
 @login_required
@@ -418,7 +418,7 @@ def vote(request, pk):
     else:
 
         form = VotingForm(candidates, preference_model,poll,read,initial=initial)
-        cand = [c.candidate for c in candidates if c.candidate]
+    cand = [c.candidate for c in candidates if c.candidate]
     return render(request, 'polls/vote.html', {'form': form, 'poll': poll,'candidates': candidates,
                                                'cand':cand, 'months': months, 'days': days})
 
@@ -462,7 +462,7 @@ def update_vote(request, pk, voter):
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
     else:
         form = VotingForm(candidates, preference_model,poll,read, initial=initial)
-        cand = [c.candidate for c in candidates if c.candidate]
+    cand = [c.candidate for c in candidates if c.candidate]
 
     return render(request, 'polls/vote.html',
                   {'form': form, 'poll': poll, 'candidates': candidates, 'cand': cand, 'months': months, 'days': days})

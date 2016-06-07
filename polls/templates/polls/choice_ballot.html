@@ -10,18 +10,18 @@
             <h3>{% trans 'Which kind of poll do you want to create?' %}</h3>
         </div>
         <div class="margin1 col-lg-12">
-            <a href="#" class="btn  btn-block btn-default" id="open" >{% bootstrap_icon "eye-open" %} Open ballot
-                <span  class="help-block text-center visible-sm visible-md visible-lg">Everyone can see everyone else's votes and names.</span></a>
+            <a href="#" class="btn  btn-block btn-default" id="open" >{% bootstrap_icon "eye-open" %} {% trans 'Open ballot'%}
+                <span  class="help-block text-center visible-sm visible-md visible-lg">{% trans 'Everyone can see everyone else s votes and names.'%}</span></a>
         </div>
         <div  class="col-lg-offset-3 col-lg-9" id="type" >
-            <a href="{% url 'newPoll' 20 %}" class="btn btn-default btn-block "  >{% bootstrap_icon "list" %} Standard poll
-                <span  class="help-block text-center visible-sm visible-md visible-lg">Choose among several custom alternatives.</span></a>
-            <a href="{% url 'newPoll' 21 %}" class="btn btn-default  btn-block " > {% bootstrap_icon "calendar" %}Date poll
-                <span  class="help-block text-center visible-sm visible-md visible-lg">Find the best date for an event.</span></a>
+            <a href="{% url 'newPoll' 20 %}" class="btn btn-default btn-block "  >{% bootstrap_icon "list" %}{% trans ' Standard poll'%}
+                <span  class="help-block text-center visible-sm visible-md visible-lg">{%  trans 'Choose among several custom alternatives.'%}</span></a>
+            <a href="{% url 'newPoll' 21 %}" class="btn btn-default  btn-block " > {% bootstrap_icon "calendar" %}{% trans 'Date poll'%}
+                <span  class="help-block text-center visible-sm visible-md visible-lg">{% trans 'Find the best date for an event'%}.</span></a>
         </div>
         <div id="secret" class=" col-lg-12 margin2">
-            <a href="{% url 'newPoll' 22%}" class="btn btn-default  btn-block  ">{% bootstrap_icon "eye-close" %} Secret ballot
-                <span  class="help-block text-center visible-sm visible-md visible-lg">Ballot is hidden until the poll closes. After that, ballot is public but anonymous.</span></a>
+            <a href="{% url 'newPoll' 22%}" class="btn btn-default  btn-block  ">{% bootstrap_icon "eye-close" %} {% trans 'Secret ballot'%}
+                <span  class="help-block text-center visible-sm visible-md visible-lg">{% trans 'Ballot is hidden until the poll closes. After that, ballot is public but anonymous.'%}</span></a>
         </div>
     </div>
     <script src="{% static 'polls/js/choice_ballot.js' %}" type="text/javascript"></script>
