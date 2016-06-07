@@ -8,10 +8,11 @@
               <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
             <h3>{% trans '2.Add candidates to poll' %}</h3>
         </div>
+      {% if candidates %}
         <div class="container-fluid form-login margin1">
 
-            <h2>List of current candidates</h2>
-            {% if candidates %}
+            <h4>List of current candidates</h4>
+
 
                 <ol class="list-group">
                     {% for c in candidates %}
@@ -42,12 +43,12 @@
                         </li>
                     {% endfor %}
                 </ol>
-            {% else %}
-                <p class="text-center">No candidate yet</p>
-            {% endif %}
-        </div>
 
-        <div class="container-fluid form-login">
+
+
+        </div>
+ {% endif %}
+        <div class="container-fluid thumbnail">
             <div class="well-sm visible-lg visible-md visible-sm">
                 <ul class="nav nav-pills-custom ">
                     <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">1.General parameters {% bootstrap_icon "menu-right" %}</a></li>
@@ -56,7 +57,7 @@
                     <li role="presentation" class="disabled"><a href="#">4.Invite</a></li>
                 </ul>
             </div>
-            <div class="thumbnail ">
+            <div class="well-lg">
                 <form action="" method="post" id="form1" >
                     {% csrf_token %}
                     {% bootstrap_form form  %}
@@ -74,7 +75,7 @@
                             <div id="empty_form" style="display:none">
                                 {% bootstrap_form formset.empty_form   %}
                             </div>
-                            <label  id="add_more" class="btn btn-default pull-right ">{% bootstrap_icon "plus" %} {% trans 'Add' %}</label>
+                            <label  id="add_more" class="btn btn-default pull-right ">{% bootstrap_icon "plus" %} </label>
                         </div>
                     </div>
                 </form>
@@ -83,8 +84,8 @@
                 </div>
             </div>
             <div class="margin2">
-                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url 'option' poll.id  %}" class="btn btn-custom pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'option' poll.id  %}" class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             </div>
         </div>
     </div>

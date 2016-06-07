@@ -12,7 +12,8 @@ body { padding-top: 100px; }
 
 
 td:nth-child(1).border {
-border: inherit;}
+border: inherit;
+}
 
 td:nth-child(2).border {
 border: inherit;}
