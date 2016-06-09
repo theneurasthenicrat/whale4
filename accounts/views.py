@@ -3,13 +3,19 @@
 # imports ####################################################################
 
 from django.shortcuts import render, redirect
-from accounts.forms import UserCreationForm, LoginForm,ContactForm
-from django.views.generic.edit import CreateView,FormView
-from accounts.models import WhaleUser
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.edit import CreateView,FormView
+from django.views.generic import DetailView
+from django.utils.decorators import method_decorator
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+
+from accounts.models import WhaleUser
+from accounts.forms import UserCreationForm, LoginForm,ContactForm
+from polls.models import VotingPoll
 
 
 class Register(CreateView):
@@ -60,3 +66,19 @@ class ContactView(FormView):
     def form_valid(self, form):
         form.send_email_contact()
         return super(ContactView, self).form_valid(form)
+
+
+class WhaleUserDetail(DetailView):
+
+    model = WhaleUser
+    template_name = "accounts/user_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(WhaleUserDetail, self).get_context_data(**kwargs)
+        context['poll_list'] = VotingPoll.objects.filter(admin_id= self.kwargs['pk'])
+        context['poll_list_voter'] = VotingPoll.objects.filter(candidates__votingscore__voter_id=self.kwargs['pk']).annotate(total=Count('id'))
+        return context
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(WhaleUserDetail, self).dispatch(*args, **kwargs)

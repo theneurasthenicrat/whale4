@@ -51,7 +51,7 @@ class WhaleUser(AbstractBaseUser):
 
     @staticmethod
     def email_generator():
-        users = WhaleUser.objects.all().count() + 1
+        users = WhaleUser.objects.all().count() + 1000
         return 'whale4' + str(users) + '@noiraudes.net'
 
     @staticmethod
