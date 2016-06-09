@@ -14,14 +14,12 @@ urlpatterns = [
     url(r'^updateVote/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.update_vote, name='updateVote'),
     url(r'^deleteVote/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.delete_vote, name='deleteVote'),
     url(r'^newPoll/(?P<choice>[^/]+)/$', views.VotingPollCreate.as_view(), name='newPoll'),
-
     url(r'^viewPoll/(?P<pk>'+uuid4+')', views.view_poll, name='viewPoll'),
     url(r'^vote/(?P<pk>'+uuid4+')', views.vote, name='vote'),
     url(r'^success/(?P<pk>'+uuid4+')/$', views.success, name='success'),
     url(r'^admin/(?P<pk>'+uuid4+')/$', views.admin_poll, name='admin'),
     url(r'^option/(?P<pk>'+uuid4+')/$', views.option, name='option'),
     url(r'^deleteVotingPoll/(?P<pk>'+uuid4+')/$', views.voting_poll_delete, name='deleteVotingPoll'),
-    url(r'^pollcsv/(?P<pk>'+uuid4+')/$', views.view_poll_csv, name='pollCsv'),
     url(r'^certificate/(?P<pk>'+uuid4+')', views.certificate, name='certificate'),
 
 ]

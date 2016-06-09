@@ -425,7 +425,7 @@ def update_vote(request, pk, voter):
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     months = []
     days = []
-    initial = {}
+    initial = dict()
     initial['nickname'] = voter.nickname
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
@@ -504,15 +504,20 @@ def view_poll(request, pk):
                     'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
                                                                   1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
                     'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
+
+
                 })
 
     votes = None if tab == {} else tab.values()
     list1 = list()
+    scores=[]
     for value in votes:
         v = dict()
         v['name'] = value['nickname']
-        v['values'] = [val['value'] for val in value['scores']]
+        score= [val['value'] for val in value['scores']]
+        v['values'] =  score
         list1.append(v)
+        scores.append(score)
 
     json_object = dict()
     json_object['preferenceModel'] = preference_model.as_dict()
@@ -529,68 +534,18 @@ def view_poll(request, pk):
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
         writer = csv.writer(response)
         writer.writerow([len(candidates)])
+        dict1=dict()
         for i, c in enumerate(candidates):
+            dict1[str(c)]=i+1
             writer.writerow([i + 1, str(c)])
-        voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
-        writer.writerow([len(voters), len(voters), len(voters)])
-        for i, voter in enumerate(voters):
-            values1 = VotingScore.objects.values_list('value', 'candidate').filter(candidate__poll__id=poll.id).filter(
-                voter=voter).order_by('candidate')
-            k = []
-            for h, v in enumerate(values1):
-                v = list(v)
-                v.append(h + 1)
-                v = tuple(v)
-                k.append(v)
+        writer.writerow([len(votes), len(votes), len(votes)])
 
-            candidates = sorted(k, key=itemgetter(0), reverse=True)
-
-            print(candidates)
-            rowvoter = [h + 1]
-            for x in candidates:
-                rowvoter.append(x[2])
-
-            writer.writerow(rowvoter)
+        for i,score in enumerate(scores):
+            values1=zip(score,candidates)
+            value1_sorted = sorted(values1, key=itemgetter(0), reverse=True)
+            rowvoter= [ dict1[str(x[1])] for x in value1_sorted]
+            writer.writerow([i+1]+rowvoter)
         return response
     else:
         return render(request, 'polls/poll.html',locals() )
 
-
-def view_poll_csv(request,pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-    candidates = (
-        DateCandidate.objects.values_list('candidate', 'date').filter(poll_id=poll.id) if poll.poll_type == 'Date'else
-        Candidate.objects.values_list('candidate', flat=True).filter(poll_id=poll.id))
-
-    cand = [y.strftime("%d/%m/%Y") + '#' + c for c, y in candidates] if poll.poll_type == 'Date' else [c for c in
-                                                                                                       candidates]
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
-
-    writer = csv.writer(response)
-    writer.writerow([len(cand)])
-    for i , c in enumerate(cand):
-        writer.writerow([ i+1 , c ])
-    writer.writerow([len(voters),len(voters),len(voters)])
-    for i, voter in enumerate( voters):
-        values = VotingScore.objects.values_list('value', 'candidate').filter(candidate__poll__id=poll.id).filter(
-            voter=voter).order_by('candidate')
-        print(values)
-        k=[]
-        for i , v in enumerate( values):
-            v=list(v)
-            v.append(i+1)
-            v=tuple(v)
-            k.append(v)
-        print(k)
-
-        candidates= sorted(k, key=itemgetter(0), reverse=True)
-
-        print(candidates)
-        rowvoter = [i + 1]
-        for x in candidates:
-            rowvoter.append(x[2])
-
-        writer.writerow(rowvoter )
-    return response
