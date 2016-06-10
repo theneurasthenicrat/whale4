@@ -65,7 +65,8 @@
                         <li ><a href="{% url 'login' %}">{% bootstrap_icon "log-in" %}  {% trans 'Log in' %}</a></li>
 
                     {% endif %}
-                    <form action="{% url 'set_language' %}" method="post" class="navbar-form navbar-right">{% csrf_token %}
+
+             <form action="{% url 'set_language' %}" method="post" class="navbar-form navbar-right">{% csrf_token %}
                         <input name="next" type="hidden" value="{{ redirect_to }}" />
                         <input name="language" type="hidden" value="fr" />
                         <button type="submit" class=" bouton4 "></button>
@@ -76,9 +77,7 @@
                         <input name="language" type="hidden" value="en" />
                         <button type="submit" class=" bouton5 "></button>
                     </form>
-
-                </ul>
-
+</ul>
             </div>
         </div>
     </nav>

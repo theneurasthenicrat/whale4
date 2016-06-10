@@ -12,7 +12,7 @@
                         <h4>{% trans 'Log in'%}</h4>
                         <form action="" method="post">
                             {% csrf_token %}
-                            {% bootstrap_form form layout='horizontal' %}
+                            {% bootstrap_form form%}
                             <input type="hidden" name="next" value="{{ next }}" />
                             <div class="wrapper ">
                                 <button type="submit" class="btn btn-custom margin2">

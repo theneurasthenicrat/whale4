@@ -9,7 +9,7 @@
                     <h4>{% trans 'Please Sign Up for Whale'%}<sup>4</sup></h4>
                     <form action="" method="post" >
                         {% csrf_token %}
-                        {% bootstrap_form form layout='horizontal'%}
+                        {% bootstrap_form form%}
                         <div class="wrapper">
                             <button type="submit" class="btn btn-custom margin2">
                                 {% bootstrap_icon "ok" %} {% trans 'Sign up '%}

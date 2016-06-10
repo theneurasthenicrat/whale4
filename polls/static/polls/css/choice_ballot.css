@@ -113,22 +113,22 @@ fieldset[disabled] .btn-custom.active {
 
 .bouton4 {
     background-image:url("../images/french.png") ;
-    width: 42px;
-    background-size: 40px 25px;
+    width: 30px;
+    background-size: 30px 20px;
     background-position: center;
     background-repeat: no-repeat;
-    height: 25px;
+    height: 20px;
     border: 1px solid  #326db7;
 
 }
 
 .bouton5 {
     background-image:url("../images/english.png") ;
-    background-size: 40px 25px;
+    background-size: 30px 20px;
     background-repeat: no-repeat;
     background-position: center;
-    width: 42px;
-    height: 25px;
+    width: 30px;
+    height: 20px;
     border: 1px solid  #326db7;
 
 }

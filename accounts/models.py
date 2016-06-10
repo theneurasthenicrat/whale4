@@ -51,8 +51,8 @@ class WhaleUser(AbstractBaseUser):
 
     @staticmethod
     def email_generator():
-        users = WhaleUser.objects.all().count() + 1000
-        return 'whale4' + str(users) + '@noiraudes.net'
+        users = WhaleUser.objects.all().count() + 1
+        return 'whale4' + str(users) +str(uuid.uuid4())+ '@noiraudes.net'
 
     @staticmethod
     def password_generator( chars=string.ascii_lowercase + string.digits):
