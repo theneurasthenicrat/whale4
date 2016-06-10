@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 import json, csv
 from django.http import HttpResponse
 from operator import itemgetter
+from collections import Counter
 
 from accounts.models import WhaleUser,WhaleUserAnomymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
@@ -151,7 +152,8 @@ class VotingPollUpdate(VotingPollMixin, UpdateView):
 
     form_class = VotingPollUpdateForm
 
-    @method_decorator(login_required,with_admin_rights)
+    @method_decorator(with_admin_rights)
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(VotingPollMixin, self).dispatch(*args, **kwargs)
 
@@ -520,7 +522,7 @@ def view_poll(request, pk):
         scores.append(score)
 
     json_object = dict()
-    json_object['preferenceModel'] = preference_model.as_dict()
+    json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
     json_object['type'] = 1 if poll.poll_type == 'Date' else 0
     json_object['candidates'] = [str(c) for c in candidates]
     json_object['votes'] = list1
@@ -534,17 +536,32 @@ def view_poll(request, pk):
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
         writer = csv.writer(response)
         writer.writerow([len(candidates)])
-        dict1=dict()
+        dict_candidates=dict()
         for i, c in enumerate(candidates):
-            dict1[str(c)]=i+1
+            dict_candidates[str(c)]=i+1
             writer.writerow([i + 1, str(c)])
-        writer.writerow([len(votes), len(votes), len(votes)])
+        len_votes = len(votes)
+        writer.writerow([len_votes, len_votes,len_votes])
 
         for i,score in enumerate(scores):
-            values1=zip(score,candidates)
-            value1_sorted = sorted(values1, key=itemgetter(0), reverse=True)
-            rowvoter= [ dict1[str(x[1])] for x in value1_sorted]
-            writer.writerow([i+1]+rowvoter)
+            values = zip(candidates, score)
+            values_sorted = sorted(values, key=itemgetter(1), reverse=True)
+            values = map(list, zip(*values_sorted))
+            candidate_score=[]
+            for k, c in enumerate(values):
+                candidate_score.insert(k, c)
+            row_voter=[]
+            j=0
+            while j<len(candidate_score[1]):
+                counter=candidate_score[1].count(candidate_score[1][j])
+                if counter==1:
+                    row_voter.append(dict_candidates[ str(candidate_score[0][j])])
+                    j += 1
+                else:
+                    x=set([dict_candidates[str(c)] for c in candidate_score[0][j:j+counter] ])
+                    row_voter.append(x)
+                    j += counter
+            writer.writerow([i+1]+row_voter)
         return response
     else:
         return render(request, 'polls/poll.html',locals() )

@@ -22,7 +22,6 @@ class VotingPollUpdateForm(ModelForm):
         exclude = ['admin','poll_type','option_ballots','option_choice','option_modify','preference_model']
 
 
-
 class OptionForm(Form):
     option_choice = forms.BooleanField(label='Vote "I don\'t know" is not allowed',required=False,
                                        help_text="Voters can choice i don't know by default."

@@ -17,12 +17,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '16 character secret key here'
+SECRET_KEY = '2$r6%^0#gorz!*pt%6aoc5wyw)d7ub3$k&#s1&!zp4$9(3!-+='
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -63,7 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-              
+               
             ],
         },
     },
@@ -103,6 +104,8 @@ USE_I18N = True
 
 USE_L10N = True
 
+
+
 gettext = lambda x: x
 
 
@@ -119,6 +122,7 @@ LANGUAGES = (
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.abspath('/staticfiles/')
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
 APPEND_SLASH = True
@@ -128,4 +132,18 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 LOCALE_PATHS = [os.path.join(BASE_DIR,'locale'),]
 AUTH_USER_MODEL = 'accounts.WhaleUser'
+
+BOOTSTRAP3 = {
+    'horizontal_label_class': 'col-md-4',
+
+    'horizontal_field_class': 'col-md-8',}
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mariejeanne.natete'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
 
