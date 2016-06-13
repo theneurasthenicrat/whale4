@@ -475,6 +475,7 @@ def delete_vote(request, pk, voter):
 def view_poll(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
+    closing_poll=poll.closing_poll()
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))

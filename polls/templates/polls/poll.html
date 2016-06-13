@@ -9,10 +9,6 @@
             <p> {{ poll.description }}</p>
         </div>
 
-
-
-
-
  <div class="form-login clearfix  ">
  <div class=" pull-right ">
  <a href="{% url 'admin' poll.id %}" class="btn btn-default btn-lg  "><span class="icon icon-settings"></span></a>
@@ -59,6 +55,11 @@
         </tr>
         {% endif %}
         </thead>
+        {% if poll.option_ballots and closing_poll%}
+             </table>
+            </div>
+            <div style="margin-bottom: 30px;"><i>{% trans 'The (anonymized) ballots will only be visible when the poll will be closed.' %}</i></div>
+             {% else %}
         {% if votes %}
             <tbody>
             {% for v in votes %}
@@ -103,6 +104,7 @@
             </div>
             <div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
         {% endif %}
+  {% endif %}
 </div>
 </div>
 

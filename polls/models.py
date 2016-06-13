@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import uuid
+from datetime import date, timedelta
 from django.db import models
 from accounts.models import WhaleUser
 from django.utils.translation import ugettext_lazy as _
@@ -10,8 +11,11 @@ class Poll(models.Model):
     title = models.CharField(max_length=250,verbose_name= _("tilte"))
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
-    closing_date = models.DateField(null=True,blank=True,verbose_name= _("closing date"))
+    closing_date = models.DateField(default=date.today()+timedelta(days=30),blank=True,verbose_name= _("closing date"))
     admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
+
+    def closing_poll(self):
+        return self.closing_date >= date.today()
 
 
 class VotingPoll(Poll):
@@ -31,7 +35,7 @@ class VotingPoll(Poll):
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=False)
     option_modify=models.BooleanField(default=False)
-    
+
 
 class Candidate(models.Model):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
