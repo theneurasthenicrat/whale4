@@ -373,7 +373,7 @@ def vote(request, pk):
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
 
-    preference_model = preference_model_from_text(poll.preference_model)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
     initial = {}
     read = True
@@ -399,9 +399,9 @@ def vote(request, pk):
     form = VotingForm(candidates, preference_model,poll,read,initial=initial)
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model,poll,read,request.POST)
         if poll.option_ballots:
             del request.session["user"]
+        form = VotingForm(candidates, preference_model,poll,read,request.POST)
         if form.is_valid():
             data = form.cleaned_data
             voter.nickname = data['nickname']
@@ -422,7 +422,7 @@ def update_vote(request, pk, voter):
     candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
-    preference_model = preference_model_from_text(poll.preference_model)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     voter = WhaleUser.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     months = []
@@ -481,7 +481,7 @@ def view_poll(request, pk):
             poll_id=poll.id))
     cand = [ c.candidate for c in candidates if c.candidate]
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-    preference_model = preference_model_from_text(poll.preference_model)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     months = []
     days = []
     if poll.poll_type == 'Date':

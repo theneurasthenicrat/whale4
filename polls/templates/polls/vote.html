@@ -1,6 +1,7 @@
 {% extends "polls/base.html" %}
 {% load bootstrap3 %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 
     <div class="container-fluid col-lg-9">
@@ -8,7 +9,23 @@
             <h2> {% trans 'Vote for this Poll' %}</h2>
             <h3> {{ poll.title }}</h3>
         </div>
+{% if poll.preference_model == "Ranks#0" %}
+    <form action="" method="post">
+     <fieldset class="form-group">
+ <label for= 'nickname' >{% trans 'nickname' %}:</label>
+  <input type="text" class="form-control" name="nickname">
+</fieldset>
 
+
+<ol class="list-group" id="sortable">
+    {% for c in candidates %}
+  <li  class="list-group-item btn" id='{{ c}}'>{{ c}}</li>
+
+    {% endfor %}
+</ol>
+<button type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
+</form>
+    {% else %}
 
         <div class="form-login clearfix ">
             <form action="" method="post">
@@ -82,7 +99,8 @@
 
             </form>
         </div>
-
+  {% endif %}
     </div>
+     <script src="{% static 'polls/js/vote.js' %}" type="text/javascript"></script>
 
 {% endblock %}

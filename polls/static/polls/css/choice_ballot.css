@@ -141,6 +141,14 @@ fieldset[disabled] .btn-custom.active {
     margin-bottom: 30px;
 }
 
+.list-group {
+    list-style: decimal inside;
+}
+
+.list-group-item {
+    display: list-item;
+}
+
 .nav-pills-custom > li {
   float: left;
 }

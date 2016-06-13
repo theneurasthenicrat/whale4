@@ -22,8 +22,8 @@ class VotingPoll(Poll):
     PREFERENCE_MODELS = (
         ('PositiveNegative', _('Positive Negative scale (--, -, 0, +, ++)')),
         ('Approval', _('Approval Voting (Yes / No)')),
-        ('RankingTies', _('Ranking with ties')),
-        ('Ranking', _('Ranking (no ties)')),
+        ('Ranks#1', _('Ranking with ties')),
+        ('Ranks#0', _('Ranking (no ties)')),
         ('Numbers#0#10', _('Scores'))
         )
     POLL_TYPES = (
@@ -117,10 +117,10 @@ class PreferenceModel:
 
 
 class Ranking(PreferenceModel):
-    def __init__(self, nb_cand, ties_allowed = 0):
-        values = [range(nb_cand + 1)]
-        texts = [str(x) for x in values]
-        PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed else "NoTies"),texts,values)
+    def __init__(self, ties_allowed, nb_cand ):
+        values = [x for x in range(nb_cand+1,1,-1 )]
+        texts = [str(x) for x in range(1,nb_cand+1 )]
+        PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed == 1 else "NoTies"),texts,values)
 
 
 class Numbers(PreferenceModel):
@@ -134,12 +134,12 @@ positiveNegative=PreferenceModel("positiveNegative", ["--", "-", "0", "+", "++"]
 approval=PreferenceModel("approval", ["no", "yes"], [0, 1])
 
         
-def preference_model_from_text(desc):
+def preference_model_from_text(desc,len_cand):
     parts = desc.split('#')
     if parts[0] == "PositiveNegative":
         return positiveNegative
     if parts[0] == "Ranks":
-        return Ranking(int(parts[1]), int(parts[2]))
+        return Ranking(int(parts[1]), len_cand)
     if parts[0] == "Numbers":
         return Numbers(int(parts[1]), int(parts[2]))
     if parts[0] == "Approval":

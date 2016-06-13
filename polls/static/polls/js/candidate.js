@@ -7,8 +7,6 @@
     $('.delete').click( function(){ 
        $(this).remove(); 
    });
-
-
-
+     
 
 });
