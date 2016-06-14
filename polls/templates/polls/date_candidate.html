@@ -3,7 +3,7 @@
 {% load static %}
 {% block content %}
     {% load bootstrap3 %}
-    <div class="container-fluid col-lg-9">
+    <div class="container">
         <div class="well">
               <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
             <h3>{% trans '2.Add candidates to poll' %}</h3>
@@ -14,7 +14,7 @@
             <h4>{% trans 'List of current candidates' %}</h4>
 
 
-                <ol class="list-group">
+                <ul class="list-group">
                     {% for c in candidates %}
                         <li class="list-group-item">
 
@@ -42,7 +42,7 @@
 
                         </li>
                     {% endfor %}
-                </ol>
+                </ul>
 
 
 

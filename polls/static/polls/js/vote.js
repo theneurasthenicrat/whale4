@@ -3,7 +3,8 @@
              var LI_POSITION = 'li_position';
 
     $( "#sortable" ).sortable({
-
+          handle: 'button',
+        cancel: '',
             update: function(event, ui) {
 
               var order = [];

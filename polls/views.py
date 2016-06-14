@@ -14,7 +14,7 @@ from collections import Counter
 
 from accounts.models import WhaleUser,WhaleUserAnomymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
-    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm
+    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -95,19 +95,19 @@ def voters_undefined(poll):
 
 
 def bad_request(request):
-    return render(request,'polls/400.html',status=400)
+    return render(request,'polls/error.html',status=400)
 
 
 def permission_denied(request):
-    return render(request,'polls/403.html',status=403)
+    return render(request,'polls/error.html',status=403)
 
 
 def page_not_found(request):
-    return render(request,'polls/404.html',status=404)
+    return render(request,'polls/error.html',status=404)
 
 
 def server_error(request):
-    return render(request,'polls/500.html',status=500)
+    return render(request,'polls/error.html',status=500)
 
 
 def home(request):
@@ -396,18 +396,19 @@ def vote(request, pk):
         messages.info(request, _('you have already vote , now you can update your vote'))
         return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter': request.user.id}))
 
-    form = VotingForm(candidates, preference_model,poll,read,initial=initial)
+    form = VotingForm(candidates, preference_model,poll,initial=initial)
+    form1= NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
         if poll.option_ballots:
             del request.session["user"]
-        form = VotingForm(candidates, preference_model,poll,read,request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            voter.nickname = data['nickname']
+        form = VotingForm(candidates, preference_model,poll,request.POST)
+        form1 = NickNameForm(read, request.POST)
+        if form.is_valid() and form1.is_valid():
+            voter.nickname = form1.cleaned_data['nickname']
             voter.save()
             for c in candidates:
-                VotingScore.objects.create(candidate=c, voter=voter, value=data['value' + str(c.id)])
+                VotingScore.objects.create(candidate=c, voter=voter, value=form.cleaned_data['value' + str(c.id)])
             messages.success(request, _('Your vote has been added to the poll, thank you!'))
 
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
@@ -428,10 +429,8 @@ def update_vote(request, pk, voter):
     months = []
     days = []
     initial = dict()
-    initial['nickname'] = voter.nickname
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
-
     read = True
     if not poll.option_ballots and not request.user.is_authenticated():
         read = False
@@ -439,15 +438,17 @@ def update_vote(request, pk, voter):
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
 
-    form = VotingForm(candidates, preference_model,poll,read, initial=initial)
+    form = VotingForm(candidates, preference_model,poll, initial=initial)
+    form1 = NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model,poll,read, request.POST)
+        form = VotingForm(candidates, preference_model,poll, request.POST)
+        form1 = NickNameForm(read, request.POST)
         if poll.option_ballots:
             del request.session["user"]
-        if form.is_valid():
+        if form.is_valid() and form1.is_valid():
             data = form.cleaned_data
-            voter.nickname = data['nickname']
+            voter.nickname = form1.cleaned_data['nickname']
             voter.save()
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]

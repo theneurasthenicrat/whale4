@@ -3,7 +3,7 @@
 {% block content %}
     {% csrf_token %}
 
-    <div class="container-fluid col-lg-9">
+<div class="container">
         <div class="well">
             <h2> {{ poll.title }}</h2>
             <p> {{ poll.description }}</p>
@@ -13,7 +13,7 @@
  <div class=" pull-right ">
  <a href="{% url 'admin' poll.id %}" class="btn btn-default btn-lg  "><span class="icon icon-settings"></span></a>
  </div>
- <div class="table-responsive ">
+<div class="table-responsive">
     <table class="table table-bordered ">
         <thead>
         {% if poll.poll_type == "Date" %}
@@ -56,8 +56,8 @@
         {% endif %}
         </thead>
         {% if poll.option_ballots and closing_poll%}
-             </table>
-            </div>
+
+
             <div style="margin-bottom: 30px;"><i>{% trans 'The (anonymized) ballots will only be visible when the poll will be closed.' %}</i></div>
              {% else %}
         {% if votes %}
@@ -98,12 +98,13 @@
                 </tr>
             {% endfor %}
             </tbody>
-            </table>
+
         {% else %}
-            </table>
-            </div>
+
             <div style="margin-bottom: 30px;"><i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i></div>
         {% endif %}
+              </table>
+            </div>
   {% endif %}
 </div>
 </div>

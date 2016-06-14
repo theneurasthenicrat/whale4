@@ -141,11 +141,11 @@ fieldset[disabled] .btn-custom.active {
     margin-bottom: 30px;
 }
 
-.list-group {
+#sortab .list-group {
     list-style: decimal inside;
 }
 
-.list-group-item {
+#sortab .list-group-item {
     display: list-item;
 }
 

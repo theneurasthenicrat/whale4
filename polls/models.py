@@ -68,7 +68,7 @@ class VotingScore(models.Model):
 
 #  preference models ########################################################
 UNDEFINED_VALUE=-222222222
-UNDEFINED_TEXT="I don't know"
+UNDEFINED_TEXT="?"
 
 class PreferenceModel:
    

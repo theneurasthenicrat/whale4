@@ -67,13 +67,24 @@ class BaseCandidateFormSet(BaseInlineFormSet):
             form.fields['DELETE'] = forms.BooleanField(required=False,label='x')
 
 
-class VotingForm(forms.Form):
-    def __init__(self, candidates, preference_model,poll,read, *args, **kwargs):
-        super(VotingForm, self).__init__(*args, **kwargs)
-        self.candidates = candidates
-        self.fields['nickname'] = forms.CharField(max_length=250, required=True, label='Nickname')
+class ButtonInput(widgets.TextInput):
+    input_type = 'button'
+
+
+class NickNameForm(Form):
+    def __init__(self, read, *args, **kwargs):
+        super(NickNameForm, self).__init__(*args, **kwargs)
+
+        self.fields['nickname'] = forms.CharField(max_length=250)
         if read:
             self.fields['nickname'].widget.attrs['readonly'] = True
+
+
+class VotingForm(forms.Form):
+    def __init__(self, candidates, preference_model,poll, *args, **kwargs):
+        super(VotingForm, self).__init__(*args, **kwargs)
+        self.candidates = candidates
+
         if poll.preference_model != "Ranks#0":
             for c in candidates:
                 self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
@@ -81,11 +92,8 @@ class VotingForm(forms.Form):
                                                                      initial=preference_model.last(),
                                                                      required=True, label=c.candidate)
         else:
-            self.fields['positions'] = forms.CharField(max_length=250,widget=forms.HiddenInput,required=False)
-
-    def clean_positions(self):
-        c = self.cleaned_data["positions"].split(';')
-        return c
+            for c in candidates:
+                self.fields['value' + str(c.id)] = forms.CharField()
 
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
