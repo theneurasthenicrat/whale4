@@ -11,6 +11,7 @@ import json, csv
 from django.http import HttpResponse
 from operator import itemgetter
 from collections import Counter
+from django.core.mail import send_mail,EmailMessage
 
 from accounts.models import WhaleUser,WhaleUserAnomymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
@@ -309,10 +310,8 @@ def success(request, pk):
     inviters = WhaleUserAnomymous.objects.filter(poll=poll.id)
     inv=[]
     for v in inviters:
-        x={}
-        x['certificat']=WhaleUserAnomymous.decodeAES(v.certificate)
-        x['email2'] =WhaleUserAnomymous.decodeAES(v.email2)
-        inv.append(x)
+        inv.append(WhaleUserAnomymous.decodeAES(v.email2))
+
     if poll.option_ballots:
        inviteformset = formset_factory(InviteForm, extra=1)
        if request.method == 'POST':
@@ -320,12 +319,21 @@ def success(request, pk):
            if formset.is_valid():
                for form in formset:
 
-                   email2=form.cleaned_data.get('email2',None)
-
-                   inviter= WhaleUserAnomymous.objects.create_user(
+                   email2 =form.cleaned_data.get('email2',None)
+                   certi = WhaleUserAnomymous.id_generator()
+                   inviter = WhaleUserAnomymous.objects.create_user(
                        email=WhaleUser.email_generator(),nickname=WhaleUserAnomymous.nickname_generator(poll.id) ,password=WhaleUser.password_generator(),email2=WhaleUserAnomymous.encodeAES(email2),
-                       certificate=WhaleUserAnomymous.encodeAES(WhaleUserAnomymous.id_generator()),poll=poll
+                       certificate=WhaleUserAnomymous.encodeAES(certi),poll=poll
                   )
+                   subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email2
+                   html_content = '<p> Hello, you are invite to secret poll.</p> ' \
+                                  '<p>This is the certificate of vote <Strong>: '+ str(certi)\
+                                  + '<Strong></p><p>You can vote at the following link' \
+                                   '<a href="http://localhost:8000/polls/vote/' \
+                                  + str(poll.id)+'"> click here for vote</a></p>'
+                   msg = EmailMessage(subject, html_content, from_email, [to])
+                   msg.content_subtype = "html"
+                   msg.send()
 
            messages.success(request, _('Inviters successfully added!'))
            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))

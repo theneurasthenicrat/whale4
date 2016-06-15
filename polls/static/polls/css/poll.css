@@ -33,7 +33,15 @@ table.table-bordered{
 	border: 2px solid #1344b7;
 }
 
-
+.type{
+    margin-left: 100px;
+}
+.choice a{
+    margin-bottom: 10px;
+}
+.choice a p,h4{
+    text-align: center;
+}
 .container-custom {
     padding: 25px;
     position: fixed;
@@ -46,7 +54,7 @@ table.table-bordered{
     box-shadow:0 1px 0 #cfcfcf;
 }
 
-h4 {
+.form-login h4 {
  border:0 solid #fff;
  border-bottom-width:1px;
  padding-bottom:10px;

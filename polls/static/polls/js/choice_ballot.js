@@ -2,10 +2,10 @@
 $(document).ready(function() {
 
 
-    $("#type").hide();
+    $(".type").hide();
 
     $("#open").click(function(){
-        $("#type").toggle();
+        $(".type").toggle();
 
     });
 

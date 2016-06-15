@@ -18,7 +18,7 @@
                         {% for v in inv %}
                             <li class="list-group-item">
 
-                                {{ v.email2 }},{{ v.certificat }}
+                                {{ v}}
                                 <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
                                 <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
                                     <div class="modal-dialog modal-sm">
@@ -28,7 +28,7 @@
                                                 <h4 class="modal-title">{% trans 'Delete ' %}{{ c }}</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.' %}</p>
+                                                <p> {% trans 'If you really want to delete this inviter' %} <strong>{{ c }}</strong>,{% trans ' click submit.' %}</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
