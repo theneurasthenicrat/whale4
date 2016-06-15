@@ -8,7 +8,7 @@ h3{
     color: #292427;
 }
 
-body { padding-top: 100px; }
+body { padding-top: 70px; }
 
 
 td:nth-child(1).border {
@@ -41,7 +41,6 @@ table.table-bordered{
 
 .form-login {
     background-color: #EDEDED;
-  
     border: 5px #d2d2d2;
     padding: 2%;
     box-shadow:0 1px 0 #cfcfcf;
@@ -110,8 +109,16 @@ fieldset[disabled] .btn-custom.active {
   background-color:  #326db7;
 }
 
+.dropdown-header-custom {
+  display: block;
+  padding: 3px 20px;
+  font-size: 12px;
+  line-height: 1.42857143;
+  color: #2037b7;
+  white-space: nowrap;
+}
 
-.bouton4 {
+.flag_fr {
     background-image:url("../images/french.png") ;
     width: 30px;
     background-size: 30px 20px;
@@ -119,11 +126,11 @@ fieldset[disabled] .btn-custom.active {
     background-repeat: no-repeat;
     height: 20px;
     border: 1px solid  #326db7;
-margin-top:15px;
+    margin-top:15px;
 
 }
 
-.bouton5 {
+.flag_en {
     background-image:url("../images/english.png") ;
     background-size: 30px 20px;
     background-repeat: no-repeat;
@@ -189,24 +196,24 @@ margin-top:15px;
   color: #1515e3;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu {
-  background-color: #326db7;
+  background-color: #ffffff;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a {
-  color: #ffffff;
+  color: #2037b7;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a:hover,
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a:focus {
-  color: #ffffff;
-  background-color: #326db7;
+  color: #2037b7;
+  background-color: #ffffff;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > .divider {
-  background-color: #326db7;
+  background-color: #2037b7;
 }
 .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
 .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
 .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
-  color: #ffffff;
-  background-color: #030b94;
+  color: #f3faff;
+  background-color: #2037b7;
 }
 .navbar-custom .navbar-nav > .active > a,
 .navbar-custom .navbar-nav > .active > a:hover,
@@ -243,17 +250,17 @@ margin-top:15px;
 
 @media (max-width: 767px) {
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
-    color: #326db7;
+    color: #2037b7;
   }
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #1515e3;
+    color: #ffffff;
   }
   .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #326db7;
-    background-color: #ffffff;
+    color: #ffffff;
+    background-color: #2037b7;
   }
 }
 

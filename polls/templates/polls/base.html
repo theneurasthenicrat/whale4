@@ -20,7 +20,7 @@
     <link href="{% static 'polls/css/preferences.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/bootstrap-datepicker3.standalone.min.css' %}" rel="stylesheet">
     <link  href="{% static 'polls/css/themes_smoothness_jquery-ui.css' %}" rel="stylesheet">
-    <link  href="{% static 'polls/css/choice_ballot.css' %}" rel="stylesheet">
+    <link href="{% static 'polls/css/poll.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/responsive-tables.css' %}" rel="stylesheet" >
 
     <!-- javascript -->
@@ -64,7 +64,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" > {% bootstrap_icon "user" %}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                     {% if user.is_authenticated %}
-                        <li class="dropdown-header">{% trans "Signed in as" %} {{ user.nickname }}</li>
+                        <li class="dropdown-header-custom">{% trans "Signed in as" %} {{ user.nickname }}</li>
                         <li><a href="{% url 'accountPoll' user.id %}" > {% bootstrap_icon "user" %}{% trans " Your profile" %}</a></li>
                         <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
                     {% else %}
@@ -73,8 +73,8 @@
                     {% endif %}
 
  </ul>
-               <li> <button type="submit" class=" bouton4 " form="fr"></button></li>
-               <li> <button type="submit" class=" bouton5 " form="en"></button></li>
+               <li> <button type="submit" class=" flag_fr " form="fr"></button></li>
+               <li> <button type="submit" class=" flag_en " form="en"></button></li>
 
                 <form action="{% url 'set_language' %}" method="post" class=" navbar-form" id="fr">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ redirect_to }}" />

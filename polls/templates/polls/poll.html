@@ -55,11 +55,7 @@
         </tr>
         {% endif %}
         </thead>
-        {% if poll.option_ballots and closing_poll%}
 
-
-            <div style="margin-bottom: 30px;"><i>{% trans 'The (anonymized) ballots will only be visible when the poll will be closed.' %}</i></div>
-             {% else %}
         {% if votes %}
             <tbody>
             {% for v in votes %}
@@ -92,9 +88,13 @@
                     <th>
                         {{ v.nickname }}
                     </th>
+                {% if poll.option_ballots and  closing_poll%}
+
+                {% else %}
                     {% for s in v.scores %}
                         <td class="{{ s.class }}">{{ s.text }}</td>
                     {% endfor %}
+                {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
@@ -105,7 +105,7 @@
         {% endif %}
               </table>
             </div>
-  {% endif %}
+
 </div>
 </div>
 

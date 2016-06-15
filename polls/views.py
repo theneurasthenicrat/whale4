@@ -38,7 +38,7 @@ def with_voter_rights(fn):
         user = get_object_or_404(WhaleUser, id=voter)
 
         if (request.user is not None and request.user.id == user.id) or ("user_id" in request.session and request.session["user_id"]==user.id) \
-            or poll.option_ballots:
+            or ("user" in request.session and request.session["user"]==user.id):
             return fn(request, pk, voter)
         else:
             messages.error(request, _('This is not your vote'))
@@ -375,12 +375,12 @@ def vote(request, pk):
 
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
-    initial = {}
+
     read = True
     if not poll.option_ballots:
         if request.user.is_authenticated():
             voter=request.user
-            initial = {'nickname': request.user.nickname}
+
         else:
             read=False
             voter = WhaleUser.objects.create_user(email=WhaleUser.email_generator(),nickname='',
@@ -389,14 +389,13 @@ def vote(request, pk):
     else:
         user_id = request.session["user"]
         voter = get_object_or_404(WhaleUserAnomymous, id= user_id)
-        initial = {'nickname': voter.nickname}
 
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     if votes:
         messages.info(request, _('you have already vote , now you can update your vote'))
-        return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter': request.user.id}))
+        return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter': voter.id}))
 
-    form = VotingForm(candidates, preference_model,poll,initial=initial)
+    form = VotingForm(candidates, preference_model,poll)
     form1= NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
@@ -410,14 +409,16 @@ def vote(request, pk):
             for c in candidates:
                 VotingScore.objects.create(candidate=c, voter=voter, value=form.cleaned_data['value' + str(c.id)])
             messages.success(request, _('Your vote has been added to the poll, thank you!'))
-
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+            if poll.option_ballots:
+                return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
+            else:
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
     return render(request, 'polls/vote.html', locals())
 
 
-@with_voter_rights
 @certificate_required
+@with_voter_rights
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     candidates = (
@@ -454,13 +455,16 @@ def update_vote(request, pk, voter):
                 v.value = data['value' + str(v.candidate.id)]
                 v.save()
             messages.success(request, _('Your vote has been updated, thank you!'))
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+            if poll.option_ballots:
+                return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
+            else:
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
     return render(request, 'polls/vote.html',locals())
 
 
-@with_voter_rights
 @certificate_required
+@with_voter_rights
 def delete_vote(request, pk, voter):
 
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -470,7 +474,31 @@ def delete_vote(request, pk, voter):
     if poll.option_ballots:
         del request.session["user"]
     messages.success(request, _('Your vote has been deleted!'))
-    return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+    if poll.option_ballots:
+        return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
+    else:
+        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+
+
+def view_poll_secret(request, pk ,voter):
+
+    poll = get_object_or_404(VotingPoll, id=pk)
+    voter = get_object_or_404(WhaleUser, id=voter)
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id).order_by('candidate')
+    candidates = Candidate.objects.filter(poll_id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
+    tab = []
+    for v in votes:
+        score = v.value
+        tab.append({
+            'value': score,
+            'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
+                                                          1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
+            'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
+
+        })
+
+    return render(request, 'polls/secret_view.html',locals() )
 
 
 def view_poll(request, pk):
