@@ -119,6 +119,7 @@ fieldset[disabled] .btn-custom.active {
     background-repeat: no-repeat;
     height: 20px;
     border: 1px solid  #326db7;
+margin-top:15px;
 
 }
 
@@ -130,6 +131,7 @@ fieldset[disabled] .btn-custom.active {
     width: 30px;
     height: 20px;
     border: 1px solid  #326db7;
+    margin-top:15px;
 
 }
 

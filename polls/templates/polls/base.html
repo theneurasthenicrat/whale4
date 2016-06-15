@@ -57,30 +57,35 @@
                             <li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE" target="_blank">{% trans ' Code license'  %}</a></li>
                         </ul>
                     </li>
-                    <li><a href="{% url 'contact' %}">{% trans 'Contact us '%}</a></li>
+                    <li><a href="{% url 'contact' %}">{% trans 'Contact us'%}</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+<ul class=" nav navbar-nav navbar-right">
+    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" > {% bootstrap_icon "user" %}<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'accountPoll' user.id %}" >  {{ user.nickname }}{% trans "'s account " %}</a></li>
+                        <li class="dropdown-header">{% trans "Signed in as" %} {{ user.nickname }}</li>
+                        <li><a href="{% url 'accountPoll' user.id %}" > {% bootstrap_icon "user" %}{% trans " Your profile" %}</a></li>
                         <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
                     {% else %}
                         <li><a href="{% url 'register' %}" >{% bootstrap_icon "user" %} {% trans 'Sign up' %}</a></li>
                         <li ><a href="{% url 'login' %}">{% bootstrap_icon "log-in" %}  {% trans 'Log in' %}</a></li>
-
                     {% endif %}
 
-             <form action="{% url 'set_language' %}" method="post" class="navbar-form navbar-right">{% csrf_token %}
-                        <input name="next" type="hidden" value="{{ redirect_to }}" />
-                        <input name="language" type="hidden" value="fr" />
-                        <button type="submit" class=" bouton4 "></button>
+ </ul>
+               <li> <button type="submit" class=" bouton4 " form="fr"></button></li>
+               <li> <button type="submit" class=" bouton5 " form="en"></button></li>
 
-                    </form>
-                    <form action="{% url 'set_language' %}" method="post" class="navbar-form navbar-right">{% csrf_token %}
-                        <input name="next" type="hidden" value="{{ redirect_to }}" />
-                        <input name="language" type="hidden" value="en" />
-                        <button type="submit" class=" bouton5 "></button>
-                    </form>
+                <form action="{% url 'set_language' %}" method="post" class=" navbar-form" id="fr">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="fr" />
+                </form>
+                <form action="{% url 'set_language' %}" method="post" class="navbar-form" id="en">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="en" />
+                </form>
 </ul>
+
             </div>
         </div>
     </nav>
