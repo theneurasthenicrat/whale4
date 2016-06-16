@@ -572,14 +572,13 @@ def view_poll(request, pk):
     elif "format" in request.GET and request.GET['format'] == 'preflib':
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-        writer = csv.writer(response)
-        writer.writerow([len(candidates)])
+        response.write(str(len(candidates)) + '\n')
         dict_candidates=dict()
         for i, c in enumerate(candidates):
             dict_candidates[str(c)]=i+1
-            writer.writerow([i + 1, str(c)])
+            response.write('{n},{l}\n'.format(n=i + 1, l=str(c)))
         len_votes = len(votes)
-        writer.writerow([len_votes, len_votes,len_votes])
+        response.write('{a},{b},{c}\n'.format(a=len_votes, b=len_votes, c= len_votes))
 
         for i,score in enumerate(scores):
             values = zip(candidates, score)
@@ -599,7 +598,8 @@ def view_poll(request, pk):
                     x=set([dict_candidates[str(c)] for c in candidate_score[0][j:j+counter] ])
                     row_voter.append(x)
                     j += counter
-            writer.writerow([i+1]+row_voter)
+            response.write(','.join([str(x) for x in ([i+1]+row_voter)]))
+            response.write('\n')
         return response
     else:
         return render(request, 'polls/poll.html',locals() )
