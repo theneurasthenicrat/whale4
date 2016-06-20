@@ -42,10 +42,27 @@ table.table-bordered{
 .choice a p,h4{
     text-align: center;
 }
+
+#list_init li{
+     margin-bottom: 10px;
+    text-align: center;
+}
+
+
+#sortable .list-group-item {
+     list-style: decimal inside;
+    display: list-item;
+     margin-bottom: 10px;
+     text-align: center;
+}
+
 .container-custom {
     padding: 25px;
     position: fixed;
 }
+
+
+
 
 .form-login {
     background-color: #EDEDED;
@@ -158,13 +175,7 @@ fieldset[disabled] .btn-custom.active {
     margin-bottom: 30px;
 }
 
-#sortab .list-group {
-    list-style: decimal inside;
-}
 
-#sortab .list-group-item {
-    display: list-item;
-}
 
 .nav-pills-custom > li {
   float: left;

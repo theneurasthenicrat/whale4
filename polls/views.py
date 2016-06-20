@@ -404,6 +404,7 @@ def vote(request, pk):
         return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter': voter.id}))
 
     form = VotingForm(candidates, preference_model,poll)
+
     form1= NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
@@ -411,6 +412,7 @@ def vote(request, pk):
             del request.session["user"]
         form = VotingForm(candidates, preference_model,poll,request.POST)
         form1 = NickNameForm(read, request.POST)
+        print(form)
         if form.is_valid() and form1.is_valid():
             voter.nickname = form1.cleaned_data['nickname']
             voter.save()
