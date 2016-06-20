@@ -1,10 +1,21 @@
 
  $(function() {
 $('ol#sortable li').hide();
+     $('#submit').addClass("disabled");
 });
+
+
 
  var worst = 1;
  var nbCandidates =$("#sortable").children().length;
+
+ function valid() {
+    if (worst!=nbCandidates+1) {
+         $('#submit').addClass("disabled");
+  }
+    $('#submit').removeClass("disabled");
+}
+
  function rank(n) {
      var unsortedItem=$('#' + n );
      var sortedItem=$('#sorted' + worst);
@@ -15,6 +26,7 @@ $('ol#sortable li').hide();
      valueItem.val( nbCandidates-worst+1);
      sortedItem.show();
      worst++;
+     valid();
 }
 
 
@@ -40,6 +52,8 @@ function unrank(n) {
     sortedItem.attr('title','');
     sortedItem.hide();
     worst--;
+    valid();
 }
+
 
 

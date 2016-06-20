@@ -48,6 +48,13 @@ table.table-bordered{
     text-align: center;
 }
 
+#init{
+border-right: dotted;
+
+}
+
+
+
 
 #sortable .list-group-item {
      list-style: decimal inside;

@@ -4,118 +4,125 @@
 {% load static %}
 {% block content %}
 
-<div class="container">
-    <div class="well">
-        <h2> {% trans 'Vote for this Poll' %}</h2>
-        <h3> {{ poll.title }}</h3>
-    </div>
-    {% if poll.preference_model == "Ranks#0" %}
-        <form action="" method="post">
-            {% csrf_token %}
+    <div class="container">
+        <div class="well">
+            <h2> {% trans 'Vote for this Poll' %}</h2>
+            <h3> {{ poll.title }}</h3>
+        </div>
+        {% if poll.preference_model == "Ranks#0" %}
+            <div class="thumbnail clearfix ">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class=" well-lg clearfix">
+                        <div class=" col-lg-6">
+                            {% bootstrap_form form1 %}
+                        </div>
+                    </div>
 
 
-            {% bootstrap_form form1 %}
-
-            <p>{% blocktrans %} Click on the names of the unsorted candidates (left frame) to rank them (right frame).
-                You can put back a sorted candidate (right) to the pool of unsorted candidates (left) by clicking on it.{% endblocktrans %}</p>
-            <div style="overflow:hidden;">
-                <div class="col-lg-6" id="init">
-                    <h2>{% trans 'Unsorted candidates' %}</h2>
-                    <ul id="list_init" class="list-group">
-                        {% for c in candidates %}
-                            <li class="list-group-item" id="{{ c.id}}" title="{{ c}}" onclick="rank(this.id)">{{ c}}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-lg-6" id="res">
-                    <h2>{% trans 'Sorted candidates' %}</h2>
-                    <ol id="sortable" class="list-group">
-                        {% for c in candidates %}
-                            <li class="list-group-item" id="sorted{{ forloop.counter }}" title="" onclick="unrank(this.id)"></li>
-                        {% endfor %}
-                    </ol>
-                </div>
+                    <div class=" well-lg clearfix">
+                        <div class="col-lg-6" id="init">
+                            <p class="bg-info help-block well-sm">{% blocktrans %} Click on the names of the unsorted candidates <span class="label label-default">left frame</span>
+                                to rank them <span class="label label-default">right frame</span> .{% endblocktrans %}</p>
+                            <h3>{% trans 'Unsorted candidates' %}</h3>
+                            <ul id="list_init" class="list-group">
+                                {% for c in candidates %}
+                                    <li class="list-group-item" id="{{ c.id}}" title="{{ c}}" onclick="rank(this.id)">{{ c}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-lg-6" id="res">
+                            <p class="bg-info help-block well-sm">{% blocktrans %} You can put back a sorted candidate <span class="label label-default">right</span>
+                                to the pool of unsorted candidates <span class="label label-default">left</span>  by clicking on it.{% endblocktrans %}</p>
+                            <h3>{% trans 'Sorted candidates' %}</h3>
+                            <ol id="sortable" class="list-group">
+                                {% for c in candidates %}
+                                    <li class="list-group-item" id="sorted{{ forloop.counter }}" title="" onclick="unrank(this.id)"></li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    {{ form }}
+                    <button id="submit" type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
+                </form>
             </div>
-            {{ form }}
-            <button type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
 
-        </form>
+        {% else %}
 
-    {% else %}
+            <div class="form-login clearfix ">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form_errors form %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered responsive"  >
+                            <thead >
+                            {% if poll.poll_type == "Date" %}
+                                <tr>
+                                    <td  class="border" colspan="1" ></td>
+                                    {% for m in months %}
+                                        <th colspan="{{ m.value }}">
+                                            {{ m.label }}
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td class="border" colspan="1" ></td>
+                                    {% for d in days %}
+                                        <th colspan="{{ d.value }}">
+                                            {{ d.label }}
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                                {% if  cand %}
+                                    <tr>
+                                        <td class="border" colspan="1" ></td>
+                                        {% for c in candidates %}
 
-        <div class="form-login clearfix ">
-            <form action="" method="post">
-                {% csrf_token %}
-                {% bootstrap_form_errors form %}
-                <div class="table-responsive">
-                    <table class="table table-bordered responsive"  >
-                        <thead >
-                        {% if poll.poll_type == "Date" %}
-                            <tr>
-                                <td  class="border" colspan="1" ></td>
-                                {% for m in months %}
-                                    <th colspan="{{ m.value }}">
-                                        {{ m.label }}
-                                    </th>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                <td class="border" colspan="1" ></td>
-                                {% for d in days %}
-                                    <th colspan="{{ d.value }}">
-                                        {{ d.label }}
-                                    </th>
-                                {% endfor %}
-                            </tr>
-                            {% if  cand %}
+                                            <th>
+                                                {{ c.candidate }}
+                                            </th>
+
+                                        {% endfor %}
+                                    </tr>
+                                {% endif %}
+                            {% else %}
                                 <tr>
                                     <td class="border" colspan="1" ></td>
                                     {% for c in candidates %}
-
                                         <th>
                                             {{ c.candidate }}
                                         </th>
-
                                     {% endfor %}
                                 </tr>
                             {% endif %}
-                        {% else %}
+                            </thead>
+                            <tbody>
                             <tr>
-                                <td class="border" colspan="1" ></td>
-                                {% for c in candidates %}
-                                    <th>
-                                        {{ c.candidate }}
-                                    </th>
+                                <td class="border text-right" >
+
+                                    <div class="form-inline">
+                                        {% bootstrap_form form1 %}
+                                    </div>
+                                </td>
+                                {% for field in form %}
+
+                                    <td >
+                                        {% bootstrap_field field show_label=False %}
+                                    </td>
                                 {% endfor %}
                             </tr>
-                        {% endif %}
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="border text-right" >
 
-                                <div class="form-inline">
-                            {% bootstrap_form form1 %}
-                                    </div>
-                            </td>
-                            {% for field in form %}
+                            </tbody>
 
-                                <td >
-                                    {% bootstrap_field field show_label=False %}
-                                </td>
-                            {% endfor %}
-                        </tr>
+                        </table>
+                    </div>
+                    <button type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
 
-                        </tbody>
-
-                    </table>
-</div>
-                <button type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
-
-            </form>
-        </div>
-    {% endif %}
-</div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
     <script src="{% static 'polls/js/vote.js' %}" type="text/javascript"></script>
 
 {% endblock %}

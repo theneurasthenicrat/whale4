@@ -89,7 +89,7 @@ class VotingForm(forms.Form):
                                                                       label=c.candidate)
         else:
             for c in candidates:
-                self.fields['value' + str(c.id)] = forms.CharField(widget=forms.HiddenInput)
+                self.fields['value' + str(c.id)] = forms.CharField(widget=forms.HiddenInput, error_messages={'required':'you must order all candidates'})
 
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
@@ -97,6 +97,7 @@ class VotingForm(forms.Form):
             if cleaned_data.get('value' + str(c.id)) != str(UNDEFINED_VALUE):
                 return
         raise forms.ValidationError("You must give a score to at least one candidate!")
+
 
 
 class InviteForm(forms.Form):
