@@ -12,19 +12,31 @@
     {% if poll.preference_model == "Ranks#0" %}
         <form action="" method="post">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <label for= 'nickname' >{% trans 'nickname' %}:</label>
-                <input type="text" class="form-control" name="nickname">
-            </fieldset>
+            {% bootstrap_form form1 %}
 
-
-            <ul class=" list-unstyled" id="sortable">
-                {% for c in candidates %}
-                    <li id='{{ c}}'><button class="btn-block" name="value"+str(c.id) value=" {{ c}}" >{{ c}}</button></li>
-                {% endfor %}
-            </ul>
+            <p>Click on the names of the unsorted candidates (left frame) to rank them (right frame). You can put back a sorted candidate (right) to the pool of unsorted candidates (left) by clicking on it.</p>
+            <div style="overflow:hidden;">
+                <div id="init">
+                    <h2>Unsorted candidates</h2>
+                    <ul id="list_init" class="list-group">
+                        {% for c in candidates %}
+                            <li class="list-group-item" id="{{ c}}" title="{{ c}}" onclick="rank(this.title)">{{ c}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="res">
+                    <h2>Sorted candidates</h2>
+                    <ul id="sortable" class="list-group">
+                        {% for c in candidates %}
+                            <li class="list-group-item" id="sorted{{ forloop.counter }}" title="" onclick="unrank(this.id)"></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {{ form }}
             <button type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
         </form>
+
     {% else %}
 
         <div class="form-login clearfix ">

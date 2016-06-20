@@ -67,10 +67,6 @@ class BaseCandidateFormSet(BaseInlineFormSet):
             form.fields['DELETE'] = forms.BooleanField(required=False,label='x')
 
 
-class ButtonInput(widgets.TextInput):
-    input_type = 'button'
-
-
 class NickNameForm(Form):
     def __init__(self, read, *args, **kwargs):
         super(NickNameForm, self).__init__(*args, **kwargs)
@@ -90,10 +86,10 @@ class VotingForm(forms.Form):
                 self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
                                                                      choices=preference_model.zip_preference() if not poll.option_choice else preference_model.zip_preference_option(),
                                                                      initial=preference_model.last(),
-                                                                     required=True, label=c.candidate)
+                                                                      label=c.candidate)
         else:
             for c in candidates:
-                self.fields['value' + str(c.id)] = forms.CharField()
+                self.fields['value' + str(c.id)] = forms.CharField(widget=forms.HiddenInput)
 
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
