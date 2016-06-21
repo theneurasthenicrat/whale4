@@ -85,7 +85,7 @@ class VotingForm(forms.Form):
             for c in candidates:
                 self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
                                                                      choices=preference_model.zip_preference() if not poll.option_choice else preference_model.zip_preference_option(),
-                                                                     initial=preference_model.last(),
+                                                                     initial=preference_model.first() if not poll.option_choice else preference_model.first_option() ,
                                                                       label=c.candidate)
         else:
             for c in candidates:

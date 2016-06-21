@@ -89,6 +89,12 @@ class PreferenceModel:
     def last(self):
         return self.values[-1]
 
+    def first(self):
+        return self.values[0]
+
+    def first_option(self):
+        return self.values[1]
+
     def nb_values(self): 
         return len(self.values)
 

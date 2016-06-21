@@ -201,7 +201,7 @@ def candidate_create(request, pk):
     candidateformset = inlineformset_factory(VotingPoll, Candidate, form=CandidateForm,
                                              formset=BaseCandidateFormSet, extra=1, can_delete=False)
     formset = candidateformset(prefix='form')
-
+    print(formset)
     if request.method == 'POST':
         formset = candidateformset(request.POST, instance=poll, prefix='form')
         if formset.is_valid():

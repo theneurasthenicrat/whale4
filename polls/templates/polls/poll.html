@@ -1,5 +1,6 @@
 {% extends "polls/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block content %}
     {% csrf_token %}
 
@@ -10,7 +11,7 @@
         </div>
 
  <div class="form-login clearfix  ">
- <div class=" pull-right ">
+<div class=" pull-right ">
  <a href="{% url 'admin' poll.id %}" class="btn btn-default btn-lg  "><span class="icon icon-settings"></span></a>
  </div>
 <div class="table-responsive">
@@ -107,6 +108,12 @@
             </div>
 
 </div>
+ <div class="well clearfix margin2 ">
+
+<a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 ">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
+
 </div>
+</div>
+
 
 {% endblock %}
