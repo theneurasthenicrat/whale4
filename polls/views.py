@@ -12,8 +12,10 @@ from django.http import HttpResponse
 from operator import itemgetter
 from collections import Counter
 from django.core.mail import send_mail,EmailMessage
+from django.template.loader import get_template
+from django.template import Context
 
-from accounts.models import WhaleUser,WhaleUserAnomymous
+from accounts.models import WhaleUser,WhaleUserAnonymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
     OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
@@ -306,12 +308,7 @@ def option(request, pk):
 @with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-
-    inviters = WhaleUserAnomymous.objects.filter(poll=poll.id)
-    inv=[]
-    for v in inviters:
-        inv.append(WhaleUserAnomymous.decodeAES(v.email2))
-
+    inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
     if poll.option_ballots:
        inviteformset = formset_factory(InviteForm, extra=1)
        if request.method == 'POST':
@@ -320,17 +317,16 @@ def success(request, pk):
                for form in formset:
 
                    email2 =form.cleaned_data.get('email2',None)
-                   certi = WhaleUserAnomymous.id_generator()
-                   inviter = WhaleUserAnomymous.objects.create_user(
-                       email=WhaleUser.email_generator(),nickname=WhaleUserAnomymous.nickname_generator(poll.id) ,password=WhaleUser.password_generator(),email2=WhaleUserAnomymous.encodeAES(email2),
-                       certificate=WhaleUserAnomymous.encodeAES(certi),poll=poll
+                   certi = WhaleUserAnonymous.id_generator()
+                   inviter = WhaleUserAnonymous.objects.create_user(
+                       email=WhaleUser.email_generator(),nickname=WhaleUserAnonymous.nickname_generator(poll.id) ,
+                       password=WhaleUser.password_generator(),email2=email2,
+                       certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
                   )
                    subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email2
-                   html_content = '<p> Hello, you are invite to secret poll.</p> ' \
-                                  '<p>This is the certificate of vote <Strong>: '+ str(certi)\
-                                  + '<Strong></p><p>You can vote at the following link' \
-                                   '<a href="http://localhost:8000/polls/vote/' \
-                                  + str(poll.id)+'"> click here for vote</a></p>'
+                   htmly = get_template('polls/email.html')
+                   d = Context({'poll': poll, 'certi':certi})
+                   html_content = htmly.render(d)
                    msg = EmailMessage(subject, html_content, from_email, [to])
                    msg.content_subtype = "html"
                    msg.send()
@@ -340,6 +336,18 @@ def success(request, pk):
        else:
            formset = inviteformset(prefix='form')
     return render(request, 'polls/success.html', locals())
+
+
+@login_required
+@with_admin_rights
+def delete_anonymous(request,pk,voter):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    voter = get_object_or_404(WhaleUserAnonymous, id=voter)
+    if poll.option_ballots:
+        del request.session["user"]
+    voter.delete()
+    messages.success(request, _('anonymous voter has been deleted!'))
+    return redirect(reverse_lazy(success, kwargs={'pk': poll.pk}))
 
 
 def certificate(request, pk):
@@ -352,9 +360,9 @@ def certificate(request, pk):
     if request.method == 'POST':
         form = BallotForm(request.POST)
         if form.is_valid():
-            certificate = WhaleUserAnomymous.encodeAES(form.cleaned_data['certificate'])
+            certificate = WhaleUserAnonymous.encodeAES(form.cleaned_data['certificate'])
             try:
-                user= WhaleUserAnomymous.objects.get(poll=poll.id,certificate=certificate)
+                user= WhaleUserAnonymous.objects.get(poll=poll.id, certificate=certificate)
                 messages.success(request, _(' your certificate is right '))
                 request.session["user"] = str( user.id)
                 if next_url is not None:
@@ -396,7 +404,7 @@ def vote(request, pk):
             request.session["user_id"] = str(voter.id)
     else:
         user_id = request.session["user"]
-        voter = get_object_or_404(WhaleUserAnomymous, id= user_id)
+        voter = get_object_or_404(WhaleUserAnonymous, id= user_id)
 
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     if votes:

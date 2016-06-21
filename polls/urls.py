@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^deleteCandidate/(?P<pk>'+uuid4+')/(?P<cand>[^/]+)/$', views.delete_candidate, name='deleteCandidate'),
     url(r'^updateVote/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.update_vote, name='updateVote'),
     url(r'^deleteVote/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.delete_vote, name='deleteVote'),
+    url(r'^deleteAnonymous/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.delete_anonymous, name='deleteAnonymous'),
     url(r'^newPoll/(?P<choice>[^/]+)/$', views.VotingPollCreate.as_view(), name='newPoll'),
     url(r'^viewPoll/(?P<pk>'+uuid4+')', views.view_poll, name='viewPoll'),
     url(r'^viewPollSecret/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.view_poll_secret, name='viewPollSecret'),

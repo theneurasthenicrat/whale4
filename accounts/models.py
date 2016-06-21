@@ -76,7 +76,7 @@ cipher = AES.new(secret)
 from polls.models import VotingPoll
 
 
-class WhaleUserAnomymous(WhaleUser):
+class WhaleUserAnonymous(WhaleUser):
     certificate = models.CharField(max_length=100)
     email2 = models.EmailField( max_length=255)
     poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
@@ -96,5 +96,5 @@ class WhaleUserAnomymous(WhaleUser):
 
     @staticmethod
     def nickname_generator(poll):
-        users = WhaleUserAnomymous.objects.filter(poll_id=poll).count() + 1
+        users = WhaleUserAnonymous.objects.filter(poll_id=poll).count() + 1
         return 'Anomymous' + str(users)

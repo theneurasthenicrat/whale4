@@ -12,13 +12,13 @@
             <div class="container-fluid form-login margin1">
 
                 <h4>{% trans 'List of current inviters' %}</h4>
-                {% if inv %}
+                {% if inviters %}
 
                     <ol class="list-group">
-                        {% for v in inv %}
+                        {% for v in inviters %}
                             <li class="list-group-item">
 
-                                {{ v}}
+                                {{ v.email2}}
                                 <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
                                 <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
                                     <div class="modal-dialog modal-sm">
@@ -32,7 +32,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
-                                                <a href="" class="btn btn-custom ">{% trans 'Submit' %} </a >
+                                                <a href="/polls/deleteAnonymous/{{ poll.id }}/{{ v.id }}" class="btn btn-custom ">{% trans 'Submit' %}</a>
 
                                             </div>
 
