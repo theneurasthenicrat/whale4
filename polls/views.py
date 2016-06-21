@@ -15,7 +15,7 @@ from django.core.mail import send_mail,EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 
-from accounts.models import WhaleUser,WhaleUserAnonymous
+from accounts.models import WhaleUser,WhaleUserAnonymous,User
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
     OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
@@ -38,7 +38,7 @@ def with_admin_rights(fn):
 def with_voter_rights(fn):
     def wrapped(request, pk,voter):
         poll = get_object_or_404(VotingPoll, id=pk)
-        user = get_object_or_404(WhaleUser, id=voter)
+        user = get_object_or_404(User, id=voter)
 
         if (request.user is not None and request.user.id == user.id) or ("user_id" in request.session and request.session["user_id"]==user.id) \
             or ("user" in request.session and request.session["user"]==user.id):
@@ -316,14 +316,13 @@ def success(request, pk):
            if formset.is_valid():
                for form in formset:
 
-                   email2 =form.cleaned_data.get('email2',None)
+                   email =form.cleaned_data.get('email',None)
                    certi = WhaleUserAnonymous.id_generator()
-                   inviter = WhaleUserAnonymous.objects.create_user(
-                       email=WhaleUser.email_generator(),nickname=WhaleUserAnonymous.nickname_generator(poll.id) ,
-                       password=WhaleUser.password_generator(),email2=email2,
+                   inviter = WhaleUserAnonymous.objects.create(
+                       email=email,nickname=WhaleUserAnonymous.nickname_generator(poll.id) ,
                        certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
                   )
-                   subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email2
+                   subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email
                    htmly = get_template('polls/email.html')
                    d = Context({'poll': poll, 'certi':certi})
                    html_content = htmly.render(d)
@@ -343,7 +342,7 @@ def success(request, pk):
 def delete_anonymous(request,pk,voter):
     poll = get_object_or_404(VotingPoll, id=pk)
     voter = get_object_or_404(WhaleUserAnonymous, id=voter)
-    if poll.option_ballots:
+    if "user" in request.session:
         del request.session["user"]
     voter.delete()
     messages.success(request, _('anonymous voter has been deleted!'))
@@ -399,8 +398,7 @@ def vote(request, pk):
 
         else:
             read=False
-            voter = WhaleUser.objects.create_user(email=WhaleUser.email_generator(),nickname='',
-                                                  password=WhaleUser.password_generator())
+            voter = User.objects.create(nickname='')
             request.session["user_id"] = str(voter.id)
     else:
         user_id = request.session["user"]
@@ -416,7 +414,7 @@ def vote(request, pk):
     form1= NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
-        if poll.option_ballots:
+        if poll.option_ballots and "user" in request.session:
             del request.session["user"]
         form = VotingForm(candidates, preference_model,poll,request.POST)
         form1 = NickNameForm(read, request.POST)
@@ -443,7 +441,7 @@ def update_vote(request, pk, voter):
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
-    voter = WhaleUser.objects.get(id=voter)
+    voter = User.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     months = []
     days = []
@@ -463,7 +461,7 @@ def update_vote(request, pk, voter):
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll, request.POST)
         form1 = NickNameForm(read, request.POST)
-        if poll.option_ballots:
+        if poll.option_ballots and "user" in request.session:
             del request.session["user"]
         if form.is_valid() and form1.is_valid():
             data = form.cleaned_data
@@ -486,7 +484,7 @@ def update_vote(request, pk, voter):
 def delete_vote(request, pk, voter):
 
     poll = get_object_or_404(VotingPoll, id=pk)
-    voter = get_object_or_404(WhaleUser, id=voter)
+    voter = get_object_or_404(User, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     votes.delete()
     if poll.option_ballots:
@@ -501,7 +499,7 @@ def delete_vote(request, pk, voter):
 def view_poll_secret(request, pk ,voter):
 
     poll = get_object_or_404(VotingPoll, id=pk)
-    voter = get_object_or_404(WhaleUser, id=voter)
+    voter = get_object_or_404(User, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id).order_by('candidate')
     candidates = Candidate.objects.filter(poll_id=poll.id)
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))

@@ -9,9 +9,32 @@ from django.utils.translation import ugettext_lazy as _
 import uuid
 from Crypto.Cipher import AES
 import base64
-import  string, random
+import string, random
+
+
+
+
+# decoder ####################################################################
+CERT_SIZE = 16
+
+# one-liner to sufficiently pad the text to be encrypted
+BS = 16
+pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+unpad = lambda s: s[:-1]
+
+# the secret key
+secret = "ivwx7561u826c8i0"
+
+# create a cipher object using the secret key
+cipher = AES.new(secret)
+
 
 # models #####################################################################
+
+
+class User(models.Model):
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
+    nickname = models.CharField(verbose_name=_('Nickname'), max_length=30)
 
 
 class WhaleUserManager(BaseUserManager):
@@ -28,12 +51,10 @@ class WhaleUserManager(BaseUserManager):
         return user
 
 
-class WhaleUser(AbstractBaseUser):
-    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
+class WhaleUser(User, AbstractBaseUser):
     email = models.EmailField(verbose_name=_('Email address'), max_length=255, unique=True)
-    nickname = models.CharField(verbose_name=_('Nickname'),max_length=30)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False) 
+    is_admin = models.BooleanField(default=False)
 
     objects = WhaleUserManager()
 
@@ -49,39 +70,13 @@ class WhaleUser(AbstractBaseUser):
     def __str__(self):             
         return self.nickname
 
-    @staticmethod
-    def email_generator():
-        users = WhaleUser.objects.all().count() + 1
-        return 'whale4' + str(users) +str(uuid.uuid4())+ '@noiraudes.net'
-
-    @staticmethod
-    def password_generator( chars=string.ascii_lowercase + string.digits):
-        return ''.join(random.choice(chars) for _ in range(6))
-
-
-
-CERT_SIZE = 16
-
-# one-liner to sufficiently pad the text to be encrypted
-BS = 16
-pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
-unpad = lambda s: s[:-1]
-
-# the secret key
-secret = "ivwx7561u826c8i0"
-
-# create a cipher object using the secret key
-cipher = AES.new(secret)
-
 from polls.models import VotingPoll
 
-
-class WhaleUserAnonymous(WhaleUser):
+class WhaleUserAnonymous(User):
     certificate = models.CharField(max_length=100)
-    email2 = models.EmailField( max_length=255)
+    email = models.EmailField(verbose_name=_('Email address'), max_length=255)
     poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
 
-    objects = WhaleUserManager()
     @staticmethod
     def encodeAES(s, c=cipher):
         return base64.b64encode(c.encrypt(pad(s)))

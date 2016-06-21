@@ -101,7 +101,7 @@ class VotingForm(forms.Form):
 
 
 class InviteForm(forms.Form):
-    email2 = forms.EmailField(label='Email address', max_length=255, required=True)
+    email = forms.EmailField(label='Email address', max_length=255, required=True)
 
 
 class BallotForm(forms.Form):
