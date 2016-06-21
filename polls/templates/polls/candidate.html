@@ -46,7 +46,7 @@
         </div>
     {% endif %}
         <div class="thumbnail clearfix">
-            <div class="well-sm visible-lg visible-md visible-sm">
+            <div class="well-sm hidden-xs">
                 <ul class="nav nav-pills-custom ">
                     <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}"> {% trans '1.General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
                     <li role="presentation" class="active" ><a href="#"> {% trans '2.Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>

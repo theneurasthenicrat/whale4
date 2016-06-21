@@ -22,9 +22,13 @@
 
 
                     <div class=" well-lg clearfix">
-                        <div class="col-lg-6" id="init">
-                            <p class="bg-info help-block well-sm">{% blocktrans %} Click on the names of the unsorted candidates <span class="label label-default">left frame</span>
+                        <div class="col-lg-6 col-sm-6" id="init">
+
+
+                            <div class="hidden-xs" >
+                            <p  class="bg-info help-block well-sm">{% blocktrans %} Click on the names of the unsorted candidates <span class="label label-default">left frame</span>
                                 to rank them <span class="label label-default">right frame</span> .{% endblocktrans %}</p>
+                        </div>
                             <h3>{% trans 'Unsorted candidates' %}</h3>
                             <ul id="list_init" class="list-group">
                                 {% for c in candidates %}
@@ -32,9 +36,11 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="col-lg-6" id="res">
+                        <div class="col-lg-6 col-sm-6" id="res">
+                        <div class="hidden-xs">
                             <p class="bg-info help-block well-sm">{% blocktrans %} You can put back a sorted candidate <span class="label label-default">right</span>
                                 to the pool of unsorted candidates <span class="label label-default">left</span>  by clicking on it.{% endblocktrans %}</p>
+                            </div>
                             <h3>{% trans 'Sorted candidates' %}</h3>
                             <ol id="sortable" class="list-group">
                                 {% for c in candidates %}

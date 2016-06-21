@@ -46,6 +46,7 @@ table.table-bordered{
 #list_init li{
      margin-bottom: 10px;
     text-align: center;
+    cursor: pointer;
 }
 
 #init{
@@ -61,6 +62,7 @@ border-right: dotted;
     display: list-item;
      margin-bottom: 10px;
      text-align: center;
+     cursor: pointer;
 }
 
 .container-custom {
