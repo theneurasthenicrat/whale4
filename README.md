@@ -1,4 +1,4 @@
-# whale4 *WHich ALternative is Elected*
+# whale4 ####*WHich ALternative is Elected*
 
 Whale4 is a free web project which is based on voting poll. There are two types of poll: open and secret ballots.
 For each poll, the users are invited to vote and they can see the results.
