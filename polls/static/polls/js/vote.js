@@ -1,32 +1,50 @@
 
- $(function() {
-$('ol#sortable li').hide();
-     $('#submit').addClass("disabled");
+$(function() {
+    $('ol#sortable li').hide();
+
+    $('#submit').addClass("disabled");
+
+    var initial_pos=[];
+
+    $( "ul#list_init li" ).each( function( index, element ){
+        var id_candidate=  $( this ).attr('id') ;
+        var value_candidate=$('#id_value'+id_candidate ).val();
+        if (value_candidate!=""){
+             initial_pos.push(value_candidate+':'+id_candidate);
+        }
+    });
+    initial_pos.sort().reverse();
+        for (i = 0; i < initial_pos.length; i++) {
+            var arr = initial_pos[i].split(":");
+            var id_candidate = parseInt(arr[1]);
+            rank(id_candidate);
+        }
+
 });
 
+var worst = 1;
+var nbCandidates =$("#sortable").children().length;
 
-
- var worst = 1;
- var nbCandidates =$("#sortable").children().length;
-
- function valid() {
+function valid() {
     if (worst!=nbCandidates+1) {
-         $('#submit').addClass("disabled");
-  }
-    $('#submit').removeClass("disabled");
+        $('#submit').addClass("disabled");
+    }
+    else {
+        $('#submit').removeClass("disabled");
+    }
 }
 
- function rank(n) {
-     var unsortedItem=$('#' + n );
-     var sortedItem=$('#sorted' + worst);
-     var valueItem=$('#id_value' + n);
-     unsortedItem.hide();
-     sortedItem.html(unsortedItem.html());
-     sortedItem.attr('title',n);
-     valueItem.val( nbCandidates-worst+1);
-     sortedItem.show();
-     worst++;
-     valid();
+function rank(n) {
+    var unsortedItem=$('#' + n );
+    var sortedItem=$('#sorted' + worst);
+    var valueItem=$('#id_value' + n);
+    unsortedItem.hide();
+    sortedItem.html(unsortedItem.html());
+    sortedItem.attr('title',n);
+    valueItem.val( nbCandidates-worst+1);
+    sortedItem.show();
+    worst++;
+    valid();
 }
 
 
@@ -42,9 +60,9 @@ function unrank(n) {
     var i;
     for (i=pos+1; i < worst; i++) {
         var sortedNext=$('#sorted' + i );
-       var valueItemNext=$('#id_value' + sortedNext.attr('title'));
+        var valueItemNext=$('#id_value' + sortedNext.attr('title'));
         valueItemNext.val(nbCandidates-i+2);
-       sortedItem.html(sortedNext.html());
+        sortedItem.html(sortedNext.html());
         sortedItem.attr('title',sortedNext.attr('title'));
         sortedItem=sortedNext;
     }
