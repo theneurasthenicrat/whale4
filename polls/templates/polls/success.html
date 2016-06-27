@@ -2,6 +2,7 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% load static %}
+
 {% block content %}
     <div class="container">
         <div class="well">
@@ -57,12 +58,82 @@
                     <li role="presentation" class="active"><a href="#">{% trans 'Invite' %}</a></li>
                 </ol>
             </div>
+
+        <div class="row">
+        <div class="media col-md-4">
+  <a class="media-left" href="#">
+    <img class="media-object" data-src="..." alt="Generic placeholder image">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Media heading</h4>
+</div>
+</div>
+
+            <div class="media col-md-4">
+  <a class="media-left" href="#">
+    <img class="media-object" data-src="..." alt="Generic placeholder image">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Media heading</h4>
+</div>
+</div>
+                   <div class="media col-md-4">
+  <a class="media-left" href="#">
+    <img class="media-object" data-src="..." alt="Generic placeholder image">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">Media heading</h4>
+</div>
+</div>
+
+     </div>
+
+        <div class="container-fluid">
             <div class="well-lg">
-                <p>{% trans 'Now you can vote at this link' %}
-                    <a href="{% url 'vote' poll.id %}"> {% url 'vote' poll.id %}</a></p>
-                 {% if poll.option_ballots %}
-                      <div class="container-fluid ">
-                <div class=" well-lg margin1">
+                <p>{% trans 'To vote for this poll click here' %}
+                    <a  class= "btn btn-default" href="{% url 'vote' poll.id %}"> Vote</a></p>
+
+
+      <div class="input-group ">
+
+  <input type="text" class="form-control" id="vote_url"  value="http://localhost:8000{% url 'vote' poll.id %}">
+           <span class=" input-group-addon" data-clipboard-target="#vote_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
+</div>
+
+
+<div class="  container-fluid margin2">
+<!-- Social Button HTML -->
+{% with url="http://strokes.imag.fr/whale3/index.do" text="whale4" via="whale4ad"  %}
+<!-- Twitter -->
+<a href="http://twitter.com/share?url={{ url }}&text={{ text }}&via={{ via }}" target="_blank" class="btn twitter">
+    <i class="fa fa-twitter"></i>
+</a>
+
+<!-- Google Plus -->
+<a href="https://plus.google.com/share?url={{ url }}" target="_blank" class="btn google-plus">
+    <i class="fa fa-google-plus"></i>
+</a>
+
+<!-- Facebook -->
+<a href="http://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="btn facebook">
+    <i class="fa fa-facebook"></i>
+</a>
+
+<!-- LinkedIn -->
+<a href="http://www.linkedin.com/shareArticle?url={{ url }}&title={{ title }}&summary={{ summary }}&source={{ source_url }}" target="_blank" class="btn linkedin">
+    <i class="fa fa-linkedin"></i>
+</a>
+
+<!-- Email -->
+<a href="mailto:?subject=<SUBJECT&body=<BODY>" target="_blank" class="btn email">
+    <i class="fa fa-envelope"></i>
+</a>
+{% endwith %}
+</div>
+            </div>
+                {% if poll.option_ballots %}
+                    <div class="container-fluid ">
+                        <div class=" well-lg margin1">
                     <div class=" col-md-10 ">
                         <form action="" method="post" id="form1" >
                             {% csrf_token %}

@@ -16,7 +16,7 @@ function update(){
         var labelid= "id_form-0-candidate";
    }
 }
-
+new Clipboard('#copy-button');
 
 });
 
