@@ -6,10 +6,10 @@ Whale4 is a web project based on poll.
 Requirements
 ------------
 
-python >= 2.7
-django >= 1.8
-django-bootstrap3 (https://github.com/dyve/django-bootstrap3)
-pycrypto
+- python >= 2.7
+- django >= 1.8
+- django-bootstrap3 (https://github.com/dyve/django-bootstrap3)
+- pycrypto
 
 Getting Started
 ---------------
