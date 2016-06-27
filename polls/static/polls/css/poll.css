@@ -54,7 +54,10 @@ border-right: dotted;
 
 }
 
-
+.nav-pills-custom li>a {
+     list-style: decimal inside;
+    display: list-item;
+}
 
 
 #sortable .list-group-item {

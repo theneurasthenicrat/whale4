@@ -50,12 +50,12 @@
  {% endif %}
         <div class="container-fluid thumbnail">
             <div class="well-sm visible-lg visible-md visible-sm">
-                <ul class="nav nav-pills-custom ">
-                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">{% trans '1.General parameters ' %}{% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="active" ><a href="#">{% trans '2.Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="disabled"><a href="#">{% trans '3.Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
-                    <li role="presentation" class="disabled"><a href="#">{% trans '4.Invite' %}</a></li>
-                </ul>
+                <ol class="nav nav-pills-custom ">
+                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">{% trans 'General parameters ' %}{% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" class="active" ><a href="#">{% trans 'Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" class="disabled"><a href="#">{% trans 'Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="disabled"><a href="#">{% trans 'Invite' %}</a></li>
+                </ol>
             </div>
             <div class="well-lg">
                 <form action="" method="post" id="form1" >
@@ -84,8 +84,8 @@
                 </div>
             </div>
             <div class="margin2">
-                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url 'option' poll.id  %}" class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default btn-lg  pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'option' poll.id  %}" class="btn btn-custom  pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             </div>
         </div>
     </div>

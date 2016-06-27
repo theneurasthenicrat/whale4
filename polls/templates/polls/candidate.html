@@ -8,7 +8,43 @@
             <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
             <h3>{% trans '2.Add candidates to poll' %}</h3>
         </div>
-     {% if candidates %}
+
+        <div class="thumbnail clearfix">
+            <div class="well-sm hidden-xs">
+                <ol class="nav nav-pills-custom ">
+                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
+                </ol>
+            </div>
+            <div class="container-fluid ">
+
+
+                <div class=" well-lg col-md-7 ">
+                    <form action="" method="post" >
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <div id="form_set" >
+                            {% for form in formset.forms %}
+
+                                {% bootstrap_form form layout="horizontal"  %}
+
+                            {% endfor %}
+                        </div>
+                        <div id="empty_form" style="display:none" >
+                            {% bootstrap_form formset.empty_form  layout="horizontal"   %}
+                        </div>
+                        <label  id="add_more" class="btn btn-default  ">{% bootstrap_icon "plus" %}</label>
+                        <div class="wrapper margin1 margin2 ">
+                            <button type="submit" class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
+                        </div>
+
+                    </form>
+                </div>
+            <div class="col-md-5">
+                {% if candidates %}
         <div class="container-fluid form-login margin1">
 
             <h4>{% trans 'List of current candidates'%}</h4>
@@ -45,45 +81,12 @@
 
         </div>
     {% endif %}
-        <div class="thumbnail clearfix">
-            <div class="well-sm hidden-xs">
-                <ul class="nav nav-pills-custom ">
-                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}"> {% trans '1.General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="active" ><a href="#"> {% trans '2.Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="disabled"><a href="#"> {% trans '3.Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
-                    <li role="presentation" class="disabled"><a href="#"> {% trans '4.Invite' %}</a></li>
-                </ul>
             </div>
-            <div class="container-fluid ">
-
-
-                <div class=" well-lg col-md-8">
-                    <form action="" method="post" >
-                        {% csrf_token %}
-                        {{ formset.management_form }}
-                        {% bootstrap_formset_errors formset %}
-                        <div id="form_set" >
-                            {% for form in formset.forms %}
-
-                                {% bootstrap_form form layout="horizontal"  %}
-
-                            {% endfor %}
-                        </div>
-                        <div id="empty_form" style="display:none" >
-                            {% bootstrap_form formset.empty_form  layout="horizontal"   %}
-                        </div>
-                        <label  id="add_more" class="btn btn-default  ">{% bootstrap_icon "plus" %}</label>
-                        <div class="wrapper margin1 margin2 ">
-                            <button type="submit" class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
-                        </div>
-
-                    </form>
-                </div>
 
 
             </div>
-            <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default btn-lg col-xs-4 col-sm-3 col-md-2 pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-            <a href="{% url 'option' poll.id  %}" class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2  pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+            <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default  pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+            <a href="{% url 'option' poll.id  %}" class="btn btn-custom  pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
 
         </div>
     </div>

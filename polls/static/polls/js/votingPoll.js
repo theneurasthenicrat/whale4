@@ -5,6 +5,7 @@
       todayHighlight: true,
       startDate: today,
       autoclose: true,
+      orientation: "bottom auto",
       
   });
 
