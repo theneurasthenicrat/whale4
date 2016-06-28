@@ -98,11 +98,30 @@ border-right: dotted;
   outline: none;
 }
 
-.btn.twitter     { background: #55acee; color: white; }
-.btn.google-plus { background: #dd4b39;color: white; }
-.btn.facebook    { background: #3B5998; color: white;}
-.btn.linkedin    { background: #4875B4; color: white;}
-.btn.email       { background: #444444; color: white;}
+.btn.twitter     { width:40px; background: #55acee; color: white; }
+.btn.google-plus { width:40px;background: #dd4b39;color: white; }
+.btn.facebook    { width:40px;background: #3B5998; color: white;}
+.btn.linkedin    { width:40px;background: #4875B4; color: white;}
+.btn.email       { width:40px;background: #444444; color: white;}
+
+
+.nav-tabs>li>a  {
+
+border-color:#d2d2d2;
+}
+
+.border-tab {
+background-color: #f6f8ff
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+ color:#ffffff;
+  background-color:  #326db7;
+
+}
+
 
 
 .form-login {

@@ -316,10 +316,10 @@ def success(request, pk):
            if formset.is_valid():
                for form in formset:
 
-                   email =form.cleaned_data.get('email',None)
+                   email =form.cleaned_data.get('email')
                    certi = WhaleUserAnonymous.id_generator()
                    inviter = WhaleUserAnonymous.objects.create(
-                       email=email,nickname=WhaleUserAnonymous.nickname_generator(poll.id) ,
+                      nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
                        certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
                   )
                    subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email
