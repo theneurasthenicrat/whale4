@@ -559,13 +559,14 @@ def view_poll(request, pk):
     votes = None if tab == {} else tab.values()
     list1 = list()
     scores=[]
-    for value in votes:
-        v = dict()
-        v['name'] = value['nickname']
-        score= [val['value'] for val in value['scores']]
-        v['values'] =  score
-        list1.append(v)
-        scores.append(score)
+    if votes:
+        for value in votes:
+            v = dict()
+            v['name'] = value['nickname']
+            score= [val['value'] for val in value['scores']]
+            v['values'] =  score
+            list1.append(v)
+            scores.append(score)
 
     json_object = dict()
     json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
