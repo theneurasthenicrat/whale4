@@ -586,7 +586,7 @@ def view_poll(request, pk):
         for i, c in enumerate(candidates):
             dict_candidates[str(c)]=i+1
             response.write('{n},{l}\n'.format(n=i + 1, l=str(c)))
-        len_votes = len(votes)
+        len_votes = len(votes) if votes else 0
         response.write('{a},{b},{c}\n'.format(a=len_votes, b=len_votes, c= len_votes))
 
         for i,score in enumerate(scores):
