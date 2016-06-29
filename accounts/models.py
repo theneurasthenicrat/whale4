@@ -10,7 +10,7 @@ import uuid
 from Crypto.Cipher import AES
 import base64
 import string, random
-
+import whale4.settings
 
 
 
@@ -22,11 +22,8 @@ BS = 16
 pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
 unpad = lambda s: s[:-1]
 
-# the secret key
-secret = "ivwx7561u826c8i0"
-
 # create a cipher object using the secret key
-cipher = AES.new(secret)
+cipher = AES.new(whale4.settings.SECRET_KEY)
 
 
 # models #####################################################################
