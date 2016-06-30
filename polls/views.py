@@ -567,12 +567,14 @@ def view_poll(request, pk):
             scores.append(score)
 
 
-    borda = dict()
-    plurality = dict()
-    veto = dict()
+
     approval = dict()
     threshold = preference_model.len()
     approval["threshold"]= preference_model.values[1:]
+    candi=[]
+    borda_scores=[]
+    plurality_scores=[]
+    veto_scores=[]
     for i, c in enumerate(candidates):
         sum_borda = 0
         sum_plurality = 0
@@ -582,10 +584,10 @@ def view_poll(request, pk):
           sum_borda = sum_borda+ (score[i] if score[i] != UNDEFINED_VALUE else 0)
           sum_plurality= sum_plurality+ (1 if score[i] == preference_model.max() else 0)
           sum_veto= sum_veto + (1 if score[i] != (preference_model.min() or UNDEFINED_VALUE) else 0)
-
-        borda[str(c)] = sum_borda
-        plurality[str(c)]= sum_plurality
-        veto[str(c)]= sum_veto
+        candi.append(str(c))
+        borda_scores.append(sum_borda)
+        plurality_scores.append(sum_plurality)
+        veto_scores.append(sum_veto)
 
     for y in approval["threshold"]:
         th={}
@@ -598,9 +600,9 @@ def view_poll(request, pk):
         approval[str(y)]=th
 
     score_method = dict()
-    score_method["Borda"]= borda
-    score_method["Plurality"] = plurality
-    score_method["Veto"] = veto
+    score_method["Borda"]= {'candidates':candi, 'scores':borda_scores}
+    score_method["Plurality"] = {'candidates':candi, 'scores':plurality_scores}
+    score_method["Veto"] = {'candidates':candi, 'scores':veto_scores}
     score_method["Approval"] = approval
 
 
@@ -648,6 +650,8 @@ def view_poll(request, pk):
         return response
     elif "result" in request.GET and request.GET['result']=='scoremethod':
         return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
+    elif "exemple" in request.GET:
+        return render(request, 'polls/exemple.html', locals())
     else:
         return render(request, 'polls/poll.html',locals() )
 
