@@ -101,6 +101,9 @@ class PreferenceModel:
     def min(self): 
         return min(self.values[1:])
 
+    def len(self):
+        return len(self.values[1:])
+
     def max(self): 
         return max(self.values[1:])
 

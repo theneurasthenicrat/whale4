@@ -544,16 +544,15 @@ def view_poll(request, pk):
         tab[id]['nickname'] = v.voter.nickname
         tab[id]['scores'] = []
         for c in candidates:
-            if c.id in scores[id]:
-                score = scores[id][c.id]
-                tab[id]['scores'].append({
-                    'value': score,
-                    'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
-                                                                  1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
-                    'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
+            score = scores[id][c.id]
+            tab[id]['scores'].append({
+                'value': score,
+                'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
+                                                              1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
+                'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
 
 
-                })
+            })
 
     votes = None if tab == {} else tab.values()
     list1 = list()
@@ -563,31 +562,46 @@ def view_poll(request, pk):
             v = dict()
             v['name'] = value['nickname']
             score= [val['value'] for val in value['scores']]
-            v['values'] =  score
+            v['values'] = score
             list1.append(v)
             scores.append(score)
 
 
-    borda= dict()
-    plurality= dict()
-    veto= dict()
-
+    borda = dict()
+    plurality = dict()
+    veto = dict()
+    approval = dict()
+    threshold = preference_model.len()
+    approval["threshold"]= preference_model.values[1:]
     for i, c in enumerate(candidates):
         sum_borda = 0
         sum_plurality = 0
         sum_veto = 0
+
         for score in scores:
-          sum_borda = sum_borda+score[i] if score[i] != UNDEFINED_VALUE else 0
-          sum_plurality= sum_plurality+ 1 if score[i]==preference_model.max() else 0
-          sum_veto= sum_veto + 1 if score[i]!= preference_model.min() else 0
+          sum_borda = sum_borda+ (score[i] if score[i] != UNDEFINED_VALUE else 0)
+          sum_plurality= sum_plurality+ (1 if score[i] == preference_model.max() else 0)
+          sum_veto= sum_veto + (1 if score[i] != (preference_model.min() or UNDEFINED_VALUE) else 0)
 
         borda[str(c)] = sum_borda
         plurality[str(c)]= sum_plurality
         veto[str(c)]= sum_veto
+
+    for y in approval["threshold"]:
+        th={}
+        for i, c in enumerate(candidates):
+            sum_approval = 0
+            for score in scores:
+                sum_approval = sum_approval + (1 if ((score[i] >= y) if preference_model.id != 'rankingWithTies'\
+                                                                       or 'rankingNoTies' else (score[i] <= y)) else 0)
+            th[str(c)]=sum_approval
+        approval[str(y)]=th
+
     score_method = dict()
     score_method["Borda"]= borda
     score_method["Plurality"] = plurality
     score_method["Veto"] = veto
+    score_method["Approval"] = approval
 
 
     if "format" in request.GET and request.GET['format'] == 'json':
@@ -636,3 +650,34 @@ def view_poll(request, pk):
         return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
     else:
         return render(request, 'polls/poll.html',locals() )
+
+
+def data_poll(request):
+    polls = VotingPoll.objects.all()
+    json_polls = dict()
+    for poll in polls:
+        json_object = dict()
+        candidates = (
+        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+            poll_id=poll.id))
+        votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+        preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+        scores = {}
+        for v in votes:
+            if v.voter.id not in scores:
+                scores[v.voter.id] = {}
+            scores[v.voter.id][v.candidate.id] = v.value
+        tab = {}
+        for v in votes:
+            id = v.voter.id
+            tab[id] = []
+            for c in candidates:
+                tab[id].append(scores[id][c.id])
+
+        json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
+        json_object['type'] = 1 if poll.poll_type == 'Date' else 0
+        json_object['candidates'] = ['candidate'+str(i+1) for i,c in enumerate(candidates)]
+        json_object['votes'] =[ ( 'voter'+ str(i+1) , score)for i, score in enumerate(tab.values())]
+        json_polls[str(poll.id)]=json_object
+
+    return HttpResponse(json.dumps(json_polls, indent=4, sort_keys=True), content_type="application/json")
