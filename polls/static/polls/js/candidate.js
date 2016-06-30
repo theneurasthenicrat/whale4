@@ -22,6 +22,5 @@ $('ul.nav.nav-tabs > li > a').click(function(e) {
     $(this).tab('show');
 });
 
-    
 });
 

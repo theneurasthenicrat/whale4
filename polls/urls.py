@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^deleteVotingPoll/(?P<pk>'+uuid4+')/$', views.voting_poll_delete, name='deleteVotingPoll'),
     url(r'^certificate/(?P<pk>'+uuid4+')', views.certificate, name='certificate'),
 
+
 ]

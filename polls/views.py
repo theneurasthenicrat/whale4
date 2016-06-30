@@ -7,11 +7,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.edit import CreateView, UpdateView
 from django.utils.decorators import method_decorator
-import json, csv
+import json
 from django.http import HttpResponse
 from operator import itemgetter
-from collections import Counter
-from django.core.mail import send_mail,EmailMessage
+from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 
@@ -568,13 +567,36 @@ def view_poll(request, pk):
             list1.append(v)
             scores.append(score)
 
-    json_object = dict()
-    json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
-    json_object['type'] = 1 if poll.poll_type == 'Date' else 0
-    json_object['candidates'] = [str(c) for c in candidates]
-    json_object['votes'] = list1
+
+    borda= dict()
+    plurality= dict()
+    veto= dict()
+
+    for i, c in enumerate(candidates):
+        sum_borda = 0
+        sum_plurality = 0
+        sum_veto = 0
+        for score in scores:
+          sum_borda = sum_borda+score[i] if score[i] != UNDEFINED_VALUE else 0
+          sum_plurality= sum_plurality+ 1 if score[i]==preference_model.max() else 0
+          sum_veto= sum_veto + 1 if score[i]!= preference_model.min() else 0
+
+        borda[str(c)] = sum_borda
+        plurality[str(c)]= sum_plurality
+        veto[str(c)]= sum_veto
+    score_method = dict()
+    score_method["Borda"]= borda
+    score_method["Plurality"] = plurality
+    score_method["Veto"] = veto
+
 
     if "format" in request.GET and request.GET['format'] == 'json':
+        json_object = dict()
+        json_object[
+            'preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
+        json_object['type'] = 1 if poll.poll_type == 'Date' else 0
+        json_object['candidates'] = [str(c) for c in candidates]
+        json_object['votes'] = list1
 
         return HttpResponse(json.dumps(json_object, indent=4, sort_keys=True), content_type="application/json")
 
@@ -610,6 +632,7 @@ def view_poll(request, pk):
             response.write(','.join([str(x) for x in ([i+1]+row_voter)]))
             response.write('\n')
         return response
+    elif "result" in request.GET and request.GET['result']=='scoremethod':
+        return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
     else:
         return render(request, 'polls/poll.html',locals() )
-
