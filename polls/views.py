@@ -588,21 +588,25 @@ def view_poll(request, pk):
         borda_scores.append(sum_borda)
         plurality_scores.append(sum_plurality)
         veto_scores.append(sum_veto)
-
+    approval_scores=[]
     for y in approval["threshold"]:
-        th={}
+        th=[]
         for i, c in enumerate(candidates):
             sum_approval = 0
             for score in scores:
-                sum_approval = sum_approval + (1 if ((score[i] >= y) if preference_model.id != 'rankingWithTies'\
-                                                                       or 'rankingNoTies' else (score[i] <= y)) else 0)
-            th[str(c)]=sum_approval
-        approval[str(y)]=th
+                sum_approval = sum_approval + (1 if score[i] >= y else 0)
+            th.append(sum_approval)
+        approval_scores.append(th)
+    if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
+        approval_scores.reverse()
+
+    approval["scores"]=approval_scores
 
     score_method = dict()
-    score_method["Borda"]= {'candidates':candi, 'scores':borda_scores}
-    score_method["Plurality"] = {'candidates':candi, 'scores':plurality_scores}
-    score_method["Veto"] = {'candidates':candi, 'scores':veto_scores}
+    score_method["candidates"]=candi
+    score_method["Borda"]= borda_scores
+    score_method["Plurality"] = plurality_scores
+    score_method["Veto"] = veto_scores
     score_method["Approval"] = approval
 
 

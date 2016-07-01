@@ -98,6 +98,11 @@ border-right: dotted;
   outline: none;
 }
 
+#radioBtn .notActive{
+    color: #3276b1;
+
+}
+
 .btn.twitter     { width:40px; background: #55acee; color: white; }
 .btn.google-plus { width:40px;background: #dd4b39;color: white; }
 .btn.facebook    { width:40px;background: #3B5998; color: white;}
