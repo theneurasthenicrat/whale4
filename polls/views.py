@@ -650,10 +650,14 @@ def view_poll(request, pk):
         return response
     elif "result" in request.GET and request.GET['result']=='scoremethod':
         return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
-    elif "exemple" in request.GET:
-        return render(request, 'polls/exemple.html', locals())
+
     else:
         return render(request, 'polls/poll.html',locals() )
+
+
+def result_view(request, pk ):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    return render(request, 'polls/result.html', locals())
 
 
 def data_poll(request):

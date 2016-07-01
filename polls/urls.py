@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^option/(?P<pk>'+uuid4+')/$', views.option, name='option'),
     url(r'^deleteVotingPoll/(?P<pk>'+uuid4+')/$', views.voting_poll_delete, name='deleteVotingPoll'),
     url(r'^certificate/(?P<pk>'+uuid4+')', views.certificate, name='certificate'),
+    url(r'^result/(?P<pk>'+uuid4+')', views.result_view, name='result'),
 
 
 ]
