@@ -93,6 +93,40 @@ def voters_undefined(poll):
                 voter = get_object_or_404(WhaleUser, id=voter)
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
+
+def data_poll():
+    polls = VotingPoll.objects.all()
+    json_polls = dict()
+    for i, poll in enumerate(polls):
+        json_object = dict()
+        candidates = (
+            DateCandidate.objects.filter(
+                poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+                poll_id=poll.id))
+        votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+        preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+        scores = {}
+        for v in votes:
+            if v.voter.id not in scores:
+                scores[v.voter.id] = {}
+            scores[v.voter.id][v.candidate.id] = v.value
+        tab = {}
+        for v in votes:
+            id = v.voter.id
+            tab[id] = []
+            for c in candidates:
+                tab[id].append(scores[id][c.id])
+
+        json_object[
+            'preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
+        json_object['type'] = 1 if poll.poll_type == 'Date' else 0
+        json_object['candidates'] = ['candidate' + str(i + 1) for i, c in enumerate(candidates)]
+        json_object['votes'] = [('voter' + str(i + 1), score) for i, score in enumerate(tab.values())]
+        json_polls['poll' + str(i + 1)] = json_object
+
+    with open('polls/data.txt', 'w') as outfile:
+        json.dump(json_polls, outfile, indent=4, sort_keys=True)
+
 # views ######################################################################
 
 
@@ -307,32 +341,32 @@ def option(request, pk):
 @with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
+
     if poll.option_ballots:
-       inviteformset = formset_factory(InviteForm, extra=1)
-       if request.method == 'POST':
-           formset = inviteformset(request.POST, prefix='form')
-           if formset.is_valid():
-               for form in formset:
+        inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
+    if request.method == 'POST':
+        form = InviteForm(request.POST)
+        if form.is_valid():
+            emails =form.cleaned_data['email']
 
-                   email =form.cleaned_data.get('email')
-                   certi = WhaleUserAnonymous.id_generator()
-                   inviter = WhaleUserAnonymous.objects.create(
-                      nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
-                       certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
-                  )
-                   subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email
-                   htmly = get_template('polls/email.html')
-                   d = Context({'poll': poll, 'certi':certi})
-                   html_content = htmly.render(d)
-                   msg = EmailMessage(subject, html_content, from_email, [to])
-                   msg.content_subtype = "html"
-                   msg.send()
+            for email in emails:
+                certi = WhaleUserAnonymous.id_generator()
+                inviter = WhaleUserAnonymous.objects.create(
+                    nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
+                    certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
+                )
+                subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email
+                htmly = get_template('polls/email.html')
+                d = Context({'poll': poll, 'certi':certi})
+                html_content = htmly.render(d)
+                msg = EmailMessage(subject, html_content, from_email, [to])
+                msg.content_subtype = "html"
+                msg.send()
 
-           messages.success(request, _('Inviters successfully added!'))
-           return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
-       else:
-           formset = inviteformset(prefix='form')
+            messages.success(request, _('Inviters successfully added!'))
+            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+    else:
+        form = InviteForm()
     return render(request, 'polls/success.html', locals())
 
 
@@ -664,33 +698,4 @@ def result_view(request, pk ):
     return render(request, 'polls/result.html', locals())
 
 
-def data_poll():
-    polls = VotingPoll.objects.all()
-    json_polls = dict()
-    for i, poll in enumerate(polls):
-        json_object = dict()
-        candidates = (
-        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
-        votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-        preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-        scores = {}
-        for v in votes:
-            if v.voter.id not in scores:
-                scores[v.voter.id] = {}
-            scores[v.voter.id][v.candidate.id] = v.value
-        tab = {}
-        for v in votes:
-            id = v.voter.id
-            tab[id] = []
-            for c in candidates:
-                tab[id].append(scores[id][c.id])
 
-        json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
-        json_object['type'] = 1 if poll.poll_type == 'Date' else 0
-        json_object['candidates'] = ['candidate'+str(i+1) for i,c in enumerate(candidates)]
-        json_object['votes'] =[ ( 'voter'+ str(i+1) , score)for i, score in enumerate(tab.values())]
-        json_polls['poll'+ str(i+1)]=json_object
-
-    with open('polls/data.txt', 'w') as outfile:
-        json.dump(json_polls, outfile, indent=4, sort_keys=True)

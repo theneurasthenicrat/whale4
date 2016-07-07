@@ -5,6 +5,11 @@
 from django.forms import ModelForm, Form, widgets,BaseInlineFormSet
 from polls.models import VotingPoll, Candidate, DateCandidate, UNDEFINED_VALUE
 from django import forms
+import re
+from django.core.validators import validate_email
+from django.forms import CharField, Textarea, ValidationError
+from django.utils.translation import ugettext as _
+
 
 
 class VotingPollForm(ModelForm):
@@ -99,10 +104,27 @@ class VotingForm(forms.Form):
         raise forms.ValidationError("You must give a score to at least one candidate!")
 
 
+email_separator_re = re.compile(r'[,;\s]+')
+
+
+class EmailsListField(CharField):
+
+    widget = Textarea
+
+    def clean(self, value):
+        super(EmailsListField, self).clean(value)
+        emails = email_separator_re.split(value)
+        emails = [email for email in emails if email ]
+
+        for email in emails:
+           validate_email(email)
+        return emails
+
 
 class InviteForm(forms.Form):
-    email = forms.EmailField(label='Email address', max_length=255, required=True)
+    email = EmailsListField()
 
 
 class BallotForm(forms.Form):
     certificate =forms.CharField(max_length=16)
+    
