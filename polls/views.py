@@ -39,12 +39,26 @@ def with_voter_rights(fn):
         poll = get_object_or_404(VotingPoll, id=pk)
         user = get_object_or_404(User, id=voter)
 
-        if (request.user is not None and request.user.id == user.id) or ("user_id" in request.session and request.session["user_id"]==user.id) \
+        if (not poll.option_experimental) or ( request.user is not None and request.user.id == user.id) or ("user_id" in request.session and request.session["user_id"]==user.id) \
             or ("user" in request.session and request.session["user"]==user.id):
             return fn(request, pk, voter)
         else:
             messages.error(request, _('This is not your vote'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    return wrapped
+
+
+def with_view_rights(fn):
+    def wrapped(request, pk, *args, **kwargs):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if poll.option_experimental and (request.user is None or request.user != poll.admin):
+            messages.error(request, _("you are not admin's poll"))
+            return redirect(reverse_lazy(home))
+        elif poll.option_ballots and poll.closing_poll():
+            messages.error(request, _("The poll is not closed"))
+            return redirect(reverse_lazy(home))
+        return fn(request, pk, *args, **kwargs)
+
     return wrapped
 
 
@@ -204,6 +218,8 @@ class VotingPollCreate(VotingPollMixin, CreateView):
             poll.poll_type = 'Date'
         if choice == 22:
             poll.option_ballots = True
+        if choice ==23:
+            poll.option_experimental= True
         poll.save()
         return super(VotingPollCreate, self).form_valid(form)
 
@@ -423,12 +439,12 @@ def vote(request, pk):
 
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
-
     read = True
     if not poll.option_ballots:
-        if request.user.is_authenticated():
+        if poll.option_experimental:
+            voter = User.objects.create(nickname='Anomymous')
+        elif request.user.is_authenticated():
             voter=request.user
-
         else:
             read=False
             voter = User.objects.create(nickname='')
@@ -460,6 +476,8 @@ def vote(request, pk):
             messages.success(request, _('Your vote has been added to the poll, thank you!'))
             if poll.option_ballots:
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
+            elif poll.option_experimental:
+                return redirect(reverse_lazy('home'))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
@@ -550,6 +568,7 @@ def view_poll_secret(request, pk ,voter):
     return render(request, 'polls/secret_view.html',locals() )
 
 
+@with_view_rights
 def view_poll(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -600,50 +619,6 @@ def view_poll(request, pk):
             list1.append(v)
             scores.append(score)
 
-
-
-    approval = dict()
-    threshold = preference_model.len()
-    approval["threshold"]= preference_model.values[1:]
-    candi=[]
-    borda_scores=[]
-    plurality_scores=[]
-    veto_scores=[]
-    for i, c in enumerate(candidates):
-        sum_borda = 0
-        sum_plurality = 0
-        sum_veto = 0
-
-        for score in scores:
-          sum_borda = sum_borda+ (score[i] if score[i] != UNDEFINED_VALUE else 0)
-          sum_plurality= sum_plurality+ (1 if score[i] == preference_model.max() else 0)
-          sum_veto= sum_veto + (1 if score[i] != (preference_model.min() or UNDEFINED_VALUE) else 0)
-        candi.append(str(c))
-        borda_scores.append(sum_borda)
-        plurality_scores.append(sum_plurality)
-        veto_scores.append(sum_veto)
-    approval_scores=[]
-    for y in approval["threshold"]:
-        th=[]
-        for i, c in enumerate(candidates):
-            sum_approval = 0
-            for score in scores:
-                sum_approval = sum_approval + (1 if score[i] >= y else 0)
-            th.append(sum_approval)
-        approval_scores.append(th)
-    if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
-        approval_scores.reverse()
-
-    approval["scores"]=approval_scores
-
-    score_method = dict()
-    score_method["candidates"]=candi
-    score_method["Borda"]= borda_scores
-    score_method["Plurality"] = plurality_scores
-    score_method["Veto"] = veto_scores
-    score_method["Approval"] = approval
-
-
     if "format" in request.GET and request.GET['format'] == 'json':
         json_object = dict()
         json_object[
@@ -687,6 +662,46 @@ def view_poll(request, pk):
             response.write('\n')
         return response
     elif "result" in request.GET and request.GET['result']=='scoremethod':
+        approval = dict()
+        threshold = preference_model.len()
+        approval["threshold"] = preference_model.values[1:]
+        candi = []
+        borda_scores = []
+        plurality_scores = []
+        veto_scores = []
+        for i, c in enumerate(candidates):
+            sum_borda = 0
+            sum_plurality = 0
+            sum_veto = 0
+
+            for score in scores:
+                sum_borda = sum_borda + (score[i] if score[i] != UNDEFINED_VALUE else 0)
+                sum_plurality = sum_plurality + (1 if score[i] == preference_model.max() else 0)
+                sum_veto = sum_veto + (1 if score[i] != (preference_model.min() or UNDEFINED_VALUE) else 0)
+            candi.append(str(c))
+            borda_scores.append(sum_borda)
+            plurality_scores.append(sum_plurality)
+            veto_scores.append(sum_veto)
+        approval_scores = []
+        for y in approval["threshold"]:
+            th = []
+            for i, c in enumerate(candidates):
+                sum_approval = 0
+                for score in scores:
+                    sum_approval = sum_approval + (1 if score[i] >= y else 0)
+                th.append(sum_approval)
+            approval_scores.append(th)
+        if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
+            approval_scores.reverse()
+
+        approval["scores"] = approval_scores
+
+        score_method = dict()
+        score_method["candidates"] = candi
+        score_method["Borda"] = borda_scores
+        score_method["Plurality"] = plurality_scores
+        score_method["Veto"] = veto_scores
+        score_method["Approval"] = approval
         return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
 
     else:

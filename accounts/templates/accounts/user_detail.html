@@ -16,6 +16,9 @@
                     <thead >
                     </tr>
                     <th >
+
+                    </th>
+                    <th >
                         {% trans 'Tilte' %}
                     </th>
                     <th >
@@ -34,6 +37,10 @@
 
 
                             <td >
+                                            <a href="{% url 'viewPoll' poll.id %}" > <i class="fa fa-eye"></i></a>
+                        <a href="{% url 'admin' poll.id %}" class="pull-right"> <i class="fa fa-pencil"></i></a>
+                            </td>
+                                  <td >
                                 {{ poll.title }}
                             </td>
 
@@ -62,7 +69,8 @@
                                     </div>
                                 </div>
                             </div>
-                        <a href="{% url 'admin' poll.id %}"> <span class="icon icon-pen"></span></a>
+
+
 
                     </td>
                         </tr>
@@ -80,6 +88,9 @@
                 <table class="table table-bordered "  >
                     <thead >
                     </tr>
+                     <th >
+
+                    </th>
                     <th >
                         {% trans 'Tilte' %}
                     </th>
@@ -96,7 +107,10 @@
                     <tbody>
                     {% for poll in poll_list_voter %}
                         <tr>
-
+                            <td >
+                                <a href="{% url 'viewPoll' poll.id %}"> <i class="fa fa-eye"></i></a>
+                                <a href="/polls/updateVote/{{ poll.id }}/{{ whaleuser.id }}" class="pull-right"> <i class="fa fa-pencil"></i></a>
+                            </td>
 
                             <td >
                                 {{ poll.title }}
@@ -104,7 +118,8 @@
 
                             <td >
                                 {{ poll.description }}
-                            </td>
+                             </td>
+
                             <td class="controls">
 
                         <button type="button" data-toggle="modal" data-target="#modal{{ forloop.counter }}" class="close"><span class="icon icon-trash_can"></span></button>
@@ -127,7 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <a href="/polls/updateVote/{{ poll.id }}/{{ whaleuser.id }}"> <span class="icon icon-pen"></span></a>
+
 
                     </td>
                         </tr>

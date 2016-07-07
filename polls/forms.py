@@ -15,7 +15,7 @@ from django.utils.translation import ugettext as _
 class VotingPollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        exclude = ['admin','poll_type','option_ballots','option_choice','option_modify']
+        exclude = ['admin','poll_type','option_ballots','option_choice','option_modify','option_experimental']
         widgets = {
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': 'Enter closing date'}),
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 4}),

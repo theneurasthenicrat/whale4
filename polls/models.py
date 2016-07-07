@@ -35,6 +35,7 @@ class VotingPoll(Poll):
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=False)
     option_modify=models.BooleanField(default=False)
+    option_experimental=models.BooleanField(default=False)
 
 
 class Candidate(models.Model):
