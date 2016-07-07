@@ -664,10 +664,10 @@ def result_view(request, pk ):
     return render(request, 'polls/result.html', locals())
 
 
-def data_poll(request):
+def data_poll():
     polls = VotingPoll.objects.all()
     json_polls = dict()
-    for poll in polls:
+    for i, poll in enumerate(polls):
         json_object = dict()
         candidates = (
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
@@ -690,6 +690,7 @@ def data_poll(request):
         json_object['type'] = 1 if poll.poll_type == 'Date' else 0
         json_object['candidates'] = ['candidate'+str(i+1) for i,c in enumerate(candidates)]
         json_object['votes'] =[ ( 'voter'+ str(i+1) , score)for i, score in enumerate(tab.values())]
-        json_polls[str(poll.id)]=json_object
+        json_polls['poll'+ str(i+1)]=json_object
 
-    return HttpResponse(json.dumps(json_polls, indent=4, sort_keys=True), content_type="application/json")
+    with open('polls/data.txt', 'w') as outfile:
+        json.dump(json_polls, outfile, indent=4, sort_keys=True)
