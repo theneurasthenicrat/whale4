@@ -41,7 +41,7 @@ function rank(n) {
     unsortedItem.hide();
     sortedItem.html(unsortedItem.html());
     sortedItem.attr('title',n);
-    valueItem.val( nbCandidates-worst+1);
+    valueItem.val( nbCandidates-worst);
     sortedItem.show();
     worst++;
     valid();
@@ -61,7 +61,7 @@ function unrank(n) {
     for (i=pos+1; i < worst; i++) {
         var sortedNext=$('#sorted' + i );
         var valueItemNext=$('#id_value' + sortedNext.attr('title'));
-        valueItemNext.val(nbCandidates-i+2);
+        valueItemNext.val(nbCandidates-i+1);
         sortedItem.html(sortedNext.html());
         sortedItem.attr('title',sortedNext.attr('title'));
         sortedItem=sortedNext;
