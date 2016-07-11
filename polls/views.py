@@ -164,6 +164,10 @@ def home(request):
     return render(request, 'polls/home.html')
 
 
+def experimental(request):
+    return render(request, 'polls/experimental.html')
+
+
 @login_required
 @with_admin_rights
 def admin_poll(request, pk):
@@ -477,7 +481,7 @@ def vote(request, pk):
             if poll.option_ballots:
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
             elif poll.option_experimental:
-                return redirect(reverse_lazy('home'))
+                return redirect(reverse_lazy('experimental'))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
