@@ -26,22 +26,15 @@
                         {% csrf_token %}
                         {{ formset.management_form }}
                         {% bootstrap_formset_errors formset %}
-                        <div id="form_set" >
-                            {% for form in formset.forms %}
-
-                                {% bootstrap_form form layout="horizontal"  %}
-
-                            {% endfor %}
-                        </div>
-                        <div id="empty_form" style="display:none" >
-                            {% bootstrap_form formset.empty_form  layout="horizontal"   %}
-                        </div>
-                        <label  id="add_more" class="btn btn-default  ">{% bootstrap_icon "plus" %}</label>
-                        <div class="wrapper margin1 margin2 ">
-                            <button type="submit" class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
-                        </div>
-
-                    </form>
+			<div class="input-group">
+			  <input id="id_form-0-id" name="form-0-id" type="hidden" />
+			  <input id="id_form-0-poll" name="form-0-poll" type="hidden" />
+			  <input id="id_form-0-candidate" name="form-0-candidate" type="text" class="form-control" placeholder="{% trans 'Candidate' %}"/>
+			  <span class="input-group-btn">
+			    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
+			  </span>
+			</div>
+		    </form>		    
                 </div>
             <div class="col-md-5">
                 {% if candidates %}
@@ -56,7 +49,7 @@
                             {{ c }}
                             <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
                             <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
-                                <div class="modal-dialog modal-sm">
+                                <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -66,9 +59,8 @@
                                             <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.'%}</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel'%}</button>
-                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-custom ">{% trans 'Submit' %} </a >
-
+                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >
+                                            <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
                                         </div>
 
                                     </div>
@@ -85,8 +77,8 @@
 
 
             </div>
-            <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default  pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-            <a href="{% url 'option' poll.id  %}" class="btn btn-custom  pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+            <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+            <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
 
         </div>
     </div>

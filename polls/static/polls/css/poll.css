@@ -1,10 +1,64 @@
 
+/***********************************************************
+  GENERAL RULES
+***********************************************************/
+
 body {
     font-family: 'Lato', Verdana, Arial, Sans-Serif;
     color: #444;
     margin: 0px;
     padding-top: 70px;
 }
+
+/* Color scheme
+- Orange:
+  - rgb(214, 116, 60)
+  - hex: #d6743c
+- Blue: 
+  - rgb(51, 117, 179)
+  - hex: #3375b3
+*/
+
+p.description {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */      
+    background: rgba(51, 117, 179, 0.9);
+    color: #fff;
+    padding: 10px;
+    width: 50%;
+    margin: 20px auto;
+    display: block;
+    position: relative;
+}
+
+p.description:before {
+    content: ' ';
+    padding: 0px;
+    margin: 0px;
+    margin-left: -10px;
+    display: block;
+    position: relative;
+    top: -20px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 10px solid #fafafa;
+    border-right: 10px solid #fafafa;
+    border-bottom: 10px solid rgba(51, 117, 179, 0.9);
+}
+
+@media (max-width: 767px) {
+    p.description {
+	width: 100%;
+    }
+}
+
+
+/***********************************************************
+  NAVIGATION BAR
+***********************************************************/
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
@@ -14,13 +68,14 @@ body {
 }
 
 .navbar-custom {
-    background-color: rgba(220, 220, 220, 0.9);
+    background-color: #fafafa;
     border-color: rgb(235, 235, 235);
 }
 
 .navbar-custom .navbar-brand {
     color: #ffffff;
-    opacity: 1;
+    opacity: 0.9;
+    margin-top: -3px;
 }
 
 .navbar-custom .navbar-brand:hover,
@@ -68,7 +123,7 @@ body {
     color: #3375b3;    
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > .divider {
-  background-color: #2037b7;
+  background-color: #3375b3;
 }
 .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
 .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
@@ -81,6 +136,15 @@ body {
     background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
     color: #3375b3;    
 }
+
+.dropdown-header-custom {
+  display: block;
+  padding: 3px 20px;
+  line-height: 1.42857143;
+  color: #3375b3;
+  white-space: nowrap;
+}
+
 
 .navbar-custom .navbar-nav > .active > a,
 .navbar-custom .navbar-nav > .active > a:hover,
@@ -102,26 +166,28 @@ body {
     transition: all .2s linear;
 }
 .navbar-custom .navbar-toggle {
-  border-color: #1344b7;
+    color: rgb(0, 0, 0);
+    border-color: rgb(235, 235, 235);
+    border-radius: 0px;
 }
 .navbar-custom .navbar-toggle:hover,
 .navbar-custom .navbar-toggle:focus {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .navbar-custom .navbar-toggle .icon-bar {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .navbar-custom .navbar-collapse,
 .navbar-custom .navbar-form {
-  border-color: #326db7;
+    border-color: rgb(235, 235, 235);
 }
+
 .navbar-custom .navbar-link {
   color: #326db7;
 }
 .navbar-custom .navbar-link:hover {
   color: #d6743c;
 }
-
 
 .flag {
     border-width: 0px;
@@ -138,6 +204,474 @@ body {
     background-image:url("../images/english.png") ;
 }
 
+@media (max-width: 767px) {
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
+    color: #000000;
+    opacity: 0.6;
+    text-transform: uppercase;
+    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: #000;
+  }
+}
+
+
+
+/***********************************************************
+  WELLS
+***********************************************************/
+
+.well {
+	min-height: 20px;
+	padding: 19px;
+	margin-bottom: 20px;
+	color: rgba(51, 117, 179, 1);
+	background: #fafafa;
+	border: 1px solid #e3e3e3;
+	border-radius: 0px;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+
+.well h2 {
+    color: rgba(51, 117, 179, 1);
+}
+
+.well h3 {
+    color: rgb(214, 116, 60);
+}
+
+/***********************************************************
+  ALERTS
+***********************************************************/
+
+.alert {
+    border-radius: 0px;
+    border: 0px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-shadow: none;
+}
+
+.alert-success {
+    background: #5cb85c;    
+    color: white;
+}
+
+.alert-success .close {
+    color: #fff;
+    opacity: 0.5;
+}
+
+.alert-success .close:hover {
+    opacity: 1;
+}
+
+
+.alert-info {
+    background: rgba(51, 117, 179, 0.9);
+    color: white;
+}
+
+
+.alert-info .close {
+    color: #fff;
+    opacity: 0.5;
+}
+
+.alert-info .close:hover {
+    opacity: 1;
+}
+
+
+/***********************************************************
+  BUTTONS
+***********************************************************/
+
+.btn {
+    border-radius: 0px;
+    border: 0px;
+    text-shadow: none;
+    margin: 0px 5px;
+}
+
+.input-group-btn .btn-custom {
+    color: #ffffff;
+    padding: 6px 12px;
+    background-color: rgba(51, 117, 179, 0.9);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    transition: all .2s linear;	
+}
+
+.btn-custom {
+    color: #ffffff;
+    background-color: rgba(51, 117, 179, 0.9);
+    transition: all .2s linear;	
+}
+
+.btn-custom.next {
+    width: 200px;
+    float: right;
+}
+.btn-custom.previous {
+    width: 200px;
+    float: left;
+}
+
+@media (max-width: 767px) {
+    .btn-custom.next {
+	width: 45%;
+	float: right;
+    }
+    .btn-custom.previous {
+	width: 45%;
+	float: left;
+    }
+}
+
+.btn-custom:hover,
+.btn-custom:focus,
+.btn-custom:active,
+.btn-custom.active,
+.open .dropdown-toggle.btn-custom {
+    color: #ffffff;
+    background-color: rgba(51, 117, 179, 1);
+    transition: all .2s linear;	
+    box-shadow: 0px 0px 5px #888888;
+}
+
+.btn-custom:active,
+.btn-custom.active,
+.open .dropdown-toggle.btn-custom {
+  background-image: none;
+}
+
+.btn-custom.disabled,
+.btn-custom[disabled],
+fieldset[disabled] .btn-custom,
+.btn-custom.disabled:hover,
+.btn-custom[disabled]:hover,
+fieldset[disabled] .btn-custom:hover,
+.btn-custom.disabled:focus,
+.btn-custom[disabled]:focus,
+fieldset[disabled] .btn-custom:focus,
+.btn-custom.disabled:active,
+.btn-custom[disabled]:active,
+fieldset[disabled] .btn-custom:active,
+.btn-custom.disabled.active,
+.btn-custom[disabled].active,
+fieldset[disabled] .btn-custom.active {
+  background-color:  #326db7;
+  border-color: #1515e3;
+}
+
+.btn-custom .badge {
+  color: #ffffff;
+  background-color:  #326db7;
+}
+
+.btn-success {
+    color: #ffffff;
+    background: #5cb85c;
+    transition: all .2s linear;	
+    opacity: 0.9;
+}
+
+.btn-success:hover {
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: 0px 0px 5px #888888;
+}
+
+.btn-danger {
+    color: #ffffff;
+    background: #b92c28;
+    transition: all .2s linear;	
+    opacity: 0.9;
+}
+
+.btn-danger:hover {
+    opacity: 1;
+    color: #ffffff;
+    box-shadow: 0px 0px 5px #888888;
+}
+
+
+.btn-ok {
+    color: #ffffff;
+    background: #5cb85c;
+    transition: all .2s linear;	
+    opacity: 0.9;
+    float: right;
+    width: auto;
+    margin: 10px;
+}
+
+.btn-ok:hover {
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: 0px 0px 5px #888888;
+}
+
+.btn-cancel {
+    color: #ffffff;
+    background: #b92c28;
+    transition: all .2s linear;	
+    opacity: 0.9;
+    float: right;
+    width: auto;
+    margin: 10px;
+}
+
+.btn-cancel:hover {
+    color: #ffffff;
+    opacity: 1;
+    box-shadow: 0px 0px 5px #888888;
+}
+
+
+/***********************************************************
+  MODALS
+***********************************************************/
+
+.modal-dialog .modal-content {
+    border-radius: 0px;
+    text-align: center;
+    background-color: rgba(51, 117, 179, 1);
+    color: #fff;
+}
+
+.modal-dialog .modal-header {
+    border: 0px;
+    color: #fff;
+}
+
+.modal-dialog .modal-header h4 {
+    margin-bottom:0px ;
+}
+
+.modal-dialog .modal-title {
+    color: #fff;
+}
+
+.modal-dialog .modal-footer {
+    border: 0px;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.modal-dialog .close {
+    color: #fff;
+    opacity: 0.5;
+    transition: all .2s linear;	
+}
+
+.modal-dialog .close:hover {
+    opacity: 1;
+}
+
+
+/***********************************************************
+  LISTS-GROUPS
+***********************************************************/
+
+
+.list-group {
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.list-group-item {
+    border-radius: 0px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    color: rgba(128, 128, 128, 0.8);
+}
+
+.list-group-item:first-child,
+.list-group-item:last-child {
+    border-radius: 0px;
+}
+
+/***********************************************************
+  CHOICES
+***********************************************************/
+
+.choice .list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: rgba(51, 117, 179, 0.9);
+    border: 0px solid #ddd;
+    border-radius: 0px;
+    color: #fff;
+    transition: all .2s linear;
+}
+
+.choice .list-group-item-active,
+.choice .list-group-item:hover {
+    background-color: rgba(51, 117, 179, 1);
+    transition: all .2s linear;
+    box-shadow: 0px 0px 5px #888888;
+}
+
+.choice .list-group-item .list-group-item-heading {
+    color: #fff;
+}
+
+.choice a {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.choice a h4 {
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+}
+
+.choice a p {
+    text-align: center;
+    color: #fff;
+    font-weight: normal;
+}
+
+
+/***********************************************************
+  LOGIN FORMS AND THUMBNAILS
+***********************************************************/
+
+.form-login {
+    background-color: #fafafa;
+    border: 1px solid rgb(235, 235, 235);
+}
+
+.form-login h4 {
+    /*    border-bottom: 1px solid rgba(128, 128, 128, 0.5);*/
+    padding: 10px;
+    margin-bottom:20px ;
+    text-align: center;
+    font-size: 24px;
+    color: rgb(68, 68, 68); 
+}
+
+.form-control {
+    border-radius: 0px;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+.thumbnail {
+    background-color: #fafafa;
+    border: 1px solid rgb(235, 235, 235);
+    border-radius: 0px;
+    padding: 10px;
+}
+
+
+/***********************************************************
+  NAV PILLS
+***********************************************************/
+
+.nav-pills-custom li>a {
+    list-style: decimal inside;
+    display: list-item;
+}
+
+.nav-pills-custom > li {
+  float: left;
+}
+.nav-pills-custom > li > a {
+  border-radius: 0px;
+}
+.nav-pills-custom > li + li {
+  margin-left: 2px;
+}
+.nav-pills-custom > li.active > a,
+.nav-pills-custom > li.active > a:hover,
+.nav-pills-custom > li.active > a:focus {
+  color:#ffffff;
+  background-color:  rgba(51, 117, 179, 0.9);
+  border-radius: 0px;
+}
+
+/***********************************************************
+  MATERIAL SWITCHES
+  Snippet by mouse0270 under MIT License:
+  http://bootsnipp.com/snippets/featured/material-design-switch
+***********************************************************/
+
+.material-switch  {
+    background: rgb(218, 218, 218);
+    color: #666;
+    margin: 5px;
+    padding: 20px;
+}
+
+.material-switch  > input[type="checkbox"] {
+    display: none;   
+}
+
+.material-switch  > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;
+}
+
+.material-switch div.cb-label {
+    font-weight: bold;
+    display: block;
+    margin-left: 60px;
+    margin-top: -20px;
+}
+
+.material-switch div.cb-help-text {
+    display: block;
+    margin-left: 60px;
+}
+
+
+.material-switch  > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch  > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch  > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch  > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
 
 
 h2{
@@ -175,12 +709,6 @@ table.table-bordered{
 .type{
     margin-left: 100px;
 }
-.choice a{
-    margin-bottom: 10px;
-}
-.choice a p,h4{
-    text-align: center;
-}
 
 #list_init li{
      margin-bottom: 10px;
@@ -193,10 +721,6 @@ border-right: dotted;
 
 }
 
-.nav-pills-custom li>a {
-     list-style: decimal inside;
-    display: list-item;
-}
 
 
 
@@ -255,85 +779,11 @@ background-color: #f6f8ff
 
 
 
-
-.form-login {
-    background-color: #EDEDED;
-    border: 5px #d2d2d2;
-    padding: 2%;
-    box-shadow:0 1px 0 #cfcfcf;
-}
-
-.form-login h4 {
- border:0 solid #fff;
- border-bottom-width:1px;
- padding-bottom:10px;
-    margin-bottom:20px ;
- text-align: center;
-}
-
-.form-control {
-    border-radius: 10px;
-}
-
 .wrapper {
     text-align: center;
 }
 
 
-.btn-custom {
-  color: #ffffff;
-  background-color:  #326db7;
-  border-color: #1515e3;
-}
-
-.btn-custom:hover,
-.btn-custom:focus,
-.btn-custom:active,
-.btn-custom.active,
-.open .dropdown-toggle.btn-custom {
-  color: #ffffff;
-  background-color:  #326db7;
-  border-color: #1515e3;
-}
-
-.btn-custom:active,
-.btn-custom.active,
-.open .dropdown-toggle.btn-custom {
-  background-image: none;
-}
-
-.btn-custom.disabled,
-.btn-custom[disabled],
-fieldset[disabled] .btn-custom,
-.btn-custom.disabled:hover,
-.btn-custom[disabled]:hover,
-fieldset[disabled] .btn-custom:hover,
-.btn-custom.disabled:focus,
-.btn-custom[disabled]:focus,
-fieldset[disabled] .btn-custom:focus,
-.btn-custom.disabled:active,
-.btn-custom[disabled]:active,
-fieldset[disabled] .btn-custom:active,
-.btn-custom.disabled.active,
-.btn-custom[disabled].active,
-fieldset[disabled] .btn-custom.active {
-  background-color:  #326db7;
-  border-color: #1515e3;
-}
-
-.btn-custom .badge {
-  color: #ffffff;
-  background-color:  #326db7;
-}
-
-.dropdown-header-custom {
-  display: block;
-  padding: 3px 20px;
-  font-size: 12px;
-  line-height: 1.42857143;
-  color: #2037b7;
-  white-space: nowrap;
-}
 
 
 .margin2{
@@ -346,89 +796,94 @@ fieldset[disabled] .btn-custom.active {
 
 
 
-.nav-pills-custom > li {
-  float: left;
+
+/***********************************************************
+  THE MAIN POLL TABLE
+***********************************************************/
+
+.poll-table tr{
+    border-bottom: 2px solid rgb(255, 255, 255);
 }
-.nav-pills-custom > li > a {
-  border-radius: 4px;
+
+.poll-table thead tr td {
+    background-color: #fff;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
-.nav-pills-custom > li + li {
-  margin-left: 2px;
+
+.poll-table thead tr th {
+    background-color: #fafafa;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
-.nav-pills-custom > li.active > a,
-.nav-pills-custom > li.active > a:hover,
-.nav-pills-custom > li.active > a:focus {
-  color:#ffffff;
-  background-color:  #326db7;
+
+.poll-table tr td,
+.poll-table tr th {
+    background-color: #fafafa;
+    border-bottom: 1px solid rgb(255, 255, 255);
 }
 
 
-@media (max-width: 767px) {
-  .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
-    color: #2037b7;
-  }
-  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
-  .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #ffffff;
-  }
-  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a,
-  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
-  .navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #ffffff;
-    background-color: #2037b7;
-  }
+.poll-table tr td.poll-100percent {
+    background: rgba(108, 191, 108, 0.8);
+    color: #fff;
 }
 
-.table-bordered tr td.poll-100percent {
-	background: rgb(76.0%, 100.0%, 63.0%);
+.poll-table tr td.poll-90percent {
+    background: rgba(137, 203, 117, 0.8);
 }
 
-.table-bordered tr td.poll-90percent {
-	background: rgb(80.8%, 100.0%, 62.4%);
+.poll-table tr td.poll-80percent {
+    background: rgba(166, 215, 126, 0.8);
 }
 
-.table-bordered tr td.poll-80percent {
-	background: rgb(85.6%, 100.0%, 61.8%);
+.poll-table tr td.poll-70percent {
+    background: rgba(195, 227, 135, 0.8);
 }
 
-.table-bordered tr td.poll-70percent {
-	background: rgb(90.4%, 100.0%, 61.2%);
+.poll-table tr td.poll-60percent {
+    background: rgba(224, 239, 144, 0.8);
 }
 
-.table-bordered tr td.poll-60percent {
-	background: rgb(95.2%, 100.0%, 60.6%);
+.poll-table tr td.poll-50percent {
+    background: rgba(255, 255, 153, 1);
 }
 
-.table-bordered tr td.poll-50percent {
-	background: rgb(100.0%, 100.0%, 60.0%);
+.poll-table tr td.poll-40percent {
+    background: rgba(240, 217, 133, 0.8);
 }
 
-.table-bordered tr td.poll-40percent {
-	background: rgb(100.0%, 93.4%, 61.0%);
+.poll-table tr td.poll-30percent {
+    background: rgba(228, 179, 115, 0.8);
 }
 
-.table-bordered tr td.poll-30percent {
-	background: rgb(100.0%, 86.8%, 62.0%);
+.poll-table tr td.poll-20percent {
+    background: rgba(216, 141, 97, 0.8);
 }
 
-.table-bordered tr td.poll-20percent {
-	background: rgb(100.0%, 80.2%, 63.0%);
+.poll-table tr td.poll-10percent {
+    background: rgba(204, 103, 79, 0.8);
 }
 
-.table-bordered tr td.poll-10percent {
-	background: rgb(100.0%, 73.6%, 64.0%);
+.poll-table  tr td.poll-0percent {
+    background: rgba(192, 65, 61, 0.8);
+    color: #fff;
 }
 
-.table-bordered  tr td.poll-0percent {
-	background: rgb(100.0%, 67.0%, 65.0%)
-}
-
-.table-bordered tr td.poll-undefined {
+.poll-table tr td.poll-undefined {
 	background: rgb(85.0%, 85.0%, 85.0%)
 }
 
-.table-bordered tbody tr td.controls {
-	width: 64px;
-	border-top-left-radius: 20px;
-	border-bottom-left-radius: 20px;
+
+.poll-table tbody tr td.controls {
+    width: 64px;
+    background-color: rgba(255, 255, 255, 1);
+    color: #fff;    
+}
+
+.poll-table tbody tr td.controls > a {
+    padding: 2px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.poll-table tbody tr td.controls a.remove {
+    color: #b92c28;
 }
