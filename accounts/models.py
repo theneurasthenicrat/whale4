@@ -69,6 +69,7 @@ class WhaleUser(User, AbstractBaseUser):
 
 from polls.models import VotingPoll
 
+
 class WhaleUserAnonymous(User):
     certificate = models.CharField(max_length=100)
     email = models.EmailField(verbose_name=_('Email address'), max_length=255)
@@ -89,4 +90,14 @@ class WhaleUserAnonymous(User):
     @staticmethod
     def nickname_generator(poll):
         users = WhaleUserAnonymous.objects.filter(poll_id=poll).count() + 1
-        return 'Anomymous' + str(users)
+        return 'Anonymous' + str(users)
+
+
+class WhaleUserExperimental(User):
+    status = models.BooleanField(default=False)
+    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
+
+    @staticmethod
+    def nickname_generator(poll):
+        user = WhaleUserExperimental.objects.filter(poll_id=poll).count() + 1
+        return 'Anonymous' + str(user)

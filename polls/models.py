@@ -35,6 +35,7 @@ class VotingPoll(Poll):
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=False)
     option_modify=models.BooleanField(default=False)
+    option_experimental=models.BooleanField(default=False)
 
 
 class Candidate(models.Model):
@@ -101,6 +102,9 @@ class PreferenceModel:
     def min(self): 
         return min(self.values[1:])
 
+    def len(self):
+        return len(self.values[1:])
+
     def max(self): 
         return max(self.values[1:])
 
@@ -124,7 +128,7 @@ class PreferenceModel:
 
 class Ranking(PreferenceModel):
     def __init__(self, ties_allowed, nb_cand ):
-        values = [x for x in range(nb_cand,0,-1 )]
+        values = [x for x in range(nb_cand-1,-1,-1 )]
         texts = [str(x) for x in range(1,nb_cand+1 )]
         PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed == 1 else "NoTies"),texts,values)
 

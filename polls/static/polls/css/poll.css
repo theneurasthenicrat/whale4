@@ -78,6 +78,9 @@ p.description:before {
     }
 }
 
+#radioBtn .notActive{
+    color: #3276b1;
+}
 
 /***********************************************************
   NAVIGATION BAR

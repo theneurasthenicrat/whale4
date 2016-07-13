@@ -6,6 +6,7 @@ uuid4="[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^choice$', views.choice, name='choice'),
+    url(r'^experimental$', views.experimental, name='experimental'),
     url(r'^candidateCreate/(?P<pk>'+uuid4+')/$', views.candidate_create, name='candidateCreate'),
     url(r'^dateCandidateCreate/(?P<pk>'+uuid4+')/$', views.date_candidate_create, name='dateCandidateCreate'),
     url(r'^manageCandidate/(?P<pk>'+uuid4+')/$', views.manage_candidate, name='manageCandidate'),
@@ -23,6 +24,7 @@ urlpatterns = [
     url(r'^option/(?P<pk>'+uuid4+')/$', views.option, name='option'),
     url(r'^deleteVotingPoll/(?P<pk>'+uuid4+')/$', views.voting_poll_delete, name='deleteVotingPoll'),
     url(r'^certificate/(?P<pk>'+uuid4+')', views.certificate, name='certificate'),
+    url(r'^result/(?P<pk>'+uuid4+')', views.result_view, name='result'),
 
 
 ]

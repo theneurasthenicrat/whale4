@@ -137,5 +137,7 @@
         {% endif %}
     </div>
     <script src="{% static 'polls/js/vote.js' %}" type="text/javascript"></script>
-
+    {% if poll.option_experimental%}
+    <script src="{% static 'polls/js/vote_experimental.js' %}" type="text/javascript"></script>
+    {% endif %}
 {% endblock %}
