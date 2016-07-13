@@ -301,7 +301,6 @@ p.description:before {
     border-radius: 0px;
     border: 0px;
     text-shadow: none;
-    margin: 0px 5px;
 }
 
 .input-group-btn .btn-custom {
@@ -552,6 +551,7 @@ fieldset[disabled] .btn-custom.active {
 .form-login {
     background-color: #fafafa;
     border: 1px solid rgb(235, 235, 235);
+    padding: 20px;
 }
 
 .form-login h4 {

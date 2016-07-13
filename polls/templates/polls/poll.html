@@ -103,12 +103,18 @@
 
 
 
-<div class="clearfix margin2">
-   <div class="col-md-3 col-sm-1"></div>
-   <a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-3 col-md-2">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
-   <a href="#" class="btn btn-custom btn-lg col-xs-12 col-sm-3 col-md-2">{% bootstrap_icon "stats" %} {% trans 'results' %}</a>
-   <a href="{% url 'admin' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-3 col-md-2">{% bootstrap_icon "cog" %} {% trans 'settings' %}</a>
-   <div  class="col-md-3 col-sm-1"></div>
+<div class="row">
+  <div class="col-md-3 col-lg-3"></div>
+  <div class=" col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2">
+    <a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
+  </div>
+  <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2" >
+    <a href="#" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "stats" %} {% trans 'results' %}</a>
+  </div>
+  <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
+   <a href="{% url 'admin' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "cog" %} {% trans 'settings' %}</a>
+  </div>
+  <div class="col-md-3 col-lg-3"></div>
  </div>
 </div>
 
