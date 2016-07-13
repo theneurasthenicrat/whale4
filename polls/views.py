@@ -14,7 +14,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 
-from accounts.models import WhaleUser,WhaleUserAnonymous,User
+from accounts.models import WhaleUser,WhaleUserAnonymous,User,WhaleUserExperimental
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
     OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
@@ -38,9 +38,18 @@ def with_voter_rights(fn):
     def wrapped(request, pk,voter):
         poll = get_object_or_404(VotingPoll, id=pk)
         user = get_object_or_404(User, id=voter)
+        if poll.option_experimental:
+            messages.error(request, _('Experimental vote can not be updated'))
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+        elif poll.option_ballots :
+            if ("user" in request.session and request.session["user"]==user.id):
+                return fn(request, pk, voter)
+            else:
+                messages.error(request, _('Experimental vote can not be updated'))
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
 
-        if (not poll.option_experimental) or ( request.user is not None and request.user.id == user.id) or ("user_id" in request.session and request.session["user_id"]==user.id) \
-            or ("user" in request.session and request.session["user"]==user.id):
+        elif ( request.user is not None and request.user.id == user.id \
+                or not isinstance(user,WhaleUser)):
             return fn(request, pk, voter)
         else:
             messages.error(request, _('This is not your vote'))
@@ -433,26 +442,21 @@ def certificate(request, pk):
 def vote(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidates = (
-        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
-    months = []
-    days = []
+    candidates = ( DateCandidate.objects.filter(poll_id=poll.id) \
+                       if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
-
-    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
     read = True
     if not poll.option_ballots:
         if poll.option_experimental:
-            voter = User.objects.create(nickname='Anomymous')
+            voter = WhaleUserExperimental(nickname=WhaleUserExperimental.nickname_generator(poll.id), poll=poll)
         elif request.user.is_authenticated():
             voter=request.user
         else:
             read=False
-            voter = User.objects.create(nickname='')
-            request.session["user_id"] = str(voter.id)
+            voter = User()
     else:
         user_id = request.session["user"]
         voter = get_object_or_404(WhaleUserAnonymous, id= user_id)

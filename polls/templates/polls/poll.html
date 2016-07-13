@@ -64,7 +64,10 @@
                             <tr>
                                 <td class="controls">
                                     {% if poll.option_experimental%}
-                                        <input type="checkbox" name="my-checkbox"  checked  data-size="mini">
+
+                                        <input type="radio" id="radio{{ v.id }}" onclick="deblock(this.id)"><i class="fa fa-unlock"></i>
+
+
                                     {% elif poll.option_ballots %}
 
                                     {% else %}
