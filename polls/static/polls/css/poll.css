@@ -19,6 +19,29 @@ body {
   - hex: #3375b3
 */
 
+
+h2{
+    text-align: center;
+    color: #326db7;
+}
+
+h3{
+    text-align: center;
+    color: #292427;
+}
+
+h4 {
+    padding: 10px;
+    margin-bottom:20px ;
+    text-align: center;
+    font-size: 24px;
+    color: rgb(51, 117, 179);
+}
+
+footer {
+    height: 50px;    
+}
+
 p.description {
     white-space: pre-wrap;       /* css-3 */
     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
@@ -554,15 +577,6 @@ fieldset[disabled] .btn-custom.active {
     padding: 20px;
 }
 
-.form-login h4 {
-    /*    border-bottom: 1px solid rgba(128, 128, 128, 0.5);*/
-    padding: 10px;
-    margin-bottom:20px ;
-    text-align: center;
-    font-size: 24px;
-    color: rgb(68, 68, 68); 
-}
-
 .form-control {
     border-radius: 0px;
     border: 1px solid rgba(128, 128, 128, 0.5);
@@ -673,15 +687,6 @@ fieldset[disabled] .btn-custom.active {
     left: 20px;
 }
 
-
-h2{
-    text-align: center;
-    color: #326db7;
-}
-h3{
-    text-align: center;
-    color: #292427;
-}
 
 
 td:nth-child(1).border {
@@ -873,17 +878,25 @@ background-color: #f6f8ff
 }
 
 
-.poll-table tbody tr td.controls {
+table tbody tr td.controls {
     width: 64px;
-    background-color: rgba(255, 255, 255, 1);
+    background: transparent;
     color: #fff;    
 }
 
-.poll-table tbody tr td.controls > a {
+table tbody tr td.controls > a {
     padding: 2px;
     color: rgba(0, 0, 0, 0.5);
 }
 
-.poll-table tbody tr td.controls a.remove {
-    color: #b92c28;
+table tbody tr td.controls > a:hover {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+table tbody tr td.controls a.remove {
+    color: rgba(185, 44, 40, 0.8);
+}
+
+table tbody tr td.controls a.remove:hover {
+    color: rgba(185, 44, 40, 1);
 }
