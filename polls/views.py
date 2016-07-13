@@ -147,7 +147,7 @@ def data_poll():
         json_object['votes'] = [('voter' + str(i + 1), score) for i, score in enumerate(tab.values())]
         json_polls['poll' + str(i + 1)] = json_object
 
-    with open('polls/data.txt', 'w') as outfile:
+    with open('polls/data.json', 'w') as outfile:
         json.dump(json_polls, outfile, indent=4, sort_keys=True)
 
 # views ######################################################################
