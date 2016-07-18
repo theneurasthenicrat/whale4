@@ -127,4 +127,3 @@ class InviteForm(forms.Form):
 
 class BallotForm(forms.Form):
     certificate =forms.CharField(max_length=16)
-    

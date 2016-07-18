@@ -84,8 +84,8 @@
                 </div>
             </div>
             <div class="margin2">
-                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-default btn-lg  pull-left"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url 'option' poll.id  %}" class="btn btn-custom  pull-right">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             </div>
         </div>
     </div>

@@ -173,8 +173,8 @@
                     </div>
                 </div>
             {% endif %}
-            <a href="{% url 'option' poll.id %}"  class="btn btn-default pull-left"> <i class="fa fa-chevron-left"></i> {% trans 'Back' %}</a>
-        <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom pull-right">  {% trans 'Poll' %}<i class="fa fa-chevron-right"></i></a>
+            <a href="{% url 'option' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+            <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
         </div>
     </div>
     <script src="{% static 'polls/js/candidate.js' %}" type="text/javascript"></script>
