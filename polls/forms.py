@@ -15,16 +15,17 @@ from django.utils.translation import ugettext as _
 class VotingPollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        exclude = ['admin','poll_type','option_ballots','option_choice','option_modify','option_experimental','status']
+        fields = ['title','description','closing_date','preference_model']
         widgets = {
+            'title': widgets.Input(attrs={ 'placeholder': 'Enter title '}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': 'Enter closing date'}),
-            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': 'Enter description '}),
         }
 
 
 class VotingPollUpdateForm(ModelForm):
     class Meta(VotingPollForm.Meta):
-        exclude = ['admin','poll_type','option_ballots','option_choice','option_modify','preference_model']
+        fields = ['title', 'description', 'closing_date']
 
 
 class OptionForm(Form):
@@ -39,6 +40,14 @@ class CandidateForm(ModelForm):
     class Meta:
         model = Candidate
         exclude = ['poll']
+        widgets = {
+            'candidate': widgets.Input(attrs={'class':'form-control', 'placeholder':'Candidate'}),
+
+        }
+        labels={
+            'candidate':"",
+        }
+
 
 
 class DateCandidateForm(ModelForm):

@@ -208,25 +208,20 @@ def manage_candidate(request, pk):
 def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = Candidate.objects.filter(poll_id=poll.id)
-    candidateformset = inlineformset_factory(VotingPoll, Candidate, form=CandidateForm,
-                                             formset=BaseCandidateFormSet, extra=1, can_delete=False)
-    formset = candidateformset(prefix='form')
-    print(formset)
+    form = CandidateForm()
     if request.method == 'POST':
-        formset = candidateformset(request.POST, instance=poll, prefix='form')
-        if formset.is_valid():
-            labels = formset.save(commit=False)
-            equal_label=[c for c in candidates for ca in labels  if str(c)== str(ca)]
+        form = CandidateForm(request.POST)
+        if form.is_valid():
+            label = form.save(commit=False)
+            equal_label=[c for c in candidates if str(c) == str(label)]
             if not equal_label:
-                for candidate in labels:
-                    candidate.save()
+                label.poll = poll
+                label.save()
                 voters_undefined(poll)
-                messages.success(request, _('Candidates successfully added!'))
+                messages.success(request, _('Candidate successfully added!'))
             else:
-                messages.error(request, _('candidates must be distinct'))
-
+                messages.error(request, _('Candidates must be distinct'))
         return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
-
     return render(request, 'polls/candidate.html', locals())
 
 

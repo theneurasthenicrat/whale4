@@ -1,21 +1,27 @@
 from django import forms
+from django.forms import widgets
 from accounts.models import WhaleUser
 from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label=_('Email address'), max_length=255, required=True)
-    password = forms.CharField(widget=forms.PasswordInput,label=_('Password'))
+    email = forms.EmailField(label=_('Email address *'),widget=forms.EmailInput(attrs={ 'placeholder': 'Enter your email address'}), max_length=255, required=True)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Enter your password'}),label=_('Password *'))
 
 
 class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput,label=_('Password'))
-    password_confirmation = forms.CharField(widget=forms.PasswordInput,label=_('Password confirmation'))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Enter your password'}),label=_('Password *'))
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Confirme your password'}),label=_('Password confirmation *'))
 
     class Meta:
         model = WhaleUser
         fields = ['email', 'nickname']
+        widgets = {
+            'email': widgets.EmailInput(attrs={'placeholder': 'Enter your email'}),
+            'nickname': widgets.Input(attrs={ 'placeholder': 'Enter your nickname'}),
+
+        }
 
     def clean_password_confirmation(self):
         password = self.cleaned_data.get("password")

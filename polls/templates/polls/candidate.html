@@ -25,57 +25,53 @@
                 <div class=" well-lg col-md-7 ">
                     <form action="" method="post" >
                         {% csrf_token %}
-                        {{ formset.management_form }}
-                        {% bootstrap_formset_errors formset %}
-			<div class="input-group">
-			  <input id="id_form-0-id" name="form-0-id" type="hidden" />
-			  <input id="id_form-0-poll" name="form-0-poll" type="hidden" />
-			  <input id="id_form-0-candidate" name="form-0-candidate" type="text" class="form-control" placeholder="{% trans 'Candidate' %}"/>
+                        {% bootstrap_form_errors form %}
+                        <div class="input-group">
+                            {{ form }}
 			  <span class="input-group-btn">
 			    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
 			  </span>
-			</div>
-		    </form>		    
+                        </div>
+                    </form>
                 </div>
-            <div class="col-md-5">
-                {% if candidates %}
-        <div class="container-fluid form-login margin1">
+                <div class="col-md-5">
+                    {% if candidates %}
+                        <div class="container-fluid form-login margin1">
 
-            <h4>{% trans 'List of current candidates'%}</h4>
+                            <h4>{% trans 'List of current candidates'%}</h4>
 
-                <ul id='list_cand' class="list-group">
-                    {% for c in candidates %}
-                        <li class="list-group-item">
+                            <ul id='list_cand' class="list-group">
+                                {% for c in candidates %}
+                                    <li class="list-group-item">
 
-                            {{ c }}
-                            <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
-                            <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">{% trans 'Delete '%}{{ c }}</h4>
+                                        {{ c }}
+                                        <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
+                                        <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">{% trans 'Delete '%}{{ c }}</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.'%}</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >
+                                                        <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.'%}</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >
-                                            <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
-                                        </div>
 
-                                    </div>
-                                </div>
-                            </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
 
-                        </li>
-                    {% endfor %}
-                </ul>
-
-        </div>
-    {% endif %}
-            </div>
-
+                        </div>
+                    {% endif %}
+                </div>
 
             </div>
             <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>

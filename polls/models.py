@@ -8,10 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 
 class Poll(models.Model):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=250,verbose_name= _("tilte"))
+    title = models.CharField(max_length=250,verbose_name= _("title *"))
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
-    closing_date = models.DateField(default=date.today()+timedelta(days=30),verbose_name= _("closing date"))
+    closing_date = models.DateField(default=date.today()+timedelta(days=30),verbose_name= _("closing date * "))
     admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
 
     def closing_poll(self):
@@ -31,7 +31,7 @@ class VotingPoll(Poll):
         ('Date', _('Date Poll'))
         )
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
-    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model"))
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model * "))
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=False)
     option_modify=models.BooleanField(default=False)

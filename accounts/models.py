@@ -31,7 +31,7 @@ cipher = AES.new(whale4.settings.SECRET_KEY)
 
 class User(models.Model):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
-    nickname = models.CharField(verbose_name=_('Nickname'), max_length=30)
+    nickname = models.CharField(verbose_name=_('Nickname *'), max_length=30)
 
 
 class WhaleUserManager(BaseUserManager):
@@ -49,7 +49,7 @@ class WhaleUserManager(BaseUserManager):
 
 
 class WhaleUser(User, AbstractBaseUser):
-    email = models.EmailField(verbose_name=_('Email address'), max_length=255, unique=True)
+    email = models.EmailField(verbose_name=_('Email address *'), max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
