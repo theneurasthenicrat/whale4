@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^deleteAnonymous/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.delete_anonymous, name='deleteAnonymous'),
     url(r'^newPoll/(?P<choice>[^/]+)/$', views.VotingPollCreate.as_view(), name='newPoll'),
     url(r'^viewPoll/(?P<pk>'+uuid4+')', views.view_poll, name='viewPoll'),
+    url(r'^status/(?P<pk>'+uuid4+')', views.status, name='status'),
     url(r'^viewPollSecret/(?P<pk>'+uuid4+')/(?P<voter>[^/]+)/$', views.view_poll_secret, name='viewPollSecret'),
     url(r'^vote/(?P<pk>'+uuid4+')', views.vote, name='vote'),
     url(r'^success/(?P<pk>'+uuid4+')/$', views.success, name='success'),

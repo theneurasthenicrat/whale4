@@ -15,9 +15,9 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 
-from accounts.models import WhaleUser, WhaleUserAnonymous, User, WhaleUserExperimental
+from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
-    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm
+    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm, StatusForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -82,6 +82,16 @@ def certificate_required(fn):
             return redirect('/polls/certificate/'+str(poll.id)+ '?next=' +str(path))
         return fn(request, pk, *args, **kwargs)
     return wrapped
+
+
+def status_required(fn):
+    def wrapped(request, pk, *args, **kwargs):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        if poll.option_experimental and (not poll.status):
+            return redirect(reverse_lazy(home))
+        return fn(request, pk, *args, **kwargs)
+    return wrapped
+
 
 
 
@@ -167,7 +177,8 @@ class VotingPollCreate(VotingPollMixin, CreateView):
         if choice == 22:
             poll.option_ballots = True
         if choice ==23:
-            poll.option_experimental= True
+          poll.option_experimental = True
+
         poll.save()
         return super(VotingPollCreate, self).form_valid(form)
 
@@ -374,6 +385,7 @@ def certificate(request, pk):
 
 
 @certificate_required
+@status_required
 def vote(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
@@ -386,7 +398,7 @@ def vote(request, pk):
     read = True
     if not poll.option_ballots:
         if poll.option_experimental:
-            voter = WhaleUserExperimental(nickname=WhaleUserExperimental.nickname_generator(poll.id), poll=poll)
+            voter = UserAnonymous(nickname=UserAnonymous.nickname_generator(poll.id), poll=poll)
         elif request.user.is_authenticated():
             voter=request.user
         else:
@@ -420,6 +432,8 @@ def vote(request, pk):
             if poll.option_ballots:
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
             elif poll.option_experimental:
+                poll.status=False
+                poll.save()
                 return redirect(reverse_lazy('experimental'))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
@@ -654,4 +668,19 @@ def result_view(request, pk ):
     return render(request, 'polls/result.html', locals())
 
 
+@login_required
+@with_view_rights
+def status(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    initial={'status':poll.status}
+    if request.method == 'POST':
+        form = StatusForm(request.POST)
+        if form.is_valid():
+            poll.status = form.cleaned_data['status']
+            poll.save()
+            messages.success(request, _('Status successfully changed!'))
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    else:
+        form = StatusForm(initial=initial)
 
+        return render(request, 'polls/status_poll.html',locals())

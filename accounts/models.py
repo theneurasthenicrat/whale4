@@ -67,13 +67,22 @@ class WhaleUser(User, AbstractBaseUser):
     def __str__(self):             
         return self.nickname
 
+
 from polls.models import VotingPoll
 
 
-class WhaleUserAnonymous(User):
+class UserAnonymous(User):
+    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
+
+    @staticmethod
+    def nickname_generator(poll):
+        user = UserAnonymous.objects.filter(poll_id=poll).count() + 1
+        return 'Anonymous' + str(user)
+
+
+class WhaleUserAnonymous(UserAnonymous):
     certificate = models.CharField(max_length=100)
     email = models.EmailField(verbose_name=_('Email address'), max_length=255)
-    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
 
     @staticmethod
     def encodeAES(s, c=cipher):
@@ -87,17 +96,6 @@ class WhaleUserAnonymous(User):
     def id_generator(size=CERT_SIZE, chars=string.ascii_lowercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-    @staticmethod
-    def nickname_generator(poll):
-        users = WhaleUserAnonymous.objects.filter(poll_id=poll).count() + 1
-        return 'Anonymous' + str(users)
 
 
-class WhaleUserExperimental(User):
-    status = models.BooleanField(default=False)
-    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
 
-    @staticmethod
-    def nickname_generator(poll):
-        user = WhaleUserExperimental.objects.filter(poll_id=poll).count() + 1
-        return 'Anonymous' + str(user)
