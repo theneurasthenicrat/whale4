@@ -529,7 +529,10 @@ fieldset[disabled] .btn-custom.active {
   CHOICES
 ***********************************************************/
 
-.choice .list-group-item {
+.choice .list-group-item ,
+.choice .list-group-item:hover,
+.choice .list-group-item:focus,
+.choice .list-group-item:active{
     position: relative;
     display: block;
     padding: 10px 15px;
@@ -537,36 +540,23 @@ fieldset[disabled] .btn-custom.active {
     background-color: rgba(51, 117, 179, 0.9);
     border: 0px solid #ddd;
     border-radius: 0px;
-    color: #fff;
     transition: all .2s linear;
-}
-
-.choice .list-group-item-active,
-.choice .list-group-item:hover {
-    background-color: rgba(51, 117, 179, 1);
-    transition: all .2s linear;
-    box-shadow: 0px 0px 5px #888888;
 }
 
 .choice .list-group-item .list-group-item-heading {
-    color: #fff;
-}
-
-.choice a {
-    margin-bottom: 10px;
-    color: #fff;
-}
-
-.choice a h4 {
     text-align: center;
-    color: #fff;
     font-size: 22px;
+    color:white;
+
 }
 
-.choice a p {
+.choice .list-group-item .list-group-item-text
+{
+    margin-bottom: 10px;
     text-align: center;
-    color: #fff;
     font-weight: normal;
+    color:white;
+
 }
 
 
