@@ -502,8 +502,7 @@ def update_vote(request, pk, voter):
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     voter = User.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
-    months = []
-    days = []
+
     initial = dict()
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
@@ -587,8 +586,7 @@ def view_poll(request, pk):
     cand = [ c.candidate for c in candidates if c.candidate]
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
-    months = []
-    days = []
+
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
     scores = {}
