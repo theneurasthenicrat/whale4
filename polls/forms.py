@@ -17,7 +17,7 @@ class VotingPollForm(ModelForm):
         model = VotingPoll
         fields = ['title','description','closing_date','preference_model']
         widgets = {
-            'title': widgets.Input(attrs={ 'placeholder': 'Enter title '}),
+            'title': widgets.TextInput(attrs={ 'placeholder': 'Enter title '}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': 'Enter closing date'}),
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': 'Enter description '}),
         }
@@ -41,7 +41,7 @@ class CandidateForm(ModelForm):
         model = Candidate
         exclude = ['poll']
         widgets = {
-            'candidate': widgets.Input(attrs={'class':'form-control', 'placeholder':'Candidate'}),
+            'candidate': widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Candidate'}),
 
         }
         labels={
@@ -57,8 +57,11 @@ class DateCandidateForm(ModelForm):
 
 
 class DateForm(Form):
-    dates = forms.CharField(max_length=300, label='Pick one or several dates', required=True,widget=forms.TextInput(attrs={'class': 'datepicker'}))
 
+    dates = forms.CharField(max_length=300, label='Pick one or several dates', widget=forms.TextInput(attrs={'class': 'datepicker form-control'}))
+    candidate = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'class': 'form-control'}),required=False,
+                                help_text='Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)',
+                                label='')
     def clean_dates(self):
         dates = self.cleaned_data["dates"].split(',')
         return dates

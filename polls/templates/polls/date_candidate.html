@@ -58,30 +58,16 @@
                 </ol>
             </div>
             <div class="well-lg">
-                <form action="" method="post" id="form1" >
-                    {% csrf_token %}
-                    {% bootstrap_form form  %}
-                    <div  id="candidate_formset">
 
-                            {{ formset.management_form }}
-                            {% bootstrap_formset_errors formset layout='inline' %}
-                            <div id="form_set" >
-                                <label>{% trans 'Give a label for the time slot to add <br>(e.g. Morning, 10AM-12AM,...)' %}</label>
-                                {% for form in formset.forms %}
-                                    {% bootstrap_form form   %}
-                                {% endfor %}
+                <form  action="" method="post">
 
-                            </div>
-                            <div id="empty_form" style="display:none">
-                                {% bootstrap_form formset.empty_form   %}
-                            </div>
-                            <label  id="add_more" class="btn btn-default pull-right ">{% bootstrap_icon "plus" %} </label>
+ {% csrf_token %}
+                        {% bootstrap_form_errors form %}
+                         {% bootstrap_form form %}
 
-                    </div>
+
+                    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
                 </form>
-                <div class="wrapper">
-                    <button type="submit" form="form1"class="btn btn-success ">{% bootstrap_icon "ok" %} {% trans 'Save' %}</button>
-                </div>
             </div>
             <div class="margin2">
                 <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
