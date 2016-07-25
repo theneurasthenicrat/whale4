@@ -5,6 +5,7 @@ from polls import views
 uuid4="[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^redirectPage/(?P<pk>'+uuid4+')/$', views.redirect_page, name='redirectPage'),
     url(r'^choice$', views.choice, name='choice'),
     url(r'^experimental$', views.experimental, name='experimental'),
     url(r'^candidateCreate/(?P<pk>'+uuid4+')/$', views.candidate_create, name='candidateCreate'),
