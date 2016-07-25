@@ -8,5 +8,7 @@
       orientation: "bottom auto",
       
   });
+     $("[name='option_choice']").bootstrapSwitch();
+         $("[name='option_modify']").bootstrapSwitch();
 
 });

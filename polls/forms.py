@@ -11,31 +11,36 @@ from django.forms import CharField, Textarea
 from django.utils.translation import ugettext as _
 
 
-class VotingPollForm(ModelForm):
+class BasePollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields = ['title','description','closing_date','preference_model']
+        fields = ['title','description','closing_date','preference_model','option_choice','option_modify']
         widgets = {
             'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title ')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': _('Enter description ')}),
+            'option_choice': widgets.CheckboxInput(attrs={'data-on-text':_("Yes"),'data-off-text':_("No")}),
+            'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes"),'data-off-text':_("No")}),
         }
 
 
+class VotingPollForm(ModelForm):
+    class Meta(BasePollForm.Meta):
+        fields = ['title', 'description', 'closing_date','preference_model']
+
 class VotingPollUpdateForm(ModelForm):
-    class Meta(VotingPollForm.Meta):
+    class Meta(BasePollForm.Meta):
         fields = ['title', 'description', 'closing_date']
 
 
 class OptionForm(ModelForm):
-    class Meta(VotingPollForm.Meta):
+    class Meta(BasePollForm.Meta):
         fields = [ 'option_choice', 'option_modify']
 
 
 class PollUpdateForm(ModelForm):
     class Meta(VotingPollForm.Meta):
         fields = ['title', 'description', 'closing_date','option_choice','option_modify']
-
 
 
 class CandidateForm(ModelForm):

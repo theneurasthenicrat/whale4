@@ -132,6 +132,7 @@ def experimental(request):
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     form = PollUpdateForm(instance=poll)
+    print(form)
     if request.method == 'POST':
         form = PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
@@ -206,10 +207,13 @@ def voting_poll_delete(request, pk):
 @with_admin_rights
 def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    if poll.poll_type != 'Date':
-        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
+    if poll.option_choice and poll.option_modify:
+        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
     else:
-        return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
+        if poll.poll_type != 'Date':
+            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
+        else:
+            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
 @login_required
