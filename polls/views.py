@@ -17,7 +17,7 @@ from django.template import Context
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
-    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm, StatusForm
+    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm, StatusForm, PollUpdateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -131,11 +131,14 @@ def experimental(request):
 @with_admin_rights
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    if poll.option_choice or poll.option_modify:
-        messages.error(request, _('You are not allowed to update the poll'))
-        return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
-    else:
-        return redirect(reverse_lazy('updateVotingPoll', kwargs={'pk': poll.pk,}))
+    form = PollUpdateForm(instance=poll)
+    if request.method == 'POST':
+        form = PollUpdateForm(request.POST,instance=poll)
+        if form.is_valid():
+            poll = form.save()
+            request.session["update"] = 1
+            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
+    return render(request, 'polls/updatePoll.html', locals())
 
 
 @login_required
@@ -153,7 +156,8 @@ class VotingPollMixin(object):
         return super(VotingPollMixin, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy(manage_candidate, kwargs={'pk': self.object.pk,})
+        self.request.session["update"] = 0
+        return reverse_lazy(manage_candidate, kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         poll = form.save(commit=False)
@@ -214,6 +218,8 @@ def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = Candidate.objects.filter(poll_id=poll.id)
     form = CandidateForm()
+    if "update" in request.session:
+        update_poll = False if int(request.session["update"]) == 1 else True
     if request.method == 'POST':
         form = CandidateForm(request.POST)
         if form.is_valid():
@@ -236,6 +242,8 @@ def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
     form = DateForm()
+    if "update" in request.session:
+        update_poll = False if int(request.session["update"]) == 1 else True
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid() :

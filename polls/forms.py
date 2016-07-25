@@ -7,9 +7,8 @@ from polls.models import VotingPoll, Candidate, DateCandidate, UNDEFINED_VALUE
 from django import forms
 import re
 from django.core.validators import validate_email
-from django.forms import CharField, Textarea, ValidationError
+from django.forms import CharField, Textarea
 from django.utils.translation import ugettext as _
-
 
 
 class VotingPollForm(ModelForm):
@@ -17,9 +16,9 @@ class VotingPollForm(ModelForm):
         model = VotingPoll
         fields = ['title','description','closing_date','preference_model']
         widgets = {
-            'title': widgets.TextInput(attrs={ 'placeholder': 'Enter title '}),
-            'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': 'Enter closing date'}),
-            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': 'Enter description '}),
+            'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title ')}),
+            'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
+            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': _('Enter description ')}),
         }
 
 
@@ -28,12 +27,15 @@ class VotingPollUpdateForm(ModelForm):
         fields = ['title', 'description', 'closing_date']
 
 
-class OptionForm(Form):
-    option_choice = forms.BooleanField(label='Vote "I don\'t know" is not allowed',required=False,
-                                       help_text="Voters can choice i don't know by default."
-                                                 " if you want to remove this option check the box")
-    option_modify = forms.BooleanField(label="Modify candidates is not allowed",required=False,
-                                       help_text="It is impossible to modify the candidates later( add or remove)")
+class OptionForm(ModelForm):
+    class Meta(VotingPollForm.Meta):
+        fields = [ 'option_choice', 'option_modify']
+
+
+class PollUpdateForm(ModelForm):
+    class Meta(VotingPollForm.Meta):
+        fields = ['title', 'description', 'closing_date','option_choice','option_modify']
+
 
 
 class CandidateForm(ModelForm):
@@ -41,7 +43,7 @@ class CandidateForm(ModelForm):
         model = Candidate
         exclude = ['poll']
         widgets = {
-            'candidate': widgets.TextInput(attrs={'class':'form-control', 'placeholder':'Candidate'}),
+            'candidate': widgets.TextInput(attrs={'class':'form-control', 'placeholder':_('Candidate')}),
 
         }
         labels={
@@ -58,9 +60,9 @@ class DateCandidateForm(ModelForm):
 
 class DateForm(Form):
 
-    dates = forms.CharField(max_length=300, label='Pick one or several dates', widget=forms.TextInput(attrs={'class': 'datepicker form-control'}))
+    dates = forms.CharField(max_length=300, label=_('Pick one or several dates'), widget=forms.TextInput(attrs={'class': 'datepicker form-control'}))
     candidate = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'class': 'form-control'}),required=False,
-                                help_text='Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)',
+                                help_text=_('Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)'),
                                 label='')
     def clean_dates(self):
         dates = self.cleaned_data["dates"].split(',')
@@ -75,7 +77,7 @@ class BaseCandidateFormSet(BaseInlineFormSet):
         for form in self.forms:
             candidate = form.cleaned_data.get("candidate")
             if candidate in candidates:
-                raise forms.ValidationError("candidates must be distinct.")
+                raise forms.ValidationError(_("candidates must be distinct."))
             candidates.append(candidate)
 
     def add_fields(self, form, index):
@@ -106,14 +108,14 @@ class VotingForm(forms.Form):
                                                                       label=c.candidate)
         else:
             for c in candidates:
-                self.fields['value' + str(c.id)] = forms.CharField(widget=forms.HiddenInput, error_messages={'required':'you must order all candidates'})
+                self.fields['value' + str(c.id)] = forms.CharField(widget=forms.HiddenInput, error_messages={'required':_('you must order all candidates')})
 
     def clean(self):
         cleaned_data = super(VotingForm, self).clean()
         for c in self.candidates:
             if cleaned_data.get('value' + str(c.id)) != str(UNDEFINED_VALUE):
                 return
-        raise forms.ValidationError("You must give a score to at least one candidate!")
+        raise forms.ValidationError(_("You must give a score to at least one candidate!"))
 
 
 email_separator_re = re.compile(r'[,;\s]+')
@@ -141,5 +143,5 @@ class BallotForm(forms.Form):
     certificate =forms.CharField(max_length=16)
 
 class StatusForm(forms.Form):
-    status= forms.BooleanField(label="Poll s'status", required=False,
-                                       help_text=" Change the status of poll")
+    status= forms.BooleanField(label=_("Poll s'status"), required=False,
+                                       help_text=_(" Change the status of poll"))

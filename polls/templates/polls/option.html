@@ -33,7 +33,7 @@
 	      {% endfor %}
             </form>
             <button type="submit"form="form1" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
-            <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+            <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
         </div>
     </div>
 {% endblock %}

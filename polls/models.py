@@ -33,8 +33,10 @@ class VotingPoll(Poll):
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
     preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model * "))
     option_ballots=models.BooleanField(default=False)
-    option_choice=models.BooleanField(default=False)
-    option_modify=models.BooleanField(default=False)
+    option_choice=models.BooleanField(default=False,verbose_name=_('Vote "I don\'t know" is not allowed'),
+                                      help_text=_("Voters can choice i don't know by default.if you want to remove this option check the box"))
+    option_modify=models.BooleanField(default=False,verbose_name=_("Modify candidates is not allowed"),
+                                      help_text=_("It is impossible to modify the candidates later( add or remove)"))
     option_experimental=models.BooleanField(default=False)
     status=models.BooleanField(default=True)
 
