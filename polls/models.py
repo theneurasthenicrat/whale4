@@ -33,8 +33,8 @@ class VotingPoll(Poll):
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
     preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model * "))
     option_ballots=models.BooleanField(default=False)
-    option_choice=models.BooleanField(default=False,verbose_name=_("Choice <span class='label label-primary'>I don't know</span>  is allowed"))
-    option_modify=models.BooleanField(default=False,verbose_name=_("Add or remove candidates is allowed"))
+    option_choice=models.BooleanField(default=True,verbose_name=_("Choice <span class='label label-primary'>I don't know</span>  is allowed"))
+    option_modify=models.BooleanField(default=True,verbose_name=_("Add or remove candidates is allowed"))
     option_experimental=models.BooleanField(default=False)
     status=models.BooleanField(default=True)
 
@@ -81,21 +81,20 @@ class PreferenceModel:
         self.texts = texts
         self.values = values
 
-        
     def zip_preference(self):
-        return zip(self.values, self.texts)
+        return zip(self.values[1:], self.texts[1:])
 
     def zip_preference_option(self):
-        return zip(self.values[1:], self.texts[1:])
+        return zip(self.values, self.texts)
 
     def last(self):
         return self.values[-1]
 
     def first(self):
-        return self.values[0]
+        return self.values[1]
 
     def first_option(self):
-        return self.values[1]
+        return self.values[0]
 
     def nb_values(self): 
         return len(self.values)
@@ -120,10 +119,10 @@ class PreferenceModel:
     def evaluate(self, value):
         return (value - self.min()) / float((self.max() - self.min()))
 
-    def as_dict(self):
+    def as_dict_option(self):
         return {"id": self.id,"values": self.values,"texts": self.texts}
 
-    def as_dict_option(self):
+    def as_dict(self):
         return {"id": self.id, "values": self.values[1:], "texts": self.texts[1:]}
 
 

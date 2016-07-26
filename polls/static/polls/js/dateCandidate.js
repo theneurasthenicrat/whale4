@@ -10,6 +10,7 @@ $(document).ready(function() {
         format: 'yyyy-mm-dd',
         multidate: true,
         orientation: "bottom auto",
+    
     });
 
 
