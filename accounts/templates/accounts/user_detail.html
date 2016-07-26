@@ -25,7 +25,9 @@
             </th>
 	  </tr>
         </thead>
+       {% if poll_list %}
         <tbody>
+
           {% for poll in poll_list %}
           <tr>
             <td class="controls">
@@ -59,6 +61,11 @@
           </tr>
           {% endfor %}
         </tbody>
+      {% else %}
+<div class="well">
+    <i>{% trans 'You are not yet admin ' %}</i>
+  </div>
+      {% endif%}
       </table>
     </div>
   </div>
@@ -78,6 +85,7 @@
             </th>
 	  </tr>
         </thead>
+       {% if poll_list_voter %}
         <tbody>
           {% for poll in poll_list_voter %}
           <tr>
@@ -112,6 +120,11 @@
           </tr>
           {% endfor %}
         </tbody>
+      {% else %}
+           <div class="well">
+    <i>{% trans 'Not yet participated ' %}</i>
+  </div>
+      {% endif%}
       </table>
     </div>
   </div>

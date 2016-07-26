@@ -132,14 +132,16 @@ def experimental(request):
 def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     form = PollUpdateForm(instance=poll)
-
+    request.session["update"] = 1
+    if "update" in request.session:
+        update_poll = False if int(request.session["update"]) == 1 else True
     if request.method == 'POST':
         form = PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
             poll = form.save()
-            request.session["update"] = 1
+
             return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/updatePoll.html', locals())
+    return render(request, 'polls/voting_poll.html', locals())
 
 
 @login_required
@@ -311,7 +313,8 @@ def option(request, pk):
 @with_admin_rights
 def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-
+    if "update" in request.session:
+        update_poll = False if int(request.session["update"]) == 1 else True
     if poll.option_ballots:
         inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
     if request.method == 'POST':

@@ -68,7 +68,7 @@
                     {% csrf_token %}
                     {% bootstrap_form_errors form %}
                     {% bootstrap_form form %}
-                    <div class="datepicker"></div>
+
                     <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
                 </form>
             </div>
@@ -77,7 +77,11 @@
                 <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             {% else %}
                 <a href="{% url 'admin' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
+                {% if poll.option_ballots %}
+                    <a href="{% url 'success' poll.id %}"  class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a>
+                {% else %}
+                    <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
+                {% endif %}
             {% endif %}
         </div>
     </div>

@@ -5,11 +5,16 @@
 {% block content %}
     <div class="container">
     <div class="well">
+          {% if update_poll %}
         <h2> {% trans 'Poll' %}</h2>
-        <h3>{% trans '1.General parameters' %}</h3>
+               {% else %}
+          <h2>{% trans 'Poll' %} : {{ poll.title }}</h2>
+            {% endif %}
+        <h3>1.{% trans 'General parameters' %}</h3>
     </div>
 
         <div class="thumbnail  clearfix ">
+            {% if update_poll %}
             <div class="well-sm hidden-xs">
                 <ol class="nav nav-pills-custom">
                     <li  class="active "><a href="#">{% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
@@ -18,6 +23,7 @@
                     <li  class="disabled"><a href="#">{% trans 'Invite' %}</a></li>
                 </ol>
             </div>
+               {% endif %}
 
             <form action="" method="post" class="well-lg" >
                 {% csrf_token %}
