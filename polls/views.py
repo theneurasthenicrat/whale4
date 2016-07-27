@@ -5,18 +5,15 @@ import json
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.edit import CreateView, UpdateView
-from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
-from polls.forms import VotingPollForm, CandidateForm, BaseCandidateFormSet, VotingForm, DateCandidateForm, DateForm, \
+from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
     OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm, StatusForm, PollUpdateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
@@ -93,6 +90,16 @@ def status_required(fn):
     return wrapped
 
 
+def minimum_candidates_required(fn):
+    def wrapped(request, pk, *args, **kwargs):
+        poll = get_object_or_404(VotingPoll, id=pk)
+        candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+                poll_id=poll.id))
+        if candidates.count() < 2:
+            messages.error(request, _('You must add at least two candidates'))
+            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
+        return fn(request, pk, *args, **kwargs)
+    return wrapped
 
 
 # views ######################################################################
@@ -128,86 +135,71 @@ def experimental(request):
 
 
 @login_required
+def choice(request):
+    request.session["update"] = 0
+    return render(request, 'polls/choice_ballot.html')
+
+
+@login_required
 @with_admin_rights
-def admin_page(request, pk):
+@minimum_candidates_required
+def admin_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    form = PollUpdateForm(instance=poll)
     request.session["update"] = 1
+    return render(request, 'polls/admin.html',locals())
+
+
+@login_required
+def new_poll(request,choice ):
+    form = VotingPollForm()
+
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
-    if request.method == 'POST':
-        form = PollUpdateForm(request.POST,instance=poll)
-        if form.is_valid():
-            poll = form.save()
 
-            return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.pk}))
+    if request.method == 'POST':
+        form = PollUpdateForm(request.POST)
+        if form.is_valid():
+            poll = form.save(commit=False)
+            poll.admin = request.user
+            if choice == 21:
+                poll.poll_type = 'Date'
+            if choice == 22:
+                poll.option_ballots = True
+            if choice ==23:
+              poll.option_experimental = True
+
+            poll.save()
+            messages.success(request, _(' General parameters are successfully created!!'))
+            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
     return render(request, 'polls/voting_poll.html', locals())
 
 
 @login_required
 @with_admin_rights
-def admin_poll(request, pk):
+def update_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    request.session["update"] = 1
+    update_poll=True
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
-    return render(request, 'polls/admin.html',locals())
 
+    form = VotingPollUpdateForm(instance=poll) if update_poll else PollUpdateForm(instance=poll)
 
-@login_required
-def choice(request):
-    return render(request, 'polls/choice_ballot.html')
-
-
-class VotingPollMixin(object):
-    model = VotingPoll
-    form_class = VotingPollForm
-    template_name = "polls/voting_poll.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(VotingPollMixin, self).dispatch(*args, **kwargs)
-
-    def get_success_url(self):
-        self.request.session["update"] = 0
-        return reverse_lazy(manage_candidate, kwargs={'pk': self.object.pk})
-
-    def form_valid(self, form):
-        poll = form.save(commit=False)
-        poll.save()
-        return super(VotingPollMixin, self).form_valid(form)
-
-
-class VotingPollUpdate(VotingPollMixin, UpdateView):
-
-    form_class = VotingPollUpdateForm
-
-    @method_decorator(with_admin_rights)
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(VotingPollMixin, self).dispatch(*args, **kwargs)
-
-
-class VotingPollCreate(VotingPollMixin, CreateView):
-
-    def form_valid(self, form):
-        poll = form.save(commit=False)
-        poll.admin = self.request.user
-        choice = int(self.kwargs['choice'])
-        if choice == 21:
-            poll.poll_type = 'Date'
-        if choice == 22:
-            poll.option_ballots = True
-        if choice ==23:
-          poll.option_experimental = True
-
-        poll.save()
-        return super(VotingPollCreate, self).form_valid(form)
+    if request.method == 'POST':
+        form = VotingPollUpdateForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
+        if form.is_valid():
+            poll = form.save()
+            if update_poll:
+                messages.success(request, _(' General parameters are successfully updated!'))
+                return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
+            else:
+                messages.success(request, _(' Parameters are successfully updated!'))
+                return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.pk}))
+    return render(request, 'polls/voting_poll.html', locals())
 
 
 @login_required
 @with_admin_rights
-def voting_poll_delete(request, pk):
+def delete_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     admin=request.user.id
     poll.delete()
@@ -219,13 +211,10 @@ def voting_poll_delete(request, pk):
 @with_admin_rights
 def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    if poll.option_choice and poll.option_modify:
-        if poll.poll_type != 'Date':
-            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
-        else:
-            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
+    if poll.poll_type != 'Date':
+        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
     else:
-        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+        return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
 
 
 @login_required
@@ -245,7 +234,7 @@ def candidate_create(request, pk):
                 label.poll = poll
                 label.save()
                 voters_undefined(poll)
-                messages.success(request, _('Candidate successfully added!'))
+                messages.success(request, _('Candidate is successfully added!'))
             else:
                 messages.error(request, _('Candidates must be distinct'))
         return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
@@ -277,7 +266,7 @@ def date_candidate_create(request, pk):
                 candidate.save()
 
             voters_undefined(poll)
-            messages.success(request, _('Candidates successfully added!'))
+            messages.success(request, _('Candidates are successfully added!'))
             return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
 
     return render(request, 'polls/date_candidate.html',locals())
@@ -295,28 +284,17 @@ def delete_candidate(request, pk, cand):
 
 @login_required
 @with_admin_rights
+@minimum_candidates_required
 def option(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    initial={'option_choice':poll.option_choice,
-             'option_modify':poll.option_modify}
+    form = OptionForm(instance=poll)
     if request.method == 'POST':
-        form = OptionForm(request.POST)
+        form = OptionForm(request.POST, instance=poll)
         if form.is_valid():
-            poll.option_choice = form.cleaned_data['option_choice']
-            poll.option_modify = form.cleaned_data['option_modify']
-            poll.save()
-            messages.success(request, _('Options successfully added!'))
+            poll = form.save()
+            messages.success(request, _('Options are successfully added!'))
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
-    else:
-        form = OptionForm(initial=initial)
-        candidates = (
-            DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-                poll_id=poll.id))
-        if candidates.count() < 2:
-            messages.error(request, _('You must add at least two candidates'))
-            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
-        else:
-            return render(request, 'polls/option.html', {'form': form, 'poll': poll})
+    return render(request, 'polls/option.html', locals())
 
 
 @login_required

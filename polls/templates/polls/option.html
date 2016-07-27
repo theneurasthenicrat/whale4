@@ -11,7 +11,7 @@
         <div class="thumbnail clearfix ">
             <div class="well-sm visible-lg visible-md visible-sm">
                 <ol class="nav nav-pills-custom">
-                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}">{% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}">{% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
                     <li role="presentation" ><a href="{% url 'manageCandidate' poll.id %}">{% trans 'Add candidates' %} {% bootstrap_icon "menu-right"%}</a></li>
                     <li role="presentation" class="active"><a href="#">{% trans 'Advanced parameters' %} {% bootstrap_icon "menu-right"%}</a></li>
                     <li role="presentation" class="disabled"><a href="#">{% trans 'Invite' %}</a></li>

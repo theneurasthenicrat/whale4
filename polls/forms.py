@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 class BasePollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields = ['title','description','closing_date','preference_model','option_choice','option_modify']
+        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','status']
         widgets = {
             'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title ')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
@@ -28,6 +28,7 @@ class VotingPollForm(ModelForm):
     class Meta(BasePollForm.Meta):
         fields = ['title', 'description', 'closing_date','preference_model']
 
+
 class VotingPollUpdateForm(ModelForm):
     class Meta(BasePollForm.Meta):
         fields = ['title', 'description', 'closing_date']
@@ -35,12 +36,17 @@ class VotingPollUpdateForm(ModelForm):
 
 class OptionForm(ModelForm):
     class Meta(BasePollForm.Meta):
-        fields = [ 'option_choice', 'option_modify']
+        fields = ['option_choice', 'option_modify']
 
 
 class PollUpdateForm(ModelForm):
     class Meta(VotingPollForm.Meta):
         fields = ['title', 'description', 'closing_date','option_choice','option_modify']
+
+
+class StatusForm(ModelForm):
+    class Meta(BasePollForm.Meta):
+        fields = ['status']
 
 
 class CandidateForm(ModelForm):
@@ -72,23 +78,6 @@ class DateForm(Form):
     def clean_dates(self):
         dates = self.cleaned_data["dates"].split(',')
         return dates
-
-
-class BaseCandidateFormSet(BaseInlineFormSet):
-    def clean(self):
-        if any(self.errors):
-            return
-        candidates = []
-        for form in self.forms:
-            candidate = form.cleaned_data.get("candidate")
-            if candidate in candidates:
-                raise forms.ValidationError(_("candidates must be distinct."))
-            candidates.append(candidate)
-
-    def add_fields(self, form, index):
-        super(BaseCandidateFormSet, self).add_fields(form, index)
-        if self.can_delete:
-            form.fields['DELETE'] = forms.BooleanField(required=False,label='x')
 
 
 class NickNameForm(Form):
@@ -147,6 +136,3 @@ class InviteForm(forms.Form):
 class BallotForm(forms.Form):
     certificate =forms.CharField(max_length=16)
 
-class StatusForm(forms.Form):
-    status= forms.BooleanField(label=_("Poll s'status"), required=False,
-                                       help_text=_(" Change the status of poll"))

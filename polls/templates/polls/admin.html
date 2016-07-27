@@ -10,7 +10,7 @@
             <h3>{% trans 'Poll :' %}{{ poll.title }}</h3>
         </div>
         <div class="list-group choice">
-            <a  href="{% url 'adminPage' poll.id %}"  class="list-group-item " >
+            <a  href="{% url 'updatePoll' poll.id %}"  class="list-group-item " >
                 <h4 class="list-group-item-heading"><i class="fa fa-cog"></i> {% trans ' Update parameters'%}</h4>
             </a>
             <a  href="{% url 'manageCandidate' poll.id %}" class="list-group-item ">
