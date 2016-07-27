@@ -31,7 +31,6 @@ fresh_syncdb: $(models)
 	python3 $(directory)/manage.py migrate
 
 syncdb: $(models)
-	find . -wholename "*/migrations/*.py" |xargs rm 
 	python3 $(directory)/manage.py makemigrations $(apps)
 	python3 $(directory)/manage.py migrate
 
