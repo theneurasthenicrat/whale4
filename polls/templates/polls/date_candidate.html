@@ -9,7 +9,7 @@
             {% if update_poll %}
                 <h3>2.{% trans 'Add candidates to poll' %}</h3>
             {% else %}
-                <h3>2.{% trans 'Add or remove candidates' %}</h3>
+                <h3>{% trans 'Add or remove candidates' %}</h3>
             {% endif %}
         </div>
       {% if candidates %}
@@ -76,12 +76,7 @@
                 <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
                 <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             {% else %}
-                <a href="{% url 'admin' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                {% if poll.option_ballots %}
-                    <a href="{% url 'success' poll.id %}"  class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a>
-                {% else %}
-                    <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
-                {% endif %}
+                <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next">{% bootstrap_icon "undo" %} {% trans 'Back to admin page' %}</a>
             {% endif %}
         </div>
     </div>

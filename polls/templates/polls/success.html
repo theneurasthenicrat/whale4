@@ -10,7 +10,7 @@
               {% if update_poll %}
             <h3>4.{% trans 'Invite the voters' %}</h3>
                      {% else %}
-                  <h3>3.{% trans 'Invite the voters' %}</h3>
+                  <h3>{% trans 'Invite the voters' %}</h3>
             {% endif %}
         </div>
         <div class="thumbnail clearfix ">
@@ -181,10 +181,11 @@
             {% endif %}
          {% if update_poll %}
             <a href="{% url 'option' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+              <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
+
           {% else %}
-              <a href="{% url 'manageCandidate' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+              <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next"> {% trans 'Back to admin page' %}</a>
          {% endif %}
-            <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
 
         </div>
     </div>

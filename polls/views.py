@@ -129,7 +129,7 @@ def experimental(request):
 
 @login_required
 @with_admin_rights
-def admin_poll(request, pk):
+def admin_page(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     form = PollUpdateForm(instance=poll)
     request.session["update"] = 1
@@ -140,8 +140,18 @@ def admin_poll(request, pk):
         if form.is_valid():
             poll = form.save()
 
-            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
+            return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.pk}))
     return render(request, 'polls/voting_poll.html', locals())
+
+
+@login_required
+@with_admin_rights
+def admin_poll(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    request.session["update"] = 1
+    if "update" in request.session:
+        update_poll = False if int(request.session["update"]) == 1 else True
+    return render(request, 'polls/admin.html',locals())
 
 
 @login_required
