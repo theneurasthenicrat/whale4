@@ -62,7 +62,6 @@ class CandidateForm(ModelForm):
         }
 
 
-
 class DateCandidateForm(ModelForm):
     class Meta:
         model = DateCandidate

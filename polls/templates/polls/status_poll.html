@@ -11,22 +11,14 @@
         <div class="thumbnail clearfix ">
 
             <form action="" method="post" id="form1" class="well-lg">
-              {% csrf_token %}
-	      {% for f in form %}
-	      <div class="material-switch">
-                <input id="{{ f.name }}" name="{{ f.name }}" type="checkbox"/>
-                <label for="{{ f.name }}" class="label-primary"></label>
-		<div class="cb-label">
-		  {{ f.label }}
-		</div>
-		<div class="cb-help-text">
-		  {{ f.help_text }}
-		</div>
-              </div>
-	      {% endfor %}
+                    {% csrf_token %}
+                    {% bootstrap_form_errors form  %}
+                    {% bootstrap_form form %}
+                    <button type="submit" class="btn btn-custom next">{% trans 'Submit' %} {% bootstrap_icon "ok" %}</button>
+                <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Back to the poll' %}</a>
             </form>
-            <button type="submit"form="form1" class="btn btn-custom next ">{% trans 'Submit' %} {% bootstrap_icon "ok" %}</button>
-            <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a></li>
+
         </div>
     </div>
+     <script src="{% static 'polls/js/votingPoll.js' %}" type="text/javascript"></script>
 {% endblock %}

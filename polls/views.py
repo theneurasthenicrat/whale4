@@ -150,7 +150,7 @@ def admin_poll(request, pk):
 
 
 @login_required
-def new_poll(request,choice ):
+def new_poll(request, choice ):
     form = VotingPollForm()
 
     if "update" in request.session:
@@ -161,11 +161,11 @@ def new_poll(request,choice ):
         if form.is_valid():
             poll = form.save(commit=False)
             poll.admin = request.user
-            if choice == 21:
+            if int(choice) == 21:
                 poll.poll_type = 'Date'
-            if choice == 22:
+            if int(choice) == 22:
                 poll.option_ballots = True
-            if choice ==23:
+            if int(choice) ==23:
               poll.option_experimental = True
 
             poll.save()
@@ -176,7 +176,7 @@ def new_poll(request,choice ):
 
 @login_required
 @with_admin_rights
-def update_poll(request, pk):
+def update_voting_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     update_poll=True
     if "update" in request.session:
@@ -209,6 +209,35 @@ def delete_poll(request, pk):
 
 @login_required
 @with_admin_rights
+@minimum_candidates_required
+def option(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    form = OptionForm(instance=poll)
+    if request.method == 'POST':
+        form = OptionForm(request.POST, instance=poll)
+        if form.is_valid():
+            poll = form.save()
+            messages.success(request, _('Options are successfully added!'))
+            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+    return render(request, 'polls/option.html', locals())
+
+
+@login_required
+@with_view_rights
+def status(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    form = StatusForm(instance=poll)
+    if request.method == 'POST':
+        form = StatusForm(request.POST,instance=poll)
+        if form.is_valid():
+            poll = form.save()
+            messages.success(request, _('Status is successfully changed!'))
+            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+    return render(request, 'polls/status_poll.html',locals())
+
+
+@login_required
+@with_admin_rights
 def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if poll.poll_type != 'Date':
@@ -225,18 +254,19 @@ def candidate_create(request, pk):
     form = CandidateForm()
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
+
     if request.method == 'POST':
         form = CandidateForm(request.POST)
         if form.is_valid():
-            label = form.save(commit=False)
-            equal_label=[c for c in candidates if str(c) == str(label)]
-            if not equal_label:
-                label.poll = poll
-                label.save()
+            candidate = form.save(commit=False)
+            candidate.poll = poll
+            equal_candidate=[c for c in candidates if str(c) == str(candidate)]
+            if equal_candidate:
+                messages.error(request, _('Candidates must be distinct'))
+            else:
+                candidate.save()
                 voters_undefined(poll)
                 messages.success(request, _('Candidate is successfully added!'))
-            else:
-                messages.error(request, _('Candidates must be distinct'))
         return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
     return render(request, 'polls/candidate.html', locals())
 
@@ -280,21 +310,6 @@ def delete_candidate(request, pk, cand):
     candidate.delete()
     messages.success(request, _('Candidate has been deleted!'))
     return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id}))
-
-
-@login_required
-@with_admin_rights
-@minimum_candidates_required
-def option(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    form = OptionForm(instance=poll)
-    if request.method == 'POST':
-        form = OptionForm(request.POST, instance=poll)
-        if form.is_valid():
-            poll = form.save()
-            messages.success(request, _('Options are successfully added!'))
-            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
-    return render(request, 'polls/option.html', locals())
 
 
 @login_required
@@ -654,19 +669,3 @@ def result_view(request, pk ):
     return render(request, 'polls/result.html', locals())
 
 
-@login_required
-@with_view_rights
-def status(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    initial={'status':poll.status}
-    if request.method == 'POST':
-        form = StatusForm(request.POST)
-        if form.is_valid():
-            poll.status = form.cleaned_data['status']
-            poll.save()
-            messages.success(request, _('Status successfully changed!'))
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-    else:
-        form = StatusForm(initial=initial)
-
-        return render(request, 'polls/status_poll.html',locals())

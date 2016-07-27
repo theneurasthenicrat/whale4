@@ -10,5 +10,5 @@
   });
      $("[name='option_choice']").bootstrapSwitch();
          $("[name='option_modify']").bootstrapSwitch();
-
+ $("[name='status']").bootstrapSwitch();
 });
