@@ -48,7 +48,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
              <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="/" ><img src="{% static 'polls/images/whale4-brand-small.png' %}" alt="Whale4"/></a>
+            <a class="navbar-brand" href="/" ><img src="{% static 'polls/images/whale4-mask-small.png' %}" alt="Whale4"/></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse " >
             <ul  class="nav navbar-nav ">
@@ -65,7 +65,7 @@
             </ul>
             <ul class=" nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" > {% bootstrap_icon "user" %}{% if user.is_authenticated %}
+                    <a href="#" class="dropdown-toggle navbar-user" data-toggle="dropdown">{% bootstrap_icon "user" %} {% if user.is_authenticated %}
                         {{ user.nickname }}  {% endif %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
@@ -78,8 +78,13 @@
                         {% endif %}
 
                     </ul>
-                <li><button type="submit" class="flag" form="fr"><img src="{% static 'polls/images/french.png' %}" alt="fr" width="20px" height="12px"/></button></li>
-                <li><button type="submit" class="flag" form="en"><img src="{% static 'polls/images/english.png' %}" alt="en" width="20px" height="12px"/></button></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span><img src="{% static 'polls/images/language.png' %}" alt="fr"/></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><button type="submit" class="flag" form="en"><img src="{% static 'polls/images/english.png' %}" alt="en" width="20px" height="12px"/> English</button></li>
+                      <li><button type="submit" class="flag" form="fr"><img src="{% static 'polls/images/french.png' %}" alt="fr" width="20px" height="12px"/> Français</button></li>
+		    </ul>
+		</li>
 
                 <form action="{% url 'set_language' %}" method="post" class=" navbar-form" id="fr">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ redirect_to }}" />

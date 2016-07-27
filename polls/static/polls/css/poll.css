@@ -94,14 +94,13 @@ p.description:before {
 }
 
 .navbar-custom {
-    background-color: #fafafa;
-    border-color: rgb(235, 235, 235);
+    background-color: #2C3E50;
+    border: none;
 }
 
 .navbar-custom .navbar-brand {
     color: #ffffff;
     opacity: 0.9;
-    margin-top: -3px;
 }
 
 .navbar-custom .navbar-brand:hover,
@@ -110,28 +109,30 @@ p.description:before {
 }
 
 .navbar-custom .navbar-text {
-    color: #000000;
+    color: #fff;
     opacity: 0.6;
     text-transform: uppercase;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
 }
 
+
 .navbar-custom .navbar-nav > li > a {
-    color: #000000;
-    opacity: 0.6;
+    color: #fff;
+    opacity: 0.8;
     text-transform: uppercase;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
     transition: all .2s linear;
     font-weight: bold;
     font-size: 13px;
+    line-height: 32px;
 }
 
 .navbar-custom .navbar-nav > li > a:hover,
 .navbar-custom .navbar-nav > li > a:focus {
-    color: #3375b3;
+    color: #fff;
     opacity: 1;
     text-transform: uppercase;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
     transition: all .2s linear;
     font-weight: bold;
     font-size: 13px;
@@ -175,10 +176,10 @@ p.description:before {
 .navbar-custom .navbar-nav > .active > a,
 .navbar-custom .navbar-nav > .active > a:hover,
 .navbar-custom .navbar-nav > .active > a:focus {
-    color: #3375b3;
+    color: #fff;
     opacity: 1;
     text-transform: uppercase;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
     transition: all .2s linear;
     font-weight: bold;
     font-size: 13px;
@@ -186,14 +187,14 @@ p.description:before {
 .navbar-custom .navbar-nav > .open > a,
 .navbar-custom .navbar-nav > .open > a:hover,
 .navbar-custom .navbar-nav > .open > a:focus {
-    color: #3375b3;
+    color: #fff;
     opacity: 1;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
     transition: all .2s linear;
 }
 .navbar-custom .navbar-toggle {
-    color: rgb(0, 0, 0);
-    border-color: rgb(235, 235, 235);
+    color: #fff;
+    border-color: #aaa;
     border-radius: 0px;
 }
 .navbar-custom .navbar-toggle:hover,
@@ -215,27 +216,29 @@ p.description:before {
   color: #d6743c;
 }
 
+.navbar-custom .navbar-nav > li > a.navbar-user  {
+    text-transform: none;
+}
+
 .flag {
     border-width: 0px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     background-color: transparent;
 }
 
-.flag_fr {
-    background-image:url("../images/french.png") ;
+.flag img {
+    margin-top: -2px;
+    margin-right: 10px;
 }
 
-.flag_en {
-    background-image:url("../images/english.png") ;
-}
 
 @media (max-width: 767px) {
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a {
-    color: #000000;
+    color: #fff;
     opacity: 0.6;
     text-transform: uppercase;
-    text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+    text-shadow: none;
   }
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-custom .navbar-nav .open .dropdown-menu > li > a:focus {
