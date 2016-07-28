@@ -232,7 +232,7 @@ def status(request, pk):
         if form.is_valid():
             poll = form.save()
             messages.success(request, _('Status is successfully changed!'))
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.id}))
     return render(request, 'polls/status_poll.html',locals())
 
 
