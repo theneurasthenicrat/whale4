@@ -41,19 +41,19 @@ def with_voter_rights(fn):
         if poll.option_experimental:
             messages.error(request, _('Experimental vote can not be updated'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-        elif poll.option_ballots :
-            if ("user" in request.session and request.session["user"]==user.id):
+        if poll.option_ballots :
+            if "user" in request.session and request.session["user"]==user.id:
                 return fn(request, pk, voter)
             else:
-                messages.error(request, _('Experimental vote can not be updated'))
+                messages.error(request, _('This is not your vote'))
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
 
-        elif ( request.user is not None and request.user.id == user.id \
-                or not isinstance(user,WhaleUser)):
+        if request.user is not None and request.user.id == user.id:
             return fn(request, pk, voter)
         else:
             messages.error(request, _('This is not your vote'))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+
     return wrapped
 
 
