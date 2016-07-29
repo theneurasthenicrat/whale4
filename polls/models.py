@@ -31,12 +31,15 @@ class VotingPoll(Poll):
         ('Date', _('Date Poll'))
         )
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
-    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("preference model * "))
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',
+                                        verbose_name= _("Preference model * "))
     option_ballots=models.BooleanField(default=False)
-    option_choice=models.BooleanField(default=True,verbose_name=_("Choice <span class='label label-primary'>I don't know</span>  is allowed"))
-    option_modify=models.BooleanField(default=True,verbose_name=_("Add or remove candidates is allowed"))
+    option_choice=models.BooleanField(default=True,
+                                      verbose_name=_("Choice <span class='label label-primary'>I don't know</span>  is allowed"))
+    option_modify=models.BooleanField(default=True,
+                                      verbose_name=_("Add or remove candidates is allowed"))
     option_experimental=models.BooleanField(default=False)
-    status=models.BooleanField(default=True)
+    status=models.BooleanField(default=True,verbose_name=_("Poll's status"))
 
 
 class Candidate(models.Model):

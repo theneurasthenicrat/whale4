@@ -17,7 +17,7 @@
         {% if update_poll %}
             <div class="well-sm hidden-xs">
                 <ol class="nav nav-pills-custom">
-                    <li><a href="{% url 'updateVotingPoll' poll.id %}">{% trans 'General parameters ' %} <i class="fa fa-chevron-right"></i></a></li>
+                    <li><a href="{% url 'updatePoll' poll.id %}">{% trans 'General parameters ' %} <i class="fa fa-chevron-right"></i></a></li>
                     <li><a href="{% url 'manageCandidate' poll.id %}">{% trans 'Add candidates ' %}<i class="fa fa-chevron-right"></i></a></li>
                     <li><a href="{% url 'option' poll.id %}">{% trans 'Advanced parameters ' %}<i class="fa fa-chevron-right"></i></a></li>
                     <li class="active"><a href="#">{% trans 'Invite' %}</a></li>

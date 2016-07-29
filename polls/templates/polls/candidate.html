@@ -19,7 +19,7 @@
          {% if update_poll %}
             <div class="well-sm hidden-xs">
                 <ol class="nav nav-pills-custom ">
-                    <li role="presentation" ><a href="{% url 'updateVotingPoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                    <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
                     <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
                     <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
                     <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
@@ -82,7 +82,7 @@
 
             </div>
             {% if update_poll %}
-                <a href="{% url 'updateVotingPoll' poll.id %}"  class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'updatePoll' poll.id %}" class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
                 <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             {% else %}
                <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next"> {% trans 'Back to admin page' %}</a>
