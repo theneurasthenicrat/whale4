@@ -6,6 +6,9 @@ apps = accounts polls
 models = accounts/models.py polls/models.py
 settings = whale4/settings.py
 settings-generic = whale4/settings-generic.py
+locales = en fr
+messages = $(locale/$(locales)/LC_MESSAGES/django.mo)
+compiled-messages = $(locale/$(locales)/LC_MESSAGES/django.po)
 
 clean:
 	-rm -rf build
@@ -34,8 +37,18 @@ syncdb: $(models)
 	python3 $(directory)/manage.py makemigrations $(apps)
 	python3 $(directory)/manage.py migrate
 
+makemessages:
+	python3 $(directory)/manage.py makemessages
+
+compilemessages: $(messages)
+	python3 $(directory)/manage.py compilemessages
+
+$(compiled-messages): compilemessages
+
+$(messages): makemessages
+
 shell: syncdb
 	python3 $(directory)/manage.py shell
 
-run: syncdb anonymize
+run: syncdb compilemessages anonymize
 	python3 $(directory)/manage.py runserver

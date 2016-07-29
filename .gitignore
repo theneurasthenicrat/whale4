@@ -6,3 +6,5 @@ polls/migrations/
 message.txt
 .idea/
 *.pyc
+locale/en/LC_MESSAGES/django.mo
+locale/fr/LC_MESSAGES/django.mo

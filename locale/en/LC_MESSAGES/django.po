@@ -16,62 +16,47 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: accounts/forms.py:9 accounts/models.py:52
-#, fuzzy
-#| msgid "email address"
 msgid "Email address *"
-msgstr "Adresse email"
+msgstr ""
 
 #: accounts/forms.py:10 accounts/forms.py:14
-#, fuzzy
-#| msgid "password"
 msgid "Password *"
-msgstr "Mot de passe"
+msgstr ""
 
 #: accounts/forms.py:15
-#, fuzzy
-#| msgid "password confirmation"
 msgid "Password confirmation *"
-msgstr "Confirmation de mot de passe"
+msgstr ""
 
 #: accounts/models.py:34
-#, fuzzy
-#| msgid "nickname"
 msgid "Nickname *"
-msgstr "Surnom"
+msgstr ""
 
 #: accounts/models.py:85
-#, fuzzy
-#| msgid "email address"
 msgid "Email address"
-msgstr "Adresse email"
+msgstr ""
 
 #: accounts/templates/accounts/contact.html:7
 msgid "Contact us "
-msgstr "Nous contacter"
+msgstr ""
 
 #: accounts/templates/accounts/contact.html:14
 msgid " Send message"
 msgstr ""
 
 #: accounts/templates/accounts/login.html:10
-#, fuzzy
-#| msgid "you are log in"
 msgid "You are log in"
-msgstr "Vous êtes connecté"
+msgstr ""
 
 #: accounts/templates/accounts/login.html:12 polls/templates/polls/base.html:75
 #: polls/templates/polls/home.html:64
 msgid "Log in"
-msgstr "Se connecter"
+msgstr ""
 
 #: accounts/templates/accounts/login.html:19
-#, fuzzy
-#| msgid "Log in"
 msgid " Log in"
-msgstr "Se connecter"
+msgstr ""
 
 #: accounts/templates/accounts/login.html:22
 msgid "Register"
@@ -82,16 +67,12 @@ msgid "Please Sign Up for Whale"
 msgstr ""
 
 #: accounts/templates/accounts/register.html:15
-#, fuzzy
-#| msgid " Sign up"
 msgid "Sign up "
-msgstr "S'inscire"
+msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:9
-#, fuzzy
-#| msgid "Welcome to Whale4"
 msgid "Welcome "
-msgstr "Bienvenu à Whale4"
+msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:10
 msgid "Update or delete yours polls"
@@ -108,16 +89,12 @@ msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:24
 #: accounts/templates/accounts/user_detail.html:84
-#, fuzzy
-#| msgid "description"
 msgid "Description"
-msgstr "description"
+msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:42
-#, fuzzy
-#| msgid "Vote for this poll"
 msgid "Delete this poll"
-msgstr "Voter pour ce sondage"
+msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:45
 msgid " If you really want to delete this poll,click submit."
@@ -139,10 +116,8 @@ msgid "OK"
 msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:66
-#, fuzzy
-#| msgid "you are log in"
 msgid "You are not yet admin "
-msgstr "Vous êtes connecté"
+msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:74
 msgid " The polls in which you participated"
@@ -162,35 +137,31 @@ msgstr ""
 
 #: accounts/views.py:27
 msgid "Your account has been successfully created."
-msgstr "Votre compte a été créé avec succès"
+msgstr ""
 
 #: accounts/views.py:43
 msgid "You are successfully log in."
-msgstr "Vous êtes connecté avec succès"
+msgstr ""
 
 #: accounts/views.py:49
 msgid "unknown WhaleUser or bad password."
-msgstr "un whale utilisateur inconnu ou un mauvais mot de passe"
+msgstr ""
 
 #: accounts/views.py:57
 msgid "You have been successfully logged out."
-msgstr "Vous avez été déconnecté avec succès"
+msgstr ""
 
 #: polls/forms.py:19
 msgid "Enter title "
 msgstr ""
 
 #: polls/forms.py:20
-#, fuzzy
-#| msgid "closing date"
 msgid "Enter closing date"
-msgstr "date de cloture"
+msgstr ""
 
 #: polls/forms.py:21
-#, fuzzy
-#| msgid "description"
 msgid "Enter description "
-msgstr "description"
+msgstr ""
 
 #: polls/forms.py:22 polls/forms.py:23
 msgid "Yes"
@@ -201,10 +172,8 @@ msgid "No"
 msgstr ""
 
 #: polls/forms.py:51
-#, fuzzy
-#| msgid "Candidates"
 msgid "Candidate"
-msgstr "Candidats"
+msgstr ""
 
 #: polls/forms.py:68
 msgid "Pick one or several dates"
@@ -240,51 +209,47 @@ msgstr ""
 
 #: polls/models.py:12
 msgid "description"
-msgstr "description"
+msgstr ""
 
 #: polls/models.py:14
-#, fuzzy
-#| msgid "closing date"
 msgid "closing date * "
-msgstr "date de cloture"
+msgstr ""
 
 #: polls/models.py:23
 msgid "Positive Negative scale (--, -, 0, +, ++)"
-msgstr "5 niveaux Positifs/Négatifs(--, -, 0, +, ++)"
+msgstr ""
 
 #: polls/models.py:24
 msgid "Approval Voting (Yes / No)"
-msgstr "Approbation(Oui/Non)"
+msgstr ""
 
 #: polls/models.py:25
 msgid "Ranking with ties"
-msgstr "Ordre avec ex-aequo"
+msgstr ""
 
 #: polls/models.py:26
 msgid "Ranking (no ties)"
-msgstr "Ordre sans ex-aequo"
+msgstr ""
 
 #: polls/models.py:27
 msgid "Scores"
-msgstr "Scores"
+msgstr ""
 
 #: polls/models.py:30
 msgid "Standard Poll"
-msgstr "Sondage standard"
+msgstr ""
 
 #: polls/models.py:31
 msgid "Date Poll"
-msgstr "Sondage type Date "
+msgstr ""
 
 #: polls/models.py:33
 msgid "poll type"
-msgstr "type de sondage"
+msgstr ""
 
 #: polls/models.py:34
-#, fuzzy
-#| msgid "preference model"
 msgid "preference model * "
-msgstr "préferences"
+msgstr ""
 
 #: polls/models.py:36
 msgid ""
@@ -297,19 +262,19 @@ msgstr ""
 
 #: polls/models.py:44
 msgid "candidate"
-msgstr "candidat"
+msgstr ""
 
 #: polls/models.py:54
 msgid "date"
-msgstr "date"
+msgstr ""
 
 #: polls/models.py:65
 msgid "voter"
-msgstr "Voteur"
+msgstr ""
 
 #: polls/models.py:66
 msgid "value"
-msgstr "valeur"
+msgstr ""
 
 #: polls/templates/polls/admin.html:9
 msgid " Update your poll"
@@ -330,51 +295,45 @@ msgid " Update parameters"
 msgstr ""
 
 #: polls/templates/polls/admin.html:17
-#, fuzzy
-#| msgid "Add candidate"
 msgid " Add or remove candidates"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/admin.html:20
 msgid " Invite the voters"
 msgstr ""
 
 #: polls/templates/polls/admin.html:28
-#, fuzzy
-#| msgid "Vote for this poll"
 msgid " Go to the poll"
-msgstr "Voter pour ce sondage"
+msgstr ""
 
 #: polls/templates/polls/base.html:12 polls/templates/polls/email.html:11
 #: polls/templates/polls/home.html:13
 msgid " Whale4 - WHich ALternative is Elected"
-msgstr "Whale4 - Quelle alternative est élu"
+msgstr ""
 
 #: polls/templates/polls/base.html:55
 msgid "Home"
-msgstr "Accueil"
+msgstr ""
 
 #: polls/templates/polls/base.html:56
 msgid " New poll"
-msgstr "Nouveau Sondage"
+msgstr ""
 
 #: polls/templates/polls/base.html:58
 msgid "Developers"
-msgstr "Développeurs"
+msgstr ""
 
 #: polls/templates/polls/base.html:60
 msgid " Get the code"
-msgstr "Voir le code"
+msgstr ""
 
 #: polls/templates/polls/base.html:61
 msgid " Code license"
-msgstr "License"
+msgstr ""
 
 #: polls/templates/polls/base.html:64
-#, fuzzy
-#| msgid "Contact us "
 msgid "Contact us"
-msgstr "Nous contacter"
+msgstr ""
 
 #: polls/templates/polls/base.html:70 polls/templates/polls/home.html:59
 msgid "Signed in as"
@@ -385,28 +344,22 @@ msgid " Your profile"
 msgstr ""
 
 #: polls/templates/polls/base.html:72 polls/templates/polls/home.html:61
-#, fuzzy
-#| msgid "Log in"
 msgid "Log out"
-msgstr "Se connecter"
+msgstr ""
 
 #: polls/templates/polls/base.html:74 polls/templates/polls/home.html:63
 msgid "Sign up"
-msgstr "S'inscire"
+msgstr "Sign up"
 
 #: polls/templates/polls/candidate.html:12
 #: polls/templates/polls/date_candidate.html:10
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Add candidates to poll"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/candidate.html:14
 #: polls/templates/polls/date_candidate.html:12
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Add or remove candidates"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/candidate.html:22
 #: polls/templates/polls/date_candidate.html:59
@@ -419,10 +372,8 @@ msgstr ""
 #: polls/templates/polls/candidate.html:23
 #: polls/templates/polls/date_candidate.html:60
 #: polls/templates/polls/success.html:21
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Add candidates "
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/candidate.html:24
 #: polls/templates/polls/date_candidate.html:61
@@ -490,13 +441,11 @@ msgstr ""
 
 #: polls/templates/polls/certificate.html:18
 msgid "Save"
-msgstr "Enregistrer"
+msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:9
-#, fuzzy
-#| msgid " New poll"
 msgid "Create a new poll"
-msgstr "Nouveau Sondage"
+msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:10
 msgid "Which kind of poll do you want to create?"
@@ -511,20 +460,16 @@ msgid "Everyone can see everyone else' s votes and names."
 msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:18
-#, fuzzy
-#| msgid "Standard Poll"
 msgid " Standard poll"
-msgstr "Sondage standard"
+msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:19
 msgid "Choose among several custom alternatives."
 msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:22
-#, fuzzy
-#| msgid "Date Poll"
 msgid " Date poll"
-msgstr "Sondage type Date "
+msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:23
 msgid "Find the best date for an event"
@@ -558,13 +503,11 @@ msgstr ""
 #: polls/templates/polls/vote.html:133
 #: polls/templates/polls/voting_poll.html:37
 msgid "Submit"
-msgstr "Envoyer"
+msgstr ""
 
 #: polls/templates/polls/email.html:15
-#, fuzzy
-#| msgid " Whale4 - WHich ALternative is Elected"
 msgid "WHich ALternative is Elected"
-msgstr "Whale4 - Quelle alternative est élu"
+msgstr ""
 
 #: polls/templates/polls/email.html:16
 msgid "Hello"
@@ -592,90 +535,87 @@ msgstr ""
 
 #: polls/templates/polls/home.html:46
 msgid "About"
-msgstr "À propos"
+msgstr ""
 
 #: polls/templates/polls/home.html:49
 msgid "Credits"
-msgstr "Équipe"
+msgstr ""
 
 #: polls/templates/polls/home.html:52
 msgid "Code/Data"
-msgstr "Code / Données"
+msgstr "Code / Data"
 
 #: polls/templates/polls/home.html:108
 msgid "Give it a try?"
-msgstr "<p>Vous voulez essayer ? Participez au sondage de démonstration :</p>"
+msgstr "<p>Do you want to give it a try? Participate in the demonstration poll:</p>"
 
 #: polls/templates/polls/home.html:113
 msgid "demo"
-msgstr "Votez"
+msgstr "Vote"
 
 #: polls/templates/polls/home.html:122
 msgid "What is Whale"
-msgstr "Qu'est-ce que la baleine ?"
+msgstr "What is Whale?"
 
 #: polls/templates/polls/home.html:128
 msgid "What is Whale left"
 msgstr ""
-"<p>Whale<sup>4</sup> est une application Web dédiée à la décision collective "
-"et au vote « profane », et devrait vous aider à vous décider collectivement "
-"entre plusieurs options. Vous pouvez à cet effet <a href=\"/polls/choice"
-"\">créer un sondage</a>, inviter des gens à y participer, et visualiser les "
-"résultats.</p>"
+"<p>Whale<sup>4</sup> is a web application dedicated to collective decision "
+"making and every day life voting. It should help you to choose collectively "
+"amongst several alternatives. For that you can <a href=\"/polls/choice"
+"\">create a poll</a> (open or sealed ballots), tell people to vote, and "
+"visualize the results.</p>"
 
 #: polls/templates/polls/home.html:131
 msgid "What is Whale right"
 msgstr ""
-"<p>Whale<sup>4</sup> propose plusieurs modes d'expression des préférences, "
-"et s'appuie sur la <a href=\"https://fr.wikipedia.org/wiki/Syst%C3%A8me_"
-"%C3%A9lectoral\">théorie du vote</a> pour éclairer les résultats.</"
-"p><p>Whale<sup>4</sup> est un projet <a href=\"http://www.fsf.org/\">libre</"
-"a> : vous pouvez en télécharger le code et l'utiliser comme bon vous semble."
-"</p>"
+"<p>Whale<sup>4</sup> allows you to choose amongst several preference "
+"expression modes (ordinal, qualitative, approval, numerical), and is based "
+"on <a href=\"https://en.wikipedia.org/wiki/Voting_theory\">voting theory</a> "
+"to enlighten your decision.</p><p>Whale<sup>4</sup> is a <a href=\"http://"
+"www.fsf.org/\">free</a> project: you can download the source code and use it "
+"as you wish to.</p>"
 
 #: polls/templates/polls/home.html:140
 msgid "Who is behind Whale"
-msgstr "Qui donc est derrière Whale ?"
+msgstr "Who is behind?"
 
 #: polls/templates/polls/home.html:146
 msgid "Who is behind Whale desc"
 msgstr ""
-"<p>Whale est développé par une équipe de chercheurs au <a href=\"http://www."
-"liglab.fr/\">Laboratoire d'Informatique de Grenoble</a>. Son développement a "
-"été en partie financé par le projet ANR CoCoRICo-CoDec portant sur le <a "
-"href=\"http://www.illc.uva.nl/COMSOC/\">choix social computationnel</a>.</"
-"p><p>Jetez donc un coup d'œil à la <a href=\"/polls/contact\">page de "
-"contacts</a> si vous voulez voir la liste des contributeurs et savoir "
-"comment contacter l'actuel <a href=\"http://recherche.noiraudes.net/"
-"\">gardien de la baleine</a>.</p>"
+"<p>Whale is developped by a group of researchers at <a href=\"http://www."
+"liglab.fr/\">Grenoble Informatics Laboratory</a> and has been partly "
+"supported by ANR Project CoCoRICo-CoDec on <a href=\"http://www.illc.uva.nl/"
+"COMSOC/\">Computational Social Choice</a>.</p><p>You can catch a glimpse at "
+"<a href=\"/polls/contact\">the contact page</a> to see the list of "
+"contributors and to see how to contact <a href=\"http://recherche.noiraudes."
+"net/\">the current Whalekeeper</a>.</p>"
 
 #: polls/templates/polls/home.html:163
 msgid "Developers and researchers"
-msgstr "Développeurs et chercheurs"
+msgstr "Developers and researchers"
 
 #: polls/templates/polls/home.html:169
 msgid "Download data desc"
 msgstr ""
-"<p>L'un des objectifs de Whale est de servir la recherche en théorie du vote "
-"en fournissant des jeux de données sur les élections.</p><p>Nourrissez la "
-"baleine en sondages; elle vous le rendra bien en données !</p>"
+"<p>One purpose of Whale<sup>4</sup> is to serve research by providing "
+"data about elections.</p><p>Feed the Whale with polls; it will feed you with "
+"data!</p>"
 
 #: polls/templates/polls/home.html:171
 msgid "Goto data download"
-msgstr "Les données"
+msgstr "Go to the data page"
 
 #: polls/templates/polls/home.html:175
 msgid "Source code desc"
 msgstr ""
-"<p>Whale est un projet libre. Vous pouvez en télécharger le code source, le "
-"modifier et l'utiliser pour vos propres besoins.</p><p>Vous voulez "
-"contribuer ? Vous êtes le / la bienvenu(e) !</p>"
+"<p>Once again, Whale<sup>4</sup> is a Free project. You can freely download "
+"the code, modify it and use it for your own purposes.</p><p>Want to "
+"contribute? You are also welcome!</p>"
 
 #: polls/templates/polls/home.html:177
-#, fuzzy
-#| msgid " Get the code"
 msgid "Get the code"
-msgstr "La page GitHub du projet"
+msgstr "The code page on GitHub"
 
 #: polls/templates/polls/option.html:9 polls/templates/polls/option.html:16
 #: polls/templates/polls/voting_poll.html:24
@@ -684,10 +624,8 @@ msgstr ""
 
 #: polls/templates/polls/option.html:15
 #: polls/templates/polls/voting_poll.html:23
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Add candidates"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/poll.html:74 polls/templates/polls/secret_view.html:40
 msgid "Delete this vote"
@@ -699,13 +637,11 @@ msgstr ""
 
 #: polls/templates/polls/poll.html:106
 msgid "No vote yet... Do you want to be the first one? "
-msgstr "Pas de vote pour l'instant ....voulez vous être le premier?"
+msgstr ""
 
 #: polls/templates/polls/poll.html:114
-#, fuzzy
-#| msgid "voter"
 msgid "vote"
-msgstr "Voteur"
+msgstr ""
 
 #: polls/templates/polls/poll.html:117
 msgid "results"
@@ -772,10 +708,8 @@ msgid "Add one or several email addresses of voters."
 msgstr ""
 
 #: polls/templates/polls/success.html:49 polls/templates/polls/success.html:77
-#, fuzzy
-#| msgid "Submit"
 msgid " Submit"
-msgstr "Envoyer"
+msgstr ""
 
 #: polls/templates/polls/success.html:57
 msgid "List of current voters"
@@ -791,10 +725,8 @@ msgstr ""
 
 #: polls/templates/polls/success.html:101
 #: polls/templates/polls/success.html:142
-#, fuzzy
-#| msgid "Vote for this poll"
 msgid "Vote to this poll"
-msgstr "Voter pour ce sondage"
+msgstr ""
 
 #: polls/templates/polls/success.html:108
 #: polls/templates/polls/success.html:149
@@ -807,16 +739,12 @@ msgid "Share on social network"
 msgstr ""
 
 #: polls/templates/polls/success.html:184
-#, fuzzy
-#| msgid "Vote for this poll"
 msgid "Go to the poll"
-msgstr "Voter pour ce sondage"
+msgstr ""
 
 #: polls/templates/polls/vote.html:9
-#, fuzzy
-#| msgid "Vote for this poll"
 msgid "Vote for this Poll"
-msgstr "Voter pour ce sondage"
+msgstr ""
 
 #: polls/templates/polls/vote.html:29
 msgid ""
@@ -827,10 +755,8 @@ msgid ""
 msgstr ""
 
 #: polls/templates/polls/vote.html:32
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Unsorted candidates"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/vote.html:41
 msgid ""
@@ -841,10 +767,8 @@ msgid ""
 msgstr ""
 
 #: polls/templates/polls/vote.html:44
-#, fuzzy
-#| msgid "Add candidate"
 msgid "Sorted candidates"
-msgstr "Ajouter un candidat"
+msgstr ""
 
 #: polls/templates/polls/vote.html:130
 msgid "Back to the poll"
@@ -852,20 +776,16 @@ msgstr ""
 
 #: polls/templates/polls/voting_poll.html:9
 #: polls/templates/polls/voting_poll.html:12
-#, fuzzy
-#| msgid "Date Poll"
 msgid "Poll"
-msgstr "Sondage type Date "
+msgstr ""
 
 #: polls/templates/polls/voting_poll.html:13
 msgid "Parameters"
 msgstr ""
 
 #: polls/views.py:34 polls/views.py:67
-#, fuzzy
-#| msgid "you are log in"
 msgid "you are not admin's poll"
-msgstr "Vous êtes connecté"
+msgstr ""
 
 #: polls/views.py:45 polls/views.py:51
 msgid "Experimental vote can not be updated"
@@ -880,16 +800,12 @@ msgid "The poll is not closed"
 msgstr ""
 
 #: polls/views.py:214
-#, fuzzy
-#| msgid "Your account has been successfully created."
 msgid "Your poll has been deleted!"
-msgstr "Votre compte a été créé avec succès"
+msgstr ""
 
 #: polls/views.py:248
-#, fuzzy
-#| msgid "Candidates successfully added!"
 msgid "Candidate successfully added!"
-msgstr "Candidats ajouté avec succès"
+msgstr ""
 
 #: polls/views.py:250
 msgid "Candidates must be distinct"
@@ -901,27 +817,23 @@ msgstr ""
 
 #: polls/views.py:280
 msgid "Candidates successfully added!"
-msgstr "Candidats ajouté avec succès"
+msgstr ""
 
 #: polls/views.py:292
 msgid "Candidate has been deleted!"
 msgstr ""
 
 #: polls/views.py:308
-#, fuzzy
-#| msgid "Candidates successfully added!"
 msgid "Options successfully added!"
-msgstr "Candidats ajouté avec succès"
+msgstr ""
 
 #: polls/views.py:316
 msgid "You must add at least two candidates"
 msgstr ""
 
 #: polls/views.py:349
-#, fuzzy
-#| msgid "Candidates successfully added!"
 msgid "Inviters successfully added!"
-msgstr "Candidats ajouté avec succès"
+msgstr ""
 
 #: polls/views.py:364
 msgid "anonymous voter has been deleted!"
@@ -948,58 +860,20 @@ msgid "Your vote has been updated, thank you!"
 msgstr ""
 
 #: polls/views.py:507
-#, fuzzy
-#| msgid "Your account has been successfully created."
 msgid "Your vote has been deleted!"
-msgstr "Votre compte a été créé avec succès"
+msgstr ""
 
 #: polls/views.py:689
-#, fuzzy
-#| msgid "Candidates successfully added!"
 msgid "Status successfully changed!"
-msgstr "Candidats ajouté avec succès"
+msgstr ""
 
 #: whale4/settings-generic.py:111 whale4/settings.py:111
 msgid "French"
-msgstr "Français"
+msgstr ""
 
 #: whale4/settings-generic.py:113 whale4/settings.py:113
 msgid "English"
-msgstr "Anglais"
+msgstr ""
 
 #~ msgid "Try the demo poll"
-#~ msgstr "Essayez Whale"
-
-#~ msgid "Know more"
-#~ msgstr "En savoir plus"
-
-#, fuzzy
-#~| msgid "Contact us "
-#~ msgid "Contact"
-#~ msgstr "Nous contacter"
-
-#~ msgid "Create account"
-#~ msgstr "Créer un compte"
-
-#~ msgid "Create "
-#~ msgstr "Créer"
-
-#~ msgid "tilte"
-#~ msgstr "titre"
-
-#~ msgid " I don't know"
-#~ msgstr "Je ne sais pas"
-
-#~ msgid "GO"
-#~ msgstr "GO"
-
-#~ msgid "This is the default home page (which will be customized soon)..."
-#~ msgstr ""
-#~ "Ceci est la page d'accueil par défaut(qui sera bientôt personnalisé)...."
-
-#~ msgid "Vote"
-#~ msgstr "Voter"
-
-#~ msgid "Poll successfully created! Now add the candidates to the poll..."
-#~ msgstr ""
-#~ "Sondage crée avec succès! Maintenant ajouter des candidats au sondage"
+#~ msgstr "Try the demo poll"
