@@ -572,6 +572,7 @@ fieldset[disabled] .btn-custom.active {
     background-color: #fafafa;
     border: 1px solid rgb(235, 235, 235);
     padding: 20px;
+    margin: 20px 0px;
 }
 
 .form-control {
@@ -584,6 +585,11 @@ fieldset[disabled] .btn-custom.active {
     border: 1px solid rgb(235, 235, 235);
     border-radius: 2px;
     padding: 10px;
+}
+
+.form-login .submit {
+    margin: 20px 0px;
+    padding: 0px;
 }
 
 

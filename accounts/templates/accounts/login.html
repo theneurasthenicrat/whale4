@@ -7,20 +7,21 @@
             <div class="col-md-offset-3 col-md-6">
                 <div class=" form-login">
                     {% if user.is_authenticated %}
-                        <h4> {% trans 'You are log in'%}  {{ user.nickname}} !</h4>
+                        <h4> {% trans 'You are already logged in as ' %}  {{ user.nickname}} !</h4>
                     {% else %}
-                        <h4>{% trans 'Log in'%}</h4>
+                        <h4>{% bootstrap_icon "user" %} {% trans 'Log in'%}</h4>
                         <form action="" method="post">
                             {% csrf_token %}
                             {% bootstrap_form form%}
                             <input type="hidden" name="next" value="{{ next }}" />
-                            <div class="wrapper ">
-                                <button type="submit" class="btn btn-custom margin2">
-                                    {% bootstrap_icon "log-in" %}{%trans ' Log in' %}
-                                </button>
-                                <span class=" btn margin2">or </span>
-                                <a href="{% url 'register' %}" class="btn margin2" > {% trans 'Register' %}</a>
+                            <div class="submit col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                              <button type="submit" class="btn btn-lg btn-custom col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                {% bootstrap_icon "log-in" %} {% trans ' Log in' %}
+                              </button>
                             </div>
+			    <div class="text-center">
+			      {% trans 'No account yet?' %} <a href="{% url 'register' %}"> {% trans 'Create one' %}</a>
+			    </div>
                         </form>
                     {% endif %}
                 </div>
