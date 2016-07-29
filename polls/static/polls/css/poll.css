@@ -195,7 +195,7 @@ p.description:before {
 .navbar-custom .navbar-toggle {
     color: #fff;
     border-color: #aaa;
-    border-radius: 0px;
+    border-radius: 2px;
 }
 .navbar-custom .navbar-toggle:hover,
 .navbar-custom .navbar-toggle:focus {
@@ -265,7 +265,7 @@ p.description:before {
 	color: rgba(51, 117, 179, 1);
 	background: #fafafa;
 	border: 1px solid #e3e3e3;
-	border-radius: 0px;
+	border-radius: 2px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
@@ -284,7 +284,7 @@ p.description:before {
 ***********************************************************/
 
 .alert {
-    border-radius: 0px;
+    border-radius: 2px;
     border: 0px;
     padding-bottom: 20px;
     padding-top: 20px;
@@ -327,7 +327,7 @@ p.description:before {
 ***********************************************************/
 
 .btn {
-    border-radius: 0px;
+    border-radius: 2px;
     border: 0px;
     text-shadow: none;
 }
@@ -472,7 +472,7 @@ fieldset[disabled] .btn-custom.active {
 ***********************************************************/
 
 .modal-dialog .modal-content {
-    border-radius: 0px;
+    border-radius: 2px;
     text-align: center;
     background-color: rgba(51, 117, 179, 1);
     color: #fff;
@@ -513,19 +513,19 @@ fieldset[disabled] .btn-custom.active {
 
 
 .list-group {
-    border-radius: 0px;
+    border-radius: 2px;
     box-shadow: none;
 }
 
 .list-group-item {
-    border-radius: 0px;
+    border-radius: 2px;
     border: 1px solid rgba(128, 128, 128, 0.5);
     color: rgba(128, 128, 128, 0.8);
 }
 
 .list-group-item:first-child,
 .list-group-item:last-child {
-    border-radius: 0px;
+    border-radius: 2px;
 }
 
 /***********************************************************
@@ -542,7 +542,7 @@ fieldset[disabled] .btn-custom.active {
     margin-bottom: 10px;
     background-color: rgba(51, 117, 179, 0.9);
     border: 0px solid #ddd;
-    border-radius: 0px;
+    border-radius: 2px;
     transition: all .2s linear;
 }
 
@@ -568,20 +568,21 @@ fieldset[disabled] .btn-custom.active {
 ***********************************************************/
 
 .form-login {
+    border-radius: 2px;
     background-color: #fafafa;
     border: 1px solid rgb(235, 235, 235);
     padding: 20px;
 }
 
 .form-control {
-    border-radius: 0px;
+    border-radius: 2px;
     border: 1px solid rgba(128, 128, 128, 0.5);
 }
 
 .thumbnail {
     background-color: #fafafa;
     border: 1px solid rgb(235, 235, 235);
-    border-radius: 0px;
+    border-radius: 2px;
     padding: 10px;
 }
 
@@ -599,7 +600,7 @@ fieldset[disabled] .btn-custom.active {
   float: left;
 }
 .nav-pills-custom > li > a {
-  border-radius: 0px;
+  border-radius: 2px;
 }
 .nav-pills-custom > li + li {
   margin-left: 2px;
@@ -609,7 +610,7 @@ fieldset[disabled] .btn-custom.active {
 .nav-pills-custom > li.active > a:focus {
   color:#ffffff;
   background-color:  rgba(51, 117, 179, 0.9);
-  border-radius: 0px;
+  border-radius: 2px;
 }
 
 /***********************************************************
