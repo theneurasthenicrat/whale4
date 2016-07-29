@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-29 14:15+0000\n"
+"POT-Creation-Date: 2016-07-29 16:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,16 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: accounts/forms.py:9 accounts/models.py:52
-#, fuzzy
-#| msgid "email address"
 msgid "Email address *"
-msgstr "Adresse email"
+msgstr "Adresse e-mail *"
 
 #: accounts/forms.py:10 accounts/forms.py:14
-#, fuzzy
-#| msgid "password"
 msgid "Password *"
-msgstr "Mot de passe"
+msgstr "Mot de passe *"
 
 #: accounts/forms.py:15
 #, fuzzy
@@ -43,10 +39,8 @@ msgid "Nickname *"
 msgstr "Surnom"
 
 #: accounts/models.py:85
-#, fuzzy
-#| msgid "email address"
 msgid "Email address"
-msgstr "Adresse email"
+msgstr "Adresse e-mail"
 
 #: accounts/templates/accounts/contact.html:7
 msgid "Contact us "
@@ -57,10 +51,8 @@ msgid " Send message"
 msgstr ""
 
 #: accounts/templates/accounts/login.html:10
-#, fuzzy
-#| msgid "you are log in"
-msgid "You are log in"
-msgstr "Vous êtes connecté"
+msgid "You are already logged in as "
+msgstr "Vous êtes connecté en tant que "
 
 #: accounts/templates/accounts/login.html:12 polls/templates/polls/base.html:75
 #: polls/templates/polls/home.html:64
@@ -68,14 +60,16 @@ msgid "Log in"
 msgstr "Se connecter"
 
 #: accounts/templates/accounts/login.html:19
-#, fuzzy
-#| msgid "Log in"
 msgid " Log in"
 msgstr "Se connecter"
 
-#: accounts/templates/accounts/login.html:22
-msgid "Register"
-msgstr ""
+#: accounts/templates/accounts/login.html:23
+msgid "No account yet?"
+msgstr "Pas encore de compte ?"
+
+#: accounts/templates/accounts/login.html:23
+msgid "Create one"
+msgstr "En créer un"
 
 #: accounts/templates/accounts/register.html:9
 msgid "Please Sign Up for Whale"
@@ -101,30 +95,30 @@ msgstr ""
 msgid "The polls you administrate"
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:21
-#: accounts/templates/accounts/user_detail.html:81
+#: accounts/templates/accounts/user_detail.html:22
+#: accounts/templates/accounts/user_detail.html:84
 msgid "Title"
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:24
-#: accounts/templates/accounts/user_detail.html:84
+#: accounts/templates/accounts/user_detail.html:25
+#: accounts/templates/accounts/user_detail.html:87
 #, fuzzy
 #| msgid "description"
 msgid "Description"
 msgstr "description"
 
-#: accounts/templates/accounts/user_detail.html:42
+#: accounts/templates/accounts/user_detail.html:43
 #, fuzzy
 #| msgid "Vote for this poll"
 msgid "Delete this poll"
 msgstr "Voter pour ce sondage"
 
-#: accounts/templates/accounts/user_detail.html:45
+#: accounts/templates/accounts/user_detail.html:46
 msgid " If you really want to delete this poll,click submit."
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:48
-#: accounts/templates/accounts/user_detail.html:107
+#: accounts/templates/accounts/user_detail.html:49
+#: accounts/templates/accounts/user_detail.html:110
 #: polls/templates/polls/candidate.html:68
 #: polls/templates/polls/date_candidate.html:38
 #: polls/templates/polls/poll.html:81 polls/templates/polls/secret_view.html:46
@@ -132,31 +126,31 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:49
-#: accounts/templates/accounts/user_detail.html:108
+#: accounts/templates/accounts/user_detail.html:50
+#: accounts/templates/accounts/user_detail.html:111
 #: polls/templates/polls/candidate.html:67 polls/templates/polls/poll.html:80
 msgid "OK"
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:66
+#: accounts/templates/accounts/user_detail.html:69
 #, fuzzy
 #| msgid "you are log in"
 msgid "You are not yet admin "
 msgstr "Vous êtes connecté"
 
-#: accounts/templates/accounts/user_detail.html:74
+#: accounts/templates/accounts/user_detail.html:76
 msgid " The polls in which you participated"
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:101
+#: accounts/templates/accounts/user_detail.html:104
 msgid "Delete your vote "
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:104
+#: accounts/templates/accounts/user_detail.html:107
 msgid "If you really want to delete your vote, click submit."
 msgstr ""
 
-#: accounts/templates/accounts/user_detail.html:125
+#: accounts/templates/accounts/user_detail.html:130
 msgid "Not yet participated "
 msgstr ""
 
@@ -170,7 +164,8 @@ msgstr "Vous êtes connecté avec succès"
 
 #: accounts/views.py:49
 msgid "unknown WhaleUser or bad password."
-msgstr "un whale utilisateur inconnu ou un mauvais mot de passe"
+msgstr ""
+"<h4>Navré, mais...</h4><p>...ce nom d'utilisateur est inconnu ou bien le mot de passe est erroné.</p>"
 
 #: accounts/views.py:57
 msgid "You have been successfully logged out."
@@ -200,38 +195,26 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: polls/forms.py:51
+#: polls/forms.py:57
 #, fuzzy
 #| msgid "Candidates"
 msgid "Candidate"
 msgstr "Candidats"
 
-#: polls/forms.py:68
+#: polls/forms.py:73
 msgid "Pick one or several dates"
 msgstr ""
 
-#: polls/forms.py:70
+#: polls/forms.py:75
 msgid "Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)"
 msgstr ""
 
-#: polls/forms.py:85
-msgid "candidates must be distinct."
-msgstr ""
-
-#: polls/forms.py:116
+#: polls/forms.py:104
 msgid "you must order all candidates"
 msgstr ""
 
-#: polls/forms.py:123
+#: polls/forms.py:111
 msgid "You must give a score to at least one candidate!"
-msgstr ""
-
-#: polls/forms.py:151
-msgid "Poll s'status"
-msgstr ""
-
-#: polls/forms.py:152 polls/templates/polls/admin.html:24
-msgid " Change the status of poll"
 msgstr ""
 
 #: polls/models.py:11
@@ -280,34 +263,38 @@ msgstr "Sondage type Date "
 msgid "poll type"
 msgstr "type de sondage"
 
-#: polls/models.py:34
+#: polls/models.py:35
 #, fuzzy
 #| msgid "preference model"
-msgid "preference model * "
+msgid "Preference model * "
 msgstr "préferences"
 
-#: polls/models.py:36
+#: polls/models.py:38
 msgid ""
 "Choice <span class='label label-primary'>I don't know</span>  is allowed"
 msgstr ""
 
-#: polls/models.py:37
+#: polls/models.py:40
 msgid "Add or remove candidates is allowed"
 msgstr ""
 
-#: polls/models.py:44
+#: polls/models.py:42
+msgid "Poll's status"
+msgstr ""
+
+#: polls/models.py:47
 msgid "candidate"
 msgstr "candidat"
 
-#: polls/models.py:54
+#: polls/models.py:57
 msgid "date"
 msgstr "date"
 
-#: polls/models.py:65
+#: polls/models.py:68
 msgid "voter"
 msgstr "Voteur"
 
-#: polls/models.py:66
+#: polls/models.py:69
 msgid "value"
 msgstr "valeur"
 
@@ -337,6 +324,10 @@ msgstr "Ajouter un candidat"
 
 #: polls/templates/polls/admin.html:20
 msgid " Invite the voters"
+msgstr ""
+
+#: polls/templates/polls/admin.html:24
+msgid " Change the status of poll"
 msgstr ""
 
 #: polls/templates/polls/admin.html:28
@@ -465,9 +456,7 @@ msgstr ""
 
 #: polls/templates/polls/candidate.html:85
 #: polls/templates/polls/date_candidate.html:76
-#: polls/templates/polls/option.html:27
-#: polls/templates/polls/status_poll.html:29
-#: polls/templates/polls/success.html:183
+#: polls/templates/polls/option.html:27 polls/templates/polls/success.html:183
 msgid "Previous"
 msgstr ""
 
@@ -554,7 +543,7 @@ msgstr ""
 
 #: polls/templates/polls/date_candidate.html:39
 #: polls/templates/polls/secret_view.html:47
-#: polls/templates/polls/status_poll.html:28 polls/templates/polls/vote.html:53
+#: polls/templates/polls/status_poll.html:17 polls/templates/polls/vote.html:53
 #: polls/templates/polls/vote.html:133
 #: polls/templates/polls/voting_poll.html:37
 msgid "Submit"
@@ -715,10 +704,6 @@ msgstr ""
 msgid "settings"
 msgstr ""
 
-#: polls/templates/polls/poll.html:124
-msgid "Status"
-msgstr ""
-
 #: polls/templates/polls/result.html:12
 msgid "Scoring method"
 msgstr ""
@@ -861,103 +846,123 @@ msgstr "Sondage type Date "
 msgid "Parameters"
 msgstr ""
 
-#: polls/views.py:34 polls/views.py:67
+#: polls/views.py:31 polls/views.py:64
 #, fuzzy
 #| msgid "you are log in"
 msgid "you are not admin's poll"
 msgstr "Vous êtes connecté"
 
-#: polls/views.py:45 polls/views.py:51
+#: polls/views.py:42
 msgid "Experimental vote can not be updated"
 msgstr ""
 
-#: polls/views.py:58
+#: polls/views.py:48 polls/views.py:54
 msgid "This is not your vote"
 msgstr ""
 
-#: polls/views.py:70
+#: polls/views.py:67
 msgid "The poll is not closed"
 msgstr ""
 
-#: polls/views.py:214
+#: polls/views.py:99
+msgid "You must add at least two candidates"
+msgstr ""
+
+#: polls/views.py:172
+#, fuzzy
+#| msgid "Your account has been successfully created."
+msgid " General parameters are successfully created!!"
+msgstr "Votre compte a été créé avec succès"
+
+#: polls/views.py:192
+#, fuzzy
+#| msgid "Candidates successfully added!"
+msgid " General parameters are successfully updated!"
+msgstr "Candidats ajouté avec succès"
+
+#: polls/views.py:195
+#, fuzzy
+#| msgid "Candidates successfully added!"
+msgid " Parameters are successfully updated!"
+msgstr "Candidats ajouté avec succès"
+
+#: polls/views.py:206
 #, fuzzy
 #| msgid "Your account has been successfully created."
 msgid "Your poll has been deleted!"
 msgstr "Votre compte a été créé avec succès"
 
-#: polls/views.py:248
+#: polls/views.py:220
 #, fuzzy
 #| msgid "Candidates successfully added!"
-msgid "Candidate successfully added!"
+msgid "Options are successfully added!"
 msgstr "Candidats ajouté avec succès"
 
-#: polls/views.py:250
+#: polls/views.py:234
+#, fuzzy
+#| msgid "Candidates successfully added!"
+msgid "Status is successfully changed!"
+msgstr "Candidats ajouté avec succès"
+
+#: polls/views.py:265
 msgid "Candidates must be distinct"
 msgstr ""
 
-#: polls/views.py:275
+#: polls/views.py:269
+#, fuzzy
+#| msgid "Candidates successfully added!"
+msgid "Candidate is successfully added!"
+msgstr "Candidats ajouté avec succès"
+
+#: polls/views.py:294
 msgid "candidates must be distinct"
 msgstr ""
 
-#: polls/views.py:280
-msgid "Candidates successfully added!"
+#: polls/views.py:299
+#, fuzzy
+#| msgid "Candidates successfully added!"
+msgid "Candidates are successfully added!"
 msgstr "Candidats ajouté avec succès"
 
-#: polls/views.py:292
+#: polls/views.py:311
 msgid "Candidate has been deleted!"
 msgstr ""
 
-#: polls/views.py:308
-#, fuzzy
-#| msgid "Candidates successfully added!"
-msgid "Options successfully added!"
-msgstr "Candidats ajouté avec succès"
-
-#: polls/views.py:316
-msgid "You must add at least two candidates"
-msgstr ""
-
-#: polls/views.py:349
+#: polls/views.py:342
 #, fuzzy
 #| msgid "Candidates successfully added!"
 msgid "Inviters successfully added!"
 msgstr "Candidats ajouté avec succès"
 
-#: polls/views.py:364
+#: polls/views.py:357
 msgid "anonymous voter has been deleted!"
 msgstr ""
 
-#: polls/views.py:381
+#: polls/views.py:374
 msgid " your certificate is right "
 msgstr ""
 
-#: polls/views.py:389
+#: polls/views.py:382
 msgid " your certificate is wrong"
 msgstr ""
 
-#: polls/views.py:421
+#: polls/views.py:414
 msgid "you have already vote , now you can update your vote"
 msgstr ""
 
-#: polls/views.py:439
+#: polls/views.py:432
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 
-#: polls/views.py:488
+#: polls/views.py:481
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 
-#: polls/views.py:507
+#: polls/views.py:500
 #, fuzzy
 #| msgid "Your account has been successfully created."
 msgid "Your vote has been deleted!"
 msgstr "Votre compte a été créé avec succès"
-
-#: polls/views.py:689
-#, fuzzy
-#| msgid "Candidates successfully added!"
-msgid "Status successfully changed!"
-msgstr "Candidats ajouté avec succès"
 
 #: whale4/settings-generic.py:111 whale4/settings.py:111
 msgid "French"
@@ -966,6 +971,11 @@ msgstr "Français"
 #: whale4/settings-generic.py:113 whale4/settings.py:113
 msgid "English"
 msgstr "Anglais"
+
+#, fuzzy
+#~| msgid "Candidates successfully added!"
+#~ msgid "Candidate successfully added!"
+#~ msgstr "Candidats ajouté avec succès"
 
 #~ msgid "Try the demo poll"
 #~ msgstr "Essayez Whale"
@@ -980,9 +990,6 @@ msgstr "Anglais"
 
 #~ msgid "Create account"
 #~ msgstr "Créer un compte"
-
-#~ msgid "Create "
-#~ msgstr "Créer"
 
 #~ msgid "tilte"
 #~ msgstr "titre"
