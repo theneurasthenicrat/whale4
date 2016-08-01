@@ -560,10 +560,7 @@ fieldset[disabled] .btn-custom.active {
   CHOICES
 ***********************************************************/
 
-.choice .list-group-item ,
-.choice .list-group-item:hover,
-.choice .list-group-item:focus,
-.choice .list-group-item:active{
+.choice .list-group-item {
     position: relative;
     display: block;
     padding: 10px 15px;
@@ -572,6 +569,22 @@ fieldset[disabled] .btn-custom.active {
     border: 0px solid #ddd;
     border-radius: 2px;
     transition: all .2s linear;
+}
+
+.choice .list-group-item:hover,
+.choice .list-group-item:focus,
+.choice .list-group-item:active{
+    background-color: rgba(51, 117, 179, 1);
+    transition: all .2s linear;
+    text-decoration: none;
+}
+
+.choice .list-group-item a:hover,
+.choice .list-group-item a:focus,
+.choice .list-group-item a:active{
+    background-color: rgba(51, 117, 179, 1);
+    transition: all .2s linear;
+    text-decoration: none;
 }
 
 .choice .list-group-item .list-group-item-heading {
@@ -587,7 +600,21 @@ fieldset[disabled] .btn-custom.active {
     text-align: center;
     font-weight: normal;
     color:white;
+}
 
+.choice .list-group-item .subchoice {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: block;
+    border-radius: 1px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    transition: all .2s linear;
+}
+
+.choice .list-group-item .subchoice:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transition: all .2s linear;
+    text-decoration: none;
 }
 
 
