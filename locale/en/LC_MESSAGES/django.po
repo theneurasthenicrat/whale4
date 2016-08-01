@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-29 16:08+0000\n"
+"POT-Creation-Date: 2016-08-01 07:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,21 +139,22 @@ msgstr ""
 msgid "Not yet participated "
 msgstr ""
 
-#: accounts/views.py:27
+#: accounts/views.py:28
 msgid "Your account has been successfully created."
-msgstr ""
+msgstr "<h4>Welcome!</h4><p>You are now registered on Whale<sup>4</sup>. The Whale whale-comes you!</p>"
 
-#: accounts/views.py:43
-msgid "You are successfully log in."
-msgstr ""
+#: accounts/views.py:44
+#, python-format
+msgid "You are logged in as %(username)s"
+msgstr "<h4>Connection successful!</h4><p>You are now logged in as %(username)s.</p><p>Whalecome...</p>"
 
-#: accounts/views.py:49
+#: accounts/views.py:50
 msgid "unknown WhaleUser or bad password."
-msgstr ""
+msgstr "<h4>Sorry but...</h4><p>...This user name is unknown or the password is incorrect.</p><p>Give another try!</p>"
 
-#: accounts/views.py:57
+#: accounts/views.py:58
 msgid "You have been successfully logged out."
-msgstr ""
+msgstr "<h4>Log out successful</h4><p>You are now disconnected from Whale<sup>4</sup>. See you later!</p>"
 
 #: polls/forms.py:19
 msgid "Enter title "

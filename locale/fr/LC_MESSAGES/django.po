@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-29 16:08+0000\n"
+"POT-Creation-Date: 2016-08-01 07:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,22 +154,23 @@ msgstr ""
 msgid "Not yet participated "
 msgstr ""
 
-#: accounts/views.py:27
+#: accounts/views.py:28
 msgid "Your account has been successfully created."
-msgstr "Votre compte a été créé avec succès"
+msgstr "<h4>Bienvenue !</h4><p>Votre compte a bien été créé. La Baleine vous souhaite la bienvenue</p>"
 
-#: accounts/views.py:43
-msgid "You are successfully log in."
-msgstr "Vous êtes connecté avec succès"
+#: accounts/views.py:44
+msgid "You are logged in as %(username)s"
+msgstr "<h4>Connexion réussie !</h4><p>Vous êtes connecté en tant que %(username)s.</p><p>Whalecome...</p>"
 
-#: accounts/views.py:49
+#: accounts/views.py:50
 msgid "unknown WhaleUser or bad password."
 msgstr ""
-"<h4>Navré, mais...</h4><p>...ce nom d'utilisateur est inconnu ou bien le mot de passe est erroné.</p>"
+"<h4>Navré, mais...</h4><p>...ce nom d'utilisateur est inconnu ou bien le mot "
+"de passe est erroné.</p><p>Essayez donc à nouveau.</p>"
 
-#: accounts/views.py:57
+#: accounts/views.py:58
 msgid "You have been successfully logged out."
-msgstr "Vous avez été déconnecté avec succès"
+msgstr "<h4>Déconnexion réussie</h4><p>Vous êtes déconnecté de la Baleine.</p><p>Vous pouvez maintenant éteindre votre ordinateur ou dispositif mobile et reprendre une activité normale.</p>"
 
 #: polls/forms.py:19
 msgid "Enter title "
@@ -971,6 +972,10 @@ msgstr "Français"
 #: whale4/settings-generic.py:113 whale4/settings.py:113
 msgid "English"
 msgstr "Anglais"
+
+#~ msgid "Log in successful."
+#~ msgstr ""
+#~ "<h4>Connexion réussie</h4><p>Vous êtes maintenant connecté en tant que "
 
 #, fuzzy
 #~| msgid "Candidates successfully added!"

@@ -12,6 +12,7 @@ from django.views.generic import DetailView
 from django.utils.decorators import method_decorator
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.utils.safestring import mark_safe
 
 from accounts.models import WhaleUser
 from accounts.forms import UserCreationForm, LoginForm,ContactForm
@@ -24,7 +25,7 @@ class Register(CreateView):
     model = WhaleUser
 
     def get_success_url(self):
-        messages.success(self.request, _('Your account has been successfully created.'))
+        messages.success(self.request, mark_safe(_('Your account has been successfully created.')))
         return reverse_lazy('login')
 
 
@@ -40,13 +41,13 @@ def login_view(request):
             user = authenticate(username=username, password=password) 
             if user is not None:
                 login(request, user)
-                messages.success(request, _('You are successfully log in.'))
+                messages.success(request, mark_safe(_('You are logged in as %(username)s') % {'username': user.nickname}))
                 if next_url is not None:
                     return redirect(next_url )
                 else:
                     return redirect(reverse_lazy('accountPoll', kwargs={'pk': user.id,}))
             else:
-                messages.error(request, _('unknown WhaleUser or bad password.'))
+                messages.error(request, mark_safe(_('unknown WhaleUser or bad password.')))
     else:
         form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form, })
@@ -54,7 +55,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, _('You have been successfully logged out.'))
+    messages.success(request, mark_safe(_('You have been successfully logged out.')))
     return redirect(reverse('home'))
 
 
