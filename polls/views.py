@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
+from django.utils.safestring import mark_safe
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
@@ -203,7 +204,7 @@ def delete_poll(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     admin=request.user.id
     poll.delete()
-    messages.success(request, _('Your poll has been deleted!'))
+    messages.success(request, mark_safe(_('Your poll has been deleted!')))
     return redirect(reverse_lazy( 'accountPoll', kwargs={'pk': admin}))
 
 

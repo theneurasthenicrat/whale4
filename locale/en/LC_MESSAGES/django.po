@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 07:02+0000\n"
+"POT-Creation-Date: 2016-08-01 08:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,85 +76,91 @@ msgstr ""
 
 #: accounts/templates/accounts/user_detail.html:9
 msgid "Welcome "
-msgstr ""
+msgstr "Welcome "
 
 #: accounts/templates/accounts/user_detail.html:10
-msgid "Update or delete yours polls"
-msgstr ""
+msgid "Manage your polls"
+msgstr "Manage your polls"
 
 #: accounts/templates/accounts/user_detail.html:14
 msgid "The polls you administrate"
-msgstr ""
+msgstr "The polls you administrate"
 
 #: accounts/templates/accounts/user_detail.html:22
 #: accounts/templates/accounts/user_detail.html:84
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 #: accounts/templates/accounts/user_detail.html:25
 #: accounts/templates/accounts/user_detail.html:87
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: accounts/templates/accounts/user_detail.html:43
-msgid "Delete this poll"
-msgstr ""
+#, python-format
+msgid "Delete poll \"%(title)s\""
+msgstr "Delete poll \"%(title)s\""
 
 #: accounts/templates/accounts/user_detail.html:46
-msgid " If you really want to delete this poll,click submit."
-msgstr ""
+msgid "Do you really want to delete this poll?"
+msgstr "Do you really want to delete this poll?"
 
 #: accounts/templates/accounts/user_detail.html:49
-#: accounts/templates/accounts/user_detail.html:110
-#: polls/templates/polls/candidate.html:68
-#: polls/templates/polls/date_candidate.html:38
-#: polls/templates/polls/poll.html:81 polls/templates/polls/secret_view.html:46
-#: polls/templates/polls/success.html:76
-msgid "Cancel"
-msgstr ""
+#: accounts/templates/accounts/user_detail.html:110 polls/forms.py:22
+#: polls/forms.py:23
+msgid "No"
+msgstr "Well, all things considered, no"
 
 #: accounts/templates/accounts/user_detail.html:50
-#: accounts/templates/accounts/user_detail.html:111
-#: polls/templates/polls/candidate.html:67 polls/templates/polls/poll.html:80
-msgid "OK"
-msgstr ""
+#: accounts/templates/accounts/user_detail.html:111 polls/forms.py:22
+#: polls/forms.py:23
+msgid "Yes"
+msgstr "Yes, please!"
 
 #: accounts/templates/accounts/user_detail.html:69
-msgid "You are not yet admin "
-msgstr ""
+msgid "You have not created any poll so far."
+msgstr "You have not created any poll so far."
 
 #: accounts/templates/accounts/user_detail.html:76
-msgid " The polls in which you participated"
-msgstr ""
+msgid "The polls you were involved in as a voter"
+msgstr "The polls you were involved in as a voter"
 
 #: accounts/templates/accounts/user_detail.html:104
-msgid "Delete your vote "
-msgstr ""
+msgid "Delete your vote"
+msgstr "Delete your vote"
 
 #: accounts/templates/accounts/user_detail.html:107
-msgid "If you really want to delete your vote, click submit."
-msgstr ""
+msgid "Do you really want to delete your vote?"
+msgstr "Do you really want to delete your vote?"
 
 #: accounts/templates/accounts/user_detail.html:130
-msgid "Not yet participated "
-msgstr ""
+msgid "You did not participate in any poll yet."
+msgstr "You did not participate in any poll yet."
 
 #: accounts/views.py:28
 msgid "Your account has been successfully created."
-msgstr "<h4>Welcome!</h4><p>You are now registered on Whale<sup>4</sup>. The Whale whale-comes you!</p>"
+msgstr ""
+"<h4>Welcome!</h4><p>You are now registered on Whale<sup>4</sup>. The Whale "
+"whale-comes you!</p>"
 
 #: accounts/views.py:44
 #, python-format
 msgid "You are logged in as %(username)s"
-msgstr "<h4>Connection successful!</h4><p>You are now logged in as %(username)s.</p><p>Whalecome...</p>"
+msgstr ""
+"<h4>Connection successful!</h4><p>You are now logged in as %(username)s.</"
+"p><p>Whalecome...</p>"
 
 #: accounts/views.py:50
 msgid "unknown WhaleUser or bad password."
-msgstr "<h4>Sorry but...</h4><p>...This user name is unknown or the password is incorrect.</p><p>Give another try!</p>"
+msgstr ""
+"<h4>Sorry but...</h4><p>...This user name is unknown or the password is "
+"incorrect.</p><p>Give another try!</p>"
 
 #: accounts/views.py:58
 msgid "You have been successfully logged out."
-msgstr "<h4>Log out successful</h4><p>You are now disconnected from Whale<sup>4</sup>. See you later!</p>"
+msgstr ""
+"<h4>Log out successful</h4><p>You are now disconnected from Whale<sup>4</"
+"sup>. See you later!</p>"
 
 #: polls/forms.py:19
 msgid "Enter title "
@@ -166,14 +172,6 @@ msgstr ""
 
 #: polls/forms.py:21
 msgid "Enter description "
-msgstr ""
-
-#: polls/forms.py:22 polls/forms.py:23
-msgid "Yes"
-msgstr ""
-
-#: polls/forms.py:22 polls/forms.py:23
-msgid "No"
 msgstr ""
 
 #: polls/forms.py:57
@@ -413,6 +411,17 @@ msgstr ""
 #: polls/templates/polls/date_candidate.html:35
 #: polls/templates/polls/success.html:73
 msgid " click submit."
+msgstr ""
+
+#: polls/templates/polls/candidate.html:67 polls/templates/polls/poll.html:80
+msgid "OK"
+msgstr ""
+
+#: polls/templates/polls/candidate.html:68
+#: polls/templates/polls/date_candidate.html:38
+#: polls/templates/polls/poll.html:81 polls/templates/polls/secret_view.html:46
+#: polls/templates/polls/success.html:76
+msgid "Cancel"
 msgstr ""
 
 #: polls/templates/polls/candidate.html:85
@@ -779,99 +788,99 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: polls/views.py:31 polls/views.py:64
+#: polls/views.py:32 polls/views.py:65
 msgid "you are not admin's poll"
 msgstr ""
 
-#: polls/views.py:42
+#: polls/views.py:43
 msgid "Experimental vote can not be updated"
 msgstr ""
 
-#: polls/views.py:48 polls/views.py:54
+#: polls/views.py:49 polls/views.py:55
 msgid "This is not your vote"
 msgstr ""
 
-#: polls/views.py:67
+#: polls/views.py:68
 msgid "The poll is not closed"
 msgstr ""
 
-#: polls/views.py:99
+#: polls/views.py:100
 msgid "You must add at least two candidates"
 msgstr ""
 
-#: polls/views.py:172
+#: polls/views.py:173
 msgid " General parameters are successfully created!!"
 msgstr ""
 
-#: polls/views.py:192
+#: polls/views.py:193
 msgid " General parameters are successfully updated!"
 msgstr ""
 
-#: polls/views.py:195
+#: polls/views.py:196
 msgid " Parameters are successfully updated!"
 msgstr ""
 
-#: polls/views.py:206
+#: polls/views.py:207
 msgid "Your poll has been deleted!"
-msgstr ""
+msgstr "<h4>Deletion confirmed</h4><p>The poll (as well as the associated votes) has been deleted from the database.</p>"
 
-#: polls/views.py:220
+#: polls/views.py:221
 msgid "Options are successfully added!"
 msgstr ""
 
-#: polls/views.py:234
+#: polls/views.py:235
 msgid "Status is successfully changed!"
 msgstr ""
 
-#: polls/views.py:265
+#: polls/views.py:266
 msgid "Candidates must be distinct"
 msgstr ""
 
-#: polls/views.py:269
+#: polls/views.py:270
 msgid "Candidate is successfully added!"
 msgstr ""
 
-#: polls/views.py:294
+#: polls/views.py:295
 msgid "candidates must be distinct"
 msgstr ""
 
-#: polls/views.py:299
+#: polls/views.py:300
 msgid "Candidates are successfully added!"
 msgstr ""
 
-#: polls/views.py:311
+#: polls/views.py:312
 msgid "Candidate has been deleted!"
 msgstr ""
 
-#: polls/views.py:342
+#: polls/views.py:343
 msgid "Inviters successfully added!"
 msgstr ""
 
-#: polls/views.py:357
+#: polls/views.py:358
 msgid "anonymous voter has been deleted!"
 msgstr ""
 
-#: polls/views.py:374
+#: polls/views.py:375
 msgid " your certificate is right "
 msgstr ""
 
-#: polls/views.py:382
+#: polls/views.py:383
 msgid " your certificate is wrong"
 msgstr ""
 
-#: polls/views.py:414
+#: polls/views.py:415
 msgid "you have already vote , now you can update your vote"
 msgstr ""
 
-#: polls/views.py:432
+#: polls/views.py:433
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 
-#: polls/views.py:481
+#: polls/views.py:482
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 
-#: polls/views.py:500
+#: polls/views.py:501
 msgid "Your vote has been deleted!"
 msgstr ""
 

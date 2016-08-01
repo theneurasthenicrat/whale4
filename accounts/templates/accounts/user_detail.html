@@ -7,7 +7,7 @@
     <div class="container ">
         <div class="well">
             <h2> {% trans 'Welcome '  %}{{ whaleuser.nickname }}</h2>
-            <h3>{% trans 'Update or delete yours polls' %}</h3>
+            <h3>{% trans 'Manage your polls' %}</h3>
         </div>
 
         <div class="form-login ">
@@ -40,14 +40,14 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title">{% trans 'Delete this poll' %} {{ poll.title }} </h4>
+                                                    <h4 class="modal-title">{% blocktrans with title=poll.title %}Delete poll "{{ title }}"{% endblocktrans %}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>{% trans ' If you really want to delete this poll,click submit.' %}</p>
+                                                    <p>{% trans 'Do you really want to delete this poll?' %}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
-                                                    <a href="{% url 'deleteVotingPoll' poll.id %}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
+                                                    <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'No'%} {% bootstrap_icon "remove" %}</button>
+                                                    <a href="{% url 'deleteVotingPoll' poll.id %}" class="btn btn-ok ">{% trans 'Yes' %} {% bootstrap_icon "ok" %} </a >
                                                 </div>
                                             </div>
                                         </div>
@@ -65,15 +65,15 @@
                     </table>
                 </div>
             {% else %}
-                <div class="well">
-                    <i>{% trans 'You are not yet admin ' %}</i>
+                <div class="well text-center">
+                    <i>{% trans 'You have not created any poll so far.' %}</i>
                 </div>
             {% endif%}
 
         </div>
 
         <div class="form-login margin2">
-            <h4>{% trans ' The polls in which you participated' %} </h4>
+            <h4>{% trans 'The polls you were involved in as a voter' %} </h4>
             {% if poll_list_voter %}
                 <div class="table-responsive ">
                     <table class="table"  >
@@ -101,14 +101,14 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title">{% trans 'Delete your vote ' %}</h4>
+                                                    <h4 class="modal-title">{% trans 'Delete your vote' %}</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p> {% trans 'If you really want to delete your vote, click submit.' %}</p>
+                                                    <p> {% trans 'Do you really want to delete your vote?' %}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
-                                                    <a href="/polls/deleteVote/{{ poll.id }}/{{ whaleuser.id }}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
+                                                    <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'No' %} {% bootstrap_icon "remove" %}</button>
+                                                    <a href="/polls/deleteVote/{{ poll.id }}/{{ whaleuser.id }}" class="btn btn-ok ">{% trans 'Yes' %} {% bootstrap_icon "ok" %} </a >
                                                 </div>
                                             </div>
                                         </div>
@@ -126,8 +126,8 @@
                     </table>
                 </div>
             {% else %}
-                <div class="well">
-                    <i>{% trans 'Not yet participated ' %}</i>
+                <div class="well text-center">
+                    <i>{% trans 'You did not participate in any poll yet.' %}</i>
                 </div>
             {% endif%}
 
