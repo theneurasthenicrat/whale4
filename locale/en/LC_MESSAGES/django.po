@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 08:01+0000\n"
+"POT-Creation-Date: 2016-08-01 09:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -445,7 +445,7 @@ msgstr ""
 
 #: polls/templates/polls/certificate.html:9
 msgid "Secret ballot"
-msgstr ""
+msgstr "Secret ballot"
 
 #: polls/templates/polls/certificate.html:18
 msgid "Save"
@@ -453,53 +453,58 @@ msgstr ""
 
 #: polls/templates/polls/choice_ballot.html:9
 msgid "Create a new poll"
-msgstr ""
+msgstr "Create a new poll"
 
 #: polls/templates/polls/choice_ballot.html:10
 msgid "Which kind of poll do you want to create?"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:14
-msgid " Open ballot"
-msgstr ""
+msgstr "Which kind of poll do you want to create?"
 
 #: polls/templates/polls/choice_ballot.html:15
-msgid "Everyone can see everyone else' s votes and names."
-msgstr ""
+msgid "Open ballot"
+msgstr "Open ballot"
 
-#: polls/templates/polls/choice_ballot.html:18
-msgid " Standard poll"
+#: polls/templates/polls/choice_ballot.html:16
+msgid "Everyone can see everyone else's votes and names."
 msgstr ""
+"The traditional poll without any high stake: everyone can see everyone "
+"else's votes and names."
 
-#: polls/templates/polls/choice_ballot.html:19
+#: polls/templates/polls/choice_ballot.html:20
+msgid "Standard poll"
+msgstr "Standard poll"
+
+#: polls/templates/polls/choice_ballot.html:21
 msgid "Choose among several custom alternatives."
-msgstr ""
+msgstr "Choose among several custom options (<i>e.g.</i> films to watch, restaurants, candidates to hire...)."
 
-#: polls/templates/polls/choice_ballot.html:22
-msgid " Date poll"
-msgstr ""
+#: polls/templates/polls/choice_ballot.html:24
+msgid "Date poll"
+msgstr "Date poll"
 
-#: polls/templates/polls/choice_ballot.html:23
+#: polls/templates/polls/choice_ballot.html:25
 msgid "Find the best date for an event"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:26
-msgid " Secret ballot"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:27
-msgid ""
-"Ballot is hidden until the poll closes. After that, ballot is public but "
-"anonymous."
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:30
-msgid " Experimental ballot"
-msgstr ""
+msgstr "Find the best date for an event."
 
 #: polls/templates/polls/choice_ballot.html:31
-msgid "The admin's poll is the only one who can see the results."
+msgid "Secret ballot poll"
+msgstr "Secret ballot"
+
+#: polls/templates/polls/choice_ballot.html:32
+msgid "Secret ballot explanation."
 msgstr ""
+"The traditional election setting: ballots are kept secret until the poll "
+"closes. After that, they become available to everyone, but on an anonymous "
+"form (voters' names are not displayed)."
+
+#: polls/templates/polls/choice_ballot.html:37
+msgid "Experimental ballot"
+msgstr "Voting experiment"
+
+#: polls/templates/polls/choice_ballot.html:38
+msgid "Experimental ballot explanation."
+msgstr ""
+"The voting experiment: voters participate anonymously. The administrator can "
+"control the way they participate and can see the results."
 
 #: polls/templates/polls/date_candidate.html:35
 msgid " If you really want to delete this candidate"
@@ -822,7 +827,9 @@ msgstr ""
 
 #: polls/views.py:207
 msgid "Your poll has been deleted!"
-msgstr "<h4>Deletion confirmed</h4><p>The poll (as well as the associated votes) has been deleted from the database.</p>"
+msgstr ""
+"<h4>Deletion confirmed</h4><p>The poll (as well as the associated votes) has "
+"been deleted from the database.</p>"
 
 #: polls/views.py:221
 msgid "Options are successfully added!"

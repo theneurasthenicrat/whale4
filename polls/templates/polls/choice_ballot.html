@@ -12,30 +12,30 @@
   <div class="list-group choice">
     <div class="list-group-item">
       <a href="#open2" data-toggle="collapse">
-        <h4 class="list-group-item-heading"><i class="fa fa-eye"></i> {% trans ' Open ballot'%}</h4>
-        <p class="list-group-item-text">{% trans "Everyone can see everyone else' s votes and names."%}</p>
+        <h4 class="list-group-item-heading"><i class="fa fa-eye"></i> {% trans 'Open ballot'%}</h4>
+        <p class="list-group-item-text">{% trans "Everyone can see everyone else's votes and names."%}</p>
       </a>
       <div id="open2" class="collapse">
         <a href="{% url 'newPoll' 20 %}" class="subchoice">
-	  <h4 class="list-group-item-heading"><i class="fa fa-list-ul"></i>{% trans ' Standard poll'%}</h4>
+	  <h4 class="list-group-item-heading"><i class="fa fa-list-ul"></i> {% trans 'Standard poll'%}</h4>
 	  <p class="list-group-item-text">{%  trans 'Choose among several custom alternatives.'%}</p>
         </a>
         <a href="{% url 'newPoll' 21 %}" class="subchoice">
-	  <h4 class="list-group-item-heading"><i class="fa fa-calendar"></i>{% trans ' Date poll'%}</h4>
+	  <h4 class="list-group-item-heading"><i class="fa fa-calendar"></i> {% trans 'Date poll'%}</h4>
 	  <p class="list-group-item-text">{% trans 'Find the best date for an event'%}.</p>
         </a>
       </div>
     </div>
     <div class="list-group-item">
       <a href="{% url 'newPoll' 22 %}">
-        <h4 class="list-group-item-heading"><i class="fa fa-eye-slash"></i> {% trans ' Secret ballot'%}</h4>
-        <p class="list-group-item-text">{% trans 'Ballot is hidden until the poll closes. After that, ballot is public but anonymous.'%}</p>
+        <h4 class="list-group-item-heading"><i class="fa fa-eye-slash"></i> {% trans 'Secret ballot poll'%}</h4>
+        <p class="list-group-item-text">{% trans 'Secret ballot explanation.' %}</p>
       </a>
     </div>
     <div class="list-group-item">
       <a href="{% url 'newPoll' 23 %}">
-        <h4 class="list-group-item-heading"><i class="fa fa-flask"></i>{% trans ' Experimental ballot'%}</h4>
-        <p class="list-group-item-text">{% trans "The admin's poll is the only one who can see the results."%}</p>
+        <h4 class="list-group-item-heading"><i class="fa fa-flask"></i> {% trans 'Experimental ballot'%}</h4>
+        <p class="list-group-item-text">{% trans 'Experimental ballot explanation.' %}</p>
       </a>
     </div>
   </div>

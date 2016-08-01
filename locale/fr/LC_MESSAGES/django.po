@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 08:01+0000\n"
+"POT-Creation-Date: 2016-08-01 09:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -477,67 +477,59 @@ msgstr ""
 
 #: polls/templates/polls/certificate.html:9
 msgid "Secret ballot"
-msgstr ""
+msgstr "Bulletin secret"
 
 #: polls/templates/polls/certificate.html:18
 msgid "Save"
 msgstr "Enregistrer"
 
 #: polls/templates/polls/choice_ballot.html:9
-#, fuzzy
-#| msgid " New poll"
 msgid "Create a new poll"
 msgstr "Nouveau Sondage"
 
 #: polls/templates/polls/choice_ballot.html:10
 msgid "Which kind of poll do you want to create?"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:14
-msgid " Open ballot"
-msgstr ""
+msgstr "Quel type de sondage voulez-vous créer ?"
 
 #: polls/templates/polls/choice_ballot.html:15
-msgid "Everyone can see everyone else' s votes and names."
-msgstr ""
+msgid "Open ballot"
+msgstr "Sondage ouvert"
 
-#: polls/templates/polls/choice_ballot.html:18
-#, fuzzy
-#| msgid "Standard Poll"
-msgid " Standard poll"
-msgstr "Sondage standard"
+#: polls/templates/polls/choice_ballot.html:16
+msgid "Everyone can see everyone else's votes and names."
+msgstr "Un sondage traditionnel sans enjeu fort : tous les participants peuvent voir les votes exprimés."
 
-#: polls/templates/polls/choice_ballot.html:19
+#: polls/templates/polls/choice_ballot.html:20
+msgid "Standard poll"
+msgstr "Classique"
+
+#: polls/templates/polls/choice_ballot.html:21
 msgid "Choose among several custom alternatives."
-msgstr ""
+msgstr "Où il s'agit de choisir entre plusieurs options fixées librement (<i>e.g.</i> élire un représentant, choisir un restaurant...)"
 
-#: polls/templates/polls/choice_ballot.html:22
-#, fuzzy
-#| msgid "Date Poll"
-msgid " Date poll"
-msgstr "Sondage type Date "
+#: polls/templates/polls/choice_ballot.html:24
+msgid "Date"
+msgstr "Date poll"
 
-#: polls/templates/polls/choice_ballot.html:23
+#: polls/templates/polls/choice_ballot.html:25
 msgid "Find the best date for an event"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:26
-msgid " Secret ballot"
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:27
-msgid ""
-"Ballot is hidden until the poll closes. After that, ballot is public but "
-"anonymous."
-msgstr ""
-
-#: polls/templates/polls/choice_ballot.html:30
-msgid " Experimental ballot"
-msgstr ""
+msgstr "Où l'on cherche la meilleure date pour un événement."
 
 #: polls/templates/polls/choice_ballot.html:31
-msgid "The admin's poll is the only one who can see the results."
-msgstr ""
+msgid "Secret ballot poll"
+msgstr "Sondage à bulletins secrets"
+
+#: polls/templates/polls/choice_ballot.html:32
+msgid "Secret ballot explanation."
+msgstr "Une élection classique dans les formes : les bulletins sont secrets jusqu'à la fermeture du sondage. Après, ils sont rendus publics, mais sous une forme anonyme (<i>i.e.</i> les noms des électeurs ne sont pas divulgués)."
+
+#: polls/templates/polls/choice_ballot.html:37
+msgid "Experimental ballot"
+msgstr "Expérimentation de vote"
+
+#: polls/templates/polls/choice_ballot.html:38
+msgid "Experimental ballot explanation."
+msgstr "Un cadre d'expérimentation de vote (oui, on fait de la <i>science</i> ici) : les votants participent de manière anonyme. L'administrateur peut contrôler la manière dont ils participent et voir les résultats."
 
 #: polls/templates/polls/date_candidate.html:35
 msgid " If you really want to delete this candidate"
@@ -890,7 +882,9 @@ msgstr "Candidats ajouté avec succès"
 
 #: polls/views.py:207
 msgid "Your poll has been deleted!"
-msgstr "<h4>Effacement confirmé</h4><p>Le sondage (ainsi que tous les votes associés) a bien été supprimé de la base.</p>"
+msgstr ""
+"<h4>Effacement confirmé</h4><p>Le sondage (ainsi que tous les votes "
+"associés) a bien été supprimé de la base.</p>"
 
 #: polls/views.py:221
 #, fuzzy
