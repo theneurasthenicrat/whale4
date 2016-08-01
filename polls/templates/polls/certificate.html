@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container">
         <div class="well">
-            <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
             <h3>{% trans 'Secret ballot' %}</h3>
         </div>
         <div class="thumbnail clearfix ">

@@ -8,7 +8,7 @@ from django import forms
 import re
 from django.core.validators import validate_email
 from django.forms import CharField, Textarea
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class BasePollForm(ModelForm):
@@ -16,11 +16,11 @@ class BasePollForm(ModelForm):
         model = VotingPoll
         fields = ['title','description','closing_date','preference_model','option_choice','option_modify','status']
         widgets = {
-            'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title ')}),
+            'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
-            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': _('Enter description ')}),
-            'option_choice': widgets.CheckboxInput(attrs={'data-on-text':_("Yes"),'data-off-text':_("No")}),
-            'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes"),'data-off-text':_("No")}),
+            'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': _('Enter description')}),
+            'option_choice': widgets.CheckboxInput(attrs={'data-on-text':_("Yes-option"),'data-off-text':_("No-option")}),
+            'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
         }
 
 

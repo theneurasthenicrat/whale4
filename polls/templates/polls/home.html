@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
       {% block title %}
-      {% trans ' Whale4 - WHich ALternative is Elected' %}
+      {% trans 'Whale4 - WHich ALternative is Elected' %}
       {% endblock %}
     </title>
 
@@ -56,8 +56,8 @@
                 {{ user.nickname }}  {% endif %}<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 {% if user.is_authenticated %}
-                <li class="dropdown-header-custom">{% trans "Signed in as" %} {{ user.nickname }}</li>
-                <li><a href="{% url 'accountPoll' user.id %}" > {% bootstrap_icon "user" %}{% trans " Your profile" %}</a></li>
+                <li class="dropdown-header-custom">{% blocktrans with nickname=user.nickname %}Signed in as {{ nickname }}{% endblocktrans %}</li>
+                <li><a href="{% url 'accountPoll' user.id %}" > {% bootstrap_icon "user" %}{% trans "Your profile" %}</a></li>
                 <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
                 {% else %}
                 <li><a href="{% url 'register' %}" >{% bootstrap_icon "user" %} {% trans 'Sign up' %}</a></li>

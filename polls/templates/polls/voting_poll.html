@@ -6,8 +6,8 @@
     <div class="container">
         <div class="well">
             {% if update_poll %}
-                <h2> {% trans 'Poll' %}</h2>
-                <h3>1.{% trans 'General parameters' %}</h3>
+                <h2> {% trans 'New poll' %}</h2>
+                <h3>1. {% trans 'General parameters' %}</h3>
             {% else %}
                 <h2>{% trans 'Poll' %} : {{ poll.title }}</h2>
                 <h3>{% trans 'Parameters' %}</h3>
@@ -19,9 +19,9 @@
             {% if update_poll %}
                 <div class="well-sm hidden-xs">
                     <ol class="nav nav-pills-custom">
-                        <li  class="active "><a href="#">{% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
-                        <li class="disabled"><a href="#">{% trans 'Add candidates' %} {% bootstrap_icon "menu-right"%}</a></li>
-                        <li  class="disabled"><a href="#">{% trans 'Advanced parameters' %} {% bootstrap_icon "menu-right"%}</a></li>
+                        <li  class="active "><a href="#">{% trans 'General parameters' %} {% bootstrap_icon "chevron-right" %}</a></li>
+                        <li class="disabled"><a href="#">{% trans 'Candidates' %} {% bootstrap_icon "chevron-right"%}</a></li>
+                        <li  class="disabled"><a href="#">{% trans 'Advanced parameters' %} {% bootstrap_icon "chevron-right"%}</a></li>
                         <li  class="disabled"><a href="#">{% trans 'Invite' %}</a></li>
                     </ol>
                 </div>

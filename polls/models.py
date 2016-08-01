@@ -35,7 +35,7 @@ class VotingPoll(Poll):
                                         verbose_name= _("Preference model * "))
     option_ballots=models.BooleanField(default=False)
     option_choice=models.BooleanField(default=True,
-                                      verbose_name=_("Choice <span class='label label-primary'>I don't know</span>  is allowed"))
+                                      verbose_name=_("Choice \"I don't know\" is allowed"))
     option_modify=models.BooleanField(default=True,
                                       verbose_name=_("Add or remove candidates is allowed"))
     option_experimental=models.BooleanField(default=False)

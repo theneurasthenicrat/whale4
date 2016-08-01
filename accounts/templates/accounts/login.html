@@ -7,7 +7,7 @@
             <div class="col-md-offset-3 col-md-6">
                 <div class=" form-login">
                     {% if user.is_authenticated %}
-                        <h4> {% trans 'You are already logged in as ' %}  {{ user.nickname}} !</h4>
+                        <h4>{% blocktrans with nickname=user.nickname %}You are already logged in as {{ nickname }}...{% endblocktrans %}</h4>
                     {% else %}
                         <h4>{% bootstrap_icon "user" %} {% trans 'Log in'%}</h4>
                         <form action="" method="post">
@@ -16,7 +16,7 @@
                             <input type="hidden" name="next" value="{{ next }}" />
                             <div class="submit col-lg-12 col-md-12 col-sm-12 col-xs-12">
                               <button type="submit" class="btn btn-lg btn-custom col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                {% bootstrap_icon "log-in" %} {% trans ' Log in' %}
+                                {% bootstrap_icon "log-in" %} {% trans 'Log in' %}
                               </button>
                             </div>
 			    <div class="text-center">

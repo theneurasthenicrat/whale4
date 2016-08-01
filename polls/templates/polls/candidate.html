@@ -7,21 +7,21 @@
     <div class="container">
         <div class="well">
 
-            <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
-                  {% if update_poll %}
-            <h3>2.{% trans 'Add candidates to poll' %}</h3>
-                {% else %}
-                         <h3>{% trans 'Add or remove candidates' %}</h3>
-             {% endif %}
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+            {% if update_poll %}
+            <h3>2. {% trans 'Add candidates to poll' %}</h3>
+            {% else %}
+            <h3>{% trans 'Add or remove candidates' %}</h3>
+            {% endif %}
         </div>
 
         <div class="thumbnail clearfix">
          {% if update_poll %}
             <div class="well-sm hidden-xs">
                 <ol class="nav nav-pills-custom ">
-                    <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates ' %}{% bootstrap_icon "menu-right" %}</a></li>
-                    <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters ' %}{% bootstrap_icon "menu-right"%}</a></li>
+                    <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "chevron-right" %}</a></li>
+                    <li role="presentation" class="active" ><a href="#"> {% trans 'Candidates' %}{% bootstrap_icon "chevron-right" %}</a></li>
+                    <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters' %}{% bootstrap_icon "chevron-right"%}</a></li>
                     <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
                 </ol>
             </div>
@@ -58,10 +58,10 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">{% trans 'Delete '%}{{ c }}</h4>
+                                                        <h4 class="modal-title">{% blocktrans with c=c %}Delete "{{ c }}"{% endblocktrans %}</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p> {% trans 'If you really want to delete this candidate' %} <strong>{{ c }}</strong>,{% trans ' click submit.'%}</p>
+                                                        <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >

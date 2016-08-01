@@ -6,26 +6,26 @@
 
     <div class="container">
         <div class="well">
-            <h2> {% trans ' Update your poll' %}</h2>
-            <h3>{% trans 'Poll :' %}{{ poll.title }}</h3>
+            <h2>{% trans 'Update your poll' %}</h2>
+            <h3>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h3>
         </div>
         <div class="list-group choice">
             <a  href="{% url 'updatePoll' poll.id %}"  class="list-group-item " >
-                <h4 class="list-group-item-heading"><i class="fa fa-cog"></i> {% trans ' Update parameters'%}</h4>
+                <h4 class="list-group-item-heading"><i class="fa fa-cog"></i> {% trans 'Update parameters'%}</h4>
             </a>
             <a  href="{% url 'manageCandidate' poll.id %}" class="list-group-item ">
-                <h4 class="list-group-item-heading"><i class="fa fa-bars"></i>{% trans ' Add or remove candidates'%}</h4>
+                <h4 class="list-group-item-heading"><i class="fa fa-bars"></i>{% trans 'Add or remove candidates'%}</h4>
             </a>
             <a  href="{% url 'success' poll.id %}" class="list-group-item ">
-                <h4 class="list-group-item-heading"><i class="fa fa-share-square-o"></i>{% trans ' Invite the voters'%}</h4>
+                <h4 class="list-group-item-heading"><i class="fa fa-share-square-o"></i>{% trans 'Invite the voters'%}</h4>
             </a>
             {% if poll.option_experimental %}
                 <a  href="{% url 'status' poll.id %}" class="list-group-item ">
-                    <h4 class="list-group-item-heading"><i class="fa fa-star"></i>{% trans ' Change the status of poll'%}</h4>
+                    <h4 class="list-group-item-heading"><i class="fa fa-star"></i>{% trans 'Change the status of poll'%}</h4>
                 </a>
             {% endif %}
             <a  href="{% url 'viewPoll' poll.id %}" class="list-group-item ">
-                <h4 class="list-group-item-heading"><i class="fa fa-th-list"></i>{% trans ' Go to the poll'%}</h4>
+                <h4 class="list-group-item-heading"><i class="fa fa-th-list"></i>{% trans 'Go to the poll'%}</h4>
             </a>
 
         </div>

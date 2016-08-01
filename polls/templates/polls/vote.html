@@ -6,8 +6,8 @@
 
     <div class="container">
         <div class="well">
-            <h2> {% trans 'Vote for this Poll' %}</h2>
-            <h3> {{ poll.title }}</h3>
+            <h2>{{ poll.title }}</h2>
+            <h3>{% trans 'Vote!' %}</h3>
         </div>
         {% if poll.preference_model == "Ranks#0" %}
             <div class="thumbnail clearfix ">

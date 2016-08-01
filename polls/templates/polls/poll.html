@@ -7,7 +7,7 @@
 
 <div class="container">
   <div class="well clearfix">
-    <h2> {{ poll.title }}</h2>
+    <h2>{{ poll.title }}</h2>
     <p class="description">{{ poll.description }}</p>
   </div>
 
@@ -74,7 +74,7 @@
                     <h4 class="modal-title">{% trans 'Delete this vote' %} </h4>
                   </div>
                   <div class="modal-body">
-                    <p>{% trans ' If you really want to delete this vote,click submit.' %}</p>
+                    <p>{% trans 'Do you really want to delete this vote?' %}</p>
                   </div>
                   <div class="modal-footer">
                     <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
@@ -103,7 +103,7 @@
   </div>
   {% else %}
   <div class="well">
-    <i>{% trans 'No vote yet... Do you want to be the first one? ' %}</i>
+    <i>{% trans 'No vote yet... Do you want to be the first one?' %}</i>
   </div>
   {% endif %}
 
