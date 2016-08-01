@@ -496,6 +496,32 @@ fieldset[disabled] .btn-custom.active {
 
 
 /***********************************************************
+  FORMS / INPUTS
+***********************************************************/
+
+select.form-control {
+    background-image: url("../images/arrow.svg");
+    padding-right: 25px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select.form-control:hover {
+    background-image: url("../images/arrow-hover.svg");
+}
+
+select.form-control::-ms-expand {
+  display: none;
+}
+
+select.form-control option {
+    padding: 5px;
+}
+
+/***********************************************************
   MODALS
 ***********************************************************/
 
