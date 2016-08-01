@@ -15,9 +15,6 @@ clean:
 	-rm -rf *~*
 	-find . -name '*.pyc' -exec rm {} \;
 
-anonymize: $(settings)
-	cat $(settings) |$(directory)/anonymize-settings.sh > $(settings-generic)
-
 test: clean
 	python3 $(directory)/manage.py test
 
@@ -50,5 +47,5 @@ $(messages): makemessages
 shell: syncdb
 	python3 $(directory)/manage.py shell
 
-run: syncdb compilemessages anonymize
+run: syncdb compilemessages
 	python3 $(directory)/manage.py runserver

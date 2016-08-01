@@ -12,18 +12,20 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# The part to be kept secret
+import whale4.secret_settings
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2$r6%^0#gorz!*pt%6aoc5wyw)d7ub3$k&#s1&!zp4$9(3!-+='
+SECRET_KEY = whale4.secret_settings.SECRET_KEY
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -37,8 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'accounts',
     'polls',
-    'bootstrap3'
-  
+    'bootstrap3'  
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,7 +57,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,7 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-               
             ],
         },
     },
@@ -80,18 +80,7 @@ WSGI_APPLICATION = 'whale4.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'db engine here',
-        'NAME': 'db name here',
-        'USER': 'db user here',
-        'PASSWORD': 'db password here',
-        'HOST': 'db host here',
-        'PORT': '5432'        
-    }
-}
-
-SALT = 'whale4salt'
+DATABASES = whale4.secret_settings.DATABASES
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -104,17 +93,12 @@ USE_I18N = True
 
 USE_L10N = True
 
-
-
 gettext = lambda x: x
 
 
 LANGUAGES = (
-
-   ('fr', gettext('French')),
-
-   ('en', gettext('English')),
-
+    ('fr', gettext('French')),
+    ('en', gettext('English')),
 )
 
 
@@ -122,28 +106,25 @@ LANGUAGES = (
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.abspath('/staticfiles/')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
 APPEND_SLASH = True
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
-LOCALE_PATHS = [os.path.join(BASE_DIR,'locale'),]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
 AUTH_USER_MODEL = 'accounts.WhaleUser'
 
 BOOTSTRAP3 = {
     'horizontal_label_class': 'col-md-4',
+    'horizontal_field_class': 'col-md-8',
+}
 
-    'horizontal_field_class': 'col-md-8',}
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'whale4.ad'
-EMAIL_HOST_PASSWORD = 'whale4ad'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-
+EMAIL_HOST = whale4.secret_settings.EMAIL_HOST
+EMAIL_HOST_USER = whale4.secret_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = whale4.secret_settings.EMAIL_HOST_PASSWORD
+EMAIL_PORT = whale4.secret_settings.EMAIL_PORT
+EMAIL_USE_TLS = whale4.secret_settings.EMAIL_USE_TLS
+EMAIL_BACKEND = whale4.secret_settings.EMAIL_BACKEND
 

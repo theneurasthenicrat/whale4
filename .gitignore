@@ -1,5 +1,5 @@
 *__pycache__*
-whale4/settings.py
+whale4/secret_settings.py
 accounts/migrations/
 resetDB.sh
 polls/migrations/
