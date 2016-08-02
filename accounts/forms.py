@@ -6,20 +6,20 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label=_('Email address *'),widget=forms.EmailInput(attrs={ 'placeholder': 'Enter your email address'}), max_length=255, required=True)
-    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Enter your password'}),label=_('Password *'))
+    email = forms.EmailField(label=_('Email address *'),widget=forms.EmailInput(attrs={ 'placeholder': _('Enter your email address')}), max_length=255, required=True)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Enter your password')}),label=_('Password *'))
 
 
 class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Enter your password'}),label=_('Password *'))
-    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Confirme your password'}),label=_('Password confirmation *'))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Enter your password')}),label=_('Password *'))
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Confirm your password')}),label=_('Password confirmation *'))
 
     class Meta:
         model = WhaleUser
         fields = ['email', 'nickname']
         widgets = {
-            'email': widgets.EmailInput(attrs={'placeholder': 'Enter your email'}),
-            'nickname': widgets.Input(attrs={ 'placeholder': 'Enter your nickname'}),
+            'email': widgets.EmailInput(attrs={'placeholder': _('Enter your email')}),
+            'nickname': widgets.Input(attrs={ 'placeholder': _('Enter your nickname')}),
 
         }
 
@@ -27,7 +27,7 @@ class UserCreationForm(forms.ModelForm):
         password = self.cleaned_data.get("password")
         password_confirmation = self.cleaned_data.get("password_confirmation")
         if password and password_confirmation and password != password_confirmation:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError(_("Passwords don't match"))
         return password_confirmation
 
     def save(self, commit=True):
@@ -40,7 +40,7 @@ class UserCreationForm(forms.ModelForm):
 
 class ContactForm(forms.Form):
     name = forms.CharField()
-    email = forms.EmailField(label='Email address', max_length=255, required=True)
+    email = forms.EmailField(label=_('Email address'), max_length=255, required=True)
     message = forms.CharField(widget=forms.Textarea)
 
     def send_email_contact(self):

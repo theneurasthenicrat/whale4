@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 19:09+0000\n"
+"POT-Creation-Date: 2016-08-02 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,21 +21,49 @@ msgstr ""
 msgid "Email address *"
 msgstr "Email address *"
 
+#: accounts/forms.py:9
+#, fuzzy
+#| msgid "Email address"
+msgid "Enter your email address"
+msgstr "Email address"
+
+#: accounts/forms.py:10 accounts/forms.py:14
+msgid "Enter your password"
+msgstr ""
+
 #: accounts/forms.py:10 accounts/forms.py:14
 msgid "Password *"
 msgstr "Password *"
 
 #: accounts/forms.py:15
+msgid "Confirm your password"
+msgstr ""
+
+#: accounts/forms.py:15
 msgid "Password confirmation *"
 msgstr "Password confirmation *"
+
+#: accounts/forms.py:21
+msgid "Enter your email"
+msgstr ""
+
+#: accounts/forms.py:22
+msgid "Enter your nickname"
+msgstr ""
+
+#: accounts/forms.py:30
+#, fuzzy
+#| msgid "Password confirmation *"
+msgid "Passwords don't match"
+msgstr "Password confirmation *"
+
+#: accounts/forms.py:43 accounts/models.py:85
+msgid "Email address"
+msgstr "Email address"
 
 #: accounts/models.py:34
 msgid "Nickname *"
 msgstr "Nickname *"
-
-#: accounts/models.py:85
-msgid "Email address"
-msgstr "Email address"
 
 #: accounts/templates/accounts/contact.html:7
 #: polls/templates/polls/base.html:64

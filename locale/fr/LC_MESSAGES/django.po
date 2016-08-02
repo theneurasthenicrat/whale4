@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 19:09+0000\n"
+"POT-Creation-Date: 2016-08-02 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,21 +22,47 @@ msgstr ""
 msgid "Email address *"
 msgstr "Adresse e-mail *"
 
+#: accounts/forms.py:9
+#, fuzzy
+#| msgid "Email address"
+msgid "Enter your email address"
+msgstr "Adresse e-mail"
+
+#: accounts/forms.py:10 accounts/forms.py:14
+msgid "Enter your password"
+msgstr "Votre mot de passe"
+
 #: accounts/forms.py:10 accounts/forms.py:14
 msgid "Password *"
 msgstr "Mot de passe *"
 
 #: accounts/forms.py:15
+msgid "Confirm your password"
+msgstr "Confirmez votre mot de passe"
+
+#: accounts/forms.py:15
 msgid "Password confirmation *"
 msgstr "Confirmation de mot de passe"
+
+#: accounts/forms.py:21
+msgid "Enter your email"
+msgstr "Votre adresse e-mail"
+
+#: accounts/forms.py:22
+msgid "Enter your nickname"
+msgstr "Votre pseudonyme"
+
+#: accounts/forms.py:30
+msgid "Passwords don't match"
+msgstr "Les mots de passe ne concordent pas..."
+
+#: accounts/forms.py:43 accounts/models.py:85
+msgid "Email address"
+msgstr "Adresse e-mail"
 
 #: accounts/models.py:34
 msgid "Nickname *"
 msgstr "Pseudonyme"
-
-#: accounts/models.py:85
-msgid "Email address"
-msgstr "Adresse e-mail"
 
 #: accounts/templates/accounts/contact.html:7
 #: polls/templates/polls/base.html:64
@@ -749,7 +775,7 @@ msgstr "Si vous êtes d'humeur sociale, partagez..."
 
 #: polls/templates/polls/vote.html:10
 msgid "Vote!"
-msgstr "Voter !"
+msgstr "La page du vote..."
 
 #: polls/templates/polls/vote.html:29
 msgid ""
@@ -758,6 +784,9 @@ msgid ""
 "                                to rank them <span class=\"label label-"
 "default\">right frame</span> ."
 msgstr ""
+"Cliquez sur les noms des candidats non classés (à <span class=\"label label-"
+"default\">gauche</span>) afin de les classer à <span class=\"label label-"
+"default\">droite</span>."
 
 #: polls/templates/polls/vote.html:32
 msgid "Unsorted candidates"
