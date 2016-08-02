@@ -139,6 +139,7 @@ header .intro-text .subtitle {
 }
 .navbar-custom .navbar-nav {
     letter-spacing: 1px;
+    text-shadow: none;
     text-transform: uppercase;
 }
 .navbar-custom .navbar-nav li a {
@@ -180,6 +181,8 @@ header .intro-text .subtitle {
 }
 .navbar-custom .navbar-nav > li > a.navbar-user  {
     text-transform: none;
+    letter-spacing: 0px;
+    text-shadow: none;
 }
 
 .flag {
@@ -194,11 +197,26 @@ header .intro-text .subtitle {
     margin-right: 10px;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu {
+    text-transform: none;
+    letter-spacing: 0px;	
     background-color: rgba(255, 255, 255, 0.9);
     color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 2px;
+    padding: 5px;
 }
+
+.navbar-custom .navbar-nav > li > .dropdown-menu {
+    text-align: center;
+    padding: 10px;
+}
+
+
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a {
     color: rgba(0, 0, 0, 0.7);
+    text-align: left;
+    padding: 0px;
+    line-height: 32px;
 }
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a:hover,
 .navbar-custom .navbar-nav > li > .dropdown-menu > li > a:focus {
