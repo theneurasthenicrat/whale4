@@ -83,7 +83,7 @@ class NickNameForm(Form):
     def __init__(self, read, *args, **kwargs):
         super(NickNameForm, self).__init__(*args, **kwargs)
 
-        self.fields['nickname'] = forms.CharField(max_length=250)
+        self.fields['nickname'] = forms.CharField(max_length=250,widget=forms.TextInput(attrs={ 'placeholder': _('Enter your nickname')}))
         if read:
             self.fields['nickname'].widget.attrs['readonly'] = True
 
