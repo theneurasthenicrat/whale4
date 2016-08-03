@@ -158,7 +158,7 @@ def new_poll(request, choice ):
         update_poll = False if int(request.session["update"]) == 1 else True
 
     if request.method == 'POST':
-        form = PollUpdateForm(request.POST)
+        form = VotingPollForm(request.POST)
         if form.is_valid():
             poll = form.save(commit=False)
             poll.admin = request.user
@@ -183,10 +183,10 @@ def update_voting_poll(request, pk):
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
 
-    form = VotingPollUpdateForm(instance=poll) if update_poll else PollUpdateForm(instance=poll)
+    form = VotingPollForm(instance=poll) if update_poll else PollUpdateForm(instance=poll)
 
     if request.method == 'POST':
-        form = VotingPollUpdateForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
+        form = VotingPollForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
             poll = form.save()
             if update_poll:

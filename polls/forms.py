@@ -26,17 +26,17 @@ class BasePollForm(ModelForm):
 
 class VotingPollForm(ModelForm):
     class Meta(BasePollForm.Meta):
-        fields = ['title', 'description', 'closing_date','preference_model']
+        fields = ['title', 'description', 'preference_model']
 
 
 class VotingPollUpdateForm(ModelForm):
     class Meta(BasePollForm.Meta):
-        fields = ['title', 'description', 'closing_date']
+        fields = ['title', 'description','preference_model']
 
 
 class OptionForm(ModelForm):
     class Meta(BasePollForm.Meta):
-        fields = ['option_choice', 'option_modify']
+        fields = ['closing_date','option_choice', 'option_modify']
 
 
 class PollUpdateForm(ModelForm):
