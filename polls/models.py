@@ -11,7 +11,7 @@ class Poll(models.Model):
     title = models.CharField(max_length=250,verbose_name= _("title *"))
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
     creation_date = models.DateField(auto_now_add=True)
-    closing_date = models.DateField(default=date.today()+timedelta(days=10000),verbose_name= _("closing date * "))
+    closing_date = models.DateField(default=date.today()+timedelta(days=1000),verbose_name= _("closing date * "))
     admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
 
     def closing_poll(self):
