@@ -278,6 +278,7 @@ def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
     form = DateForm()
+    print(form)
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
     if request.method == 'POST':

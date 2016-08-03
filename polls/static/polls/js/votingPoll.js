@@ -6,6 +6,7 @@
       startDate: today,
       autoclose: true,
       orientation: "bottom auto",
+      language: "fr",
       
   });
      $("[name='option_choice']").bootstrapSwitch();
