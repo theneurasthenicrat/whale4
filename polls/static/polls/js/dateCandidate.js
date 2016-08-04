@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
- $('#dateexemple').multiDatesPicker({
+ $('#datepicker').multiDatesPicker({
           altField: '#id_dates',
           dateFormat: 'yy-mm-dd'
 

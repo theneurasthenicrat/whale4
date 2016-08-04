@@ -12,7 +12,35 @@
                 <h3>{% trans 'Add or remove candidates' %}</h3>
             {% endif %}
         </div>
-      {% if candidates %}
+
+        <div class="container-fluid thumbnail">
+            {% if update_poll %}
+                <div class="well-sm hidden-xs">
+                    <ol class="nav nav-pills-custom ">
+                        <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                        <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates' %}{% bootstrap_icon "menu-right" %}</a></li>
+                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters' %}{% bootstrap_icon "menu-right"%}</a></li>
+                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
+                    </ol>
+                </div>
+            {% endif %}
+            <div class="well-lg">
+                 <div class="container-fluid ">
+
+                     <div class=" well-lg col-md-4 ">
+                <form  action="" method="post">
+                    {% csrf_token %}
+
+
+                     <div id="datepicker" class="ll-skin-cangas "> <p  class="bg-info help-block well-sm">{% trans 'Pick one or several dates' %}</p></div>
+
+                    {% bootstrap_form_errors form %}
+                    {% bootstrap_form form %}
+                    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
+                </form>
+                      </div>
+                  <div class=" col-md-8 ">
+                       {% if candidates %}
         <div class="container-fluid form-login margin1">
 
             <h4>{% trans 'List of current candidates' %}</h4>
@@ -25,7 +53,7 @@
                             {{ c }}
                             <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
                             <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
-                                <div class="modal-dialog modal-sm">
+                                <div class="modal-dialog ">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -35,8 +63,8 @@
                                           <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-custom ">{% trans 'OK' %} </a >
                                             <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
+                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok ">{% trans 'OK' %} </a >
                                         </div>
 
                                     </div>
@@ -51,26 +79,8 @@
 
         </div>
       {% endif %}
-        <div class="container-fluid thumbnail">
-            {% if update_poll %}
-                <div class="well-sm hidden-xs">
-                    <ol class="nav nav-pills-custom ">
-                        <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
-                        <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates' %}{% bootstrap_icon "menu-right" %}</a></li>
-                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters' %}{% bootstrap_icon "menu-right"%}</a></li>
-                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
-                    </ol>
-                </div>
-            {% endif %}
-            <div class="well-lg">
-                <form  action="" method="post">
-                    {% csrf_token %}
-                     <div id="dateexemple" class="ll-skin-cangas"></div>
-                    {% bootstrap_form_errors form %}
-                    {% bootstrap_form form %}
-
-                    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
-                </form>
+          </div>
+                 </div>
             </div>
             {% if update_poll %}
                 <a href="{% url 'updatePoll' poll.id %}" class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>

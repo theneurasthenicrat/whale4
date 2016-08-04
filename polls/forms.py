@@ -67,15 +67,15 @@ class DateCandidateForm(ModelForm):
         model = DateCandidate
         exclude = ['poll','date']
 
-
+##label=_('Pick one or several dates')
 class DateForm(Form):
 
-    dates = forms.CharField(max_length=300, label=_('Pick one or several dates'), widget=forms.TextInput(attrs={'class': 'datepicker form-control'}))
-    candidate = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'class': 'form-control'}),required=False,
+    dates = forms.CharField(widget=forms.HiddenInput(),max_length=300)
+    candidate = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'class': ' margin2 form-control'}),required=False,
                                 help_text=_('Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)'),
                                 label='')
     def clean_dates(self):
-        dates = self.cleaned_data["dates"].split(',')
+        dates = self.cleaned_data["dates"].split(', ')
         return dates
 
 

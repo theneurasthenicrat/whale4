@@ -988,6 +988,14 @@ table tbody tr td.controls a.remove:hover {
 	width: 300px;
 }
 
+@media (max-width: 991px) {
+    .ll-skin-cangas  .ui-datepicker {
+	width: 100%;
+
+    }
+}
+
+
 .ll-skin-cangas .ui-datepicker .ui-datepicker-prev:before {
 	content: "\e079";
 }

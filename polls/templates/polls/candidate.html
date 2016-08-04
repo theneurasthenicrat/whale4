@@ -64,8 +64,8 @@
                                                         <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >
                                                         <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
+                                                        <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok">{% trans 'OK' %} {% bootstrap_icon "ok" %}</a >
                                                     </div>
 
                                                 </div>
