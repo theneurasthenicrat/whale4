@@ -542,11 +542,15 @@ def view_poll(request, pk):
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
     scores = {}
+    scores1={}
+    for c in candidates:
+        scores1[c.id]=[]
     for v in votes:
         if v.voter.id not in scores:
             scores[v.voter.id] = {}
         scores[v.voter.id][v.candidate.id] = v.value
-
+        scores1[v.candidate.id].append(v.value)
+    print(scores1)
     tab = {}
     for v in votes:
         id = v.voter.id
@@ -666,8 +670,99 @@ def view_poll(request, pk):
         return render(request, 'polls/poll.html',locals() )
 
 
-def result_view(request, pk ):
+def result_all(request, pk ):
     poll = get_object_or_404(VotingPoll, id=pk)
+    return render(request, 'polls/all_result.html', locals())
+
+
+def result_view(request, pk,method ):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    title = ''
+    label = ''
+    options = ''
+    explanation = ''
+
+    if int(method) == 1:
+        title= _('scoring method title')
+        label= _('scoring label')
+        options =[{'value':'Borda', 'name':_('Borda')},{'value':'Plurality','name':_('Plurality')},{'value':'Veto','name':_('Veto')},
+                  {'value':'Approval','name':_('Approval')},{'value':'CurveA','name':_('Curve Approval')}]
+        explanation= _('scoring method explanation')
+    if int(method) == 2:
+        title = _('condorcet method title')
+        label = _('condorcet label')
+        options = [{'value':'Copeland 0', 'name':_('Copeland 0')},{'value':'Copeland 0', 'name':_('Copeland 0')},{'value':'Simpson', 'name':_('Simpson')}]
+        explanation = _('condorcet method explanation')
+    if int(method) == 3 :
+        title = _('runoff method title')
+        label = _('runoff label')
+        options = [{'value':'STV', 'name':_('STV')},{'value':'Two Round majority', 'name':_('Two Round majority')}]
+        explanation = _('runoff method explanation')
+    if int(method) == 4:
+        title = _('randomized method title')
+        label = _('randomized label')
+        options = [{'value':'Shuffle candidates for the first round', 'name':_('Shuffle candidates for the first round')}]
+        explanation = _('randomized method explanation')
+    method= dict()
+    method['title']= title
+    method['label']= label
+    method['options']= options
+    method['explanation']= explanation
+
     return render(request, 'polls/result.html', locals())
 
 
+def result_scores(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+            poll_id=poll.id))
+
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+    scores = {}
+    for c in candidates:
+        scores[c.id] = []
+    for v in votes:
+        scores[v.candidate.id].append(v.value)
+
+    approval = dict()
+    threshold = preference_model.len()
+    approval["threshold"] = preference_model.values[1:]
+    candi = []
+    borda_scores = []
+    plurality_scores = []
+    veto_scores = []
+    for c in candidates:
+        sum_borda = 0
+        sum_plurality = 0
+        sum_veto = 0
+
+        for score in scores:
+            sum_borda = sum_borda + (score if score != UNDEFINED_VALUE else 0)
+            sum_plurality = sum_plurality + (1 if score == preference_model.max() else 0)
+            sum_veto = sum_veto + (1 if score != (preference_model.min() or UNDEFINED_VALUE) else 0)
+        candi.append(str(c))
+        borda_scores.append(sum_borda)
+        plurality_scores.append(sum_plurality)
+        veto_scores.append(sum_veto)
+    approval_scores = []
+    for y in approval["threshold"]:
+        th = []
+        for c in candidates:
+            sum_approval = 0
+            for score in scores:
+                sum_approval = sum_approval + (1 if score >= y else 0)
+            th.append(sum_approval)
+        approval_scores.append(th)
+    if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
+        approval_scores.reverse()
+
+    approval["scores"] = approval_scores
+
+    score_method = dict()
+    score_method["candidates"] = candi
+    score_method["Borda"] = borda_scores
+    score_method["Plurality"] = plurality_scores
+    score_method["Veto"] = veto_scores
+    score_method["Approval"] = approval
+    return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")

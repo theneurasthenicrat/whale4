@@ -375,6 +375,7 @@ p.description:before {
 }
 
 .alert-info {
+    margin: 20px auto;
     background: rgba(51, 117, 179, 0.9);
     color: white;
 }

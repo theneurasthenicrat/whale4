@@ -6,15 +6,18 @@
 {% block content %}
 
     <div class="container">
-        <input type="hidden" id="url_poll" value="{% url 'viewPoll' poll.id %}" />
+     <div class="well">
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+            <h3>{{ method.title}}</h3>
+        </div>
+        <input type="hidden" id="url_poll" value="{% url 'scores' poll.id %}" />
         <div class="row">
             <div class="form-group col-xs-6">
-                <label for="score_method">{% trans 'Scoring method' %}</label>
-                <select class="form-control" id="score_method">
-                    <option value="Borda">{% trans 'Borda' %}</option>
-                    <option value="Plurality">{% trans 'Plurality' %}</option>
-                    <option value="Veto">{% trans 'Veto' %}</option>
-                    <option value="Approval">{% trans 'Approval' %}</option>
+                <label for="method">{{ method.label }}</label>
+                <select class="form-control" id="method">
+                      {% for option in method.options %}
+                    <option value="{{ option.value }}">{{ option.name }}</option>
+                                {% endfor %}
                 </select>
             </div>
             <div  id="approval" class="form-group col-xs-6">
@@ -23,16 +26,21 @@
                 </select>
             </div>
         </div>
-        <div class="input-group">
-            <div id="radioBtn" class="btn-group">
-                <a class="btn btn-primary btn-sm active" data-toggle="plot" data-title="bar"><i class="fa fa-bar-chart"></i> </a>
-                <a class="btn btn-default btn-sm notActive" data-toggle="plot" data-title="pie"><i class="fa fa-pie-chart"></i></a>
-            </div>
-            <input type="hidden" name="plot" id="plot" value="bar">
-        </div>
+
         <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
 
-        <script src="{% static 'polls/js/result.js' %}" type="text/javascript"></script>
+
+
+     <div class="row">
+
+
+            <div class=" col-xs-12 col-sm-6 col-md-3 col-lg-3 margin2">
+                <a href="{% url 'results' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-xs-12">{% bootstrap_icon "stats" %} {% trans ' Back to all results' %}</a>
+            </div>
+
+        </div>
+
     </div>
+      <script src="{% static 'polls/js/result.js' %}" type="text/javascript"></script>
 
 {% endblock %}

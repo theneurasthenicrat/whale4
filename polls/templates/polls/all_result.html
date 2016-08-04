@@ -1,0 +1,86 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+<!-- Page Content -->
+    <div class="container">
+
+      <div class="well">
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+            <h3>{% trans 'See the results of poll' %}</h3>
+        </div>
+
+        <!-- Page Features -->
+        <div class="row text-center">
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{% static 'polls/images/scoring.png' %}" alt="">
+                    <div class="caption">
+                        <h3>{% trans 'Scoring method title' %}</h3>
+                        <p>{% trans 'Scoring method message' %}.</p>
+                        <p>
+                            <a href="/polls/viewResult/{{poll.pk }}/1/" class="btn btn-primary">{% trans 'See' %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{% static 'polls/images/condorcet.png' %}" alt="">
+                    <div class="caption">
+                        <h3>{% trans 'Condorcet method title' %}</h3>
+                        <p>{% trans 'Condorcet method message' %}.</p>
+                        <p>
+                             <a href="/polls/viewResult/{{poll.pk }}/2/" class="btn btn-primary">{% trans 'See' %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{% static 'polls/images/runoff.png' %}" alt="">
+                    <div class="caption">
+                        <h3>{% trans 'run-off  method title' %}</h3>
+                        <p>{% trans 'run- off method message' %}.</p>
+                        <p>
+                            <a href="/polls/viewResult/{{poll.pk }}/3/"class="btn btn-primary">{% trans 'See' %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{% static 'polls/images/randomTournaments.png' %}" alt="">
+                    <div class="caption">
+                        <h3>{% trans 'randomized method title' %}</h3>
+                        <p>{% trans 'randomized method message' %}.</p>
+                        <p>
+                            <a href="/polls/viewResult/{{poll.pk }}/4/" class="btn btn-primary">{% trans 'See' %}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+
+            <div class=" col-xs-12 col-sm-6 col-md-3 col-lg-3 margin2">
+                <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-xs-12">{% bootstrap_icon "list" %} {% trans 'Back to the poll' %}</a>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+{% endblock %}

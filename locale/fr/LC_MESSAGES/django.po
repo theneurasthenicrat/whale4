@@ -62,7 +62,7 @@ msgstr "Adresse e-mail"
 
 #: accounts/models.py:34
 msgid "Nickname *"
-msgstr "Pseudonyme"
+msgstr "Pseudonyme *"
 
 #: accounts/templates/accounts/contact.html:7
 #: polls/templates/polls/base.html:64
