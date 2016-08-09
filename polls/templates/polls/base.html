@@ -12,23 +12,28 @@
             {% trans 'Whale4 - WHich ALternative is Elected' %}
         {% endblock %}
     </title>
-
-    <!-- css -->
-    <link href="{% static 'polls/css/bootstrap.min.css' %}" rel="stylesheet">
+   <link href="{% static 'polls/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/bootstrap-theme.min.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/mfglabs_iconset.css' %}" rel="stylesheet">
+<link href="{% static 'polls/css/poll.css' %}" rel="stylesheet">
+
+  <script src="{% static 'polls/js/jquery-1.12.3.min.js' %}"></script>
+    <script src="{% static 'polls/js/bootstrap.min.js' %}"></script>
+{% block static-extra %}
+
+
     <link href="{% static 'polls/css/preferences.css' %}" rel="stylesheet">
     <link href="{% static 'polls/css/bootstrap-datepicker3.standalone.min.css' %}" rel="stylesheet">
     <link  href="{% static 'polls/css/themes_smoothness_jquery-ui.css' %}" rel="stylesheet">
-    <link href="{% static 'polls/css/poll.css' %}" rel="stylesheet">
+
 
     <link href="{% static 'polls/css/responsive-tables.css' %}" rel="stylesheet" >
     <link href="{% static 'polls/css/font-awesome.min.css' %}" rel="stylesheet" >
     <link href="{% static 'polls/css/bootstrap-switch.min.css' %}" rel="stylesheet" >
 
     <!-- javascript -->
-    <script src="{% static 'polls/js/jquery-1.12.3.min.js' %}"></script>
-    <script src="{% static 'polls/js/bootstrap.min.js' %}"></script>
+
+
    <script src="{% static 'polls/js/jquery-ui.multidatespicker.js' %}"></script>
 
     <script src="{% static 'polls/js/bootstrap-datepicker.min.js' %}"></script>
@@ -38,10 +43,10 @@
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-	<!--<script src="jquery-ui-1.10.1.custom.js"></script> -->
 
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+
+  {% endblock %}
 
 
 

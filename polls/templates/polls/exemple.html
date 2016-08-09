@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v3.js"></script>
+<style>
+
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  fill: #000;
+  font: 20px sans-serif;
+  pointer-events: none;
+}
+    marker{
+        fill: #ccc;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<body>
+<script>
+
+var graph = {
+    "nodes": [  { "name": "A", "value":10},
+                {"name": "B", "value":9},
+                { "name": "C", "value":8},
+                { "name":"D" , "value":7},
+                {"name": "E", "value":6},
+                { "name":  "F", "value":5},
+                { "name": "G", "value":4},
+                { "name": "H", "value":3 },
+                { "name": "I", "value":2},
+                { "name": "J", "value":1 }
+
+            ],
+    "links": [  { "target": 1, "source":  0 , "value":1},
+                { "target":  2, "source":  0 , "value":2},
+                { "target": 3, "source":  0 , "value":3},
+                { "target": 4, "source":  0 , "value":4},
+                { "target":  5, "source":  0 , "value":5},
+                { "target":  6, "source":  0 , "value":6},
+                { "target":  7, "source":  0 , "value":7},
+                { "target":  8, "source":  0 , "value":8},
+                { "target": 9, "source":  0 , "value":9},
+                { "target": 2, "source":  1, "value":1 },
+                { "target": 3, "source":  1 , "value":2},
+                { "target":  4, "source":  1 , "value":3},
+                { "target":  5, "source":  1 , "value":4},
+                { "target": 6, "source":  1 , "value":5},
+                { "target":  7, "source":  1 , "value":6},
+                { "target":  8, "source":  1, "value":7 },
+                { "target":  9, "source":  1, "value":8 },
+                { "target": 3, "source":  2 , "value":1},
+                { "target": 4, "source":  2 , "value":2},
+                { "target": 5, "source":  2 , "value":3},
+                { "target":  6, "source":  2 , "value":4},
+                { "target":  7, "source":  2, "value":5 },
+                { "target": 8, "source":  2 , "value":6},
+                { "target": 9, "source":  2 , "value":7},
+                { "target": 4, "source":  3 , "value":1},
+                { "target": 5, "source":  3 , "value":2},
+                { "target":  6, "source":  3, "value":3 },
+                { "target":  7, "source":  3, "value":4 },
+                { "target": 8, "source":  3, "value":5 },
+                { "target": 9, "source":  3, "value":6 },
+                { "target": 5, "source":  4 , "value":1},
+                { "target":  6, "source":  4 , "value":2},
+                { "target":  7, "source":  4 , "value":3},
+                { "target": 8, "source":  4 , "value":4},
+                { "target": 9, "source":  4, "value":5 },
+             { "target":  6, "source":  5 , "value":1},
+                { "target":  7, "source":  5, "value":2 },
+                { "target": 8, "source":  5 , "value":3},
+                { "target": 9, "source":  5 , "value":4},
+                { "target":  7, "source": 6 , "value":1},
+                { "target": 8, "source":  6 , "value":2},
+                { "target": 9, "source":  6, "value":3 },
+             { "target": 8, "source":  7, "value":1 },
+                { "target": 9, "source":  7, "value":2 },
+             { "target": 9, "source":  8 , "value":1}
+            ]
+    };
+
+var nodes = graph.nodes,
+    links = graph.links;
+
+var width = 960,
+    height = 500;
+
+var color = d3.scale.linear()
+  .domain([1,5,10])
+  .range(["red", "#e1dd38", "green"]);
+
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// build the arrow.
+svg.append("svg:defs").selectAll("marker")
+    .data(["end"])
+  .enter().append("svg:marker")
+    .attr("id", String)
+    .attr("viewBox", "0 0 10 10")
+    .attr("refX", 20)
+    .attr("refY", 5)
+    .attr("markerWidth", 10)
+    .attr("markerHeight", 10)
+    .attr("orient", "auto")
+  .append("svg:path")
+    .attr("d", "M 0 0 L 10 5 L 0 10 z");
+
+
+var path = svg.append("svg:g").selectAll("path")
+    .data(links)
+  .enter().append("svg:path")
+    .attr("class", "link")
+    //.attr("stroke-width", function(d) { return d.value; })
+    .attr("marker-end", "url(#end)");
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+
+
+  var node = svg.append("g")
+      .attr("class", "nodes")
+    .selectAll("circle")
+    .data(nodes)
+    .enter().append("circle")
+      .attr("r",16)
+      .attr("fill", function(d) { return color(d.value); })
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+    node.append("text")
+        .attr("x", 22)
+        .attr("dy", ".35em")
+        .style("fill", function(d) { return color(d.value); })
+        .text(function(d) { return d.name; });
+
+  simulation
+      .nodes(nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(links);
+
+  function ticked() {
+    path
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  }
+
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+
+resize();
+  d3.select(window).on("resize", resize);
+
+
+function resize() {
+    if (window.matchMedia("(min-width: 600px)").matches) {
+       width = 960, height = 500;
+        } else {
+         width = window.innerWidth/2, height = window.innerHeight/2;
+
+
+        };
+
+    svg.attr("width", width).attr("height", height);
+
+    simulation.size([width, height]).resume();
+
+  }
+
+
+</script>
+</body>
+</html>

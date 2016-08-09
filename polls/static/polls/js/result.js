@@ -1,108 +1,49 @@
-$(document).ready(function() {
-    var dataJson;
-    var url_poll =$("#url_poll").val();
-    var url=url_poll;
-    $.getJSON(url,  function(data) {
-        dataJson=data;
-        for( var i = 0 ; i < data.Approval.threshold.length ; i++ ) {
-          $("#approval_method").append("<option>"+data.Approval.threshold[i]+"</option>");
-        }
-          plot_function(dataJson);
+
+
+
+var div_container= d3.select("body").append("div")
+                        .attr("class", "container");
+
+div_container.append("div")
+                    .attr("class","well")
+                    .append("h2").text("sondage title")
+                    .append("h3").text("method title");
+
+
+var div_control= div_container.append("div")
+    .attr("class","container-fluid form-group");
+
+
+div_control.append("label")
+    .attr("for","control")
+    .attr("class"," col-sm-2 control-label")
+    .text("label method");
+
+var div_control_select = div_control.append("div").attr("class", "col-sm-5")
+    .append("select")
+    .attr("id","control")
+    .attr("class"," form-control");
+
+var url=d3.select("#url_poll").property("value");
+
+d3.json(url, function(error, data) {
+
+
+var dataOptions = data.scoring.candidates;
+var options= div_control_select.selectAll("option")
+             .data(dataOptions)
+             .enter()
+             .append("option")
+             .text(function(d){return d;});
+
     });
 
-    $("#method ,#approval_method").change(function () {
-        plot_function(dataJson);
-    });
-
-
-});
-
-
-function plot_function(dataJson) {
-    var method = $("#method option:selected").val();
-
-    var approval = $("#approval_method option:selected").text();
-    var scores;
-    var name;
-    var candidates=dataJson.candidates;
-    $("#approval").hide();
-    switch (method) {
-        case "Borda":
-            name="Borda";
-            scores = dataJson.Borda;
-            break;
-        case "Veto":
-            name="Veto";
-            scores = dataJson.Veto;
-            break;
-        case "Plurality":
-            name="Plurality";
-            scores = dataJson.Plurality;
-            break;
-        case "Approval":
-            name="Approval";
-            $("#approval").show();
-            var i=0;
-            while ((dataJson.Approval.threshold[i] !=approval) &&(i < dataJson.Approval.threshold.length)) {
-                i=i+1;
-            }
-            scores = dataJson.Approval.scores[i];
-    }
-
-    var data;
-    var layout;
-
-    data = [{
-        x:candidates,
-        y:scores,
-        type: 'bar'
-    }];
-    layout = {
-        title: name,
-        annotations: annotationContent
-    };
-
-    var annotationContent = [];
-
-
-    for( var i = 0 ; i < candidates.length ; i++ ){
-        var result = {
-            x: candidates[i],
-            y: scores[i],
-            text: scores[i],
-            xanchor: 'center',
-            yanchor: 'bottom',
-            showarrow: false
-        };
-        annotationContent.push(result);
-    }
 
 
 
-
-    var d3 = Plotly.d3;
-
-    var WIDTH_IN_PERCENT_OF_PARENT = 60,
-        HEIGHT_IN_PERCENT_OF_PARENT = 80;
-
-
-    var gd3 = d3.select('body')
-        .select('#myDiv')
-        .style({
-            width: WIDTH_IN_PERCENT_OF_PARENT + '%',
-            height: HEIGHT_IN_PERCENT_OF_PARENT + 'vf',
-
-        });
-
-    var gd = gd3.node();
-
-    Plotly.newPlot(gd, data, layout);
-
-    window.onresize = function() {
-        Plotly.Plots.resize(gd);
-    };
-
-
-
-}
-
+var btn_back= div_container.append("div")
+                .attr("class","margin2")
+                .append("a")
+                .attr("href","http://127.0.0.1:8000/polls/results/64a72410-1e37-431c-b56f-b5abe56df701" )
+                .attr("class","btn btn-custom btn-lg  col-md-3 ")
+                .text("Back to all results");

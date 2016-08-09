@@ -12,10 +12,11 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
+from operator import itemgetter
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
-    OptionForm, VotingPollUpdateForm, InviteForm, BallotForm, NickNameForm, StatusForm, PollUpdateForm
+    OptionForm, InviteForm, BallotForm, NickNameForm, StatusForm, PollUpdateForm
 from polls.models import VotingPoll, Candidate, preference_model_from_text, VotingScore, UNDEFINED_VALUE, \
     DateCandidate
 
@@ -675,40 +676,43 @@ def result_all(request, pk ):
     return render(request, 'polls/all_result.html', locals())
 
 
-def result_view(request, pk,method ):
+def result_view(request, pk ,method):
     poll = get_object_or_404(VotingPoll, id=pk)
+    method=int(method)
     title = ''
     label = ''
     options = ''
     explanation = ''
 
     if int(method) == 1:
-        title= _('scoring method title')
-        label= _('scoring label')
-        options =[{'value':'Borda', 'name':_('Borda')},{'value':'Plurality','name':_('Plurality')},{'value':'Veto','name':_('Veto')},
-                  {'value':'Approval','name':_('Approval')},{'value':'CurveA','name':_('Curve Approval')}]
-        explanation= _('scoring method explanation')
+        title = _('scoring method title')
+        label = _('scoring label')
+        options = [{'value': 'Borda', 'name': _('Borda')}, {'value': 'Plurality', 'name': _('Plurality')},
+                   {'value': 'Veto', 'name': _('Veto')},
+                   {'value': 'Approval', 'name': _('Approval')}, {'value': 'CurveA', 'name': _('Curve Approval')}]
+        explanation = _('scoring method explanation')
     if int(method) == 2:
         title = _('condorcet method title')
         label = _('condorcet label')
-        options = [{'value':'Copeland 0', 'name':_('Copeland 0')},{'value':'Copeland 0', 'name':_('Copeland 0')},{'value':'Simpson', 'name':_('Simpson')}]
+        options = [{'value': 'Copeland 0', 'name': _('Copeland 0')}, {'value': 'Copeland 0', 'name': _('Copeland 0')},
+                   {'value': 'Simpson', 'name': _('Simpson')}]
         explanation = _('condorcet method explanation')
-    if int(method) == 3 :
+    if int(method) == 3:
         title = _('runoff method title')
         label = _('runoff label')
-        options = [{'value':'STV', 'name':_('STV')},{'value':'Two Round majority', 'name':_('Two Round majority')}]
+        options = [{'value': 'STV', 'name': _('STV')}, {'value': 'Two Round majority', 'name': _('Two Round majority')}]
         explanation = _('runoff method explanation')
     if int(method) == 4:
         title = _('randomized method title')
         label = _('randomized label')
-        options = [{'value':'Shuffle candidates for the first round', 'name':_('Shuffle candidates for the first round')}]
+        options = [
+            {'value': 'Shuffle candidates for the first round', 'name': _('Shuffle candidates for the first round')}]
         explanation = _('randomized method explanation')
-    method= dict()
-    method['title']= title
-    method['label']= label
-    method['options']= options
-    method['explanation']= explanation
-
+    method = dict()
+    method['title'] = title
+    method['label'] = label
+    method['options'] = options
+    method['explanation'] = explanation
     return render(request, 'polls/result.html', locals())
 
 
@@ -726,22 +730,27 @@ def result_scores(request, pk):
         scores[v.candidate.id].append(v.value)
 
     approval = dict()
-    threshold = preference_model.len()
+
     approval["threshold"] = preference_model.values[1:]
     candi = []
     borda_scores = []
     plurality_scores = []
     veto_scores = []
+    graph={}
+    graph["nodes"]=[]
     for c in candidates:
         sum_borda = 0
         sum_plurality = 0
         sum_veto = 0
-
-        for score in scores:
+        node={}
+        for score in scores[c.id]:
             sum_borda = sum_borda + (score if score != UNDEFINED_VALUE else 0)
             sum_plurality = sum_plurality + (1 if score == preference_model.max() else 0)
             sum_veto = sum_veto + (1 if score != (preference_model.min() or UNDEFINED_VALUE) else 0)
         candi.append(str(c))
+        node["name"]=str(c)
+        node["value"]=sum_borda
+        graph["nodes"].append(node)
         borda_scores.append(sum_borda)
         plurality_scores.append(sum_plurality)
         veto_scores.append(sum_veto)
@@ -750,19 +759,55 @@ def result_scores(request, pk):
         th = []
         for c in candidates:
             sum_approval = 0
-            for score in scores:
+            for score in scores[c.id]:
                 sum_approval = sum_approval + (1 if score >= y else 0)
             th.append(sum_approval)
         approval_scores.append(th)
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
 
+
+    i=0
+    n= len(candi)
+    graph["links"]=[]
+    graph["nodes"]= sorted(graph["nodes"], key=itemgetter('value'),reverse=True)
+    while(i<n-1):
+        j=i+1
+        while(j<n):
+
+            a=  graph["nodes"][i]["value"]
+            b=  graph["nodes"][j]["value"]
+            link = {}
+            link["value"]=abs(a-b)
+            if  a-b >0 :
+
+                link["source"]=i
+                link["target"]=j
+
+            else:
+
+                link["source"] = j
+                link["target"] = i
+            graph["links"].append(link)
+            j=j+1
+        i=i+1
+
     approval["scores"] = approval_scores
+
 
     score_method = dict()
     score_method["candidates"] = candi
-    score_method["Borda"] = borda_scores
-    score_method["Plurality"] = plurality_scores
-    score_method["Veto"] = veto_scores
-    score_method["Approval"] = approval
-    return HttpResponse(json.dumps(score_method, indent=4, sort_keys=True), content_type="application/json")
+    score_method["borda"] = borda_scores
+    score_method["plurality"] = plurality_scores
+    score_method["veto"] = veto_scores
+    score_method["approval"] = approval
+
+    method= dict()
+    method["scoring"]=score_method
+    method["condorcet"] = graph
+
+
+
+
+
+    return HttpResponse(json.dumps(method, indent=4, sort_keys=True), content_type="application/json")
