@@ -64,16 +64,24 @@ function graph() {
 }
 
 
+
 graph();
 
 d3.select("#option").on("change", graph);
 
 d3.select("#approval").on("change", graph);
 
+
+d3.select(window).on('resize', graph);
+
+
+
+
+
 function scoring_plot(data) {
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 60, left: 60},
+        width =window.innerWidth/2,
+        height = window.innerHeight/2;
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
@@ -134,10 +142,10 @@ function condorcet_plot(data) {
     var nodes = data.nodes,
         links = data.links,
         colorTab = ["red", "#e1dd38", "green"],
-        width = 500,
-        height = 500,
-        width1 = 350,
-        height1 = 350,
+        width = window.innerWidth/4,
+        height = window.innerHeight/2,
+        width1 = window.innerWidth/6,
+        height1 = window.innerWidth/6,
         minNodeValue = d3.min(nodes, function(d) { return d.value; }),
         meanNodeValue = d3.mean(nodes, function(d) { return d.value; }),
         maxNodeValue = d3.max(nodes, function(d) { return d.value; });
@@ -146,7 +154,7 @@ function condorcet_plot(data) {
         .domain([minNodeValue,meanNodeValue ,maxNodeValue])
         .range(colorTab);
 
-    var margin = {top: 100, right: 20, bottom: 20, left: 100};
+    var margin = {top: 60, right: 20, bottom: 20, left: 60};
 
 
     var maxLinkValue = d3.max(links, function(d) { return d.value; });
@@ -190,11 +198,11 @@ function condorcet_plot(data) {
         .nodes(d3.values(nodes))
         .links(links)
         .size([width, height])
-        .linkDistance(300)
+        .linkDistance(width/1.5)
         .charge(-50)
         .on("tick", tick)
         .start();
-
+ d3.selectAll("svg").remove();
     var svg = d3.select("#graph").append("svg")
         .attr("width", width)
         .attr("height", height);
