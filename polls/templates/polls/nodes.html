@@ -138,16 +138,7 @@ var color1 = d3.scale.linear()
   .domain([-maxLinkValue,0,maxLinkValue])
   .range(colorTab);
 
-var matrixSvg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .style("margin-left", margin.left + "px")
-	.style("margin-top", margin.top + "px")
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//d3.json("foo.json", function(miserables) {
-  var matrix = [],
+var matrix = [],
       n = nodes.length;
 
   // Compute index per node.
@@ -173,59 +164,6 @@ var matrixSvg = d3.select("body").append("svg")
 
   // The default sort order.
   x.domain(orders.name);
-
-  matrixSvg.append("rect")
-      .attr("class", "background")
-      .attr("width", width)
-      .attr("height", height);
-
-  var row = matrixSvg.selectAll(".row")
-      .data(matrix)
-    .enter().append("g")
-      .attr("class", "row")
-      .attr("transform", function(d, i) {  return "translate(0," + x(i) + ")"; })
-      .each(row);
-
-  row.append("line")
-      .attr("x2", width);
-
-  row.append("text")
-      .attr("x", -6)
-      .attr("y", x.rangeBand() / 5)
-      .attr("dy", ".32em")
-      .attr("text-anchor", "end")
-      .style("fill", function(d,i) { return color(nodes[i].value); })
-      .text(function(d, i) { return nodes[i].name; });
-
-  var column = matrixSvg.selectAll(".column")
-      .data(matrix)
-    .enter().append("g")
-      .attr("class", "column")
-      .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
-
-  column.append("line")
-      .attr("x1", -width);
-
-  column.append("text")
-      .attr("x", 6)
-      .attr("y", x.rangeBand() / 5)
-      .attr("dy", ".32em")
-      .attr("text-anchor", "start")
-       .style("fill", function(d,i) { return color(nodes[i].value); })
-      .text(function(d, i) { return nodes[i].name; });
-
-  function row(row) {
-    var cell = d3.select(this).selectAll(".cell")
-        .data(row.filter(function(d) { return d.z; }))
-      .enter().append("rect")
-        .attr("class", "cell")
-        .attr("x", function(d) { return x(d.x); })
-        .attr("width", x.rangeBand())
-        .attr("height", x.rangeBand())
-        .style("fill", function(d) { return  color1(d.z ); });
-
-  }
-
 
 
 
@@ -306,6 +244,68 @@ function tick() {
 }
 
 
+var matrixSvg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .style("margin-left", margin.left + "px")
+	.style("margin-top", margin.top + "px")
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//d3.json("foo.json", function(miserables) {
+
+
+  matrixSvg.append("rect")
+      .attr("class", "background")
+      .attr("width", width)
+      .attr("height", height);
+
+  var row = matrixSvg.selectAll(".row")
+      .data(matrix)
+    .enter().append("g")
+      .attr("class", "row")
+      .attr("transform", function(d, i) {  return "translate(0," + x(i) + ")"; })
+      .each(row);
+
+  row.append("line")
+      .attr("x2", width);
+
+  row.append("text")
+      .attr("x", -6)
+      .attr("y", x.rangeBand() / 5)
+      .attr("dy", ".32em")
+      .attr("text-anchor", "end")
+      .style("fill", function(d,i) { return color(nodes[i].value); })
+      .text(function(d, i) { return nodes[i].name; });
+
+  var column = matrixSvg.selectAll(".column")
+      .data(matrix)
+    .enter().append("g")
+      .attr("class", "column")
+      .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+
+  column.append("line")
+      .attr("x1", -width);
+
+  column.append("text")
+      .attr("x", 6)
+      .attr("y", x.rangeBand() / 5)
+      .attr("dy", ".32em")
+      .attr("text-anchor", "start")
+       .style("fill", function(d,i) { return color(nodes[i].value); })
+      .text(function(d, i) { return nodes[i].name; });
+
+  function row(row) {
+    var cell = d3.select(this).selectAll(".cell")
+        .data(row.filter(function(d) { return d.z; }))
+      .enter().append("rect")
+        .attr("class", "cell")
+        .attr("x", function(d) { return x(d.x); })
+        .attr("width", x.rangeBand())
+        .attr("height", x.rangeBand())
+        .style("fill", function(d) { return  color1(d.z ); });
+
+  }
 
 
 
