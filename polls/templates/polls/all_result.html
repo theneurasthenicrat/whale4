@@ -4,11 +4,12 @@
 {% load bootstrap3 %}
 
 {% block content %}
+
 <!-- Page Content -->
     <div class="container">
 
       <div class="well">
-            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+            <h2>{{ poll.title}} </h2>
             <h3>{% trans 'See the results of poll' %}</h3>
         </div>
 

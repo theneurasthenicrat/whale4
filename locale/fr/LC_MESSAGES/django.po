@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 14:31+0000\n"
+"POT-Creation-Date: 2016-08-10 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,10 +309,9 @@ msgstr "valeur"
 msgid "Update your poll"
 msgstr "Administration du sondage"
 
-#: polls/templates/polls/admin.html:10 polls/templates/polls/all_result.html:11
-#: polls/templates/polls/candidate.html:10
+#: polls/templates/polls/admin.html:10 polls/templates/polls/candidate.html:10
 #: polls/templates/polls/certificate.html:8 polls/templates/polls/option.html:8
-#: polls/templates/polls/result.html:14 polls/templates/polls/success.html:9
+#: polls/templates/polls/success.html:9
 #, python-format
 msgid "Poll \"%(title)s\""
 msgstr "Sondage « %(title)s »"
@@ -339,60 +338,60 @@ msgstr "Changer le statut du sondage"
 msgid "Go to the poll"
 msgstr "La page du sondage"
 
-#: polls/templates/polls/all_result.html:12
+#: polls/templates/polls/all_result.html:13
 #, fuzzy
 #| msgid "Change the status of poll"
 msgid "See the results of poll"
 msgstr "Changer le statut du sondage"
 
-#: polls/templates/polls/all_result.html:22 polls/views.py:640
+#: polls/templates/polls/all_result.html:23 polls/views.py:640
 #, fuzzy
 #| msgid "Scoring method"
 msgid "scoring method title"
 msgstr "Calcul de scores"
 
-#: polls/templates/polls/all_result.html:23
+#: polls/templates/polls/all_result.html:24
 #, fuzzy
 #| msgid "Scoring method"
 msgid "scoring method message"
 msgstr "Où l'on compte un nombre de points par candidat..."
 
-#: polls/templates/polls/all_result.html:25
-#: polls/templates/polls/all_result.html:38
-#: polls/templates/polls/all_result.html:51
-#: polls/templates/polls/all_result.html:64
+#: polls/templates/polls/all_result.html:26
+#: polls/templates/polls/all_result.html:39
+#: polls/templates/polls/all_result.html:52
+#: polls/templates/polls/all_result.html:65
 msgid "See"
 msgstr "Voir"
 
-#: polls/templates/polls/all_result.html:35 polls/views.py:648
+#: polls/templates/polls/all_result.html:36 polls/views.py:648
 msgid "condorcet method title"
 msgstr "Méthodes de Condorcet"
 
-#: polls/templates/polls/all_result.html:36
+#: polls/templates/polls/all_result.html:37
 #, fuzzy
 #| msgid "Scoring method"
 msgid "condorcet method message"
 msgstr "Où l'on engage des duels entre candidats..."
 
-#: polls/templates/polls/all_result.html:48 polls/views.py:655
+#: polls/templates/polls/all_result.html:49 polls/views.py:655
 msgid "runoff method title"
 msgstr "Méthodes à plusieurs tours"
 
-#: polls/templates/polls/all_result.html:49
+#: polls/templates/polls/all_result.html:50
 #, fuzzy
 #| msgid "Scoring method"
 msgid "runoff method message"
 msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
-#: polls/templates/polls/all_result.html:61 polls/views.py:661
+#: polls/templates/polls/all_result.html:62 polls/views.py:661
 msgid "randomized method title"
 msgstr "Tournois aléatoires"
 
-#: polls/templates/polls/all_result.html:62
+#: polls/templates/polls/all_result.html:63
 msgid "randomized method message"
 msgstr "Où l'on simule un tournoi sportif entre candidats..."
 
-#: polls/templates/polls/all_result.html:76 polls/templates/polls/vote.html:130
+#: polls/templates/polls/all_result.html:77 polls/templates/polls/vote.html:130
 msgid "Back to the poll"
 msgstr "Retour au sondage"
 
@@ -748,7 +747,7 @@ msgstr "Résultats"
 msgid "settings"
 msgstr "Paramètres"
 
-#: polls/templates/polls/result.html:37
+#: polls/templates/polls/result.html:45
 #, fuzzy
 #| msgid "Back to the poll"
 msgid "Back to the results"
@@ -1024,10 +1023,11 @@ msgstr "Courbe d'approbation"
 msgid "scoring method explanation"
 msgstr ""
 "On compte un nombre de points pour chaque candidat, de la manière suivante :"
-"Borda : un candidat gagne n - 1 points chaque fois qu'il est classé en premier, "
-"n - 2 points chaque fois qu'il est classé en second, etc. (n est le nombre de candidats)"
-"Pluralité : un candidat gagne 1 point chaque fois qu'il est classé en premier."
-"Veto : un candidat gagne 1 point chaque fois qu'il n'est pas classé dernier."
+"Borda : un candidat gagne n - 1 points chaque fois qu'il est classé en "
+"premier, n - 2 points chaque fois qu'il est classé en second, etc. (n est le "
+"nombre de candidats)Pluralité : un candidat gagne 1 point chaque fois qu'il "
+"est classé en premier.Veto : un candidat gagne 1 point chaque fois qu'il "
+"n'est pas classé dernier."
 
 #: polls/views.py:649
 msgid "condorcet label"
@@ -1050,11 +1050,15 @@ msgstr ""
 #| msgid "Secret ballot explanation."
 msgid "condorcet method explanation"
 msgstr ""
-"<p>On réalise des duels entre les candidats : pour un candidat A et un candidat B,"
-"on met une flèche de A vers B si une majorité de votants préfèrent A à B, et vice-versa.</p>"
-"<p>L'épaisseur de la flèche dénote la différence de voix entre les deux candidats. Il y a un trait pointillé si les deux candidats sont à égalité.</p>"
-"<p>Le tableau à droite est une représentation matricielle du graphe orienté. Dans les deux cas, "
-"les couleurs associées aux candidats sont calculées en fonction d'un score particulier, Copeland 0, Copeland 1 ou Simpson (à choisir dans le menu déroulant).</p>"
+"<p>On réalise des duels entre les candidats : pour un candidat A et un "
+"candidat B,on met une flèche de A vers B si une majorité de votants "
+"préfèrent A à B, et vice-versa.</p><p>L'épaisseur de la flèche dénote la "
+"différence de voix entre les deux candidats. Il y a un trait pointillé si "
+"les deux candidats sont à égalité.</p><p>Le tableau à droite est une "
+"représentation matricielle du graphe orienté. Dans les deux cas, les "
+"couleurs associées aux candidats sont calculées en fonction d'un score "
+"particulier, Copeland 0, Copeland 1 ou Simpson (à choisir dans le menu "
+"déroulant).</p>"
 
 #: polls/views.py:656
 msgid "runoff label"
@@ -1073,11 +1077,15 @@ msgstr ""
 #| msgid "Secret ballot explanation."
 msgid "runoff method explanation"
 msgstr ""
-"<p>Ces méthodes fonctionnent par élimination successive de candidats. À chaque étape, les voix pour les candidats éliminés sont reportés sur les autres.</p>"
-"<p>Single Transferrable Vote : À chaque tour, les candidats sont classés selon leur score de pluralité (voir méthodes de calcul de scores).</p>"
-"<p>S'il y a des ex-aequo, on considère en plus le score de Borda. À chaque tour, le pire candidat est éliminé.</p>"
-"<p>Scrutin majoritaire à deux tours : On garde pour le second tour les candidats ayant le plus haut score de pluralité "
-"(départage aléatoire des ex-aequo). Au second tour, on élit le candidat ayant le plus haut score de pluralité.</p>"
+"<p>Ces méthodes fonctionnent par élimination successive de candidats. À "
+"chaque étape, les voix pour les candidats éliminés sont reportés sur les "
+"autres.</p><p>Single Transferrable Vote : À chaque tour, les candidats sont "
+"classés selon leur score de pluralité (voir méthodes de calcul de scores).</"
+"p><p>S'il y a des ex-aequo, on considère en plus le score de Borda. À chaque "
+"tour, le pire candidat est éliminé.</p><p>Scrutin majoritaire à deux tours : "
+"On garde pour le second tour les candidats ayant le plus haut score de "
+"pluralité (départage aléatoire des ex-aequo). Au second tour, on élit le "
+"candidat ayant le plus haut score de pluralité.</p>"
 
 #: polls/views.py:662
 msgid "randomized label"
@@ -1090,9 +1098,12 @@ msgstr "Nouveau tirage aleatoire au premier tour"
 #: polls/views.py:665
 msgid "randomized method explanation"
 msgstr ""
-"<p>Cette méthode fonctionne exactement à la manière d'un tournoi sportif par élimination. À chaque tour,"
-"les candidats s'affrontent par paire. Le meilleur de chaque paire (celui qui est préféré par une majorité de votants) va au tour suivant.</p>"
-"<p>Deux candidats ex-aequo à un tour donné sont départagés aléatoirement. Le tirage initial du premier tour est aléatoire.</p>"
+"<p>Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "
+"élimination. À chaque tour,les candidats s'affrontent par paire. Le meilleur "
+"de chaque paire (celui qui est préféré par une majorité de votants) va au "
+"tour suivant.</p><p>Deux candidats ex-aequo à un tour donné sont départagés "
+"aléatoirement. Le tirage initial du premier tour est aléatoire.</p>"
+
 #: whale4/settings.py:100
 msgid "French"
 msgstr "Français"

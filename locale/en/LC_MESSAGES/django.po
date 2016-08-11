@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 14:31+0000\n"
+"POT-Creation-Date: 2016-08-10 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,10 +306,9 @@ msgstr "value"
 msgid "Update your poll"
 msgstr "Poll parameters"
 
-#: polls/templates/polls/admin.html:10 polls/templates/polls/all_result.html:11
-#: polls/templates/polls/candidate.html:10
+#: polls/templates/polls/admin.html:10 polls/templates/polls/candidate.html:10
 #: polls/templates/polls/certificate.html:8 polls/templates/polls/option.html:8
-#: polls/templates/polls/result.html:14 polls/templates/polls/success.html:9
+#: polls/templates/polls/success.html:9
 #, python-format
 msgid "Poll \"%(title)s\""
 msgstr "Poll \"%(title)s\""
@@ -336,66 +335,50 @@ msgstr "Change the status"
 msgid "Go to the poll"
 msgstr "Back to the poll page"
 
-#: polls/templates/polls/all_result.html:12
-#, fuzzy
-#| msgid "Change the status of poll"
+#: polls/templates/polls/all_result.html:13
 msgid "See the results of poll"
-msgstr "Change the status"
+msgstr "See the results of poll"
 
-#: polls/templates/polls/all_result.html:22 polls/views.py:640
+#: polls/templates/polls/all_result.html:23 polls/views.py:640
 msgid "scoring method title"
 msgstr "Scoring methods"
 
-#: polls/templates/polls/all_result.html:23
-#, fuzzy
-#| msgid "scoring method title"
+#: polls/templates/polls/all_result.html:24
 msgid "scoring method message"
 msgstr "Where each candidate gets some points according to its ranks..."
 
-#: polls/templates/polls/all_result.html:25
-#: polls/templates/polls/all_result.html:38
-#: polls/templates/polls/all_result.html:51
-#: polls/templates/polls/all_result.html:64
+#: polls/templates/polls/all_result.html:26
+#: polls/templates/polls/all_result.html:39
+#: polls/templates/polls/all_result.html:52
+#: polls/templates/polls/all_result.html:65
 msgid "See"
 msgstr ""
 
-#: polls/templates/polls/all_result.html:35 polls/views.py:648
-#, fuzzy
-#| msgid "scoring method title"
+#: polls/templates/polls/all_result.html:36 polls/views.py:648
 msgid "condorcet method title"
 msgstr "Condorcet-based methods"
 
-#: polls/templates/polls/all_result.html:36
-#, fuzzy
-#| msgid "scoring method title"
+#: polls/templates/polls/all_result.html:37
 msgid "condorcet method message"
 msgstr "Where candidates fight with each other..."
 
-#: polls/templates/polls/all_result.html:48 polls/views.py:655
-#, fuzzy
-#| msgid "scoring method title"
+#: polls/templates/polls/all_result.html:49 polls/views.py:655
 msgid "runoff method title"
 msgstr "Run-off methods"
 
-#: polls/templates/polls/all_result.html:49
-#, fuzzy
-#| msgid "scoring method title"
+#: polls/templates/polls/all_result.html:50
 msgid "runoff method message"
 msgstr "Where candidates are successively eliminated..."
 
-#: polls/templates/polls/all_result.html:61 polls/views.py:661
-#, fuzzy
-#| msgid "randomized method explanation"
+#: polls/templates/polls/all_result.html:62 polls/views.py:661
 msgid "randomized method title"
 msgstr "Randomized cups"
 
-#: polls/templates/polls/all_result.html:62
-#, fuzzy
-#| msgid "randomized method explanation"
+#: polls/templates/polls/all_result.html:63
 msgid "randomized method message"
 msgstr "Where we simulate a sport cup between candidates..."
 
-#: polls/templates/polls/all_result.html:76 polls/templates/polls/vote.html:130
+#: polls/templates/polls/all_result.html:77 polls/templates/polls/vote.html:130
 msgid "Back to the poll"
 msgstr "Back to the poll"
 
@@ -758,9 +741,7 @@ msgstr "results"
 msgid "settings"
 msgstr "settings"
 
-#: polls/templates/polls/result.html:37
-#, fuzzy
-#| msgid "Back to the poll"
+#: polls/templates/polls/result.html:45
 msgid "Back to the results"
 msgstr "Back to the poll"
 
@@ -995,8 +976,6 @@ msgstr ""
 "poll.</p>"
 
 #: polls/views.py:641
-#, fuzzy
-#| msgid "scoring method title"
 msgid "scoring label"
 msgstr "Scoring vector"
 
@@ -1017,23 +996,19 @@ msgid "Approval"
 msgstr "Approval"
 
 #: polls/views.py:644
-#, fuzzy
-#| msgid "Approval"
 msgid "Curve Approval"
 msgstr "Curve of approval"
 
 #: polls/views.py:645
-#, fuzzy
-#| msgid "scoring method title"
 msgid "scoring method explanation"
 msgstr ""
-"<p> We compute a number of points for each candidate as follows:</"
-"p><p>Borda : a candidate wins n - 1 points every time it is ranked first, n "
-"- 2 points every time it is ranked second, and so on. (n is the number of "
-"candidates)</p><p>Plurality: a candidate wins 1 point every time it is "
-"ranked first (of a given voter).</p><p>Veto : a candidate wins 1 point every "
-"time it is not ranked last.</p><p>Approval: a candidate wins 1 point every "
-"time it is ranked above the specified threshold.</p>"
+"We compute a number of points for each candidate as follows:Borda : a "
+"candidate wins n - 1 points every time it is ranked first, n - 2 points "
+"every time it is ranked second, and so on. (n is the number of "
+"candidates)Plurality: a candidate wins 1 point every time it is ranked first "
+"(of a given voter).Veto : a candidate wins 1 point every time it is not "
+"ranked last.Approval: a candidate wins 1 point every time it is ranked above "
+"the specified threshold."
 
 #: polls/views.py:649
 msgid "condorcet label"
@@ -1044,8 +1019,6 @@ msgid "Copeland 0"
 msgstr "Copeland 0"
 
 #: polls/views.py:650
-#, fuzzy
-#| msgid "Copeland 0"
 msgid "Copeland 1"
 msgstr "Copeland 1"
 
@@ -1054,18 +1027,15 @@ msgid "Simpson"
 msgstr "Simpson(maxmin)"
 
 #: polls/views.py:652
-#, fuzzy
-#| msgid "Secret ballot explanation."
 msgid "condorcet method explanation"
 msgstr ""
-"<p>We organize a duel between each pair of candidates: for a candidate A and "
-"a candidate B,there is an arrow from A to B if a majority of voters prefer A "
-"to B, and vice-versa.</p> <p>The more voters prefer A to B, the thicker the "
-"arrow. A dotted line replaces the arrow if two candidates are tie.</p><p>The "
-"right-hand side table is a matrix representation of the oriented graph. In "
-"both sides,the colors associated to the candidates are computed using a "
-"particular function, namely Copeland 0, Copeland 1 or Simpson (choose in the "
-"combo box).</p>"
+"We organize a duel between each pair of candidates: for a candidate A and a "
+"candidate B,there is an arrow from A to B if a majority of voters prefer A "
+"to B, and vice-versa.The more voters prefer A to B, the thicker the arrow. A "
+"dotted line replaces the arrow if two candidates are tie.The right-hand side "
+"table is a matrix representation of the oriented graph. In both sides,the "
+"colors associated to the candidates are computed using a particular "
+"function, namely Copeland 0, Copeland 1 or Simpson (choose in the combo box)."
 
 #: polls/views.py:656
 msgid "runoff label"
@@ -1080,19 +1050,17 @@ msgid "Two Round majority"
 msgstr "Two Round majority"
 
 #: polls/views.py:658
-#, fuzzy
-#| msgid "Secret ballot explanation."
 msgid "runoff method explanation"
 msgstr ""
-"<p>These methods successively eliminate candidates. After each round, the "
-"votes for each eliminated candidates are properly transfered to the "
-"remaining ones.</p><p>Single Transferrable Vote: At each round, the "
-"candidates are ranked according to their plurality score (see the scoring "
-"methods).</p><p>Ties are broken according their Borda score. After each "
-"round, the worst candidate is eliminated.</p><p>Two-rounds majority: We keep "
-"for the second round the candidates having the highest plurality score (ties "
-"randomly broken).</p><p>The winner is the second round candidate having the "
-"highest plurality score (once again, ties randomly broken).</p>"
+"These methods successively eliminate candidates. After each round, the votes "
+"for each eliminated candidates are properly transfered to the remaining ones."
+"Single Transferrable Vote: At each round, the candidates are ranked "
+"according to their plurality score (see the scoring methods).Ties are broken "
+"according their Borda score. After each round, the worst candidate is "
+"eliminated.Two-rounds majority: We keep for the second round the candidates "
+"having the highest plurality score (ties randomly broken).The winner is the "
+"second round candidate having the highest plurality score (once again, ties "
+"randomly broken)."
 
 #: polls/views.py:662
 msgid "randomized label"
@@ -1105,10 +1073,10 @@ msgstr "Shuffle candidates for the first round"
 #: polls/views.py:665
 msgid "randomized method explanation"
 msgstr ""
-"<p>This method simulates a sport championship. At each round, the candidates "
-"fight by pairs.</p><p>The best candidate of each pair (the one who is "
-"prefered by a majority of voters) goes to the next round.</p> <p>Ties are "
-"randomly broken. Fights for the initial round are randomly chosen.</p>"
+"This method simulates a sport championship. At each round, the candidates "
+"fight by pairs.The best candidate of each pair (the one who is prefered by a "
+"majority of voters) goes to the next round.Ties are randomly broken. Fights "
+"for the initial round are randomly chosen."
 
 #: whale4/settings.py:100
 msgid "French"

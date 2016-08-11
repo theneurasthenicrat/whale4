@@ -13,8 +13,21 @@
         <div class="well">
             <h2>{{ poll.title }}</h2>
             <h3>{{ title }}</h3>
-         <p class="description">{{ explanation }}</p>
+             <button class="btn btn-custom center-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            {% trans 'Information' %}
+        </button>
+        <div class="collapse" id="collapseExample">
+            <div class="jumbotron">
+               {{ explanation }}
+            </div>
         </div>
+
+        </div>
+
+
+
+
+
         <input type="hidden" id="url_poll" value="{% url 'scores' poll.id  %}" />
         <input type="hidden" id="method" value="{{ method }}" />
         <div class="thumbnail clearfix">
