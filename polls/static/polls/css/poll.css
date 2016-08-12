@@ -81,6 +81,14 @@ h4 {
     color: rgb(51, 117, 179);
 }
 
+.result a:hover {
+    text-decoration: none;
+}
+
+
+
+
+
 footer {
     height: 50px;    
 }
@@ -88,7 +96,7 @@ footer {
 p.description {
     white-space: pre-wrap;       /* css-3 */
     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
+    //white-space: -pre-wrap;      /* Opera 4-6 */
     white-space: -o-pre-wrap;    /* Opera 7 */      
     background: rgba(51, 117, 179, 0.9);
     color: #fff;
