@@ -537,40 +537,26 @@ def view_poll(request, pk):
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
     cand = [ c.candidate for c in candidates if c.candidate]
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    voting = VotingScore.objects.filter(candidate__poll__id=poll.id)
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
+
     scores = {}
-    scores1={}
-    for c in candidates:
-        scores1[c.id]=[]
-    for v in votes:
+    votes=[]
+    for v in voting:
         if v.voter.id not in scores:
-            scores[v.voter.id] = {}
-        scores[v.voter.id][v.candidate.id] = v.value
-        scores1[v.candidate.id].append(v.value)
-    print(scores1)
-    tab = {}
-    for v in votes:
-        id = v.voter.id
-        tab[id] = {}
-        tab[id]['id'] = id
-        tab[id]['nickname'] = v.voter.nickname
-        tab[id]['scores'] = []
-        for c in candidates:
-            score = scores[id][c.id]
-            tab[id]['scores'].append({
-                'value': score,
-                'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
-                                                              1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
-                'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
+            scores[v.voter.id] = {"id":v.voter.id,"nickname":v.voter.nickname,"scores":[]}
+            votes.append(scores[v.voter.id])
+        scores[v.voter.id]["scores"].append({'value':v.value,
+                                             'class': 'poll-{0:d}percent'.format(
+                                                 int(round(preference_model.evaluate(v.value),
+                                                           1) * 100)) if v.value != UNDEFINED_VALUE else 'poll-undefined',
+                                             'text': preference_model.value2text(v.value)
+                                             })
 
 
-            })
-
-    votes = None if tab == {} else tab.values()
     list1 = list()
     scores=[]
     if votes:
@@ -736,7 +722,7 @@ def result_scores(request, pk):
             b= nodes[j]["value"]
             link = {}
             link["value"]=abs(a-b)
-            if a-b >0 :
+            if a-b >=0 :
                 link["source"]=i
                 link["target"]=j
 

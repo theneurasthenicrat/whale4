@@ -4,78 +4,27 @@ var url=d3.select("#url_poll").property("value");
 var method=d3.select("#method").property("value");
 
 function graph() {
+
     d3.json(url, function(error, data) {
+
         d3.select("#controlApproval").style("visibility","hidden");
         method= parseInt(method);
-         var data;
+
         switch(method) {
             case 1:
-                var option= d3.select("#option").node().value;
-
-
-                switch(option) {
-                    case 'borda':
-                        data = data.scoring.borda;
-                        scoring_plot(data);
-                        break;
-                    case 'plurality':
-                        data = data.scoring.plurality;
-                        scoring_plot(data);
-                        break;
-                    case 'veto':
-                        data = data.scoring.veto;
-                        scoring_plot(data);
-                        break;
-                    case 'approval':
-                        d3.select("#controlApproval").style("visibility","visible");
-                        var approval_select= d3.select("#approval")
-                            .selectAll("option")
-                            .data(data.scoring.approval.threshold)
-                            .enter().append("option")
-                            .attr("value",function(d,i) { return i; })
-                            .text(function(d) { return d; });
-
-                        var i= d3.select("#approval").node().value;
-
-                        data = data.scoring.approval.scores[i];
-                        scoring_plot(data);
-                        break;
-                    case 'curvea':
-                        data = data.scoring.plurality;
-                        scoring_plot(data);
-                }
-
+                scoring_plot(data.scoring);
                 break;
-
-
             case 2:
-                var data = data.condorcet;
-                condorcet_plot(data);
-
+                condorcet_plot(data.condorcet);
                 break;
 
             case 3:
-
-            var option= d3.select("#option").node().value;
-
-                switch(option) {
-                    case 'stv':
-                        data = data.runoff.stv;
-                        runoff_plot(data);
-                        break;
-                    case 'trm':
-                        data = data.runoff.trm;
-                        runoff_plot(data);
-                }
+                runoff_plot(data.runoff);
                 break;
-
-            default:
+            case 4:
+                runoff_plot(data.runoff);
 
         }
-
-
-
-
     });
 }
 
@@ -87,13 +36,39 @@ d3.select("#option").on("change", graph);
 
 d3.select("#approval").on("change", graph);
 
-
 d3.select(window).on('resize', graph);
 
 
+function scoring_plot(scoring) {
+    var option= d3.select("#option").node().value;
+     var data;
+     switch(option) {
+                    case 'borda':
+                        data = scoring.borda;
+                        break;
+                    case 'plurality':
+                        data = scoring.plurality;
+                        break;
+                    case 'veto':
+                        data = scoring.veto;
+                        break;
+                    case 'approval':
+                        d3.select("#controlApproval").style("visibility","visible");
+                        var approval_select= d3.select("#approval")
+                            .selectAll("option")
+                            .data(scoring.approval.threshold)
+                            .enter().append("option")
+                            .attr("value",function(d,i) { return i; })
+                            .text(function(d) { return d; });
 
-function scoring_plot(data) {
-    var margin = {top: 20, right: 20, bottom: 60, left: 60},
+                        var i= d3.select("#approval").node().value;
+
+                        data = scoring.approval.scores[i];
+                        break;
+                    case 'curvea':
+                        data = scoring.plurality;
+                }
+    var margin = {top: 20, right: 20, bottom: 60, left: 40},
         width =window.innerWidth/2,
         height = window.innerHeight/2;
 
@@ -113,12 +88,14 @@ function scoring_plot(data) {
 
     var color = d3.scale.linear()
         .range(["red", "#e1dd38", "green"]);
+
     d3.select("svg").remove();
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
     x.domain(data.map(function(d) { return d.x; }));
     y.domain([0, d3.max(data, function(d) { return d.y; })]);
     color.domain([d3.min(data, function(d) { return d.y; }),d3.mean(data, function(d) { return d.y; }),d3.max(data, function(d) { return d.y; })]);
@@ -126,7 +103,13 @@ function scoring_plot(data) {
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .style("font-size", "14px")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-30)");
 
     svg.append("g")
         .attr("class", "y axis")
@@ -135,20 +118,32 @@ function scoring_plot(data) {
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
+        .style("font-size", "14px")
         .style("text-anchor", "end")
         .text("Scores");
 
     var bar= svg.selectAll(".bar")
-        .data(data)
-        .enter();
+        .data(data).enter().append("g").attr("class", "bar");
 
     bar.append("rect")
-        .attr("class", "bar")
         .attr("x", function(d) { return x(d.x); })
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.y); })
         .attr("fill",function(d) { return color(d.y); })
         .attr("height", function(d) { return height - y(d.y); });
+
+    bar.append("text")
+        .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
+        .attr("y", function(d) { return y(d.y)+10; })
+        .attr("text-anchor", "middle")
+        .attr("dy", "-1em")
+        .attr("fill",function(d) { return color(d.y); })
+        .style("font-weight","bold")
+        .text( function(d) { return d.y; });
+
+
+
+
 
 }
 
@@ -371,7 +366,18 @@ function condorcet_plot(data) {
 
 }
 
-function runoff_plot(data) {
+function runoff_plot(runoff) {
+        var option= d3.select("#option").node().value;
+var data;
+                switch(option) {
+                    case 'stv':
+                        data = runoff.stv;
+
+                        break;
+                    case 'trm':
+                        data = runoff.trm;
+
+                }
     var colorTab = [ "green","#e1dd38","red"],
         width = window.innerWidth / 2,
         height = window.innerHeight / 2;
