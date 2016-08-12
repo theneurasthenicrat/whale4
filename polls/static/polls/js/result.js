@@ -7,11 +7,12 @@ function graph() {
     d3.json(url, function(error, data) {
         d3.select("#controlApproval").style("visibility","hidden");
         method= parseInt(method);
+         var data;
         switch(method) {
             case 1:
                 var option= d3.select("#option").node().value;
 
-                var data;
+
                 switch(option) {
                     case 'borda':
                         data = data.scoring.borda;
@@ -39,7 +40,7 @@ function graph() {
                         data = data.scoring.approval.scores[i];
                         scoring_plot(data);
                         break;
-                    default:
+                    case 'curvea':
                         data = data.scoring.plurality;
                         scoring_plot(data);
                 }
@@ -54,9 +55,18 @@ function graph() {
                 break;
 
             case 3:
-                var data = data.condorcet;
-                runoff_plot(data);
 
+            var option= d3.select("#option").node().value;
+
+                switch(option) {
+                    case 'stv':
+                        data = data.runoff.stv;
+                        runoff_plot(data);
+                        break;
+                    case 'trm':
+                        data = data.runoff.trm;
+                        runoff_plot(data);
+                }
                 break;
 
             default:
@@ -79,8 +89,6 @@ d3.select("#approval").on("change", graph);
 
 
 d3.select(window).on('resize', graph);
-
-
 
 
 
@@ -368,7 +376,7 @@ function runoff_plot(data) {
         width = window.innerWidth / 2,
         height = window.innerHeight / 2;
 
-  var matrix = [["a","b","c","d"],["a","b","c"], ["a","b"],["a"]];
+  var matrix = data;
     var color = d3.scale.linear()
         .domain([0,0.5,1])
         .range(colorTab);
@@ -448,7 +456,7 @@ function runoff_plot(data) {
         .attr("x", (x.rangeBand())/6)
         .attr("y",(y.rangeBand())/6)
         .attr("dy", ".35em")
-        .text(String);
+        .text(function(d){return d.name;});
 
 }
 

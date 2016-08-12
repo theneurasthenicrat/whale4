@@ -641,7 +641,7 @@ def result_view(request, pk ,method):
         label = _('scoring label')
         options = [{'value': 'borda', 'name': _('Borda')}, {'value': 'plurality', 'name': _('Plurality')},
                      {'value': 'veto', 'name': _('Veto')},
-                     {'value': 'approval', 'name': _('Approval')}, {'value': 'curveA', 'name': _('Curve Approval')}]
+                     {'value': 'approval', 'name': _('Approval')}, {'value': 'curvea', 'name': _('Curve Approval')}]
         explanation = _('scoring method explanation')
 
     if method == 2:
@@ -654,7 +654,7 @@ def result_view(request, pk ,method):
     if method == 3:
         title = _('runoff method title')
         label = _('runoff label')
-        options = [{'value': 'STV', 'name': _('STV')}, {'value': 'Two Round majority', 'name': _('Two Round majority')}]
+        options = [{'value': 'stv', 'name': _('STV')}, {'value': 'trm', 'name': _('Two Round majority')}]
         explanation = _('runoff method explanation')
 
     if method ==4:
@@ -689,18 +689,24 @@ def result_scores(request, pk):
     veto_scores = []
 
     nodes=[]
+    matrix=[]
     for c in candidates:
         sum_borda = 0
         sum_plurality = 0
         sum_veto = 0
         node={}
+        runoff={}
         for score in scores[c.id]:
             sum_borda = sum_borda + (score if score != UNDEFINED_VALUE else 0)
             sum_plurality = sum_plurality + (1 if score == preference_model.max() else 0)
-            sum_veto = sum_veto + (1 if score != (preference_model.min() or UNDEFINED_VALUE) else 0)
+            sum_veto = sum_veto + (1 if score != (preference_model.min()) else 0)
         candi.append(str(c))
         node["name"]=str(c)
         node["value"]=sum_borda
+        runoff["name"]=str(c)
+        runoff["plurality"]=sum_plurality
+        runoff["borda"]=sum_borda
+        matrix.append(runoff)
         nodes.append(node)
         borda_scores.append({"x":str(c),"y":sum_borda})
         plurality_scores.append({"x":str(c),"y":sum_plurality})
@@ -740,6 +746,14 @@ def result_scores(request, pk):
             links.append(link)
             j=j+1
         i=i+1
+    matrix= sorted(matrix, key=itemgetter('plurality','borda'),reverse=True)
+    n = len(candi)
+    matrix1=[]
+    while n>0:
+        matrix1.append(matrix[:n])
+        n=n-1
+
+
 
     approval["scores"] = approval_scores
 
@@ -754,6 +768,8 @@ def result_scores(request, pk):
     condorcet_method["links"] = links
 
     runoff_method = dict()
+    runoff_method["stv"]= matrix1
+    runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
 
     randomized_method = dict()
 
