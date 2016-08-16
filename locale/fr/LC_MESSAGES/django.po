@@ -737,7 +737,7 @@ msgstr "Pas de vote pour l'instant... Voulez vous être le premier ?"
 
 #: polls/templates/polls/poll.html:114
 msgid "vote"
-msgstr "Vote"
+msgstr "Voter"
 
 #: polls/templates/polls/poll.html:117
 msgid "results"
