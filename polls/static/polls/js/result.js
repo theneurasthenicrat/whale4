@@ -106,7 +106,6 @@ function scoring_plot(scoring) {
         .call(xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
-        .style("font-size", "14px")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", "rotate(-30)");
@@ -118,7 +117,6 @@ function scoring_plot(scoring) {
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
         .attr("dy", ".71em")
-        .style("font-size", "14px")
         .style("text-anchor", "end")
         .text("Scores");
 
