@@ -1,6 +1,13 @@
 {% extends "polls/base.html" %}
 {% load i18n %}
 {% load static %}
+{% block static-extra %}
+    <script src="{% static 'polls/js/jquery-ui.multidatespicker.js' %}"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+{% endblock %}
 {% block content %}
     {% load bootstrap3 %}
     <div class="container">

@@ -789,28 +789,7 @@ table.table-bordered{
     margin-left: 100px;
 }
 
-#list_init li{
-     margin-bottom: 10px;
-    text-align: center;
-    cursor: pointer;
-}
 
-#init{
-border-right: dotted;
-
-}
-
-
-
-
-
-#sortable .list-group-item {
-     list-style: decimal inside;
-    display: list-item;
-     margin-bottom: 10px;
-     text-align: center;
-     cursor: pointer;
-}
 
 .container-custom {
     padding: 25px;

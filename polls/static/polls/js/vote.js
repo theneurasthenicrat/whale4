@@ -2,6 +2,7 @@
 $(function() {
     $('ol#sortable li').hide();
 
+
     $('#submit').addClass("disabled");
 
     var initial_pos=[];
@@ -20,10 +21,19 @@ $(function() {
             rank(id_candidate);
         }
 
+   $( "ol#sortable li" ).each( function( i, element ){
+      $( this ).css('background-color', color(i));
+       
+    });
+
+
+
 });
 
 var worst = 1;
 var nbCandidates =$("#sortable").children().length;
+    var colorTab = ["green", "#e1dd38", "red"];
+var color = d3.scale.linear().domain([0, (nbCandidates-1) / 2, nbCandidates-1]).range(colorTab);
 
 function valid() {
     if (worst!=nbCandidates+1) {

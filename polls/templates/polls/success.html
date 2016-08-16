@@ -2,7 +2,10 @@
 {% load bootstrap3 %}
 {% load i18n %}
 {% load static %}
+{% block static-extra %}
 
+ <script src="{% static 'polls/js/clipboard.min.js' %}"></script>
+{% endblock %}
 {% block content %}
     <div class="container">
         <div class="well">
