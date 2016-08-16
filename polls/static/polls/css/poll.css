@@ -1021,7 +1021,6 @@ table tbody tr td.controls a.remove:hover {
 }
 
 .ll-skin-cangas .ui-widget {
-	font-family: "Helvetica Neue","Trebuchet MS",Tahoma,Verdana,Arial,sans-serif;
 	background: #f0f4f7;
 	border-radius: 0;
 	margin:0px;
@@ -1067,7 +1066,6 @@ table tbody tr td.controls a.remove:hover {
 .ll-skin-cangas .ui-datepicker th {
 	font-size: 9px;
 	color: #6c7173;
-	font-size: 9px;
 	text-shadow: 0 1px 0 rgba(255,255,255,.55);
 	text-transform: uppercase;
 	font-weight: normal;
@@ -1131,7 +1129,8 @@ table tbody tr td.controls a.remove:hover {
 
 
 	.axis {
-	  font: 10px sans-serif;
+	    font-size: 14px;
+	    fill: #444;
 	}
 	.axis path,
 	.axis line {
