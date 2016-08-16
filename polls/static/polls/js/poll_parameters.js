@@ -4,9 +4,7 @@
       format: 'yyyy-mm-dd',
       todayHighlight: true,
       startDate: today,
-      autoclose: true,
       orientation: "bottom auto",
-      language: "fr",
       
   });
      $("[name='option_choice']").bootstrapSwitch();

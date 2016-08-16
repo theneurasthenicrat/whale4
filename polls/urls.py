@@ -7,7 +7,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^redirectPage/(?P<pk>'+uuid4+')/$', views.redirect_page, name='redirectPage'),
     url(r'^choice$', views.choice, name='choice'),
-    url(r'^experimental$', views.experimental, name='experimental'),
     url(r'^candidateCreate/(?P<pk>'+uuid4+')/$', views.candidate_create, name='candidateCreate'),
     url(r'^dateCandidateCreate/(?P<pk>'+uuid4+')/$', views.date_candidate_create, name='dateCandidateCreate'),
     url(r'^manageCandidate/(?P<pk>'+uuid4+')/$', views.manage_candidate, name='manageCandidate'),

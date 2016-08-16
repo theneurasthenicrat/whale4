@@ -132,14 +132,11 @@ def redirect_page(request, pk):
     return render(request, 'polls/redirectPage.html',locals())
 
 
-def experimental(request):
-    return render(request, 'polls/experimental.html')
-
 
 @login_required
 def choice(request):
     request.session["update"] = 0
-    return render(request, 'polls/choice_ballot.html')
+    return render(request, 'polls/new_poll.html')
 
 
 @login_required
@@ -173,7 +170,7 @@ def new_poll(request, choice ):
             poll.save()
             messages.success(request, mark_safe(_('General parameters successfully created!')))
             return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/voting_poll.html', locals())
+    return render(request, 'polls/parameters_poll.html', locals())
 
 
 @login_required
@@ -196,7 +193,7 @@ def update_voting_poll(request, pk):
             else:
                 messages.success(request, mark_safe(_('Parameters are successfully updated!')))
                 return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/voting_poll.html', locals())
+    return render(request, 'polls/parameters_poll.html', locals())
 
 
 @login_required
@@ -346,7 +343,7 @@ def success(request, pk):
             return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
     else:
         form = InviteForm()
-    return render(request, 'polls/success.html', locals())
+    return render(request, 'polls/invite.html', locals())
 
 
 @login_required
@@ -438,7 +435,8 @@ def vote(request, pk):
             elif poll.option_experimental:
                 poll.status=False
                 poll.save()
-                return redirect(reverse_lazy('experimental'))
+                messages.success(request, mark_safe(_('Thank you for voting')))
+                return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
@@ -611,7 +609,7 @@ def view_poll(request, pk):
             response.write('\n')
         return response
     else:
-        return render(request, 'polls/poll.html',locals() )
+        return render(request, 'polls/view_poll.html', locals())
 
 
 def result_all(request, pk ):
@@ -650,7 +648,7 @@ def result_view(request, pk ,method):
             {'value': 'Shuffle candidates for the first round', 'name': _('Shuffle candidates for the first round')}]
         explanation = _('randomized method explanation')
 
-    return render(request, 'polls/result.html', locals())
+    return render(request, 'polls/detail_result.html', locals())
 
 
 def result_scores(request, pk):
