@@ -11,12 +11,16 @@
 {% block content %}
     {% load bootstrap3 %}
     <div class="container">
-        <div class="well">
-            <h2> {% trans 'Poll :' %}{{ poll.title }}</h2>
+         <div class="well">
+
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
             {% if update_poll %}
-                <h3>2.{% trans 'Add candidates to poll' %}</h3>
-            {% else %}
+            <h3>2. {% trans 'Add candidates to poll' %}</h3>
+              {% elif poll.option_choice and poll.option_modify %}
+
                 <h3>{% trans 'Add or remove candidates' %}</h3>
+               {% else %}
+                 <h3>{% trans 'Remove candidates' %}</h3>
             {% endif %}
         </div>
 
@@ -33,7 +37,7 @@
             {% endif %}
             <div class="well-lg">
                  <div class="container-fluid ">
-
+{% if poll.option_choice and poll.option_modify %}
                      <div class=" well-lg col-md-4 ">
                 <form  action="" method="post">
                     {% csrf_token %}
@@ -46,6 +50,7 @@
                     <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
                 </form>
                       </div>
+                  {% endif %}
                   <div class=" col-md-8 ">
                        {% if candidates %}
         <div class="container-fluid form-login margin1">

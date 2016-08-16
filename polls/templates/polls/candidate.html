@@ -10,8 +10,11 @@
             <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
             {% if update_poll %}
             <h3>2. {% trans 'Add candidates to poll' %}</h3>
-            {% else %}
-            <h3>{% trans 'Add or remove candidates' %}</h3>
+              {% elif poll.option_choice and poll.option_modify %}
+
+                <h3>{% trans 'Add or remove candidates' %}</h3>
+               {% else %}
+                 <h3>{% trans 'Remove candidates' %}</h3>
             {% endif %}
         </div>
 
@@ -28,7 +31,7 @@
          {% endif %}
             <div class="container-fluid ">
 
-
+             {% if poll.option_choice and poll.option_modify %}
                 <div class=" well-lg col-md-7 ">
                     <form action="" method="post" >
                         {% csrf_token %}
@@ -41,6 +44,8 @@
                         </div>
                     </form>
                 </div>
+             {% endif %}
+
                 <div class="col-md-5">
                     {% if candidates %}
                         <div class="container-fluid form-login margin1">
