@@ -624,27 +624,27 @@ def result_view(request, pk ,method):
         options = [{'value': 'borda', 'name': _('Borda')}, {'value': 'plurality', 'name': _('Plurality')},
                      {'value': 'veto', 'name': _('Veto')},
                      {'value': 'approval', 'name': _('Approval')}, {'value': 'curvea', 'name': _('Curve Approval')}]
-        explanation = _('scoring method explanation')
+        explanation =  mark_safe(_('scoring method explanation'))
 
     if method == 2:
         title = _('condorcet method title')
         label = _('condorcet label')
         options = [{'value': 'Copeland 0', 'name': _('Copeland 0')}, {'value': _('Copeland 1'), 'name': _('Copeland 1')},
                      {'value': 'Simpson', 'name': _('Simpson')}]
-        explanation = _('condorcet method explanation')
+        explanation = mark_safe(_('condorcet method explanation'))
 
     if method == 3:
         title = _('runoff method title')
         label = _('runoff label')
         options = [{'value': 'stv', 'name': _('STV')}, {'value': 'trm', 'name': _('Two Round majority')}]
-        explanation = _('runoff method explanation')
+        explanation = mark_safe(_('runoff method explanation'))
 
     if method ==4:
         title = _('randomized method title')
         label = _('randomized label')
         options = [
             {'value': 'Shuffle candidates for the first round', 'name': _('Shuffle candidates for the first round')}]
-        explanation = _('randomized method explanation')
+        explanation =mark_safe( _('randomized method explanation'))
 
     return render(request, 'polls/detail_result.html', locals())
 

@@ -13,19 +13,17 @@
         <div class="well">
             <h2>{{ poll.title }}</h2>
             <h3>{{ title }}</h3>
-             <button class="btn btn-custom center-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            {% trans 'Information' %}
+             <button class="btn btn-custom btn-lg  center-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            {% trans 'More about the' %}  {{ title }} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+
         </button>
         <div class="collapse" id="collapseExample">
-            <div class="jumbotron">
+            <div class="well">
                {{ explanation }}
             </div>
         </div>
 
         </div>
-
-
-
 
 
         <input type="hidden" id="url_poll" value="{% url 'scores' poll.id  %}" />
