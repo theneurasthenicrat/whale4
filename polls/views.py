@@ -31,7 +31,7 @@ def with_admin_rights(fn):
         poll = get_object_or_404(VotingPoll, id=pk)
         if request.user is None or request.user != poll.admin:
             messages.error(request, mark_safe(_("you are not the poll administrator")))
-            return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+            return redirect(reverse_lazy('redirectPage'))
         return fn(request,pk,*args, **kwargs)
     return wrapped
 
@@ -64,10 +64,10 @@ def with_view_rights(fn):
         poll = get_object_or_404(VotingPoll, id=pk)
         if poll.option_experimental and (request.user is None or request.user != poll.admin):
             messages.error(request,  mark_safe(_("you are not the poll administrator")))
-            return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+            return redirect(reverse_lazy('redirectPage'))
         elif poll.option_ballots and poll.closing_poll():
             messages.error(request, mark_safe(_("The poll is not closed")))
-            return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+            return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
 
     return wrapped
@@ -87,7 +87,7 @@ def status_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
         if poll.option_experimental and (not poll.status):
-            return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+            return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
     return wrapped
 
@@ -127,10 +127,8 @@ def home(request):
     return render(request, 'polls/home.html')
 
 
-def redirect_page(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    return render(request, 'polls/redirectPage.html',locals())
-
+def redirect_page(request):
+    return render(request, 'polls/redirectPage.html')
 
 
 @login_required
@@ -376,7 +374,7 @@ def certificate(request, pk):
                 if next_url is not None:
                     return redirect(next_url)
                 else:
-                    return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+                    return redirect(reverse_lazy('redirectPage'))
 
             except:
                 messages.error (request,  mark_safe(_('your certificate is incorrect')))
@@ -435,8 +433,8 @@ def vote(request, pk):
             elif poll.option_experimental:
                 poll.status=False
                 poll.save()
-                messages.success(request, mark_safe(_('Thank you for voting')))
-                return redirect(reverse_lazy('redirectPage', kwargs={'pk': poll.pk,}))
+                messages.info(request, mark_safe(_('Thank you for voting')))
+                return redirect(reverse_lazy('redirectPage'))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 

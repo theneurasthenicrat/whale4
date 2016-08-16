@@ -56,7 +56,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, mark_safe(_('You have been successfully logged out.')))
-    return redirect(reverse('login'))
+    return redirect(reverse('redirectPage'))
 
 
 class ContactView(FormView):
