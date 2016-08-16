@@ -80,7 +80,7 @@
                     <ul class="dropdown-menu">
                         {% if user.is_authenticated %}
                             <li class="dropdown-header-custom">{% blocktrans with nickname=user.nickname %}Signed in as {{ nickname }}{% endblocktrans %}</li>
-                            <li><a href="{% url 'accountPoll' user.id %}" > {% bootstrap_icon "user" %}{% trans "Your profile" %}</a></li>
+                            <li><a href="{% url 'accountPoll' user.id %}" >{% bootstrap_icon "user" %} {% trans "Your profile" %}</a></li>
                             <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
                         {% else %}
                             <li><a href="{% url 'register' %}" >{% bootstrap_icon "user" %} {% trans 'Sign up' %}</a></li>
