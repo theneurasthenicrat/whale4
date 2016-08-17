@@ -254,6 +254,7 @@ def candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = Candidate.objects.filter(poll_id=poll.id)
     form = CandidateForm()
+    print(form)
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
 
