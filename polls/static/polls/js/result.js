@@ -120,17 +120,34 @@ function scoring_plot(scoring) {
         .style("text-anchor", "end")
         .text("Scores");
 
-    var bar= svg.selectAll(".bar")
-        .data(data).enter().append("g").attr("class", "bar");
 
-    bar.append("rect")
+
+    svg.select('.x.axis').transition().duration(750).call(xAxis);
+    svg.select(".y.axis").transition().duration(750).call(yAxis);
+
+    var bars = svg.selectAll(".bar").data(data)
+
+    bars.exit()
+        .transition()
+        .duration(750)
+        .attr("y", y(0))
+        .attr("height", height - y(0))
+        .style('fill-opacity', 1e-6)
+        .remove();
+
+    bars.enter().append("rect")
+        .attr("class", "bar")
+        .attr("y", y(0))
+        .attr("height", height - y(0));
+
+    bars.transition().duration(750)
         .attr("x", function(d) { return x(d.x); })
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.y); })
         .attr("fill",function(d) { return color(d.y); })
         .attr("height", function(d) { return height - y(d.y); });
 
-    bar.append("text")
+    bars.enter().append("text")
         .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
         .attr("y", function(d) { return y(d.y)+10; })
         .attr("text-anchor", "middle")
@@ -139,9 +156,7 @@ function scoring_plot(scoring) {
         .style("font-weight","bold")
         .text( function(d) { return d.y; });
 
-
-
-
+    
 
 }
 
