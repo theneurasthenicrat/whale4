@@ -31,7 +31,7 @@
          {% endif %}
             <div class="container-fluid ">
 
-             {% if poll.option_choice and poll.option_modify %}
+             {% if poll.option_choice %}
                 <div class=" well-lg col-md-7 ">
                     <form action="" method="post" >
                         {% csrf_token %}

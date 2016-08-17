@@ -238,10 +238,14 @@ def status(request, pk):
 @with_admin_rights
 def manage_candidate(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
-    if poll.poll_type != 'Date':
-        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
+    if poll.option_modify:
+        if poll.poll_type != 'Date':
+            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
+        else:
+            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
     else:
-        return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
+        messages.error(request, mark_safe(_('Add or remove candidates is not allowed!')))
+        return redirect(reverse_lazy('redirectPage'))
 
 
 @login_required
