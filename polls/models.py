@@ -67,6 +67,7 @@ class VotingScore(models.Model):
     candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE)
     voter = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name= _("voter"))
     value = models.IntegerField(verbose_name= _("value"))
+    last_modification= models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('candidate', 'voter')

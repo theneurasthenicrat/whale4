@@ -67,7 +67,7 @@ class DateCandidateForm(ModelForm):
         model = DateCandidate
         exclude = ['poll','date']
 
-##label=_('Pick one or several dates')
+
 class DateForm(Form):
 
     dates = forms.CharField(widget=forms.HiddenInput(),max_length=300)

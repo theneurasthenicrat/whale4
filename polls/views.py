@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
+from datetime import datetime
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
@@ -462,6 +463,7 @@ def update_vote(request, pk, voter):
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
 
+
     form = VotingForm(candidates, preference_model,poll, initial=initial)
     form1 = NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
@@ -476,6 +478,7 @@ def update_vote(request, pk, voter):
             voter.save()
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
+                v.last_modification= datetime.now()
                 v.save()
             messages.success(request,  mark_safe(_('Your vote has been updated, thank you!')))
             if poll.option_ballots:
@@ -533,7 +536,7 @@ def view_poll(request, pk):
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
     cand = [ c.candidate for c in candidates if c.candidate]
-    voting = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    voting = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('last_modification')
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
 
     if poll.poll_type == 'Date':
