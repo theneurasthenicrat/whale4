@@ -69,8 +69,9 @@ function scoring_plot(scoring) {
                         data = scoring.plurality;
                 }
     var margin = {top: 20, right: 20, bottom: 60, left: 40},
-        width =window.innerWidth/2,
+        width  = $("#graph").width()-margin.right-margin.left,
         height = window.innerHeight/2;
+
 
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], .1);
@@ -105,10 +106,10 @@ function scoring_plot(scoring) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
+        .style("text-anchor", "start")
+        .attr("dx", "1.8em")
         .attr("dy", ".15em")
-        .attr("transform", "rotate(-30)");
+        .attr("transform", "rotate(30)");
 
     svg.append("g")
         .attr("class", "y axis")
