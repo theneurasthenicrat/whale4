@@ -280,7 +280,7 @@ def date_candidate_create(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
     form = DateForm()
-    print(form)
+
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
     if request.method == 'POST':
@@ -335,9 +335,10 @@ def success(request, pk):
                     nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
                     certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
                 )
-                subject, from_email, to = 'invite to secret poll', 'whale4.ad@gmail.com', email
+                subject, from_email, to = 'Invite to the secret poll', 'whale4.ad@gmail.com', email
                 htmly = get_template('polls/email.html')
-                d = Context({'poll': poll, 'certi':certi})
+                url="http://localhost:8000"+str(reverse_lazy(vote, kwargs={'pk': poll.pk}))
+                d = Context({'poll': poll, 'certi':certi,'url':url})
                 html_content = htmly.render(d)
                 msg = EmailMessage(subject, html_content, from_email, [to])
                 msg.content_subtype = "html"

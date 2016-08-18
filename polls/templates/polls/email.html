@@ -12,12 +12,9 @@
 </head>
 <body >
 <div style="padding: 20px;">
-<a href="http://localhost:8000/" style="text-decoration: none"> <h3>Whale4 <small>{% trans 'WHich ALternative is Elected' %}</small></h3></a>
-    <p> {% trans 'Hello' %}<br>
-        {% trans 'You are invite to secret poll.' %}<br>
-       {% trans ' This is the certificate of vote' %} <strong> {{ certi }}</strong><br>
-        {% trans 'You can vote at the following link' %}</p>
-        <a href="http://localhost:8000/polls/vote/{{poll.id}}"> {% trans 'click here for vote' %}</a>
+ <h3>Whale4 <small>{% trans 'WHich ALternative is Elected' %}</small></h3>
+
+    {% blocktrans with url=url certi=certi %}Email text template with url {{ url }} and certificate {{ certi }}.{% endblocktrans %}
 </div>
 </body>
 </html>
