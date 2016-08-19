@@ -14,6 +14,8 @@ from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
 from datetime import datetime
+from random import sample
+from math import log2, modf,pow
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
@@ -678,7 +680,7 @@ def result_scores(request, pk):
     borda_scores = []
     plurality_scores = []
     veto_scores = []
-
+    randomized_scores=[]
     nodes=[]
     matrix=[]
     for c in candidates:
@@ -700,7 +702,9 @@ def result_scores(request, pk):
         matrix.append(runoff)
         nodes.append(node)
         borda_scores.append({"x":str(c),"y":sum_borda})
+        randomized_scores.append({"name":str(c),"value":sum_borda,"parent":str(c)})
         plurality_scores.append({"x":str(c),"y":sum_plurality})
+
         veto_scores.append({"x":str(c),"y":sum_veto})
     approval_scores = []
     for y in approval["threshold"]:
@@ -744,6 +748,52 @@ def result_scores(request, pk):
         matrix1.append(matrix[:n])
         n=n-1
 
+    list_round=[]
+
+    len_cand=len(candi)
+    a,b=modf( log2(len_cand))
+    if a!=0:
+        n=len_cand-pow(2,b)
+    else:
+        n=len_cand/2
+
+    while(n>0):
+        h=sample(randomized_scores,2)
+        parent=h[0] if h[0]["value"] > h[1]["value"] else h[1]
+        h[0]["parent"]=parent["name"]
+        h[1]["parent"]=parent["name"]
+        h[0]["diff"]= h[0]["value"]-h[1]["value"]
+        h[1]["diff"]= h[1]["value"]-h[0]["value"]
+
+        list_round.append({"name":parent["name"],"value":parent["value"],"parent":"null","children":h})
+        randomized_scores.remove(h[0])
+        randomized_scores.remove(h[1])
+        n=n-1
+    list_x=[{"name":x["name"],"value":x["value"],"parent":"null","children":[x]} for x in randomized_scores]
+    list_round.extend(list_x)
+
+    n = len(list_round)
+
+    j=log2(n)
+    round =j+1
+    list_p=list_round
+    while(j>0):
+        list_round1=[]
+        i = 0
+        while(i<n):
+            parent=list_p[i] if list_p[i]["value"] > list_p[i + 1]["value"] else list_p[i + 1]
+            list_p[i]["parent"]=parent["name"]
+            list_p[i]["diff"]=list_p[i]["value"]-list_p[i + 1]["value"]
+            list_p[i+1]["parent"]=parent["name"]
+            list_p[i+1]["diff"] = list_p[i+1]["value"] - list_p[i]["value"]
+
+            list_round1.append({"name":parent["name"],"parent":"null","value":parent["value"],"children":list_p[i:i+2]})
+            i=i+2
+        n=len(list_round1)
+
+        list_p=list_round1[:]
+        j=j-1
+
 
 
     approval["scores"] = approval_scores
@@ -762,7 +812,8 @@ def result_scores(request, pk):
     runoff_method["stv"]= matrix1
     runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
 
-    randomized_method = dict()
+    randomized_method = {"list":list_p,"round":round}
+
 
     method= dict()
     method["scoring"]=score_method

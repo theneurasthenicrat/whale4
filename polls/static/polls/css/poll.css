@@ -1117,3 +1117,24 @@ table tbody tr td.controls a.remove:hover {
 	  stroke: #000;
 	  shape-rendering: crispEdges;
 	}
+
+    .node {
+		cursor: pointer;
+	}
+
+	.node circle {
+
+
+	  stroke-width: 3px;
+	}
+
+	.node text {
+	  font: 12px sans-serif;
+        font-weight: bold;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}

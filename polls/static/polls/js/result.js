@@ -22,7 +22,7 @@ function graph() {
                 runoff_plot(data.runoff);
                 break;
             case 4:
-                runoff_plot(data.runoff);
+                randomized(data.randomized);
 
         }
     });
@@ -162,13 +162,14 @@ function scoring_plot(scoring) {
 }
 
 function condorcet_plot(data) {
+     var margin = {top:80, right: 10, bottom: 20, left: 80};
     var nodes = data.nodes,
         links = data.links,
         colorTab = ["red", "#e1dd38", "green"],
-        width = window.innerWidth / 4,
+        width = $("#graph").width()/2,
         height = window.innerHeight / 2,
-        width1 = window.innerWidth / 6,
-        height1 = window.innerWidth / 6,
+        width1 = width-margin.right-margin.left,
+        height1 = width-margin.right-margin.left,
         minNodeValue = d3.min(nodes, function (d) {
             return d.value;
         }),
@@ -183,7 +184,7 @@ function condorcet_plot(data) {
         .domain([minNodeValue, meanNodeValue, maxNodeValue])
         .range(colorTab);
 
-    var margin = {top: 60, right: 20, bottom: 20, left: 60};
+
 
 
     var maxLinkValue = d3.max(links, function (d) {
@@ -191,7 +192,7 @@ function condorcet_plot(data) {
     });
 
 
-    var x = d3.scale.ordinal().rangeBands([0, width1]),
+    var x = d3.scale.ordinal().rangeBands([0, width1-margin.right-margin.left]),
         z = d3.scale.linear().domain([0, 4]).clamp(true);
 
 
@@ -233,8 +234,9 @@ function condorcet_plot(data) {
         .start();
     d3.selectAll("svg").remove();
     var svg = d3.select("#graph").append("svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", width )
+		.attr("height", height);
+
 
     svg.append("svg:defs").selectAll("marker")
         .data(["end"])
@@ -301,7 +303,7 @@ function condorcet_plot(data) {
     }
 
     var matrixSvg = d3.select("#graph").append("svg")
-        .attr("width", width1 + margin.left + margin.right)
+        .attr("width", width1 )
         .attr("height", height1 + margin.top + margin.bottom)
         .style("margin-left", margin.left + "px")
         .style("margin-top", margin.top + "px")
@@ -309,9 +311,7 @@ function condorcet_plot(data) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-    matrixSvg.append("rect")
-        .attr("width", width1)
-        .attr("height", height1);
+
 
     var row = matrixSvg.selectAll(".row")
         .data(matrix)
@@ -393,7 +393,7 @@ var data;
 
                 }
     var colorTab = [ "green","#e1dd38","red"],
-        width = window.innerWidth / 2,
+        width = $("#graph").width()-50,
         height = window.innerHeight / 2;
 
   var matrix = data;
@@ -441,7 +441,7 @@ var data;
         .append("text")
         .attr("x", 0)
         .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
+        .attr("text-anchor", "start")
         .text(function(d, i) {return i == (matrix.length-1) ? "Winner" : "Round " + i;})
         .attr("transform", function(d, j) {return "translate(" + (y.rangeBand()/ 2) + "," + (50 / 2) + ")"; });
 
@@ -472,11 +472,106 @@ var data;
         .append("text")
         .attr("fill", "#fff")
         .attr("font-weight", "bold")
-        .style("text-anchor", "middle")
-        .attr("x", (x.rangeBand())/6)
-        .attr("y",(y.rangeBand())/6)
-        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+	    .attr("x", x.rangeBand()/6)
+	    .attr("y", y.rangeBand()/6)
+	    .attr("dy", ".35em")
         .text(function(d){return d.name;});
 
 }
 
+function randomized(data){
+    var treeData = data.list;
+    var round=data.round;
+
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+ width = $("#graph").width() - margin.right - margin.left,
+ height = window.innerHeight-50- margin.top - margin.bottom;
+
+     var colorRange = d3.scale.category20();
+
+var i = 0;
+
+var tree = d3.layout.tree()
+ .size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+ .projection(function(d) { return [d.y, d.x]; });
+
+ d3.select("svg").remove();
+var svg = d3.select("#graph").append("svg")
+ .attr("width", width + margin.right + margin.left)
+ .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+ .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+
+update(root);
+
+function update(source) {
+
+    // Compute the new tree layout.
+    var nodes = tree.nodes(root).reverse(),
+        links = tree.links(nodes);
+
+    // Normalize for fixed-depth.
+    nodes.forEach(function (d) {
+        d.y = width-d.depth*width/round;
+    });
+
+    // Declare the nodesâ€¦
+    var node = svg.selectAll("g.node")
+        .data(nodes, function (d) {
+            return d.id || (d.id = ++i);
+        });
+
+    // Enter the nodes.
+    var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function (d) {
+            return "translate(" +  (d.y) + "," +  (d.x) + ")";
+        });
+
+
+
+    nodeEnter.append("circle")
+        .attr("r", 10)
+        .style("fill", function (d) {return colorRange(d.name);})
+        .style("stroke", function (d) {return colorRange(d.name);});
+
+    nodeEnter.append("text")
+        .attr("x", 0)
+        .attr("y",-20)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function (d) {return d.name;})
+        .style("fill", function (d) {return colorRange(d.name);});
+
+ nodeEnter.append("text")
+        .attr("x", width/(round*2)-10)
+        .attr("y",-10)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        .text(function (d) {return d.diff;})
+        .style("fill", function (d) {return colorRange(d.name);});
+
+
+    var link = svg.selectAll("path.link")
+        .data(links, function (d) {
+            return d.target.id;
+        });
+
+
+    link.enter().insert("path", "g")
+        .attr("class", "link")
+        .attr("d", elbow);
+
+    function elbow(d, i) {
+  return "M" + d.target.y + "," + d.target.x
+       + "H" + (d.source.y-width/(round*2)) + "V" + d.source.x + "H" + d.source.y
+       + (d.source.children ? "" : "h" + margin.right);
+}
+}
+
+}
