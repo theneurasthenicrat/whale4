@@ -38,39 +38,38 @@ d3.select("#approval").on("change", graph);
 
 d3.select(window).on('resize', graph);
 
-
 function scoring_plot(scoring) {
     var option= d3.select("#option").node().value;
-     var data;
-     switch(option) {
-                    case 'borda':
-                        data = scoring.borda;
-                        break;
-                    case 'plurality':
-                        data = scoring.plurality;
-                        break;
-                    case 'veto':
-                        data = scoring.veto;
-                        break;
-                    case 'approval':
-                        d3.select("#controlApproval").style("visibility","visible");
-                        var approval_select= d3.select("#approval")
-                            .selectAll("option")
-                            .data(scoring.approval.threshold)
-                            .enter().append("option")
-                            .attr("value",function(d,i) { return i; })
-                            .text(function(d) { return d; });
+    var data;
+    switch(option) {
+        case 'borda':
+            data = scoring.borda;
+            break;
+        case 'plurality':
+            data = scoring.plurality;
+            break;
+        case 'veto':
+            data = scoring.veto;
+            break;
+        case 'approval':
+            d3.select("#controlApproval").style("visibility","visible");
+            var approval_select= d3.select("#approval")
+                .selectAll("option")
+                .data(scoring.approval.threshold)
+                .enter().append("option")
+                .attr("value",function(d,i) { return i; })
+                .text(function(d) { return d; });
 
-                        var i= d3.select("#approval").node().value;
+            var i= d3.select("#approval").node().value;
 
-                        data = scoring.approval.scores[i];
-                        break;
-                    case 'curvea':
-                        data = scoring.plurality;
-                }
+            data = scoring.approval.scores[i];
+            break;
+        case 'curvea':
+            data = scoring.plurality;
+    }
     var margin = {top: 20, right: 20, bottom: 60, left: 40},
         width  = $("#graph").width()-margin.right-margin.left,
-        height = window.innerHeight/2;
+        height = window.innerHeight/1.4;
 
 
     var x = d3.scale.ordinal()
@@ -157,17 +156,17 @@ function scoring_plot(scoring) {
         .style("font-weight","bold")
         .text( function(d) { return d.y; });
 
-    
+
 
 }
 
 function condorcet_plot(data) {
-     var margin = {top:80, right: 10, bottom: 20, left: 80};
+    var margin = {top:80, right: 10, bottom: 20, left: 80};
     var nodes = data.nodes,
         links = data.links,
         colorTab = ["red", "#e1dd38", "green"],
         width = $("#graph").width()/2,
-        height = window.innerHeight / 2,
+        height = window.innerHeight / 1.4,
         width1 = width-margin.right-margin.left,
         height1 = width-margin.right-margin.left,
         minNodeValue = d3.min(nodes, function (d) {
@@ -235,7 +234,7 @@ function condorcet_plot(data) {
     d3.selectAll("svg").remove();
     var svg = d3.select("#graph").append("svg")
         .attr("width", width )
-		.attr("height", height);
+        .attr("height", height);
 
 
     svg.append("svg:defs").selectAll("marker")
@@ -381,22 +380,22 @@ function condorcet_plot(data) {
 }
 
 function runoff_plot(runoff) {
-        var option= d3.select("#option").node().value;
-var data;
-                switch(option) {
-                    case 'stv':
-                        data = runoff.stv;
+    var option= d3.select("#option").node().value;
+    var data;
+    switch(option) {
+        case 'stv':
+            data = runoff.stv;
 
-                        break;
-                    case 'trm':
-                        data = runoff.trm;
+            break;
+        case 'trm':
+            data = runoff.trm;
 
-                }
+    }
     var colorTab = [ "green","#e1dd38","red"],
         width = $("#graph").width()-50,
-        height = window.innerHeight / 2;
+        height = window.innerHeight/1.4;
 
-  var matrix = data;
+    var matrix = data;
     var color = d3.scale.linear()
         .domain([0,0.5,1])
         .range(colorTab);
@@ -473,9 +472,9 @@ var data;
         .attr("fill", "#fff")
         .attr("font-weight", "bold")
         .attr("text-anchor", "start")
-	    .attr("x", x.rangeBand()/6)
-	    .attr("y", y.rangeBand()/6)
-	    .attr("dy", ".35em")
+        .attr("x", x.rangeBand()/6)
+        .attr("y", y.rangeBand()/6)
+        .attr("dy", ".35em")
         .text(function(d){return d.name;});
 
 }
@@ -484,94 +483,93 @@ function randomized(data){
     var treeData = data.list;
     var round=data.round;
 
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
- width = $("#graph").width() - margin.right - margin.left,
- height = window.innerHeight-50- margin.top - margin.bottom;
+    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+        width = $("#graph").width() - margin.right - margin.left,
+        height = window.innerHeight/1.4- margin.top - margin.bottom;
 
-     var colorRange = d3.scale.category20();
+    var colorRange = d3.scale.category20();
 
-var i = 0;
+    var i = 0;
 
-var tree = d3.layout.tree()
- .size([height, width]);
+    var tree = d3.layout.tree()
+        .size([height, width]);
 
-var diagonal = d3.svg.diagonal()
- .projection(function(d) { return [d.y, d.x]; });
+    
 
- d3.select("svg").remove();
-var svg = d3.select("#graph").append("svg")
- .attr("width", width + margin.right + margin.left)
- .attr("height", height + margin.top + margin.bottom)
-  .append("g")
- .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    d3.select("svg").remove();
+    var svg = d3.select("#graph").append("svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-root = treeData[0];
+    root = treeData[0];
 
-update(root);
+    update(root);
 
-function update(source) {
+    function update(source) {
 
-    // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
-        links = tree.links(nodes);
+        // Compute the new tree layout.
+        var nodes = tree.nodes(root).reverse(),
+            links = tree.links(nodes);
 
-    // Normalize for fixed-depth.
-    nodes.forEach(function (d) {
-        d.y = width-d.depth*width/round;
-    });
-
-    // Declare the nodesâ€¦
-    var node = svg.selectAll("g.node")
-        .data(nodes, function (d) {
-            return d.id || (d.id = ++i);
+        // Normalize for fixed-depth.
+        nodes.forEach(function (d) {
+            d.y = width-d.depth*width/round;
         });
 
-    // Enter the nodes.
-    var nodeEnter = node.enter().append("g")
-        .attr("class", "node")
-        .attr("transform", function (d) {
-            return "translate(" +  (d.y) + "," +  (d.x) + ")";
-        });
+        // Declare the nodesâ€¦
+        var node = svg.selectAll("g.node")
+            .data(nodes, function (d) {
+                return d.id || (d.id = ++i);
+            });
+
+        // Enter the nodes.
+        var nodeEnter = node.enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" +  (d.y) + "," +  (d.x) + ")";
+            });
 
 
 
-    nodeEnter.append("circle")
-        .attr("r", 10)
-        .style("fill", function (d) {return colorRange(d.name);})
-        .style("stroke", function (d) {return colorRange(d.name);});
+        nodeEnter.append("circle")
+            .attr("r", 10)
+            .style("fill", function (d) {return colorRange(d.name);})
+            .style("stroke", function (d) {return colorRange(d.name);});
 
-    nodeEnter.append("text")
-        .attr("x", 0)
-        .attr("y",-20)
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        .text(function (d) {return d.name;})
-        .style("fill", function (d) {return colorRange(d.name);});
+        nodeEnter.append("text")
+            .attr("x", 0)
+            .attr("y",-20)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .text(function (d) {return d.name;})
+            .style("fill", function (d) {return colorRange(d.name);});
 
- nodeEnter.append("text")
-        .attr("x", width/(round*2)-10)
-        .attr("y",-10)
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        .text(function (d) {return d.diff;})
-        .style("fill", function (d) {return colorRange(d.name);});
-
-
-    var link = svg.selectAll("path.link")
-        .data(links, function (d) {
-            return d.target.id;
-        });
+        nodeEnter.append("text")
+            .attr("x", width/(round*2)-10)
+            .attr("y",-10)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .text(function (d) {return d.diff;})
+            .style("fill", function (d) {return colorRange(d.name);});
 
 
-    link.enter().insert("path", "g")
-        .attr("class", "link")
-        .attr("d", elbow);
+        var link = svg.selectAll("path.link")
+            .data(links, function (d) {
+                return d.target.id;
+            });
 
-    function elbow(d, i) {
-  return "M" + d.target.y + "," + d.target.x
-       + "H" + (d.source.y-width/(round*2)) + "V" + d.source.x + "H" + d.source.y
-       + (d.source.children ? "" : "h" + margin.right);
-}
-}
+
+        link.enter().insert("path", "g")
+            .attr("class", "link")
+            .attr("d", elbow);
+
+        function elbow(d, i) {
+            return "M" + d.target.y + "," + d.target.x
+                + "H" + (d.source.y-width/(round*2)) + "V" + d.source.x + "H" + d.source.y
+                + (d.source.children ? "" : "h" + margin.right);
+        }
+    }
 
 }
