@@ -973,7 +973,7 @@ msgstr ""
 
 #: polls/views.py:634
 msgid "scoring label"
-msgstr ""
+msgstr "Vecteur de score"
 
 #: polls/views.py:635
 msgid "Borda"
@@ -1024,15 +1024,15 @@ msgstr ""
 #: polls/views.py:645
 msgid "condorcet method explanation"
 msgstr ""
-"<p>On réalise des duels entre les candidats : pour un candidat A et un "
+"<section><p>On réalise des duels entre les candidats :</p><ul><li> Pour un candidat A et un "
 "candidat B,on met une flèche de A vers B si une majorité de votants "
-"préfèrent A à B, et vice-versa.</p><p>L'épaisseur de la flèche dénote la "
+"préfèrent A à B, et vice-versa. L'épaisseur de la flèche dénote la "
 "différence de voix entre les deux candidats. Il y a un trait pointillé si "
-"les deux candidats sont à égalité.</p><p>Le tableau à droite est une "
+"les deux candidats sont à égalité.</li><li>Le tableau à droite est une "
 "représentation matricielle du graphe orienté. Dans les deux cas, les "
 "couleurs associées aux candidats sont calculées en fonction d'un score "
 "particulier, Copeland 0, Copeland 1 ou Simpson (à choisir dans le menu "
-"déroulant).</p>"
+"déroulant).</li></ul></section>"
 
 #: polls/views.py:649
 msgid "runoff label"
@@ -1049,15 +1049,15 @@ msgstr ""
 #: polls/views.py:651
 msgid "runoff method explanation"
 msgstr ""
-"<p>Ces méthodes fonctionnent par élimination successive de candidats. À "
+"<section><p>Ces méthodes fonctionnent par élimination successive de candidats. À "
 "chaque étape, les voix pour les candidats éliminés sont reportés sur les "
-"autres.</p><p>Single Transferrable Vote : À chaque tour, les candidats sont "
+"autres.</p><ul><li>Single Transferrable Vote : À chaque tour, les candidats sont "
 "classés selon leur score de pluralité (voir méthodes de calcul de scores).</"
 "p><p>S'il y a des ex-aequo, on considère en plus le score de Borda. À chaque "
-"tour, le pire candidat est éliminé.</p><p>Scrutin majoritaire à deux tours : "
+"tour, le pire candidat est éliminé.</li><li>Scrutin majoritaire à deux tours : "
 "On garde pour le second tour les candidats ayant le plus haut score de "
 "pluralité (départage aléatoire des ex-aequo). Au second tour, on élit le "
-"candidat ayant le plus haut score de pluralité.</p>"
+"candidat ayant le plus haut score de pluralité.</li></ul></section>"
 
 #: polls/views.py:655
 msgid "randomized label"
@@ -1070,11 +1070,11 @@ msgstr "Nouveau tirage aleatoire au premier tour"
 #: polls/views.py:658
 msgid "randomized method explanation"
 msgstr ""
-"<p>Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "
-"élimination. À chaque tour,les candidats s'affrontent par paire. Le meilleur "
+"<section><p>Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "
+"élimination.</p><ul><li> À chaque tour,les candidats s'affrontent par paire. Le meilleur "
 "de chaque paire (celui qui est préféré par une majorité de votants) va au "
-"tour suivant.</p><p>Deux candidats ex-aequo à un tour donné sont départagés "
-"aléatoirement. Le tirage initial du premier tour est aléatoire.</p>"
+"tour suivant.</li><li>Deux candidats ex-aequo à un tour donné sont départagés "
+"aléatoirement. Le tirage initial du premier tour est aléatoire.</li></ul></section>"
 
 #: whale4/settings.py:100
 msgid "French"
