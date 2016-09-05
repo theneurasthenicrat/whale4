@@ -1,0 +1,65 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="well">
+            <h2>{{ poll.title}} </h2>
+            <h3>{% trans 'Data of poll' %}</h3>
+        </div>
+
+        <!-- Page Features -->
+        <div class="row text-center result">
+
+            <div class="col-md-4 col-sm-6 "><a href="/polls/viewPoll/{{poll.pk }}?format=json" class="thumbnail">
+
+                <img src="{% static 'polls/images/data-json.jpeg' %}" class="img-thumbnail" alt="">
+                <span class="caption">
+                       <h4> {% trans 'JSON' %}</h4>
+
+            </span>
+            </a>
+            </div>
+
+            <div class="col-md-4 col-sm-6 " ><a href="/polls/viewPoll/{{poll.pk }}?format=preflib" class="thumbnail">
+
+                <img src="{% static 'polls/images/data-preflib.jpeg' %}" class="img-thumbnail" alt="">
+                <span class="caption">
+                       <h4>  {% trans 'PREFLIB' %}</h4>
+
+                </span>
+            </a>
+            </div>
+
+            <div class="col-md-4 col-sm-6 ">
+                <a href="/polls/viewPoll/{{poll.pk }}?format=csv" class="thumbnail">
+
+                    <img src="{% static 'polls/images/data-csv.png' %}"  class="img-thumbnail" alt="">
+            <span class="caption">
+            <h4> {% trans 'CSV' %}</h4>
+
+                </span>
+                </a>
+            </div>
+
+
+        </div>
+
+
+<div class="text-center">
+                <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom  btn-lg ">{% bootstrap_icon "list" %} {% trans 'Back to the poll' %}</a>
+</div>
+
+
+
+
+
+
+    </div>
+
+{% endblock %}

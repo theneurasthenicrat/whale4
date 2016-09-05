@@ -566,12 +566,16 @@ def view_poll(request, pk):
 
     list1 = list()
     scores=[]
+    voters=[]
     if votes:
         for value in votes:
             v = dict()
             v['name'] = value['nickname']
             score= [val['value'] for val in value['scores']]
+            text=[val['text'] for val in value['scores']]
             v['values'] = score
+            text.insert(0,value['nickname'])
+            voters.append(text)
             list1.append(v)
             scores.append(score)
 
@@ -587,7 +591,7 @@ def view_poll(request, pk):
 
     elif "format" in request.GET and request.GET['format'] == 'preflib':
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        response['Content-Disposition'] = 'attachment; filename="poll-preflib.csv"'
         response.write(str(len(candidates)) + '\n')
         dict_candidates=dict()
         for i, c in enumerate(candidates):
@@ -617,6 +621,18 @@ def view_poll(request, pk):
             response.write(','.join([str(x) for x in ([i+1]+row_voter)]))
             response.write('\n')
         return response
+
+    elif"format" in request.GET and request.GET['format'] == 'csv':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="poll-csv.csv"'
+        response.write(','.join(['voter']+[str(c) for c in candidates] ))
+        response.write('\n')
+        for voter in voters:
+            response.write(','.join([str(x) for x in voter]))
+            response.write('\n')
+
+        return response
+
     else:
         return render(request, 'polls/view_poll.html', locals())
 
@@ -821,5 +837,9 @@ def result_scores(request, pk):
     method["runoff"] = runoff_method
     method["randomized"] = randomized_method
 
-
     return HttpResponse(json.dumps(method, indent=4, sort_keys=True), content_type="application/json")
+
+
+def data_page(request, pk ):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    return render(request, 'polls/data.html', locals())

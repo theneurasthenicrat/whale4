@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^results/(?P<pk>'+uuid4+')', views.result_all, name='results'),
     url(r'^viewResult/(?P<pk>'+uuid4+')/(?P<method>[^/]+)/$', views.result_view, name='viewResult'),
     url(r'^scores/(?P<pk>'+uuid4+')', views.result_scores, name='scores'),
+    url(r'^data/(?P<pk>'+uuid4+')', views.data_page, name='data'),
 
 
 ]
