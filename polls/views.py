@@ -821,5 +821,9 @@ def result_scores(request, pk):
     method["runoff"] = runoff_method
     method["randomized"] = randomized_method
 
-
     return HttpResponse(json.dumps(method, indent=4, sort_keys=True), content_type="application/json")
+
+
+def data_page(request, pk ):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    return render(request, 'polls/data.html', locals())
