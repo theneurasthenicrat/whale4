@@ -1,0 +1,195 @@
+{%extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% block static-extra %}
+
+ <script src="{% static 'polls/js/clipboard.min.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="well">
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+              {% if update_poll %}
+            <h3>4. {% trans 'Invite the voters' %}</h3>
+            {% else %}
+            <h3>{% trans 'Invite the voters' %}</h3>
+            {% endif %}
+        </div>
+        <div class="thumbnail clearfix ">
+        {% if update_poll %}
+            <div class="well-sm hidden-xs">
+                <ol class="nav nav-pills-custom">
+                    <li><a href="{% url 'updatePoll' poll.id %}">{% trans 'General parameters' %} <i class="fa fa-chevron-right"></i></a></li>
+                    <li><a href="{% url 'manageCandidate' poll.id %}">{% trans 'Add candidates' %} <i class="fa fa-chevron-right"></i></a></li>
+                    <li><a href="{% url 'option' poll.id %}">{% trans 'Advanced parameters' %} <i class="fa fa-chevron-right"></i></a></li>
+                    <li class="active"><a href="#">{% trans 'Invite' %}</a></li>
+                </ol>
+            </div>
+        {% endif %}
+            {% if poll.option_ballots %}
+                <div class="well-lg">
+                    <ul class="nav nav-tabs nav-justified ">
+                        <li class="active" ><a href="#tab1">{% trans 'Add the voters' %}</a></li>
+                        <li ><a href="#tab2">{% trans "Share vote's link " %}</a></li>
+                    </ul>
+                    <div class="tab-content border-tab ">
+
+                        <div class="tab-pane active" id="tab1">
+
+                            <div class="row ">
+                                <div>
+                                    <div class="col-xs-12 col-sm-6 ">
+                                        <div class=" well margin2">
+
+                                            <p  class="help-block">{% trans 'Add one or several email addresses of voters.' %}</p>
+
+                                            <form action="" method="post"  >
+                                                {% csrf_token %}
+                                                {% bootstrap_form_errors form %}
+                                                {% bootstrap_form form show_label=False  %}
+                                                <div class="wrapper ">
+                                                <button type="submit" class="btn btn-success "> <i class="fa fa-send"></i> {% trans 'Submit' %}</button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-6">
+                                        <div class="well-sm">
+                                            <h4>{% trans 'List of current voters' %}</h4>
+                                            {% if inviters %}
+
+                                                <ol class="list-group">
+                                                    {% for v in inviters %}
+                                                        <li class="list-group-item">
+                                                            {{ v.email}}
+                                                            <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
+                                                            <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
+                                                                <div class="modal-dialog modal-sm">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            <h4 class="modal-title">{% blocktrans with c=c %}Delete "{{ c }}"{% endblocktrans %}</h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <a href="/polls/deleteAnonymous/{{ poll.id }}/{{ v.id }}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>
+                                                                            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </li>
+                                                    {% endfor %}
+                                                </ol>
+
+                                            {% else %}
+                                                <p class="text-center">{% trans 'No voter yet' %}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane " id="tab2">
+                            <div class="row well-lg" >
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="well">
+                                        <h5 >{% trans 'Vote to this poll' %}</h5>
+                                        <a  class= "btn btn-block btn-custom " href="{% url 'vote' poll.id %}">{% trans 'Vote' %} {% bootstrap_icon "pencil" %}</a>
+                                    </div>
+                                </div>
+
+                                <div class="  col-xs-12 col-sm-4">
+                                    <div class="well">
+                                        <h5 >{% trans 'Copy this link' %}</h5>
+                                        <div class="input-group ">
+                                            <input type="text" class="form-control" id="vote_url"  value="http://localhost:8000{% url 'vote' poll.id %}">
+                                            <span class=" input-group-addon" data-clipboard-target="#vote_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="well">
+                                        <h5 >{% trans 'Share on social network' %}</h5>
+                                        <div class="  container-fluid ">
+                                            {% with url="http://strokes.imag.fr/whale3/index.do" text="whale4" via="whale4ad"  %}
+                                                <a href="http://twitter.com/share?url={{ url }}&text={{ text }}&via={{ via }}" target="_blank" class="btn twitter">
+                                                    <i class="fa fa-twitter"></i></a>
+                                                <a href="https://plus.google.com/share?url={{ url }}" target="_blank" class="btn google-plus">
+                                                    <i class="fa fa-google-plus"></i></a>
+                                                <a href="http://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="btn facebook">
+                                                    <i class="fa fa-facebook"></i></a>
+                                                <a href="http://www.linkedin.com/shareArticle?url={{ url }}&title={{ title }}&summary={{ summary }}&source={{ source_url }}" target="_blank" class="btn linkedin">
+                                                    <i class="fa fa-linkedin"></i></a>
+                                                <a href="mailto:? " target="_blank" class="btn email">
+                                                    <i class="fa fa-envelope"></i></a>
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row well-lg" >
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="well">
+                            <h5 >{% trans 'Vote to this poll' %}</h5>
+                            <a  class= "btn btn-block btn-custom " href="{% url 'vote' poll.id %}">{% trans 'Vote' %} {% bootstrap_icon "pencil" %}</a>
+                        </div>
+                    </div>
+
+                    <div class="  col-xs-12 col-sm-4">
+                        <div class="well">
+                            <h5 >{% trans 'Copy this link' %}</h5>
+                            <div class="input-group ">
+                                <input type="text" class="form-control" id="vote_url"  value="http://localhost:8000{% url 'vote' poll.id %}">
+                                <span class=" input-group-addon" data-clipboard-target="#vote_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="well">
+                            <h5 >{% trans 'Share on social network' %}</h5>
+                            <div class="  container-fluid ">
+                                {% with url="http://strokes.imag.fr/whale3/index.do" text="whale4" via="whale4ad"  %}
+                                    <a href="http://twitter.com/share?url={{ url }}&text={{ text }}&via={{ via }}" target="_blank" class="btn twitter">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                    <a href="https://plus.google.com/share?url={{ url }}" target="_blank" class="btn google-plus">
+                                        <i class="fa fa-google-plus"></i>
+                                    </a>
+                                    <a href="http://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="btn facebook">
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                    <a href="http://www.linkedin.com/shareArticle?url={{ url }}&title={{ title }}&summary={{ summary }}&source={{ source_url }}" target="_blank" class="btn linkedin">
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                    <a href="mailto:? " target="_blank" class="btn email">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+         {% if update_poll %}
+            <a href="{% url 'option' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+              <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
+
+          {% else %}
+              <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next"> {% trans 'Back to admin page' %}</a>
+         {% endif %}
+
+        </div>
+    </div>
+    <script src="{% static 'polls/js/invite.js' %}" type="text/javascript"></script>
+{% endblock %}

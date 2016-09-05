@@ -1,0 +1,128 @@
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {% block title %}
+            {% trans 'Whale4 - WHich ALternative is Elected' %}
+        {% endblock %}
+    </title>
+   <link href="{% static 'polls/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'polls/css/bootstrap-theme.min.css' %}" rel="stylesheet">
+    <link href="{% static 'polls/css/mfglabs_iconset.css' %}" rel="stylesheet">
+<link href="{% static 'polls/css/poll.css' %}" rel="stylesheet">
+ <link href="{% static 'polls/css/font-awesome.min.css' %}" rel="stylesheet" >
+
+  <script src="{% static 'polls/js/jquery-1.12.3.min.js' %}"></script>
+    <script src="{% static 'polls/js/bootstrap.min.js' %}"></script>
+
+{% block static-extra %}
+
+
+    <link href="{% static 'polls/css/preferences.css' %}" rel="stylesheet">
+    <link href="{% static 'polls/css/bootstrap-datepicker3.standalone.min.css' %}" rel="stylesheet">
+    <link  href="{% static 'polls/css/themes_smoothness_jquery-ui.css' %}" rel="stylesheet">
+
+
+    <link href="{% static 'polls/css/responsive-tables.css' %}" rel="stylesheet" >
+
+    <link href="{% static 'polls/css/bootstrap-switch.min.css' %}" rel="stylesheet" >
+
+    <!-- javascript -->
+
+
+    <script src="{% static 'polls/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'polls/js/responsive-tables.js' %}"></script>
+
+    <script src="{% static 'polls/js/bootstrap-switch.min.js' %}"></script>
+
+
+
+
+  {% endblock %}
+
+
+
+</head>
+<body >
+
+
+<nav class="navbar navbar-custom navbar-fixed-top ">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+             <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="/" ><img src="{% static 'polls/images/whale4-brand-circle.png' %}" alt="Whale4"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse" >
+            <ul  class="nav navbar-nav navbar-right">
+                <li><a href="/" >{% trans 'Home' %}</a></li>
+                <li><a href="{% url 'choice' %}">{% trans 'New poll' %}</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" >{% trans  'Developers'  %} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://github.com/theneurasthenicrat/whale4" target="_blank">{%trans 'Get the code' %}</a></li>
+                        <li><a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE" target="_blank">{% trans 'Code license' %}</a></li>
+                    </ul>
+                </li>
+                <li><a href="mailto:whale4ad@gmail.com"> {% trans 'Contact us'%}</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle navbar-user" data-toggle="dropdown">{% bootstrap_icon "user" %} {% if user.is_authenticated %}
+                        {{ user.nickname }}  {% endif %}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                            <li class="dropdown-header-custom">{% blocktrans with nickname=user.nickname %}Signed in as {{ nickname }}{% endblocktrans %}</li>
+                            <li><a href="{% url 'accountPoll' user.id %}" >{% bootstrap_icon "user" %} {% trans "Your profile" %}</a></li>
+                            <li><a href="{% url 'logout' %}" >{% bootstrap_icon "log-out" %} {% trans 'Log out' %} </a></li>
+                        {% else %}
+                            <li><a href="{% url 'register' %}" >{% bootstrap_icon "user" %} {% trans 'Sign up' %}</a></li>
+                            <li ><a href="{% url 'login' %}">{% bootstrap_icon "log-in" %}  {% trans 'Log in' %}</a></li>
+                        {% endif %}
+
+                    </ul>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{% static 'polls/images/language.png' %}" alt="language"/> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><button type="submit" class="flag" form="en"><img src="{% static 'polls/images/english.png' %}" alt="en" width="20px" height="12px"/> English</button></li>
+                      <li><button type="submit" class="flag" form="fr"><img src="{% static 'polls/images/french.png' %}" alt="fr" width="20px" height="12px"/> Français</button></li>
+		    </ul>
+		</li>
+
+                <form action="{% url 'set_language' %}" method="post" class=" navbar-form" id="fr">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="fr" />
+                </form>
+                <form action="{% url 'set_language' %}" method="post" class="navbar-form" id="en">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}" />
+                    <input name="language" type="hidden" value="en" />
+                </form>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+
+<div class="container-fluid">
+    <div class="container">
+        {% bootstrap_messages %}
+    </div>
+    {% block content %}
+        Default page
+    {% endblock %}
+
+
+</div>
+
+<script src="{% static 'polls/js/base.js' %}" type="text/javascript"></script>
+<footer></footer>
+</body>
+</html>
+

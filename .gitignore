@@ -1,5 +1,11 @@
 *__pycache__*
-whale4/settings.py
+whale4/secret_settings.py
 accounts/migrations/
 resetDB.sh
-whale4/migrations/
+polls/migrations/
+message.txt
+.idea/
+*.pyc
+locale/en/LC_MESSAGES/django.mo
+locale/fr/LC_MESSAGES/django.mo
+sql/

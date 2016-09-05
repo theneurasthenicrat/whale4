@@ -1,0 +1,107 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block static-extra %}
+    <script src="{% static 'polls/js/jquery-ui.multidatespicker.js' %}"></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+{% endblock %}
+{% block content %}
+    {% load bootstrap3 %}
+    <div class="container">
+         <div class="well">
+
+            <h2>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h2>
+            {% if update_poll %}
+            <h3>2. {% trans 'Add candidates to poll' %}</h3>
+              {% elif poll.option_choice and poll.option_modify %}
+
+                <h3>{% trans 'Add or remove candidates' %}</h3>
+               {% else %}
+                 <h3>{% trans 'Remove candidates' %}</h3>
+            {% endif %}
+        </div>
+
+        <div class="container-fluid thumbnail">
+            {% if update_poll %}
+                <div class="well-sm hidden-xs">
+                    <ol class="nav nav-pills-custom ">
+                        <li role="presentation" ><a href="{% url 'updatePoll' poll.id %}"> {% trans 'General parameters' %} {% bootstrap_icon "menu-right" %}</a></li>
+                        <li role="presentation" class="active" ><a href="#"> {% trans 'Add candidates' %}{% bootstrap_icon "menu-right" %}</a></li>
+                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Advanced parameters' %}{% bootstrap_icon "menu-right"%}</a></li>
+                        <li role="presentation" class="disabled"><a href="#"> {% trans 'Invite' %}</a></li>
+                    </ol>
+                </div>
+            {% endif %}
+            <div class="well-lg">
+                 <div class="container-fluid ">
+{% if poll.option_choice  %}
+                     <div class=" well-lg col-md-4 ">
+                <form  action="" method="post">
+                    {% csrf_token %}
+
+
+                     <div id="datepicker" class="ll-skin-cangas "> <p  class="bg-info help-block well-sm">{% trans 'Pick one or several dates' %}</p></div>
+
+                    {% bootstrap_form_errors form %}
+                    {% bootstrap_form form %}
+                    <button class="btn btn-custom" type="submit">{% trans 'Add' %} {% bootstrap_icon "ok" %} </button>
+                </form>
+                      </div>
+                  {% endif %}
+                  <div class=" col-md-8 ">
+                       {% if candidates %}
+        <div class="container-fluid form-login margin1">
+
+            <h4>{% trans 'List of current candidates' %}</h4>
+
+
+                <ul class="list-group">
+                    {% for c in candidates %}
+                        <li class="list-group-item">
+
+                            {{ c }}
+                            <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>
+                            <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
+                                <div class="modal-dialog ">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">{% blocktrans with c=c %}Delete "{{ c }}"{% endblocktrans %}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
+                                            <a href="/polls/deleteCandidate/{{c.poll.pk }}/{{c.id}}" class="btn btn-ok ">{% trans 'OK' %} </a >
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+
+        </div>
+      {% endif %}
+          </div>
+                 </div>
+            </div>
+            {% if update_poll %}
+                <a href="{% url 'updatePoll' poll.id %}" class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+                <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+            {% else %}
+                <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next">{% bootstrap_icon "undo" %} {% trans 'Back to admin page' %}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{% static 'polls/js/dateCandidate.js' %}" type="text/javascript"></script>
+{% endblock %}

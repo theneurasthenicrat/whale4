@@ -3,47 +3,99 @@
 # imports ####################################################################
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
+from django.utils.translation import ugettext_lazy as _
+import uuid
+from Crypto.Cipher import AES
+import base64
+import string, random
+import whale4.settings
+
+
+
+# decoder ####################################################################
+CERT_SIZE = 16
+
+# one-liner to sufficiently pad the text to be encrypted
+BS = 16
+pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+unpad = lambda s: s[:-1]
+
+# create a cipher object using the secret key
+cipher = AES.new(whale4.settings.SECRET_KEY)
+
 
 # models #####################################################################
 
+
+class User(models.Model):
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
+    nickname = models.CharField(verbose_name=_('Nickname *'), max_length=30)
+
+
 class WhaleUserManager(BaseUserManager):
-    def create_user(self, email, password, nickname, **kwargs):
-        user = self.model(
-            email=self.normalize_email(email),
-            nickname=nickname,
-            is_active=True,
-            **kwargs
-        )
+    def create_user(self, email, nickname, password=None,*args,**kwargs):
+        user = self.model(email=self.normalize_email(email), nickname=nickname,*args,**kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, nickname, **kwargs):
-        user = self.model(
-            email=self.normalize_email(email),
-            nickname=nickname,
-            is_staff=True,
-            is_admin=True,
-            is_active=True,
-            **kwargs
-        )
-        user.set_password(password)
+    def create_superuser(self, email, nickname, password,):
+        user = self.model(email=self.normalize_email(email), nickname=nickname,password=password)
+        user.is_admin = True
         user.save(using=self._db)
         return user
 
-class WhaleUser(AbstractBaseUser, PermissionsMixin):
-    USERNAME_FIELD = 'email'
 
-    email = models.EmailField(unique=True)
-    nickname = models.CharField(max_length=30)
+class WhaleUser(User, AbstractBaseUser):
+    email = models.EmailField(verbose_name=_('Email address *'), max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    
+
     objects = WhaleUserManager()
-    
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname']
+
     def get_full_name(self):
         return self.nickname
+
     def get_short_name(self):
         return self.nickname
+
+    def __str__(self):             
+        return self.nickname
+
+
+from polls.models import VotingPoll
+
+
+class UserAnonymous(User):
+    poll = models.ForeignKey(VotingPoll, on_delete=models.CASCADE)
+
+    @staticmethod
+    def nickname_generator(poll):
+        user = UserAnonymous.objects.filter(poll_id=poll).count() + 1
+        return 'Anonymous' + str(user)
+
+
+class WhaleUserAnonymous(UserAnonymous):
+    certificate = models.CharField(max_length=100)
+    email = models.EmailField(verbose_name=_('Email address'), max_length=255)
+
+    @staticmethod
+    def encodeAES(s, c=cipher):
+        return base64.b64encode(c.encrypt(pad(s)))
+
+    @staticmethod
+    def decodeAES(e, c=cipher):
+        return unpad(c.decrypt(base64.b64decode(e)))
+
+    @staticmethod
+    def id_generator(size=CERT_SIZE, chars=string.ascii_lowercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
+
+
+

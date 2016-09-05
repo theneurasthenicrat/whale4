@@ -1,0 +1,130 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+
+<div class="container">
+  <div class="well clearfix">
+    <h2>{{ poll.title }}</h2>
+    <p class="description">{{ poll.description }}</p>
+  </div>
+
+  {% if votes %}
+  <div class="table-responsive">
+    <table class="table poll-table">
+      <thead>
+        {% if poll.poll_type == "Date" %}
+        <tr>
+          <td class="border" colspan="2" ></td>
+          {% for m in months %}
+          <th colspan="{{ m.value }}">
+            {{ m.label }}
+          </th>
+          {% endfor %}
+        </tr>
+        <tr>
+          <td class="border" colspan="2" ></td>
+          {% for d in days %}
+          <th colspan="{{ d.value }}">
+            {{ d.label }}
+          </th>
+          {% endfor %}
+        </tr>
+        {% if cand %}
+        <tr>
+          <td class="border" colspan="2" ></td>
+          {% for c in candidates %}
+          <th>
+            {{ c.candidate }}
+          </th>
+          {% endfor %}
+        </tr>
+        {% endif %}
+        {% else %}
+
+        <tr>
+          <td class="border" colspan="2" ></td>
+          {% for c in candidates %}
+          <th>
+            {{ c.candidate }}
+          </th>
+          {% endfor %}
+        </tr>
+        {% endif %}
+      </thead>
+
+      <tbody>
+        {% for v in votes %}
+        <tr>
+          <td class="controls">
+            {% if poll.option_experimental%}		      
+
+            {% elif poll.option_ballots %}		      
+            {% else %}
+            <a href="/polls/updateVote/{{ poll.id }}/{{ v.id }}" >{% bootstrap_icon "pencil" %}</a>
+	    
+            <a href="#" class="remove" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{% bootstrap_icon "remove" %}</a>
+            <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{% trans 'Delete this vote' %} </h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>{% trans 'Do you really want to delete this vote?' %}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="/polls/deleteVote/{{ poll.id }}/{{ v.id }}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
+                    <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
+                  </div>
+		  
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </td>
+          <th>
+            {{ v.nickname }}
+          </th>
+          {% if poll.option_ballots and  closing_poll%}
+
+          {% else %}
+          {% for s in v.scores %}
+          <td class="{{ s.class }}">{{ s.text }}</td>
+          {% endfor %}
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="well">
+    <i>{% trans 'No vote yet... Do you want to be the first one?' %}</i>
+  </div>
+  {% endif %}
+
+
+  <div class="row">
+    <div class="col-md-3 col-lg-3"></div>
+    <div class=" col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2">
+      <a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2" >
+      <a href="{% url 'results' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "stats" %} {% trans 'results' %}</a>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
+      <a href="{% url 'admin' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "cog" %} {% trans 'settings' %}</a>
+    </div>
+
+    <div class="col-md-3 col-lg-3"></div>
+  </div>
+
+
+
+</div>
+
+{% endblock %}

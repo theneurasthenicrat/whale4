@@ -1,0 +1,22 @@
+{% extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% block content %}
+     <div class="container ">
+                <div class=" form-login">
+                        <h4>{% trans 'Contact us'%}</h4>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form form  %}
+
+                            <div class="wrapper ">
+                                <button type="submit" class="btn btn-custom btn-lg col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    {% bootstrap_icon "ok" %} {%trans 'Send message' %}
+                                </button>
+
+                            </div>
+                        </form>
+                </div>
+
+    </div>
+{% endblock %}

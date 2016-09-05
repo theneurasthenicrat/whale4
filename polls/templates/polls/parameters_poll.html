@@ -1,0 +1,46 @@
+{% extends "polls/base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="well">
+            {% if update_poll %}
+                <h2> {% trans 'New poll' %}</h2>
+                <h3>1. {% trans 'General parameters' %}</h3>
+            {% else %}
+                <h2>{% trans 'Poll' %} : {{ poll.title }}</h2>
+                <h3>{% trans 'Parameters' %}</h3>
+            {% endif %}
+
+        </div>
+
+        <div class="thumbnail  clearfix ">
+            {% if update_poll %}
+                <div class="well-sm hidden-xs">
+                    <ol class="nav nav-pills-custom">
+                        <li  class="active "><a href="#">{% trans 'General parameters' %} {% bootstrap_icon "chevron-right" %}</a></li>
+                        <li class="disabled"><a href="#">{% trans 'Candidates' %} {% bootstrap_icon "chevron-right"%}</a></li>
+                        <li  class="disabled"><a href="#">{% trans 'Advanced parameters' %} {% bootstrap_icon "chevron-right"%}</a></li>
+                        <li  class="disabled"><a href="#">{% trans 'Invite' %}</a></li>
+                    </ol>
+                </div>
+            {% endif %}
+
+            <form action="" method="post" class="well-lg" >
+                {% csrf_token %}
+                {% bootstrap_form_errors form  %}
+                {% bootstrap_form form %}
+                {% if update_poll %}
+                    <button type="submit" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</button>
+                {% else %}
+                    <button type="submit" class="btn btn-custom next">{% trans 'Submit' %} {% bootstrap_icon "ok" %}</button>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+ {% if not update_poll %}
+    <script src="{% static 'polls/js/poll_parameters.js' %}" type="text/javascript"></script>
+     {% endif %}
+{% endblock %}

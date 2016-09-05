@@ -1,0 +1,1088 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-29 13:20+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/forms.py:9 accounts/models.py:52
+msgid "Email address *"
+msgstr "Adresse e-mail *"
+
+#: accounts/forms.py:9 accounts/forms.py:21
+msgid "Enter your email"
+msgstr "Votre adresse e-mail"
+
+#: accounts/forms.py:10 accounts/forms.py:14
+msgid "Enter your password"
+msgstr "Votre mot de passe"
+
+#: accounts/forms.py:10 accounts/forms.py:14
+msgid "Password *"
+msgstr "Mot de passe *"
+
+#: accounts/forms.py:15
+msgid "Confirm your password"
+msgstr "Confirmez votre mot de passe"
+
+#: accounts/forms.py:15
+msgid "Password confirmation *"
+msgstr "Confirmation de mot de passe"
+
+#: accounts/forms.py:22 polls/forms.py:86
+msgid "Enter your nickname"
+msgstr "Votre pseudonyme"
+
+#: accounts/forms.py:30
+msgid "Passwords don't match"
+msgstr "Les mots de passe ne concordent pas..."
+
+#: accounts/forms.py:43 accounts/models.py:85
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+#: accounts/models.py:34 polls/forms.py:86
+msgid "Nickname *"
+msgstr "Pseudonyme *"
+
+#: accounts/templates/accounts/contact.html:7
+#: polls/templates/polls/base.html:74
+msgid "Contact us"
+msgstr "Nous contacter"
+
+#: accounts/templates/accounts/contact.html:14
+msgid "Send message"
+msgstr "Envoyer le message"
+
+#: accounts/templates/accounts/login.html:10
+#, python-format
+msgid "You are already logged in as %(nickname)s..."
+msgstr "Vous êtes connecté en tant que %(nickname)s..."
+
+#: accounts/templates/accounts/login.html:12
+#: accounts/templates/accounts/login.html:19 polls/templates/polls/base.html:85
+#: polls/templates/polls/home.html:64
+msgid "Log in"
+msgstr "Se connecter"
+
+#: accounts/templates/accounts/login.html:23
+msgid "No account yet?"
+msgstr "Pas encore de compte ?"
+
+#: accounts/templates/accounts/login.html:23
+msgid "Create one"
+msgstr "En créer un"
+
+#: accounts/templates/accounts/register.html:9
+msgid "Create a new account"
+msgstr "Créer un compte"
+
+#: accounts/templates/accounts/register.html:15
+#: polls/templates/polls/base.html:84 polls/templates/polls/home.html:63
+msgid "Sign up"
+msgstr "S'inscrire"
+
+#: accounts/templates/accounts/user_detail.html:9
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: accounts/templates/accounts/user_detail.html:10
+msgid "Manage your polls"
+msgstr "Gestion de vos sondages"
+
+#: accounts/templates/accounts/user_detail.html:14
+msgid "The polls you administrate"
+msgstr "Les sondages que vous administrez"
+
+#: accounts/templates/accounts/user_detail.html:22
+#: accounts/templates/accounts/user_detail.html:84
+msgid "Title"
+msgstr "Titre"
+
+#: accounts/templates/accounts/user_detail.html:25
+#: accounts/templates/accounts/user_detail.html:87
+msgid "Description"
+msgstr "Description"
+
+#: accounts/templates/accounts/user_detail.html:43
+#, python-format
+msgid "Delete poll \"%(title)s\""
+msgstr "Effacer le sondage « %(title)s »"
+
+#: accounts/templates/accounts/user_detail.html:46
+msgid "Do you really want to delete this poll?"
+msgstr "Êtes-vous certain de vouloir effacer ce sondage ?"
+
+#: accounts/templates/accounts/user_detail.html:49
+#: accounts/templates/accounts/user_detail.html:110
+msgid "No"
+msgstr "Tout compte fait, non"
+
+#: accounts/templates/accounts/user_detail.html:50
+#: accounts/templates/accounts/user_detail.html:111
+msgid "Yes"
+msgstr "Oui !"
+
+#: accounts/templates/accounts/user_detail.html:69
+msgid "You have not created any poll so far."
+msgstr "Vous n'avez encore créé aucun sondage."
+
+#: accounts/templates/accounts/user_detail.html:76
+msgid "The polls you were involved in as a voter"
+msgstr "Les sondages auxquels vous avez participé en tant que votant"
+
+#: accounts/templates/accounts/user_detail.html:104
+msgid "Delete your vote"
+msgstr "Supprimer votre vote"
+
+#: accounts/templates/accounts/user_detail.html:107
+msgid "Do you really want to delete your vote?"
+msgstr "Êtes vous certain de vouloir effacer votre vote pour ce sondage ?"
+
+#: accounts/templates/accounts/user_detail.html:130
+msgid "You did not participate in any poll yet."
+msgstr "Vous n'avez pris part à aucun sondage pour le moment."
+
+#: accounts/views.py:28
+msgid "Your account has been successfully created."
+msgstr ""
+"<h4>Bienvenue !</h4><p>Votre compte a bien été créé. La Baleine vous "
+"souhaite la bienvenue</p>"
+
+#: accounts/views.py:44
+#, python-format
+msgid "You are logged in as %(username)s"
+msgstr ""
+"<h4>Connexion réussie !</h4><p>Vous êtes connecté en tant que %(username)s.</"
+"p><p>Whalecome...</p>"
+
+#: accounts/views.py:50
+msgid "unknown WhaleUser or bad password."
+msgstr ""
+"<h4>Navré, mais...</h4><p>...ce nom d'utilisateur est inconnu ou bien le mot "
+"de passe est erroné.</p><p>Essayez donc à nouveau.</p>"
+
+#: accounts/views.py:58
+msgid "You have been successfully logged out."
+msgstr ""
+"<h4>Déconnexion réussie</h4><p>Vous êtes déconnecté de la Baleine.</"
+"p><p>Vous pouvez maintenant éteindre votre ordinateur ou dispositif mobile "
+"et reprendre une activité normale.</p>"
+
+#: polls/forms.py:19
+msgid "Enter title"
+msgstr "Le titre du sondage"
+
+#: polls/forms.py:20
+msgid "Enter closing date"
+msgstr "La date de fin du sondage"
+
+#: polls/forms.py:21
+msgid "Enter description"
+msgstr "La description du sondage"
+
+#: polls/forms.py:22 polls/forms.py:23
+msgid "Yes-option"
+msgstr "Oui"
+
+#: polls/forms.py:22 polls/forms.py:23
+msgid "No-option"
+msgstr "Non"
+
+#: polls/forms.py:57
+msgid "Candidate"
+msgstr "Candidat"
+
+#: polls/forms.py:75
+msgid "Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)"
+msgstr ""
+"Donnez une étiquette au créneau à ajouter (par exemple « matin », ou "
+"« 10h-12h »...)"
+
+#: polls/forms.py:104
+msgid "you must order all candidates"
+msgstr "Vous devez ordonner tous les candidats"
+
+#: polls/forms.py:111
+msgid "You must give a score to at least one candidate!"
+msgstr "Notez au moins un candidat !"
+
+#: polls/forms.py:136
+msgid "certificate"
+msgstr "certificat"
+
+#: polls/models.py:11
+msgid "title *"
+msgstr "titre *"
+
+#: polls/models.py:12
+msgid "description"
+msgstr "description"
+
+#: polls/models.py:14
+msgid "closing date * "
+msgstr "date de fin du sondage *"
+
+#: polls/models.py:23
+msgid "Positive Negative scale (--, -, 0, +, ++)"
+msgstr "5 niveaux Positifs/Négatifs (--, -, 0, +, ++)"
+
+#: polls/models.py:24
+msgid "Approval Voting (Yes / No)"
+msgstr "Approbation (Oui/Non)"
+
+#: polls/models.py:25
+msgid "Ranking with ties"
+msgstr "Ordre avec ex-aequo"
+
+#: polls/models.py:26
+msgid "Ranking (no ties)"
+msgstr "Ordre sans ex-aequo"
+
+#: polls/models.py:27
+msgid "Scores"
+msgstr "Scores"
+
+#: polls/models.py:30
+msgid "Standard Poll"
+msgstr "Sondage classique"
+
+#: polls/models.py:31
+msgid "Date Poll"
+msgstr "Sondage type date"
+
+#: polls/models.py:33
+msgid "poll type"
+msgstr "type de sondage"
+
+#: polls/models.py:35
+msgid "Preference model * "
+msgstr "Préferences"
+
+#: polls/models.py:38
+msgid "Choice \"I don't know\" is allowed"
+msgstr ""
+"Un votant peut laisser des candidats non classés (<i>i.e.</i> donner la "
+"valeur <span class='label label-primary'>Je ne sais pas</span> à des "
+"candidats)"
+
+#: polls/models.py:40
+msgid "Add or remove candidates is allowed"
+msgstr ""
+"L'administrateur (vous, donc) peut ajouter ou retirer des candidats pendant "
+"la vie du sondage"
+
+#: polls/models.py:42
+msgid "Poll's status"
+msgstr "Statut du sondage"
+
+#: polls/models.py:47
+msgid "candidate"
+msgstr "candidat"
+
+#: polls/models.py:57
+msgid "date"
+msgstr "date"
+
+#: polls/models.py:68
+msgid "voter"
+msgstr "votant"
+
+#: polls/models.py:69
+msgid "value"
+msgstr "valeur"
+
+#: polls/templates/polls/admin.html:9
+msgid "Update your poll"
+msgstr "Administration du sondage"
+
+#: polls/templates/polls/admin.html:10 polls/templates/polls/candidate.html:10
+#: polls/templates/polls/certificate.html:8
+#: polls/templates/polls/date_candidate.html:16
+#: polls/templates/polls/invite.html:12 polls/templates/polls/option.html:8
+#, python-format
+msgid "Poll \"%(title)s\""
+msgstr "Sondage « %(title)s »"
+
+#: polls/templates/polls/admin.html:14
+msgid "Update parameters"
+msgstr "Paramètres généraux et avancés"
+
+#: polls/templates/polls/admin.html:17 polls/templates/polls/candidate.html:15
+#: polls/templates/polls/date_candidate.html:21
+msgid "Add or remove candidates"
+msgstr "Ajouter / supprimer des candidats"
+
+#: polls/templates/polls/admin.html:20 polls/templates/polls/invite.html:14
+#: polls/templates/polls/invite.html:16
+msgid "Invite the voters"
+msgstr "Invitation des participants"
+
+#: polls/templates/polls/admin.html:24
+msgid "Change the status of poll"
+msgstr "Changer le statut du sondage"
+
+#: polls/templates/polls/admin.html:28 polls/templates/polls/invite.html:186
+msgid "Go to the poll"
+msgstr "La page du sondage"
+
+#: polls/templates/polls/all_result.html:13
+msgid "See the results of poll"
+msgstr "Visualiser les résultats du sondage"
+
+#: polls/templates/polls/all_result.html:23 polls/views.py:633
+msgid "scoring method title"
+msgstr "Méthodes de calcul des scores"
+
+#: polls/templates/polls/all_result.html:24
+msgid "scoring method message"
+msgstr "Où l'on compte un nombre de points par candidat..."
+
+#: polls/templates/polls/all_result.html:33 polls/views.py:641
+msgid "condorcet method title"
+msgstr "Méthodes de Condorcet"
+
+#: polls/templates/polls/all_result.html:34
+msgid "condorcet method message"
+msgstr "Où l'on engage des duels entre tous les candidats..."
+
+#: polls/templates/polls/all_result.html:44 polls/views.py:648
+msgid "runoff method title"
+msgstr "Méthodes à plusieurs tours"
+
+#: polls/templates/polls/all_result.html:45
+msgid "runoff method message"
+msgstr "Où l'on élimine les candidats un tour après l'autre..."
+
+#: polls/templates/polls/all_result.html:54 polls/views.py:654
+msgid "randomized method title"
+msgstr "Méthode de tournois aléatoires"
+
+#: polls/templates/polls/all_result.html:55
+msgid "randomized method message"
+msgstr "Où l'on simule un tournoi sportif entre candidats..."
+
+#: polls/templates/polls/all_result.html:65 polls/templates/polls/vote.html:135
+msgid "Back to the poll"
+msgstr "Retour au sondage"
+
+#: polls/templates/polls/base.html:12 polls/templates/polls/home.html:13
+msgid "Whale4 - WHich ALternative is Elected"
+msgstr "Whale4 - WHich ALternative is Elected"
+
+#: polls/templates/polls/base.html:65
+msgid "Home"
+msgstr "Accueil"
+
+#: polls/templates/polls/base.html:66
+#: polls/templates/polls/parameters_poll.html:9
+msgid "New poll"
+msgstr "Nouveau Sondage"
+
+#: polls/templates/polls/base.html:68
+msgid "Developers"
+msgstr "Développeurs"
+
+#: polls/templates/polls/base.html:70 polls/templates/polls/home.html:177
+msgid "Get the code"
+msgstr "La page GitHub du projet"
+
+#: polls/templates/polls/base.html:71
+msgid "Code license"
+msgstr "Licence"
+
+#: polls/templates/polls/base.html:80 polls/templates/polls/home.html:59
+#, python-format
+msgid "Signed in as %(nickname)s"
+msgstr "Vous êtes connecté en tant que %(nickname)s..."
+
+#: polls/templates/polls/base.html:81 polls/templates/polls/home.html:60
+msgid "Your profile"
+msgstr "Votre profil"
+
+#: polls/templates/polls/base.html:82 polls/templates/polls/home.html:61
+msgid "Log out"
+msgstr "Se déconnecter"
+
+#: polls/templates/polls/candidate.html:12
+#: polls/templates/polls/date_candidate.html:18
+msgid "Add candidates to poll"
+msgstr "Ajouter des candidats au sondage"
+
+#: polls/templates/polls/candidate.html:17
+#: polls/templates/polls/date_candidate.html:23
+#, fuzzy
+#| msgid "Add or remove candidates"
+msgid "Remove candidates"
+msgstr "Ajouter / supprimer des candidats"
+
+#: polls/templates/polls/candidate.html:25
+#: polls/templates/polls/date_candidate.html:31
+#: polls/templates/polls/invite.html:23 polls/templates/polls/option.html:14
+#: polls/templates/polls/parameters_poll.html:10
+#: polls/templates/polls/parameters_poll.html:22
+msgid "General parameters"
+msgstr "Paramètres généraux"
+
+#: polls/templates/polls/candidate.html:26
+#: polls/templates/polls/parameters_poll.html:23
+msgid "Candidates"
+msgstr "Candidats"
+
+#: polls/templates/polls/candidate.html:27
+#: polls/templates/polls/date_candidate.html:33
+#: polls/templates/polls/invite.html:25 polls/templates/polls/option.html:9
+#: polls/templates/polls/option.html:16
+#: polls/templates/polls/parameters_poll.html:24
+msgid "Advanced parameters"
+msgstr "Paramètres avancés"
+
+#: polls/templates/polls/candidate.html:28
+#: polls/templates/polls/date_candidate.html:34
+#: polls/templates/polls/invite.html:26 polls/templates/polls/option.html:17
+#: polls/templates/polls/parameters_poll.html:25
+msgid "Invite"
+msgstr "Invitation des votants"
+
+#: polls/templates/polls/candidate.html:42
+#: polls/templates/polls/date_candidate.html:50
+msgid "Add"
+msgstr "Ajouter"
+
+#: polls/templates/polls/candidate.html:53
+#: polls/templates/polls/date_candidate.html:58
+msgid "List of current candidates"
+msgstr "Candidats du sondage"
+
+#: polls/templates/polls/candidate.html:66
+#: polls/templates/polls/date_candidate.html:72
+#: polls/templates/polls/invite.html:73
+#, python-format
+msgid "Delete \"%(c)s\""
+msgstr "Supprimer le candidat « %(c)s »"
+
+#: polls/templates/polls/candidate.html:69
+#: polls/templates/polls/date_candidate.html:75
+#: polls/templates/polls/invite.html:76
+#, python-format
+msgid "Do you really want to delete \"%(c)s\"?"
+msgstr ""
+"Êtes-vous certain de vouloir enlever « %(c)s » de la liste des candidats du "
+"sondage ?"
+
+#: polls/templates/polls/candidate.html:72
+#: polls/templates/polls/date_candidate.html:78
+#: polls/templates/polls/invite.html:80
+#: polls/templates/polls/secret_view.html:45
+#: polls/templates/polls/view_poll.html:81
+msgid "Cancel"
+msgstr "Tout compte fait, non"
+
+#: polls/templates/polls/candidate.html:73
+#: polls/templates/polls/date_candidate.html:79
+#: polls/templates/polls/invite.html:79
+#: polls/templates/polls/secret_view.html:44
+#: polls/templates/polls/view_poll.html:80
+msgid "OK"
+msgstr "Oui !"
+
+#: polls/templates/polls/candidate.html:90
+#: polls/templates/polls/date_candidate.html:98
+#: polls/templates/polls/invite.html:185 polls/templates/polls/option.html:28
+msgid "Previous"
+msgstr "Précédent"
+
+#: polls/templates/polls/candidate.html:91
+#: polls/templates/polls/date_candidate.html:99
+#: polls/templates/polls/option.html:27
+#: polls/templates/polls/parameters_poll.html:35
+msgid "Next"
+msgstr "Suivant"
+
+#: polls/templates/polls/candidate.html:93
+#: polls/templates/polls/date_candidate.html:101
+#: polls/templates/polls/invite.html:189
+msgid "Back to admin page"
+msgstr "Retour à la page d'administration"
+
+#: polls/templates/polls/certificate.html:9
+msgid "Secret ballot"
+msgstr "Sondage à bulletins secrets"
+
+#: polls/templates/polls/certificate.html:18
+msgid "Save"
+msgstr "Enregistrer"
+
+#: polls/templates/polls/date_candidate.html:32
+#: polls/templates/polls/invite.html:24 polls/templates/polls/option.html:15
+msgid "Add candidates"
+msgstr "Ajouter un candidat"
+
+#: polls/templates/polls/date_candidate.html:46
+msgid "Pick one or several dates"
+msgstr ""
+
+#: polls/templates/polls/detail_result.html:17
+msgid "More about the"
+msgstr "À propos des"
+
+#: polls/templates/polls/detail_result.html:56
+msgid "Back to the results"
+msgstr "Retour aux résultats"
+
+#: polls/templates/polls/email.html:11
+msgid " Whale4 - WHich ALternative is Elected"
+msgstr "Whale4 - WHich ALternative is Elected"
+
+#: polls/templates/polls/email.html:15
+msgid "WHich ALternative is Elected"
+msgstr "Whale4 - WHich ALternative is Elected"
+
+#: polls/templates/polls/email.html:17
+#, python-format
+msgid "Email text template with url %(url)s and certificate %(certi)s."
+msgstr ""
+
+#: polls/templates/polls/home.html:46
+msgid "About"
+msgstr "À propos"
+
+#: polls/templates/polls/home.html:49
+msgid "Credits"
+msgstr "Équipe"
+
+#: polls/templates/polls/home.html:52
+msgid "Code/Data"
+msgstr "Code / Données"
+
+#: polls/templates/polls/home.html:108
+msgid "Give it a try?"
+msgstr "<p>Vous voulez essayer ? Participez au sondage de démonstration :</p>"
+
+#: polls/templates/polls/home.html:113
+msgid "demo"
+msgstr "Votez"
+
+#: polls/templates/polls/home.html:122
+msgid "What is Whale"
+msgstr "Qu'est-ce que la baleine ?"
+
+#: polls/templates/polls/home.html:128
+msgid "What is Whale left"
+msgstr ""
+"<p>Whale<sup>4</sup> est une application Web dédiée à la décision collective "
+"et au vote « profane », et devrait vous aider à vous décider collectivement "
+"entre plusieurs options. Vous pouvez à cet effet <a href=\"/polls/choice"
+"\">créer un sondage</a>, inviter des gens à y participer, et visualiser les "
+"résultats.</p>"
+
+#: polls/templates/polls/home.html:131
+msgid "What is Whale right"
+msgstr ""
+"<p>Whale<sup>4</sup> propose plusieurs modes d'expression des préférences, "
+"et s'appuie sur la <a href=\"https://fr.wikipedia.org/wiki/Syst%C3%A8me_"
+"%C3%A9lectoral\">théorie du vote</a> pour éclairer les résultats.</"
+"p><p>Whale<sup>4</sup> est un projet <a href=\"http://www.fsf.org/\">libre</"
+"a> : vous pouvez en télécharger le code et l'utiliser comme bon vous semble."
+"</p>"
+
+#: polls/templates/polls/home.html:140
+msgid "Who is behind Whale"
+msgstr "Qui est donc derrière Whale ?"
+
+#: polls/templates/polls/home.html:146
+msgid "Who is behind Whale desc"
+msgstr ""
+"<p>Whale est développé par une équipe de chercheurs au <a href=\"http://www."
+"liglab.fr/\">Laboratoire d'Informatique de Grenoble</a>. Son développement a "
+"été en partie financé par le projet ANR CoCoRICo-CoDec portant sur le <a "
+"href=\"http://www.illc.uva.nl/COMSOC/\">choix social computationnel</a>.</"
+"p><p>Jetez donc un coup d'œil à la <a href=\"/polls/contact\">page de "
+"contacts</a> si vous voulez voir la liste des contributeurs et savoir "
+"comment contacter l'actuel <a href=\"http://recherche.noiraudes.net/"
+"\">gardien de la baleine</a>.</p>"
+
+#: polls/templates/polls/home.html:163
+msgid "Developers and researchers"
+msgstr "Développeurs et chercheurs"
+
+#: polls/templates/polls/home.html:169
+msgid "Download data desc"
+msgstr ""
+"<p>L'un des objectifs de Whale est de servir la recherche en théorie du vote "
+"en fournissant des jeux de données sur les élections.</p><p>Nourrissez la "
+"baleine en sondages; elle vous le rendra bien en données !</p>"
+
+#: polls/templates/polls/home.html:171
+msgid "Goto data download"
+msgstr "Les données"
+
+#: polls/templates/polls/home.html:175
+msgid "Source code desc"
+msgstr ""
+"<p>Whale est un projet libre. Vous pouvez en télécharger le code source, le "
+"modifier et l'utiliser pour vos propres besoins.</p><p>Vous voulez "
+"contribuer ? Vous êtes le / la bienvenu(e) !</p>"
+
+#: polls/templates/polls/invite.html:33
+msgid "Add the voters"
+msgstr "Ajouter des votants"
+
+#: polls/templates/polls/invite.html:34
+msgid "Share vote's link "
+msgstr "Partager le lien"
+
+#: polls/templates/polls/invite.html:45
+msgid "Add one or several email addresses of voters."
+msgstr ""
+"Ajouter une ou plusieurs adresses e-mail (séparées par des virgules, points-"
+"virgules ou sauts de lignes)."
+
+#: polls/templates/polls/invite.html:52
+#: polls/templates/polls/parameters_poll.html:37
+#: polls/templates/polls/status_poll.html:17 polls/templates/polls/vote.html:58
+#: polls/templates/polls/vote.html.py:138
+msgid "Submit"
+msgstr "Envoyer"
+
+#: polls/templates/polls/invite.html:60
+msgid "List of current voters"
+msgstr "Registre électoral"
+
+#: polls/templates/polls/invite.html:92
+msgid "No voter yet"
+msgstr "Pas de votant pour l'instant"
+
+#: polls/templates/polls/invite.html:103 polls/templates/polls/invite.html:144
+msgid "Vote to this poll"
+msgstr "Voter pour ce sondage"
+
+#: polls/templates/polls/invite.html:104 polls/templates/polls/invite.html:145
+msgid "Vote"
+msgstr "Voter"
+
+#: polls/templates/polls/invite.html:110 polls/templates/polls/invite.html:151
+msgid "Copy this link"
+msgstr "Copier le lien vers le sondage"
+
+#: polls/templates/polls/invite.html:119 polls/templates/polls/invite.html:160
+msgid "Share on social network"
+msgstr "Si vous êtes d'humeur sociale, partagez..."
+
+#: polls/templates/polls/new_poll.html:9
+msgid "Create a new poll"
+msgstr "Nouveau Sondage"
+
+#: polls/templates/polls/new_poll.html:10
+msgid "Which kind of poll do you want to create?"
+msgstr "Quel type de sondage voulez-vous créer ?"
+
+#: polls/templates/polls/new_poll.html:15
+msgid "Open ballot"
+msgstr "Sondage ouvert"
+
+#: polls/templates/polls/new_poll.html:16
+msgid "Everyone can see everyone else's votes and names."
+msgstr ""
+"Un sondage traditionnel sans enjeu fort : tous les participants peuvent voir "
+"les votes exprimés."
+
+#: polls/templates/polls/new_poll.html:20
+msgid "Standard poll"
+msgstr "Sondage classique"
+
+#: polls/templates/polls/new_poll.html:21
+msgid "Choose among several custom alternatives."
+msgstr ""
+"Où il s'agit de choisir entre plusieurs options fixées librement (<i>e.g.</"
+"i> élire un représentant, choisir un restaurant...)"
+
+#: polls/templates/polls/new_poll.html:24
+msgid "Date poll"
+msgstr "Choix dans la date"
+
+#: polls/templates/polls/new_poll.html:25
+msgid "Find the best date for an event"
+msgstr "Où l'on cherche la meilleure date pour un événement."
+
+#: polls/templates/polls/new_poll.html:31
+msgid "Secret ballot poll"
+msgstr "Sondage à bulletins secrets"
+
+#: polls/templates/polls/new_poll.html:32
+msgid "Secret ballot explanation."
+msgstr ""
+"Une élection classique dans les formes : les bulletins sont secrets jusqu'à "
+"la fermeture du sondage. Après, ils sont rendus publics, mais sous une forme "
+"anonyme (<i>i.e.</i> les noms des électeurs ne sont pas divulgués)."
+
+#: polls/templates/polls/new_poll.html:37
+msgid "Experimental ballot"
+msgstr "Expérimentation de vote"
+
+#: polls/templates/polls/new_poll.html:38
+msgid "Experimental ballot explanation."
+msgstr ""
+"Un cadre d'expérimentation de vote (oui, on fait de la <i>science</i> ici) : "
+"les votants participent de manière anonyme. L'administrateur peut contrôler "
+"la manière dont ils participent et voir les résultats."
+
+#: polls/templates/polls/parameters_poll.html:12
+msgid "Poll"
+msgstr "Sondage"
+
+#: polls/templates/polls/parameters_poll.html:13
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: polls/templates/polls/secret_view.html:38
+#: polls/templates/polls/view_poll.html:74
+msgid "Delete this vote"
+msgstr "Supprimer ce vote"
+
+#: polls/templates/polls/secret_view.html:41
+#: polls/templates/polls/view_poll.html:77
+msgid "Do you really want to delete this vote?"
+msgstr "Êtes-vous certain de vouloir effacer ce vote ?"
+
+#: polls/templates/polls/secret_view.html:65
+msgid "no vote yet"
+msgstr "Pas encore de vote"
+
+#: polls/templates/polls/status_poll.html:8
+msgid "Poll :"
+msgstr "Sondage :"
+
+#: polls/templates/polls/status_poll.html:9
+msgid "change the status of poll"
+msgstr "Changer le statut du sondage"
+
+#: polls/templates/polls/view_poll.html:106
+msgid "No vote yet... Do you want to be the first one?"
+msgstr "Pas de vote pour l'instant... Voulez vous être le premier ?"
+
+#: polls/templates/polls/view_poll.html:114
+msgid "vote"
+msgstr "Voter"
+
+#: polls/templates/polls/view_poll.html:117
+msgid "results"
+msgstr "Résultats"
+
+#: polls/templates/polls/view_poll.html:120
+msgid "settings"
+msgstr "Paramètres"
+
+#: polls/templates/polls/vote.html:15
+msgid "Vote!"
+msgstr "La page du vote..."
+
+#: polls/templates/polls/vote.html:34
+msgid ""
+" Click on the names of the unsorted candidates <span class=\"label label-"
+"default\">left frame</span>\n"
+"                                to rank them <span class=\"label label-"
+"default\">right frame</span> ."
+msgstr ""
+"Cliquez sur les noms des candidats non classés (à <span class=\"label label-"
+"default\">gauche</span>) afin de les classer à <span class=\"label label-"
+"default\">droite</span>."
+
+#: polls/templates/polls/vote.html:37
+msgid "Unsorted candidates"
+msgstr "Candidats non classés"
+
+#: polls/templates/polls/vote.html:46
+msgid ""
+" You can put back a sorted candidate <span class=\"label label-default"
+"\">right</span>\n"
+"                                to the pool of unsorted candidates <span "
+"class=\"label label-default\">left</span>  by clicking on it."
+msgstr ""
+" Vous pouvez remettre un candidat déjà classé (à <span class=\"label label-"
+"default\">droite</span>)\n"
+" dans l'ensemble des candidats non classés (à <span class=\"label label-"
+"default\">gauche</span>) en cliquant sur celui-ci."
+
+#: polls/templates/polls/vote.html:49
+msgid "Sorted candidates"
+msgstr "Candidats classés"
+
+#: polls/views.py:36 polls/views.py:69
+msgid "you are not the poll administrator"
+msgstr ""
+"<h4>Bien tenté, mais...</h4><p>Vous n'êtes pas l'administrateur du sondage. "
+"Désolé...</p>"
+
+#: polls/views.py:47
+msgid "Experimental vote can not be updated"
+msgstr ""
+"<h4>Hum...</h4><p>Quelque chose de louche s'est passé : vous tentez de "
+"mettre un jour un vote pour un sondage de type expérimental. Ce n'est pas "
+"possible.</p>"
+
+#: polls/views.py:53 polls/views.py:59
+msgid "This is not your vote"
+msgstr ""
+"<h4>Bien tenté, mais...</h4><p>Ce vote ne vous appartient pas. N'essayez "
+"donc pas de tricher...</p>"
+
+#: polls/views.py:72
+msgid "The poll is not closed"
+msgstr "<h4>Soyez patient...</h4><p>Le sondage n'est pas encore clôt...</p>"
+
+#: polls/views.py:104
+msgid "You must add at least two candidates"
+msgstr "<h4>Oups...</h4><p>Vous devez ajouter au moins deux candidats.</p>"
+
+#: polls/views.py:172
+msgid "General parameters successfully created!"
+msgstr ""
+"<h4>Sondage créé</h4><p>Votre sondage a été créé. Maintenant, ajoutez des "
+"candidats et réglez les paramètres avancés.</p>"
+
+#: polls/views.py:192
+msgid "General parameters successfully updated!"
+msgstr ""
+"<h4>Paramètres mis à jour</h4><p>Les paramètres généraux du sondage ont été "
+"mis à jour.</p>"
+
+#: polls/views.py:195
+msgid "Parameters are successfully updated!"
+msgstr ""
+"<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
+"été mis à jour.</p>"
+
+#: polls/views.py:206
+msgid "Your poll has been deleted!"
+msgstr ""
+"<h4>Effacement confirmé</h4><p>Le sondage (ainsi que tous les votes "
+"associés) a bien été supprimé de la base.</p>"
+
+#: polls/views.py:220
+msgid "Options are successfully added!"
+msgstr ""
+"<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
+"été mis à jour.</p>"
+
+#: polls/views.py:234
+msgid "Status is successfully changed!"
+msgstr ""
+"<h4>Statut mis à jour</h4><p>Le statut de votre sondage a bien été mis à "
+"jour.</p>"
+
+#: polls/views.py:249
+#, fuzzy
+#| msgid "Add or remove candidates is allowed"
+msgid "Add or remove candidates is not allowed!"
+msgstr ""
+"L'administrateur (vous, donc) peut ajouter ou retirer des candidats pendant "
+"la vie du sondage"
+
+#: polls/views.py:270 polls/views.py:300
+#, python-format
+msgid "Candidates must be distinct (%(c)s)"
+msgstr ""
+"<h4>S'il-vous-plaît...</h4><p>...Donnez des noms différents à des candidats "
+"différents (%(c)s est déjà dans la liste des candidats).</p>"
+
+#: polls/views.py:274
+#, python-format
+msgid "Candidate %(c)s successfully added!"
+msgstr ""
+"<h4>Candidat ajouté</h4><p>Le candidat %(c)s a été ajouté au sondage.</p>"
+
+#: polls/views.py:305
+msgid "Candidates are successfully added!"
+msgstr ""
+"<h4>Candidats ajoutés</h4><p>Les candidats ont bien été ajoutés à la liste.</"
+"p>"
+
+#: polls/views.py:317
+#, python-format
+msgid "Candidate has been deleted (%(c)s)!"
+msgstr ""
+"<h4>Candidat supprimé</h4><p>%(c)s a bien été supprimé de la liste des "
+"candidats.</p>"
+
+#: polls/views.py:349
+msgid "Invited voters successfully added!"
+msgstr ""
+"<h4>Invités ajoutés</h4><p>Les personnes que vous avez spécifiées ont bien "
+"été ajoutés à la liste des votants.</p>"
+
+#: polls/views.py:364
+msgid "anonymous voter has been deleted!"
+msgstr ""
+"<h4>Votant supprimé</h4><p>Le votant anonyme a bien été supprimé de la liste."
+"</p>"
+
+#: polls/views.py:381
+msgid "your certificate is correct"
+msgstr ""
+"<h4>Autorisation accordée</h4><p>Votre certificat est valide. Vous pouvez "
+"voter !</p>"
+
+#: polls/views.py:389
+msgid "your certificate is incorrect"
+msgstr ""
+"<h4>Certificat incorrect</h4><p>Hum, il semblerait que le certificat que "
+"vous avez entré ne correspond pas à un certificat valide. Faute de frappe ? "
+"Prenez une grande inspiration et tapez-le à nouveau.</p>"
+
+#: polls/views.py:421
+msgid "you have already voted, now you can update your vote"
+msgstr ""
+"<h4>Bienvenue à nouveau...</h4><p>Vous avez déjà voté. Si vous voulez, vous "
+"pouvez modifier votre vote.</p>"
+
+#: polls/views.py:439
+msgid "Your vote has been added to the poll, thank you!"
+msgstr ""
+"<h4>A voté!</h4><p>Votre vote a bien été pris en compte. Merci d'avoir "
+"utilisé Whale !</p>"
+
+#: polls/views.py:445
+msgid "Thank you for voting"
+msgstr "Merci de votre participation!"
+
+#: polls/views.py:491
+msgid "Your vote has been updated, thank you!"
+msgstr ""
+"<h4>A voté! (à nouveau)</h4><p>La modification de votre vote a bien été "
+"prise en compte. Merci d'avoir utilisé Whale !</p>"
+
+#: polls/views.py:510
+msgid "Your vote has been deleted!"
+msgstr ""
+"<h4>Vote supprimé</h4><p>La suppression de votre vote a bien été prise en "
+"compte. Merci d'avoir utilisé Whale !</p>"
+
+#: polls/views.py:634
+msgid "scoring label"
+msgstr "Vecteur de score"
+
+#: polls/views.py:635
+msgid "Borda"
+msgstr "Borda"
+
+#: polls/views.py:635
+msgid "Plurality"
+msgstr "Pluralité"
+
+#: polls/views.py:636
+msgid "Veto"
+msgstr "Veto"
+
+#: polls/views.py:637
+msgid "Approval"
+msgstr "Approbation"
+
+#: polls/views.py:637
+msgid "Curve Approval"
+msgstr "Courbe d'approbation"
+
+#: polls/views.py:638
+msgid "scoring method explanation"
+msgstr ""
+"<section><p>On compte un nombre de points pour chaque candidat, de la manière suivante :"
+"</p><ul><li>Borda : un candidat gagne n - 1 points chaque fois qu'il est classé en "
+"premier, n - 2 points chaque fois qu'il est classé en second, etc. (n est le "
+"nombre de candidats).</li><li>Pluralité : un candidat gagne 1 point chaque fois qu'il "
+"est classé en premier.</li><li>Veto : un candidat gagne 1 point chaque fois qu'il "
+"n'est pas classé dernier.</li></ul></section>"
+
+#: polls/views.py:642
+msgid "condorcet label"
+msgstr ""
+
+#: polls/views.py:643
+msgid "Copeland 0"
+msgstr ""
+
+#: polls/views.py:643
+msgid "Copeland 1"
+msgstr ""
+
+#: polls/views.py:644
+msgid "Simpson"
+msgstr ""
+
+#: polls/views.py:645
+msgid "condorcet method explanation"
+msgstr ""
+"<section><p>On réalise des duels entre les candidats :</p><ul><li> Pour un candidat A et un "
+"candidat B,on met une flèche de A vers B si une majorité de votants "
+"préfèrent A à B, et vice-versa. L'épaisseur de la flèche dénote la "
+"différence de voix entre les deux candidats. Il y a un trait pointillé si "
+"les deux candidats sont à égalité.</li><li>Le tableau à droite est une "
+"représentation matricielle du graphe orienté. Dans les deux cas, les "
+"couleurs associées aux candidats sont calculées en fonction d'un score "
+"particulier, Copeland 0, Copeland 1 ou Simpson (à choisir dans le menu "
+"déroulant).</li></ul></section>"
+
+#: polls/views.py:649
+msgid "runoff label"
+msgstr ""
+
+#: polls/views.py:650
+msgid "STV"
+msgstr ""
+
+#: polls/views.py:650
+msgid "Two Round majority"
+msgstr ""
+
+#: polls/views.py:651
+msgid "runoff method explanation"
+msgstr ""
+"<section><p>Ces méthodes fonctionnent par élimination successive de candidats. À "
+"chaque étape, les voix pour les candidats éliminés sont reportés sur les "
+"autres.</p><ul><li>Single Transferrable Vote : À chaque tour, les candidats sont "
+"classés selon leur score de pluralité (voir méthodes de calcul de scores).</"
+"p><p>S'il y a des ex-aequo, on considère en plus le score de Borda. À chaque "
+"tour, le pire candidat est éliminé.</li><li>Scrutin majoritaire à deux tours : "
+"On garde pour le second tour les candidats ayant le plus haut score de "
+"pluralité (départage aléatoire des ex-aequo). Au second tour, on élit le "
+"candidat ayant le plus haut score de pluralité.</li></ul></section>"
+
+#: polls/views.py:655
+msgid "randomized label"
+msgstr ""
+
+#: polls/views.py:657
+msgid "Shuffle candidates for the first round"
+msgstr "Nouveau tirage aleatoire au premier tour"
+
+#: polls/views.py:658
+msgid "randomized method explanation"
+msgstr ""
+"<section><p>Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "
+"élimination.</p><ul><li> À chaque tour,les candidats s'affrontent par paire. Le meilleur "
+"de chaque paire (celui qui est préféré par une majorité de votants) va au "
+"tour suivant.</li><li>Deux candidats ex-aequo à un tour donné sont départagés "
+"aléatoirement. Le tirage initial du premier tour est aléatoire.</li></ul></section>"
+
+#: whale4/settings.py:100
+msgid "French"
+msgstr "Français"
+
+#: whale4/settings.py:101
+msgid "English"
+msgstr "Anglais"
+
+#~ msgid "See"
+#~ msgstr "Voir"
