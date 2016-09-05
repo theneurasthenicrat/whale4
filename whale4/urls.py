@@ -1,20 +1,22 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import  include, url
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
-from accounts.views import RegistrationView
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from polls.views import home
+from django.conf.urls import handler400,handler403,handler404,handler500
 
-urlpatterns = patterns('',
-                       # url(r'^poll/(?P<poll>[a-f0-9]+)$', 'whale4.views.view_poll', name='poll'),
-                       url(r'^poll$', 'whale4.views.view_poll', name='poll'),
-                       url(r'^$', 'whale4.views.home', name='home'),
-                       url(r'^create-voting-poll/$', 'whale4.views.create_voting_poll', name='create voting poll'),
-                       url(r'^manage-candidates$', 'whale4.views.manage_candidates', name='manage candidates'),
-                       url(r'^delete-vote$', 'whale4.views.delete_vote', name='delete vote'),
-                       url(r'^admin-poll$', 'whale4.views.admin_poll', name='administrate poll'),
-                       url(r'^vote$', 'whale4.views.vote', name='vote'),
-                       
-                       url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'accounts/login.html'}, name='login'),
-                       url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'accounts/logout.html'}, name='logout'),
-                       url(r'^register/$', RegistrationView.as_view(), name='register'),
-                       url(r'^register-success/$', 'accounts.views.register_success', name='register-success'),
-)
+handler400 = 'polls.views.bad_request'
+handler403 = 'polls.views.permission_denied'
+handler404 = 'polls.views.page_not_found'
+handler500 = 'polls.views.server_error'
+
+urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^polls/', include('polls.urls')),
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^$',home, name='home'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+
+]
+
+urlpatterns += staticfiles_urlpatterns()
+

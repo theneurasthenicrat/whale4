@@ -1,0 +1,27 @@
+#list_init li{
+     margin-bottom: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #808080;
+    color:white;
+    font-weight: bold;
+    border: 1px solid #ccc;
+
+}
+
+#init{
+border-right: dotted;
+
+}
+
+
+#sortable .list-group-item {
+     list-style: decimal inside;
+    display: list-item;
+     margin-bottom: 10px;
+     text-align: center;
+     cursor: pointer;
+     color:white;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}

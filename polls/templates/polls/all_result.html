@@ -1,0 +1,75 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="well">
+            <h2>{{ poll.title}} </h2>
+            <h3>{% trans 'See the results of poll' %}</h3>
+        </div>
+
+        <!-- Page Features -->
+        <div class="row text-center result">
+
+            <div class="col-md-3 col-sm-6 "><a href="/polls/viewResult/{{poll.pk }}/1/" class="thumbnail">
+
+                <img src="{% static 'polls/images/scoring.png' %}" class="img-thumbnail" alt="">
+                <span class="caption">
+                       <h4> {% trans 'scoring method title' %}</h4>
+                        <blockquote>{% trans 'scoring method message' %}</blockquote>
+            </span>
+            </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6 " ><a href="/polls/viewResult/{{poll.pk }}/2/" class="thumbnail">
+
+                <img src="{% static 'polls/images/condorcet.png' %}" class="img-thumbnail" alt="">
+                <span class="caption">
+                       <h4>  {% trans 'condorcet method title' %}</h4>
+                       <blockquote>{% trans 'condorcet method message' %}</blockquote>
+                </span>
+            </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6 ">
+                <a href="/polls/viewResult/{{poll.pk }}/3/" class="thumbnail">
+
+                    <img src="{% static 'polls/images/runoff.png' %}"  class="img-thumbnail" alt="">
+            <span class="caption">
+            <h4> {% trans 'runoff method title' %}</h4>
+                        <blockquote>{% trans 'runoff method message' %}</blockquote>
+                </span>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6 "><a href="/polls/viewResult/{{poll.pk }}/4/" class="thumbnail" >
+
+                <img src="{% static 'polls/images/randomTournaments.png' %}" class="img-thumbnail" alt="">
+                    <span class="caption">
+                        <h4>{% trans 'randomized method title' %}</h4>
+                        <blockquote>{% trans 'randomized method message' %}</blockquote>
+                    </span>
+
+            </a>
+            </div>
+
+        </div>
+
+
+<div class="text-center">
+                <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom  btn-lg ">{% bootstrap_icon "list" %} {% trans 'Back to the poll' %}</a>
+</div>
+
+
+
+
+
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% load static %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% trans ' Whale4 - WHich ALternative is Elected' %}</title>
+</head>
+<body >
+<div style="padding: 20px;">
+ <h3>Whale4 <small>{% trans 'WHich ALternative is Elected' %}</small></h3>
+
+    {% blocktrans with url=url certi=certi %}Email text template with url {{ url }} and certificate {{ certi }}.{% endblocktrans %}
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

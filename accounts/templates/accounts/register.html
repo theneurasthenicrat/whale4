@@ -1,44 +1,23 @@
-{% extends "whale4/base.html" %}
-
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
 {% block content %}
-
-<h1>Create account</h1>
-
-{% if form.non_field_errors %}
-<div class="alert alert-danger" role="alert">
-    {{ form.non_field_errors }}
-</div>
-{% endif %}
-
-<form class="form-vertical"  action="/register/"  method="post">{% csrf_token %}
-    <fieldset>
-        <legend>{{ title }}</legend>
-	<div class="form-group">
-        {% for field in form %}
-            {% if field.errors %}
-                <div class="control-group error">
-                    <label class="control-label">{{ field.label }}</label> 
-                    <div class="controls">{{ field }}
-                        <span class="help-inline">
-                            {% for error in  field.errors %}{{ error }}{% endfor %}
-                        </span>
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <div class=" form-login">
+                    <h4>{% trans 'Create a new account' %}</h4>
+                    <form action="" method="post" >
+                        {% csrf_token %}
+                        {% bootstrap_form form%}
+                        <div class="wrapper">
+                            <button type="submit" class="btn btn-custom margin2">
+                                {% bootstrap_icon "ok" %} {% trans 'Sign up'%}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            {% else %}
-                <div class="control-group">
-                    <label class="control-label">{{ field.label }}</label> 
-                    <div class="controls">{{ field }}
-                        {% if field.help_text %}
-                            <p class="help-inline"><small>{{ field.help_text }}</small></p>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-	{% endfor %}
-	</div>
-    </fieldset>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary" >Create</button>
+            </div>
+        </div>
     </div>
-</form>
 {% endblock %}
