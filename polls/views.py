@@ -14,7 +14,7 @@ from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
 from datetime import datetime
-from random import sample
+from random import sample, shuffle
 from math import log2, modf,pow
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
@@ -399,6 +399,10 @@ def vote(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = ( DateCandidate.objects.filter(poll_id=poll.id) \
                        if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+    if poll.option_shuffle:
+        candidates=list(candidates)
+        shuffle(candidates)
+
     preference_model = preference_model_from_text(poll.preference_model, len(candidates))
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
@@ -551,18 +555,30 @@ def view_poll(request, pk):
         (days, months) = days_months(candidates)
 
     scores = {}
-    votes=[]
     for v in voting:
         if v.voter.id not in scores:
-            scores[v.voter.id] = {"id":v.voter.id,"nickname":v.voter.nickname,"scores":[]}
-            votes.append(scores[v.voter.id])
-        scores[v.voter.id]["scores"].append({'value':v.value,
-                                             'class': 'poll-{0:d}percent'.format(
-                                                 int(round(preference_model.evaluate(v.value),
-                                                           1) * 100)) if v.value != UNDEFINED_VALUE else 'poll-undefined',
-                                             'text': preference_model.value2text(v.value)
-                                             })
+            scores[v.voter.id] = {}
+        scores[v.voter.id][v.candidate.id] = v.value
 
+    tab = {}
+    for v in voting:
+        id = v.voter.id
+        tab[id] = {}
+        tab[id]['id'] = id
+        tab[id]['nickname'] = v.voter.nickname
+        tab[id]['scores'] = []
+        for c in candidates:
+            score= scores[v.voter.id][c.id]
+            tab[id]['scores'].append(
+                {'value': score,
+                 'class': 'poll-{0:d}percent'.format(
+                     int(round(preference_model.evaluate(score),
+                               1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
+                 'text': preference_model.value2text(score)
+
+                 })
+
+    votes= tab.values()
 
     list1 = list()
     scores=[]

@@ -9,5 +9,6 @@
   });
      $("[name='option_choice']").bootstrapSwitch();
          $("[name='option_modify']").bootstrapSwitch();
+         $("[name='option_shuffle']").bootstrapSwitch();
  $("[name='status']").bootstrapSwitch();
 });

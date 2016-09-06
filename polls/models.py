@@ -39,6 +39,8 @@ class VotingPoll(Poll):
     option_modify=models.BooleanField(default=True,
                                       verbose_name=_("Add or remove candidates is allowed"))
     option_experimental=models.BooleanField(default=False)
+    option_shuffle=models.BooleanField(default=False,verbose_name=_("option shuffle"))
+
     status=models.BooleanField(default=True,verbose_name=_("Poll's status"))
 
 

@@ -14,13 +14,15 @@ from django.utils.translation import ugettext_lazy as _
 class BasePollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','status']
+        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','status','option_shuffle']
         widgets = {
             'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 4,'placeholder': _('Enter description')}),
             'option_choice': widgets.CheckboxInput(attrs={'data-on-text':_("Yes-option"),'data-off-text':_("No-option")}),
             'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
+            'option_shuffle': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
+
         }
 
 
@@ -29,19 +31,14 @@ class VotingPollForm(ModelForm):
         fields = ['title', 'description', 'preference_model']
 
 
-class VotingPollUpdateForm(ModelForm):
-    class Meta(BasePollForm.Meta):
-        fields = ['title', 'description','preference_model']
-
-
 class OptionForm(ModelForm):
     class Meta(BasePollForm.Meta):
-        fields = ['closing_date','option_choice', 'option_modify']
+        fields = ['closing_date','option_choice', 'option_modify','option_shuffle']
 
 
 class PollUpdateForm(ModelForm):
     class Meta(VotingPollForm.Meta):
-        fields = ['title', 'description', 'closing_date','option_choice','option_modify']
+        fields = ['title', 'description', 'closing_date','option_choice','option_modify','option_shuffle']
 
 
 class StatusForm(ModelForm):

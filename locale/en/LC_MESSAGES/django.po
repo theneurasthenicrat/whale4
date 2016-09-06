@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-29 13:20+0000\n"
+"POT-Creation-Date: 2016-09-06 08:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Password confirmation *"
 msgstr "Password confirmation *"
 
-#: accounts/forms.py:22 polls/forms.py:86
+#: accounts/forms.py:22 polls/forms.py:83
 msgid "Enter your nickname"
 msgstr ""
 
@@ -55,7 +55,7 @@ msgstr "Password confirmation *"
 msgid "Email address"
 msgstr "Email address"
 
-#: accounts/models.py:34 polls/forms.py:86
+#: accounts/models.py:34 polls/forms.py:83
 msgid "Nickname *"
 msgstr "Nickname *"
 
@@ -194,31 +194,31 @@ msgstr "Enter closing date"
 msgid "Enter description"
 msgstr "Enter description"
 
-#: polls/forms.py:22 polls/forms.py:23
+#: polls/forms.py:22 polls/forms.py:23 polls/forms.py:24
 msgid "Yes-option"
 msgstr "Yes"
 
-#: polls/forms.py:22 polls/forms.py:23
+#: polls/forms.py:22 polls/forms.py:23 polls/forms.py:24
 msgid "No-option"
 msgstr "No"
 
-#: polls/forms.py:57
+#: polls/forms.py:54
 msgid "Candidate"
 msgstr "Candidate"
 
-#: polls/forms.py:75
+#: polls/forms.py:72
 msgid "Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)"
 msgstr "Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)"
 
-#: polls/forms.py:104
+#: polls/forms.py:101
 msgid "you must order all candidates"
 msgstr "You must rank all candidates"
 
-#: polls/forms.py:111
+#: polls/forms.py:108
 msgid "You must give a score to at least one candidate!"
 msgstr "You must give a score to at least one candidate"
 
-#: polls/forms.py:136
+#: polls/forms.py:133
 msgid "certificate"
 msgstr ""
 
@@ -283,22 +283,26 @@ msgstr ""
 "she wants."
 
 #: polls/models.py:42
+msgid "option shuffle"
+msgstr "Candidates will be randomly mixed in voting page"
+
+#: polls/models.py:44
 msgid "Poll's status"
 msgstr "Poll status"
 
-#: polls/models.py:47
+#: polls/models.py:49
 msgid "candidate"
 msgstr "candidate"
 
-#: polls/models.py:57
+#: polls/models.py:59
 msgid "date"
 msgstr "date"
 
-#: polls/models.py:68
+#: polls/models.py:70
 msgid "voter"
 msgstr "voter"
 
-#: polls/models.py:69
+#: polls/models.py:71
 msgid "value"
 msgstr "value"
 
@@ -340,7 +344,7 @@ msgstr "Back to the poll page"
 msgid "See the results of poll"
 msgstr "See the results of poll"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:633
+#: polls/templates/polls/all_result.html:23 polls/views.py:649
 msgid "scoring method title"
 msgstr "Scoring methods"
 
@@ -348,7 +352,7 @@ msgstr "Scoring methods"
 msgid "scoring method message"
 msgstr "Where each candidate gets some points according to its ranks..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:641
+#: polls/templates/polls/all_result.html:33 polls/views.py:657
 msgid "condorcet method title"
 msgstr "Condorcet-based methods"
 
@@ -356,7 +360,7 @@ msgstr "Condorcet-based methods"
 msgid "condorcet method message"
 msgstr "Where candidates fight with each other..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:648
+#: polls/templates/polls/all_result.html:44 polls/views.py:664
 msgid "runoff method title"
 msgstr "Run-off methods"
 
@@ -364,7 +368,7 @@ msgstr "Run-off methods"
 msgid "runoff method message"
 msgstr "Where candidates are successively eliminated..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:654
+#: polls/templates/polls/all_result.html:54 polls/views.py:670
 msgid "randomized method title"
 msgstr "Randomized cups"
 
@@ -372,7 +376,8 @@ msgstr "Randomized cups"
 msgid "randomized method message"
 msgstr "Where we simulate a sport cup between candidates..."
 
-#: polls/templates/polls/all_result.html:65 polls/templates/polls/vote.html:135
+#: polls/templates/polls/all_result.html:65 polls/templates/polls/data.html:55
+#: polls/templates/polls/vote.html:135
 msgid "Back to the poll"
 msgstr "Back to the poll"
 
@@ -521,6 +526,26 @@ msgstr "Secret ballot"
 msgid "Save"
 msgstr "Save"
 
+#: polls/templates/polls/data.html:13
+#, fuzzy
+#| msgid "Date poll"
+msgid "Data of poll"
+msgstr "Date poll"
+
+#: polls/templates/polls/data.html:23
+msgid "JSON"
+msgstr ""
+
+#: polls/templates/polls/data.html:33
+msgid "PREFLIB"
+msgstr ""
+
+#: polls/templates/polls/data.html:44
+#, fuzzy
+#| msgid "STV"
+msgid "CSV"
+msgstr "STV"
+
 #: polls/templates/polls/date_candidate.html:32
 #: polls/templates/polls/invite.html:24 polls/templates/polls/option.html:15
 msgid "Add candidates"
@@ -625,7 +650,7 @@ msgstr ""
 "about elections.</p><p>Feed the Whale with polls; it will feed you with data!"
 "</p>"
 
-#: polls/templates/polls/home.html:171
+#: polls/templates/polls/home.html:171 polls/templates/polls/view_poll.html:123
 msgid "Goto data download"
 msgstr "Go to the data page"
 
@@ -961,57 +986,59 @@ msgstr ""
 "<h4>Vote deleted</h4><p>Your vote has been successfully deleted from the "
 "poll.</p>"
 
-#: polls/views.py:634
+#: polls/views.py:650
 msgid "scoring label"
 msgstr "Scoring vector"
 
-#: polls/views.py:635
+#: polls/views.py:651
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:635
+#: polls/views.py:651
 msgid "Plurality"
 msgstr "Plurality"
 
-#: polls/views.py:636
+#: polls/views.py:652
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:637
+#: polls/views.py:653
 msgid "Approval"
 msgstr "Approval"
 
-#: polls/views.py:637
+#: polls/views.py:653
 msgid "Curve Approval"
 msgstr "Curve of approval"
 
-#: polls/views.py:638
+#: polls/views.py:654
 msgid "scoring method explanation"
 msgstr ""
-"<section><p>We compute a number of points for each candidate as follows:</p><ul><li>Borda : a candidate wins n - 1 points every time it is ranked "
+"<section><p>We compute a number of points for each candidate as follows:</"
+"p><ul><li>Borda : a candidate wins n - 1 points every time it is ranked "
 "first, n - 2 points every time it is ranked second, and so on. (n is the "
 "number of candidates).</li><li>Plurality: a candidate wins 1 point every "
 "time it is ranked first (of a given voter).</li><li>Veto : a candidate wins "
 "1 point every time it is not ranked last.</li><li>Approval: a candidate wins "
-"1 point every time it is ranked above the specified threshold.</li></ul></section>"
+"1 point every time it is ranked above the specified threshold.</li></ul></"
+"section>"
 
-#: polls/views.py:642
+#: polls/views.py:658
 msgid "condorcet label"
 msgstr "Candidate value computation method"
 
-#: polls/views.py:643
+#: polls/views.py:659
 msgid "Copeland 0"
 msgstr "Copeland 0"
 
-#: polls/views.py:643
+#: polls/views.py:659
 msgid "Copeland 1"
 msgstr "Copeland 1"
 
-#: polls/views.py:644
+#: polls/views.py:660
 msgid "Simpson"
 msgstr "Simpson(maxmin)"
 
-#: polls/views.py:645
+#: polls/views.py:661
 msgid "condorcet method explanation"
 msgstr ""
 "<section><p>We organize a duel between each pair of candidates:</"
@@ -1024,19 +1051,19 @@ msgstr ""
 "namely Copeland 0, Copeland 1 or Simpson (choose in the combo box).</li></"
 "ul></section>"
 
-#: polls/views.py:649
+#: polls/views.py:665
 msgid "runoff label"
 msgstr "Procedure"
 
-#: polls/views.py:650
+#: polls/views.py:666
 msgid "STV"
 msgstr "STV"
 
-#: polls/views.py:650
+#: polls/views.py:666
 msgid "Two Round majority"
 msgstr "Two Round majority"
 
-#: polls/views.py:651
+#: polls/views.py:667
 msgid "runoff method explanation"
 msgstr ""
 "<section><p>These methods successively eliminate candidates. After each "
@@ -1049,15 +1076,15 @@ msgstr ""
 "randomly broken).The winner is the second round candidate having the highest "
 "plurality score (once again, ties randomly broken).</li></ul></section>"
 
-#: polls/views.py:655
+#: polls/views.py:671
 msgid "randomized label"
 msgstr "randomized method"
 
-#: polls/views.py:657
+#: polls/views.py:673
 msgid "Shuffle candidates for the first round"
 msgstr "Shuffle candidates for the first round"
 
-#: polls/views.py:658
+#: polls/views.py:674
 msgid "randomized method explanation"
 msgstr ""
 "<section><p>This method simulates a sport championship. At each round, the "
