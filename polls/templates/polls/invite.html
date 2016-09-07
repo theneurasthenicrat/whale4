@@ -76,7 +76,7 @@
                                                                             <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                                                         </div>
                                                                         <div class="modal-footer">
-                                                                            <a href="/polls/deleteAnonymous/{{ poll.id }}/{{ v.id }}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>
+                                                                            <a href="{% url 'deleteAnonymous' pk=poll.pk voter=v.id%}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>
                                                                             <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
                                                                         </div>
 
@@ -109,7 +109,7 @@
                                     <div class="well">
                                         <h5 >{% trans 'Copy this link' %}</h5>
                                         <div class="input-group ">
-                                            <input type="text" class="form-control" id="vote_url"  value="http://localhost:8000{% url 'vote' poll.id %}">
+                                            <input type="text" class="form-control" id="vote_url"  value="{% url 'vote' poll.id %}">
                                             <span class=" input-group-addon" data-clipboard-target="#vote_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@
                                     <div class="well">
                                         <h5 >{% trans 'Share on social network' %}</h5>
                                         <div class="  container-fluid ">
-                                            {% with url="http://strokes.imag.fr/whale3/index.do" text="whale4" via="whale4ad"  %}
+                                            {% with url="http://strokes.imag.fr/whale4/polls/vote/"  text="whale4" via="whale4ad"  %}
                                                 <a href="http://twitter.com/share?url={{ url }}&text={{ text }}&via={{ via }}" target="_blank" class="btn twitter">
                                                     <i class="fa fa-twitter"></i></a>
                                                 <a href="https://plus.google.com/share?url={{ url }}" target="_blank" class="btn google-plus">
@@ -150,7 +150,7 @@
                         <div class="well">
                             <h5 >{% trans 'Copy this link' %}</h5>
                             <div class="input-group ">
-                                <input type="text" class="form-control" id="vote_url"  value="http://localhost:8000{% url 'vote' poll.id %}">
+                                <input type="text" class="form-control" id="vote_url"  value="{% url 'vote' poll.id %}">
                                 <span class=" input-group-addon" data-clipboard-target="#vote_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                         <div class="well">
                             <h5 >{% trans 'Share on social network' %}</h5>
                             <div class="  container-fluid ">
-                                {% with url="http://strokes.imag.fr/whale3/index.do" text="whale4" via="whale4ad"  %}
+                                {% with url="http://strokes.imag.fr/whale4/polls/vote" text="whale4" via="whale4ad"  %}
                                     <a href="http://twitter.com/share?url={{ url }}&text={{ text }}&via={{ via }}" target="_blank" class="btn twitter">
                                         <i class="fa fa-twitter"></i>
                                     </a>

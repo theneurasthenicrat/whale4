@@ -76,8 +76,8 @@ class WhaleUserDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(WhaleUserDetail, self).get_context_data(**kwargs)
-        context['poll_list'] = VotingPoll.objects.filter(admin_id= self.kwargs['pk']).order_by('creation_date')
-        context['poll_list_voter'] = VotingPoll.objects.filter(candidates__votingscore__voter_id=self.kwargs['pk']).annotate(total=Count('id')).order_by('creation_date')
+        context['poll_list'] = VotingPoll.objects.filter(admin_id= self.kwargs['pk']).order_by('-creation_date')
+        context['poll_list_voter'] = VotingPoll.objects.filter(candidates__votingscore__voter_id=self.kwargs['pk']).annotate(total=Count('id')).order_by('-creation_date')
         return context
 
     @method_decorator(login_required)

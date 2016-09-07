@@ -16,7 +16,7 @@
         <!-- Page Features -->
         <div class="row text-center result">
 
-            <div class="col-md-3 col-sm-6 "><a href="/polls/viewResult/{{poll.pk }}/1/" class="thumbnail">
+            <div class="col-md-3 col-sm-6 "><a href= "{% url 'viewResult' pk=poll.pk method=1 %}" class="thumbnail">
 
                 <img src="{% static 'polls/images/scoring.png' %}" class="img-thumbnail" alt="">
                 <span class="caption">
@@ -26,7 +26,7 @@
             </a>
             </div>
 
-            <div class="col-md-3 col-sm-6 " ><a href="/polls/viewResult/{{poll.pk }}/2/" class="thumbnail">
+            <div class="col-md-3 col-sm-6 " ><a href="{% url 'viewResult' pk=poll.pk method=2 %}" class="thumbnail">
 
                 <img src="{% static 'polls/images/condorcet.png' %}" class="img-thumbnail" alt="">
                 <span class="caption">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="col-md-3 col-sm-6 ">
-                <a href="/polls/viewResult/{{poll.pk }}/3/" class="thumbnail">
+                <a href="{% url 'viewResult' pk=poll.pk method=3 %}" class="thumbnail">
 
                     <img src="{% static 'polls/images/runoff.png' %}"  class="img-thumbnail" alt="">
             <span class="caption">
@@ -47,7 +47,7 @@
                 </a>
             </div>
 
-            <div class="col-md-3 col-sm-6 "><a href="/polls/viewResult/{{poll.pk }}/4/" class="thumbnail" >
+            <div class="col-md-3 col-sm-6 "><a href="{% url 'viewResult' pk=poll.pk method=4 %}" class="thumbnail" >
 
                 <img src="{% static 'polls/images/randomTournaments.png' %}" class="img-thumbnail" alt="">
                     <span class="caption">

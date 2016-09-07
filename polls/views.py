@@ -341,7 +341,7 @@ def success(request, pk):
                 )
                 subject, from_email, to = 'Invite to the secret poll', 'whale4.ad@gmail.com', email
                 htmly = get_template('polls/email.html')
-                url="http://localhost:8000"+str(reverse_lazy(vote, kwargs={'pk': poll.pk}))
+                url="http://strokes.imag.fr/whale4/polls/vote/"+str(poll.pk)
                 d = Context({'poll': poll, 'certi':certi,'url':url})
                 html_content = htmly.render(d)
                 msg = EmailMessage(subject, html_content, from_email, [to])

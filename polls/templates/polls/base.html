@@ -58,11 +58,11 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
              <span class="sr-only">Toggle navigation</span> <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="/" ><img src="{% static 'polls/images/whale4-brand-circle.png' %}" alt="Whale4"/></a>
+            <a class="navbar-brand" href="{% url 'home' %}" ><img src="{% static 'polls/images/whale4-brand-circle.png' %}" alt="Whale4"/></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse" >
             <ul  class="nav navbar-nav navbar-right">
-                <li><a href="/" >{% trans 'Home' %}</a></li>
+                <li><a href="{% url 'home' %}" >{% trans 'Home' %}</a></li>
                 <li><a href="{% url 'choice' %}">{% trans 'New poll' %}</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" >{% trans  'Developers'  %} <span class="caret"></span></a>
