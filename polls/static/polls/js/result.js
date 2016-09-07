@@ -73,7 +73,7 @@ function scoring_plot(scoring) {
             bar_char(data);
             break;
         case 'curvea':
-            data = scoring.veto;
+            data = scoring.curve_approval;
            curve_approval(data);
 
     }
@@ -181,7 +181,7 @@ function curve_approval(data) {
 
 // Set the ranges
     var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width],1);
+        .rangeRoundBands([0, width]);
     var y = d3.scale.linear().range([height, 0]);
 
     var xAxis = d3.svg.axis()
@@ -195,20 +195,19 @@ function curve_approval(data) {
     var color = d3.scale.category10();
 // Define the line
     var line = d3.svg.line()
-        .interpolate("basic")
+
         .x(function(d) { return x(d.x); })
-        .y(function(d) { return y(d.y); });
+        .y(function(d) { return y(d.y); })
+      .interpolate("basis");
 
-
+  d3.select("svg").remove();
   var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var data=[{"candidate":"a","x":1,"y":10},{"candidate":"a","x":2,"y":11},{"candidate":"a","x":3,"y":12},
-        {"candidate":"b","x":1,"y":11},{"candidate":"b","x":2,"y":12},{"candidate":"b","x":3,"y":13},
-        {"candidate":"c","x":1,"y":12},{"candidate":"c","x":2,"y":13},{"candidate":"c","x":3,"y":14}];
+
 
 
 
@@ -228,11 +227,12 @@ function curve_approval(data) {
         svg.append("path")
             .attr("class", "line")
             .attr("d", line(d.values))
+            .attr("fill","none")
             .style("stroke",  color(d.key) );
 
         svg.append("text")
             .attr("x", 10)
-            .attr("transform",  "translate(" + x(d.values[d.values.length - 1].x) + "," + y(d.values[d.values.length - 1].y) + ")" )
+            .attr("transform",  "translate(" + x(d.values[d.values.length -1].x) + "," + i*30 + ")" )
             .attr("dy", "0.35em")
             .style("font", "10px sans-serif")
             .style("stroke",  color(d.key) )
