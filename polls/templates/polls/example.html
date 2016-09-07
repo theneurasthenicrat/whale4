@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+
+<!-- load the d3.js library -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+
+
+// Set the ranges
+var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width],1);
+var y = d3.scale.linear().range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+var color = d3.scale.category10();
+// Define the line
+var line = d3.svg.line()
+        .interpolate("basic")
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
+
+
+var svg = d3.select("body")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+var data=[{"candidate":"a","x":1,"y":10},{"candidate":"a","x":2,"y":11},{"candidate":"a","x":3,"y":12},
+{"candidate":"b","x":1,"y":11},{"candidate":"b","x":2,"y":12},{"candidate":"b","x":3,"y":13},
+{"candidate":"c","x":1,"y":12},{"candidate":"c","x":2,"y":13},{"candidate":"c","x":3,"y":14}];
+
+
+
+
+ x.domain(data.map(function(d) { return d.x; }));
+
+    y.domain([0, d3.max(data, function(d) { return d.y; })]);
+
+    // Nest the entries by symbol
+    var dataNest = d3.nest()
+        .key(function(d) {return d.candidate;})
+        .entries(data);
+
+    // Loop through each symbol / key
+    dataNest.forEach(function(d,i) {
+
+        svg.append("path")
+            .attr("class", "line")
+            .attr("d", line(d.values))
+            .style("stroke",  color(d.key) );
+
+        svg.append("text")
+      .attr("x", 10)
+        .attr("transform",  "translate(" + x(d.values[d.values.length - 1].x) + "," + y(d.values[d.values.length - 1].y) + ")" )
+      .attr("dy", "0.35em")
+      .style("font", "10px sans-serif")
+                .style("stroke",  color(d.key) )
+      .text( d.key);
+
+    });
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+
+
+</script>
+</body>
+

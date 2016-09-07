@@ -39,34 +39,47 @@ d3.select("#approval").on("change", graph);
 d3.select(window).on('resize', graph);
 
 function scoring_plot(scoring) {
-    var option= d3.select("#option").node().value;
+    var option = d3.select("#option").node().value;
     var data;
-    switch(option) {
+    switch (option) {
         case 'borda':
             data = scoring.borda;
+            bar_char(data);
             break;
         case 'plurality':
             data = scoring.plurality;
+            bar_char(data);
             break;
         case 'veto':
             data = scoring.veto;
+            bar_char(data);
             break;
         case 'approval':
-            d3.select("#controlApproval").style("visibility","visible");
-            var approval_select= d3.select("#approval")
+            d3.select("#controlApproval").style("visibility", "visible");
+            var approval_select = d3.select("#approval")
                 .selectAll("option")
                 .data(scoring.approval.threshold)
                 .enter().append("option")
-                .attr("value",function(d,i) { return i; })
-                .text(function(d) { return d; });
+                .attr("value", function (d, i) {
+                    return i;
+                })
+                .text(function (d) {
+                    return d;
+                });
 
-            var i= d3.select("#approval").node().value;
+            var i = d3.select("#approval").node().value;
 
             data = scoring.approval.scores[i];
+            bar_char(data);
             break;
         case 'curvea':
-            data = scoring.plurality;
+            data = scoring.veto;
+           curve_approval(data);
+
     }
+}
+
+ function bar_char(data) {
     var margin = {top: 20, right: 20, bottom: 60, left: 40},
         width  = $("#graph").width()-margin.right-margin.left,
         height = window.innerHeight/1.4;
@@ -156,9 +169,91 @@ function scoring_plot(scoring) {
         .style("font-weight","bold")
         .text( function(d) { return d.y; });
 
+}
+
+function curve_approval(data) {
+
+    var margin = {top: 20, right: 20, bottom: 60, left: 40},
+        width  = $("#graph").width()-margin.right-margin.left,
+        height = window.innerHeight/1.4;
+
+
+
+// Set the ranges
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width],1);
+    var y = d3.scale.linear().range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var color = d3.scale.category10();
+// Define the line
+    var line = d3.svg.line()
+        .interpolate("basic")
+        .x(function(d) { return x(d.x); })
+        .y(function(d) { return y(d.y); });
+
+
+  var svg = d3.select("#graph").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var data=[{"candidate":"a","x":1,"y":10},{"candidate":"a","x":2,"y":11},{"candidate":"a","x":3,"y":12},
+        {"candidate":"b","x":1,"y":11},{"candidate":"b","x":2,"y":12},{"candidate":"b","x":3,"y":13},
+        {"candidate":"c","x":1,"y":12},{"candidate":"c","x":2,"y":13},{"candidate":"c","x":3,"y":14}];
+
+
+
+
+    x.domain(data.map(function(d) { return d.x; }));
+
+    y.domain([0, d3.max(data, function(d) { return d.y; })]);
+
+    // Nest the entries by symbol
+    var dataNest = d3.nest()
+        .key(function(d) {return d.candidate;})
+        .entries(data);
+
+    // Loop through each symbol / key
+    dataNest.forEach(function(d,i) {
+
+        svg.append("path")
+            .attr("class", "line")
+            .attr("d", line(d.values))
+            .style("stroke",  color(d.key) );
+
+        svg.append("text")
+            .attr("x", 10)
+            .attr("transform",  "translate(" + x(d.values[d.values.length - 1].x) + "," + y(d.values[d.values.length - 1].y) + ")" )
+            .attr("dy", "0.35em")
+            .style("font", "10px sans-serif")
+            .style("stroke",  color(d.key) )
+            .text( d.key);
+
+    });
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
 
 }
+
 
 function condorcet_plot(data) {
     var margin = {top:80, right: 10, bottom: 20, left: 80};

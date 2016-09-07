@@ -741,6 +741,7 @@ def result_scores(request, pk):
 
         veto_scores.append({"x":str(c),"y":sum_veto})
     approval_scores = []
+    curve_approval=[]
     for y in approval["threshold"]:
         th = []
         for c in candidates:
@@ -748,6 +749,8 @@ def result_scores(request, pk):
             for score in scores[c.id]:
                 sum_approval = sum_approval + (1 if score >= y else 0)
             th.append({"x":str(c),"y":sum_approval})
+            curve_approval.append({"candidate":str(c),"x":y,"y":sum_approval})
+
         approval_scores.append(th)
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
@@ -837,6 +840,7 @@ def result_scores(request, pk):
     score_method["plurality"] = plurality_scores
     score_method["veto"] = veto_scores
     score_method["approval"] = approval
+    score_method["curve_approval"] = curve_approval
 
     condorcet_method = dict()
     condorcet_method["nodes"] = nodes
