@@ -16,6 +16,7 @@ from operator import itemgetter
 from datetime import datetime,date
 from random import sample, shuffle
 from math import log2, modf,pow
+from django.db.models import Count
 
 from accounts.models import WhaleUser, WhaleUserAnonymous, User, UserAnonymous
 from polls.forms import VotingPollForm, CandidateForm,  VotingForm,  DateForm, \
@@ -440,8 +441,9 @@ def vote(request, pk):
         if form.is_valid() and form1.is_valid():
             voter.nickname = form1.cleaned_data['nickname']
             voter.save()
+            today = datetime.now()
             for c in candidates:
-                VotingScore.objects.create(candidate=c, voter=voter, value=form.cleaned_data['value' + str(c.id)])
+                VotingScore.objects.create(candidate=c,last_modification=today, voter=voter, value=form.cleaned_data['value' + str(c.id)])
             messages.success(request,  mark_safe(_('Your vote has been added to the poll, thank you!')))
             if poll.option_ballots:
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
@@ -490,9 +492,10 @@ def update_vote(request, pk, voter):
             data = form.cleaned_data
             voter.nickname = form1.cleaned_data['nickname']
             voter.save()
+            today=datetime.now()
             for v in votes:
                 v.value = data['value' + str(v.candidate.id)]
-                v.last_modification= datetime.now()
+                v.last_modification= today
                 v.save()
             messages.success(request,  mark_safe(_('Your vote has been updated, thank you!')))
             if poll.option_ballots:
@@ -550,28 +553,34 @@ def view_poll(request, pk):
         DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
             poll_id=poll.id))
     cand = [ c.candidate for c in candidates if c.candidate]
-    voting = VotingScore.objects.filter(candidate__poll__id=poll.id).order_by('last_modification')
-    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
-
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
 
-    scores = {}
-    for v in voting:
-        if v.voter.id not in scores:
-            scores[v.voter.id] = {}
-        scores[v.voter.id][v.candidate.id] = v.value
+    voting = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).annotate(vote=Count('voter'))
 
-    tab = {}
-    for v in voting:
-        id = v.voter.id
-        tab[id] = {}
-        tab[id]['id'] = id
-        tab[id]['nickname'] = v.voter.nickname
-        tab[id]['scores'] = []
+    list_voters=[]
+    for i in voters:
+        if i not in list_voters:
+            list_voters.append(i)
+
+    len_voters=len(list_voters)
+    list_json_votes = []
+    list_csv_votes = []
+    list_preflib_votes = []
+    votes=[]
+
+    for v in list_voters:
+        user = get_object_or_404(User, id=v)
+        h={'id':user.id,'nickname':user.nickname,'scores':[]}
+        k={'name':user.nickname,'values':[]}
+        g=[user.nickname]
+        j=[]
         for c in candidates:
-            score= scores[v.voter.id][c.id]
-            tab[id]['scores'].append(
+            score=voting.get(voter=v,candidate=c).value
+            k["values"].append(score)
+            h['scores'].append(
                 {'value': score,
                  'class': 'poll-{0:d}percent'.format(
                      int(round(preference_model.evaluate(score),
@@ -579,35 +588,25 @@ def view_poll(request, pk):
                  'text': preference_model.value2text(score)
 
                  })
-
-    votes= tab.values()
-
-    list1 = list()
-    scores=[]
-    voters=[]
-    if votes:
-        for value in votes:
-            v = dict()
-            v['name'] = value['nickname']
-            score= [val['value'] for val in value['scores']]
-            text=[val['text'] for val in value['scores']]
-            v['values'] = score
-            text.insert(0,value['nickname'])
-            voters.append(text)
-            list1.append(v)
-            scores.append(score)
+            g.append(preference_model.value2text(score))
+            j.append(score)
+        votes.append(h)
+        list_json_votes.append(k)
+        list_csv_votes.append(g)
+        list_preflib_votes.append(j)
 
     if "format" in request.GET and request.GET['format'] == 'json':
+
         json_object = dict()
-        json_object[
-            'preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
+        json_object['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
         json_object['type'] = 1 if poll.poll_type == 'Date' else 0
         json_object['candidates'] = [str(c) for c in candidates]
-        json_object['votes'] = list1
+        json_object['votes'] = list_json_votes
 
         return HttpResponse(json.dumps(json_object, indent=4, sort_keys=True), content_type="application/json")
 
     elif "format" in request.GET and request.GET['format'] == 'preflib':
+
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="poll-preflib.csv"'
         response.write(str(len(candidates)) + '\n')
@@ -618,7 +617,7 @@ def view_poll(request, pk):
         len_votes = len(votes) if votes else 0
         response.write('{a},{b},{c}\n'.format(a=len_votes, b=len_votes, c= len_votes))
 
-        for i,score in enumerate(scores):
+        for i,score in enumerate(list_preflib_votes):
             values = zip(candidates, score)
             values_sorted = sorted(values, key=itemgetter(1), reverse=True)
             values = map(list, zip(*values_sorted))
@@ -641,11 +640,12 @@ def view_poll(request, pk):
         return response
 
     elif"format" in request.GET and request.GET['format'] == 'csv':
+
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="poll-csv.csv"'
         response.write(','.join(['voter']+[str(c) for c in candidates] ))
         response.write('\n')
-        for voter in voters:
+        for voter in list_csv_votes:
             response.write(','.join([str(x) for x in voter]))
             response.write('\n')
 

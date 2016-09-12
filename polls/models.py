@@ -74,6 +74,7 @@ class VotingScore(models.Model):
 
     class Meta:
         unique_together = ('candidate', 'voter')
+        ordering = ['last_modification']
 
 #  preference models ########################################################
 UNDEFINED_VALUE=-222222222

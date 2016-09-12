@@ -9,9 +9,11 @@
   <div class="well clearfix">
     <h2>{{ poll.title }}</h2>
     <p class="description">{{ poll.description }}</p>
+      <p class="text-center">{% trans 'The number of participants is:' %}  <label class="label label-primary">{{len_voters }}</label></p>
   </div>
 
   {% if votes %}
+
   <div class="table-responsive">
     <table class="table poll-table">
       <thead>
@@ -106,8 +108,10 @@
     <i>{% trans 'No vote yet... Do you want to be the first one?' %}</i>
   </div>
   {% endif %}
-
-
+<div class="well-sm">
+<p class="text-center">{% trans 'The poll is opened until' %} <label class="label label-danger">{{ poll.closing_date }}</label>
+    {% trans '(unless the poll creator decides to close it before).' %} </p>
+</div>
   <div class="row">
     <div class="col-md-3 col-lg-3"></div>
     <div class=" col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2">
