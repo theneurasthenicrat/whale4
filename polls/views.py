@@ -700,6 +700,7 @@ def result_scores(request, pk):
             poll_id=poll.id))
 
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+
     preference_model = preference_model_from_text(poll.preference_model, len(candidates))
     scores = {}
     for c in candidates:
@@ -714,7 +715,7 @@ def result_scores(request, pk):
     borda_scores = []
     plurality_scores = []
     veto_scores = []
-    randomized_scores=[]
+
     nodes=[]
     matrix=[]
     for c in candidates:
@@ -736,7 +737,6 @@ def result_scores(request, pk):
         matrix.append(runoff)
         nodes.append(node)
         borda_scores.append({"x":str(c),"y":sum_borda})
-        randomized_scores.append({"name":str(c),"value":sum_borda,"parent":str(c)})
         plurality_scores.append({"x":str(c),"y":sum_plurality})
 
         veto_scores.append({"x":str(c),"y":sum_veto})
@@ -754,84 +754,14 @@ def result_scores(request, pk):
         approval_scores.append(th)
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
+        approval["threshold"] = [x+1 for x in preference_model.values[1:]]
 
 
-    i=0
-    n= len(candi)
-    links=[]
-    nodes= sorted(nodes, key=itemgetter('value'),reverse=True)
-    while(i<n-1):
-        j=i+1
-        while(j<n):
-
-            a= nodes[i]["value"]
-            b= nodes[j]["value"]
-            link = {}
-            link["value"]=abs(a-b)
-            if a-b >=0 :
-                link["source"]=i
-                link["target"]=j
-
-            else:
-                link["source"] = j
-                link["target"] = i
-            links.append(link)
-            j=j+1
-        i=i+1
-    matrix= sorted(matrix, key=itemgetter('plurality','borda'),reverse=True)
     n = len(candi)
-    matrix1=[]
-    while n>0:
-        matrix1.append(matrix[:n])
-        n=n-1
+    links=condorcet(n, nodes)
 
-    list_round=[]
-
-    len_cand=len(candi)
-    a,b=modf( log2(len_cand))
-    if a!=0:
-        n=len_cand-pow(2,b)
-    else:
-        n=len_cand/2
-
-    while(n>0):
-        h=sample(randomized_scores,2)
-        parent=h[0] if h[0]["value"] > h[1]["value"] else h[1]
-        h[0]["parent"]=parent["name"]
-        h[1]["parent"]=parent["name"]
-        h[0]["diff"]= h[0]["value"]-h[1]["value"]
-        h[1]["diff"]= h[1]["value"]-h[0]["value"]
-
-        list_round.append({"name":parent["name"],"value":parent["value"],"parent":"null","children":h})
-        randomized_scores.remove(h[0])
-        randomized_scores.remove(h[1])
-        n=n-1
-    list_x=[{"name":x["name"],"value":x["value"],"parent":"null","children":[x]} for x in randomized_scores]
-    list_round.extend(list_x)
-
-    n = len(list_round)
-
-    j=log2(n)
-    round =j+1
-    list_p=list_round
-    while(j>0):
-        list_round1=[]
-        i = 0
-        while(i<n):
-            parent=list_p[i] if list_p[i]["value"] > list_p[i + 1]["value"] else list_p[i + 1]
-            list_p[i]["parent"]=parent["name"]
-            list_p[i]["diff"]=list_p[i]["value"]-list_p[i + 1]["value"]
-            list_p[i+1]["parent"]=parent["name"]
-            list_p[i+1]["diff"] = list_p[i+1]["value"] - list_p[i]["value"]
-
-            list_round1.append({"name":parent["name"],"parent":"null","value":parent["value"],"children":list_p[i:i+2]})
-            i=i+2
-        n=len(list_round1)
-
-        list_p=list_round1[:]
-        j=j-1
-
-
+    n = len(candi)
+    matrix1= runoff_function(matrix, n)
 
     approval["scores"] = approval_scores
 
@@ -850,7 +780,9 @@ def result_scores(request, pk):
     runoff_method["stv"]= matrix1
     runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
 
-    randomized_method = {"list":list_p,"round":round}
+    round,list_cand=randomized_round(poll)
+
+    randomized_method = {"list":list_cand,"round":round}
 
 
     method= dict()
@@ -865,3 +797,110 @@ def result_scores(request, pk):
 def data_page(request, pk ):
     poll = get_object_or_404(VotingPoll, id=pk)
     return render(request, 'polls/data.html', locals())
+
+
+def randomized_round(poll):
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    candidates1 = [{"value": x.id, "name": str(x), "parent": x.candidate} for x in candidates]
+    len_cand = len(candidates)
+
+    a, b = modf(log2(len_cand))
+    if a != 0:
+        n = len_cand - pow(2, b)
+    else:
+        n = len_cand / 2
+    list1 = []
+    while (n > 0):
+
+        k = sample(candidates1, 2)
+        cand1 = k[0]
+        cand2 = k[1]
+        round_randomized(votes, voters, cand1, cand2, list1)
+        candidates1.remove(cand1)
+        candidates1.remove(cand2)
+        n = n - 1
+
+    list_x1 = [{"name": x["name"], "value": x["value"], "parent": "null", "children": [x]} for x in candidates1]
+
+    list1.extend(list_x1)
+    n = len(list1)
+
+    j = log2(n)
+    n=n/2
+    round = j + 1
+
+    while (j > 0):
+        list_round = []
+        i = 0
+        while (i < n):
+            cand1 = list1[i]
+            cand2 = list1[i + 1]
+            round_randomized(votes, voters, cand1, cand2, list_round)
+            i = i + 1
+        n = len(list_round)/2
+        list1 = list_round[:]
+        j = j - 1
+
+    return round,list1
+
+
+def round_randomized(votes,voters,cand1,cand2,*parameters):
+    sum1 = 0
+    sum2 = 0
+    for v in voters:
+        vote1 = votes.get(voter=v, candidate=cand1["value"])
+        vote2 = votes.get(voter=v, candidate=cand2["value"])
+        if vote1.value > vote2.value:
+            sum1 = sum1 + 1
+        else:
+            sum2 = sum2 + 1
+    if sum1 > sum2:
+        parent = cand1
+    else:
+        parent = cand2
+
+    cand1["parent"] = parent["name"]
+    cand2["parent"] = parent["name"]
+    cand1["diff"] = sum1
+    cand2["diff"] = sum2
+
+    parameters[0].append({"name": parent["name"],"value": parent["value"], "parent": "null", "children": [cand1, cand2]})
+
+
+def condorcet(n,nodes):
+    i = 0
+    links = []
+    nodes = sorted(nodes, key=itemgetter('value'), reverse=True)
+    while (i < n - 1):
+        j = i + 1
+        while (j < n):
+
+            a = nodes[i]["value"]
+            b = nodes[j]["value"]
+            link = {}
+            link["value"] = abs(a - b)
+            if a - b >= 0:
+                link["source"] = i
+                link["target"] = j
+
+            else:
+                link["source"] = j
+                link["target"] = i
+            links.append(link)
+            j = j + 1
+        i = i + 1
+    return links
+
+def runoff_function(matrix,n):
+    matrix= sorted(matrix, key=itemgetter('plurality','borda'),reverse=True)
+
+    matrix1=[]
+    while n>0:
+        matrix1.append(matrix[:n])
+        n=n-1
+
+    return matrix1
+
+

@@ -10,9 +10,9 @@
 {% block content %}
 
     <div class="container">
-        <div class="well">
+
             <h2>{{ poll.title }}</h2>
-            <h3>{{ title }}</h3>
+
              <button class="btn btn-custom btn-lg  center-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             {% trans 'More about the' %}  {{ title }} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
 
@@ -21,7 +21,7 @@
             <div class="well">
                {{ explanation }}
             </div>
-        </div>
+
 
         </div>
 
@@ -57,4 +57,8 @@
 </div>
     </div>
     <script src="{% static 'polls/js/result.js' %}" type="text/javascript"></script>
+    <script src="{% static 'polls/js/scoring-method.js' %}" type="text/javascript"></script>
+    <script src="{% static 'polls/js/condorcet-method.js' %}" type="text/javascript"></script>
+    <script src="{% static 'polls/js/run-off-method.js' %}" type="text/javascript"></script>
+    <script src="{% static 'polls/js/randomized-method.js' %}" type="text/javascript"></script>
 {% endblock %}
