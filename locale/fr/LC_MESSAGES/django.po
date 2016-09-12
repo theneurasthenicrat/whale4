@@ -605,7 +605,7 @@ msgstr "Votez"
 
 #: polls/templates/polls/home.html:122
 msgid "What is Whale"
-msgstr "Qu'est-ce que la baleine ?"
+msgstr "Qu'est-ce que Whale ?"
 
 #: polls/templates/polls/home.html:128
 msgid "What is Whale left"
