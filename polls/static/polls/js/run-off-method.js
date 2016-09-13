@@ -21,6 +21,18 @@ function runoff_plot(runoff) {
 
     var margin = {top: 20, right: 20, bottom: 20, left: 20};
 
+    var n= matrix[0].length;
+    var round= matrix.length;
+     var padding_round=10;
+     var padding_cand=10;
+     var padding_cand_round=10;
+     var margin_text_round=15;
+     var margin_text=50;
+     var round_step=(width/round)-padding_round;
+     var cand_width=(round_step-padding_round)-padding_cand_round;
+     var cand_height=((height-margin_text)/n)-padding_cand;
+     var cand_height_padding=((height-margin_text)/n);
+
 
     var x = d3.scale.ordinal().rangeBands([0, width]);
     x.domain(d3.range(matrix.length));
@@ -50,39 +62,40 @@ function runoff_plot(runoff) {
     roundG
         .append("rect")
         .attr("y", 0)
-        .attr("width",x.rangeBand()-10)
+        .attr("width",round_step)
         .attr("height", height)
-        .attr("fill", "yellow")
-        .attr("opacity", 0.1);
+        .attr("fill", "#cccccc")
+        .attr("opacity",0.5);
+
 
     roundG
         .append("text")
-        .attr("x", 0)
+        .attr("x",round_step/2 )
+         .attr("y",margin_text_round)
         .attr("dy", ".35em")
-        .attr("text-anchor", "start")
-        .text(function(d, i) {return i == (matrix.length-1) ? "Winner" : "Round " + (i+1);})
-        .attr("transform", function(d, j) {return "translate(" + (y.rangeBand()/ 2) + "," + (50 / 2) + ")"; });
+        .attr("text-anchor", "middle")
+        .text(function(d, i) {return i == (matrix.length-1) ? "Winner" : "Round " + (i+1);});
+
 
     var roundElmt = row.selectAll(".round")
         .data(function(d) {return d;});
 
     row
-        .attr("transform", function(d, i) {return "translate(" + ( x.rangeBand() * i)  + ")"; });
+        .attr("transform", function(d, i) {return "translate(" + ( (width/round) * i)  + ")"; });
 
     var insideG = roundElmt.enter()
         .append("g")
         .attr("class", function(d, i) {return "g" + i;});
-    var n= matrix[0].length;
+
 
     roundElmt
-        .attr("transform", function(d, j) {return "translate(" + 0 + "," + (((height-100)/n * j )+100)+ ")"; });
+        .attr("transform", function(d, j) {return "translate(" + 0 + "," + (margin_text+(cand_height_padding*j))+ ")"; });
 
     insideG
         .append("rect")
         .attr("x", "10px")
-        .attr("y", "-1em")
-        .attr("width", x.rangeBand()-30)
-        .attr("height", y.rangeBand())
+        .attr("width",cand_width)
+        .attr("height",cand_height)
         .style("fill",function(d, i,j) {return matrix[j].length==1?color(i): color((i)/(matrix[j].length-1));})
         .attr("opacity", 0.8);
 
@@ -90,10 +103,10 @@ function runoff_plot(runoff) {
         .append("text")
         .attr("fill", "#fff")
         .attr("font-weight", "bold")
-        .attr("text-anchor", "start")
-        .attr("x", x.rangeBand()/6)
-        .attr("y", y.rangeBand()/6)
+        .attr("text-anchor", "middle")
+        .attr("x", cand_width/2)
+        .attr("y",cand_height/2)
         .attr("dy", ".35em")
-        .text(function(d){return d.name;});
+        .text(function(d){return d.name+" ("+d.plurality+")";});
 
 }
