@@ -11,24 +11,23 @@
 
     <div class="container">
 
-            <h2>{{ poll.title }}</h2>
-
-             <button class="btn btn-custom btn-lg  center-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <input type="hidden" id="url_poll" value="{% url 'scores' poll.id  %}" />
+        <input type="hidden" id="method" value="{{ method }}" />
+        <div class="thumbnail clearfix">
+           <h2>{{ poll.title }}</h2>
+<div class=" text-center margin1">
+             <button class="btn btn-custom btn-lg " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             {% trans 'More about the' %}  {{ title }} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
 
         </button>
+        <a href="{% url 'results' poll.id %}"   class="btn btn-custom  btn-lg  ">{% bootstrap_icon "list" %} {% trans 'Back to the results' %}</a>
+</div>
         <div class="collapse" id="collapseExample">
             <div class="well">
                {{ explanation }}
             </div>
 
-
         </div>
-
-
-        <input type="hidden" id="url_poll" value="{% url 'scores' poll.id  %}" />
-        <input type="hidden" id="method" value="{{ method }}" />
-        <div class="thumbnail clearfix">
             <div class="container-fluid " id="control">
                 <div class="form-group">
                     <label class="col-xs-3 control-label" for ='option'> {{ label }}</label>
@@ -52,9 +51,7 @@
         <div id="graph"> </div>
 
         </div>
-    <div class="text-center">
-        <a href="{% url 'results' poll.id %}"   class="btn btn-custom  btn-lg ">{% bootstrap_icon "list" %} {% trans 'Back to the results' %}</a>
-</div>
+
     </div>
     <script src="{% static 'polls/js/result.js' %}" type="text/javascript"></script>
     <script src="{% static 'polls/js/scoring-method.js' %}" type="text/javascript"></script>

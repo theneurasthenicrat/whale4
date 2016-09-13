@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 import json
 from polls.models import VotingScore, VotingPoll,\
     Candidate, DateCandidate, UNDEFINED_VALUE, preference_model_from_text
-from accounts.models import WhaleUser
+from accounts.models import User
 
 # simple functions ######################################################################
 
@@ -29,6 +29,10 @@ def days_months(candidates):
 
 def voters_undefined(poll):
     voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    list_voters = []
+    for i in voters:
+        if i not in list_voters:
+            list_voters.append(i)
     if voters:
         initial_candidates = VotingScore.objects.values_list('candidate', flat=True).filter(
             candidate__poll__id=poll.id).distinct()
@@ -37,8 +41,8 @@ def voters_undefined(poll):
 
         for c in candidates_diff:
             c = get_object_or_404(Candidate, id=c)
-            for voter in voters:
-                voter = get_object_or_404(WhaleUser, id=voter)
+            for voter in list_voters:
+                voter = get_object_or_404(User, id=voter)
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
 
