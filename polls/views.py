@@ -783,9 +783,9 @@ def result_scores(request, pk):
     runoff_method["stv"]= matrix1
     runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
 
-    round,list_cand=randomized_round(poll)
+    round,list_a=randomized_round(poll)
 
-    randomized_method = {"list":list_cand,"round":round}
+    randomized_method = {"list":list_a,"round":round}
 
 
     method= dict()
@@ -793,7 +793,6 @@ def result_scores(request, pk):
     method["condorcet"] = condorcet_method
     method["runoff"] = runoff_method
     method["randomized"] = randomized_method
-
     return HttpResponse(json.dumps(method, indent=4, sort_keys=True), content_type="application/json")
 
 
@@ -803,11 +802,17 @@ def data_page(request, pk ):
 
 
 def randomized_round(poll):
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).distinct()
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
+    list_voters = []
+    for i in voters:
+        if i not in list_voters:
+            list_voters.append(i)
+
     candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
     candidates1 = [{"value": x.id, "name": str(x), "parent": x.candidate} for x in candidates]
     len_cand = len(candidates)
+
 
     a, b = modf(log2(len_cand))
     if a != 0:
@@ -820,7 +825,7 @@ def randomized_round(poll):
         k = sample(candidates1, 2)
         cand1 = k[0]
         cand2 = k[1]
-        round_randomized(votes, voters, cand1, cand2, list1)
+        round_randomized(votes, list_voters, cand1, cand2, list1)
         candidates1.remove(cand1)
         candidates1.remove(cand2)
         n = n - 1
@@ -831,7 +836,6 @@ def randomized_round(poll):
     n = len(list1)
 
     j = log2(n)
-    n=n/2
     round = j + 1
 
     while (j > 0):
@@ -840,19 +844,19 @@ def randomized_round(poll):
         while (i < n):
             cand1 = list1[i]
             cand2 = list1[i + 1]
-            round_randomized(votes, voters, cand1, cand2, list_round)
-            i = i + 1
-        n = len(list_round)/2
+            round_randomized(votes, list_voters, cand1, cand2, list_round)
+            i = i + 2
+        n = len(list_round)
         list1 = list_round[:]
         j = j - 1
 
     return round,list1
 
 
-def round_randomized(votes,voters,cand1,cand2,*parameters):
+def round_randomized(votes,list_voters,cand1,cand2,*parameters):
     sum1 = 0
     sum2 = 0
-    for v in voters:
+    for v in list_voters:
         vote1 = votes.get(voter=v, candidate=cand1["value"])
         vote2 = votes.get(voter=v, candidate=cand2["value"])
         if vote1.value > vote2.value:

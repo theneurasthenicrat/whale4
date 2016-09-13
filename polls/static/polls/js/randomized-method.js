@@ -7,7 +7,7 @@ function randomized(data){
 
     var margin = {top: 20, right: 60, bottom: 20, left: 60},
         width = $("#graph").width() - margin.right - margin.left,
-        height = window.innerHeight/2- margin.top - margin.bottom;
+        height = window.innerHeight/1.4- margin.top - margin.bottom;
 
     var colorRange = d3.scale.category20();
 
@@ -19,6 +19,19 @@ function randomized(data){
 
 
     d3.select("svg").remove();
+    d3.select("div#control").remove();
+
+
+    d3.select("#graph").append("div").attr("id","control")
+        .append("input")
+        .attr("type","button")
+        .attr("class","btn btn-success")
+        .attr("id"," Shuffle_randomized")
+        .attr("value","Shuffle candidates for the first round")
+        .on("click",graph);
+
+
+
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top + margin.bottom)

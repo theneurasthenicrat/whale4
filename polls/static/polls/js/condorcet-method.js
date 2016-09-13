@@ -4,7 +4,7 @@ function condorcet_plot(data) {
     var nodes = data.nodes,
         links = data.links,
         colorTab = ["red", "#e1dd38", "green"],
-        width = $("#graph").width()/2,
+        width =  ( $(window).width()>970) ? $("#graph").width()/2 : $("#graph").width(),
         height = window.innerHeight / 2,
         width1 = width-margin.right-margin.left,
         height1 = width-margin.right-margin.left,
@@ -71,7 +71,10 @@ function condorcet_plot(data) {
         .start();
 
     d3.selectAll("svg").remove();
-    var svg = d3.select("#graph").append("svg")
+
+
+    var svg = d3.select("#graph").append("div").attr("class", "col-md-6")
+        .append("svg")
         .attr("width", width )
         .attr("height", width);
 
@@ -81,7 +84,7 @@ function condorcet_plot(data) {
         .enter().append("svg:marker")
         .attr("id", String)
         .attr("viewBox", "0 0 10 10")
-        .attr("refX", 20)
+        .attr("refX", 18)
         .attr("refY", 5)
         .attr("markerWidth", 10)
         .attr("markerHeight", 10)
@@ -113,8 +116,10 @@ function condorcet_plot(data) {
         .style("stroke-width", 1.5);
 
     node.append("text")
-        .attr("x", 22)
+        .attr("x", 0)
+         .attr("y", -20)
         .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
         .style("fill", function (d) {
             return color(d.value);
         })
@@ -140,7 +145,8 @@ function condorcet_plot(data) {
             });
     }
 
-    var matrixSvg = d3.select("#graph").append("svg")
+    var matrixSvg = d3.select("#graph").append("div").attr("class", "col-md-6")
+        .append("svg")
         .attr("width", width1 )
         .attr("height", height1 + margin.top + margin.bottom)
         .style("margin-left", margin.left + "px")
@@ -166,7 +172,7 @@ function condorcet_plot(data) {
 
     row.append("text")
         .attr("x", -6)
-        .attr("y", x.rangeBand() / 5)
+        .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
         .style("fill", function (d, i) {
@@ -190,7 +196,7 @@ function condorcet_plot(data) {
 
     column.append("text")
         .attr("x", 6)
-        .attr("y", x.rangeBand() / 5)
+        .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {
