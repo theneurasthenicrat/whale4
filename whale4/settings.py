@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'accounts',
     'polls',
-    'bootstrap3'  
+    'bootstrap3',
+    'polymorphic',
 )
 
 MIDDLEWARE_CLASSES = (

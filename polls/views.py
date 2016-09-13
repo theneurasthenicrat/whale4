@@ -54,7 +54,7 @@ def with_voter_rights(fn):
                 messages.error(request, mark_safe(_('This is not your vote')))
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
 
-        if request.user is not None and request.user.id == user.id:
+        if not (isinstance(user,WhaleUser)) or (request.user is not None and request.user.id == user.id):
             return fn(request, pk, voter)
         else:
             messages.error(request, mark_safe(_('This is not your vote')))
@@ -571,9 +571,12 @@ def view_poll(request, pk):
     list_preflib_votes = []
     votes=[]
 
+
     for v in list_voters:
         user = get_object_or_404(User, id=v)
-        h={'id':user.id,'nickname':user.nickname,'scores':[]}
+        modify_allowed= not (isinstance(user,WhaleUser)) or (request.user is not None and request.user.id == user.id)
+
+        h={'id':user.id,'nickname':user.nickname,'scores':[],'modify': modify_allowed}
         k={'name':user.nickname,'values':[]}
         g=[user.nickname]
         j=[]

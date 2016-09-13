@@ -65,6 +65,7 @@
 
             {% elif poll.option_ballots %}		      
             {% else %}
+            {% if v.modify%}
             <a href="{% url 'updateVote' pk=poll.id voter=v.id %}" >{% bootstrap_icon "pencil" %}</a>
 	    
             <a href="#" class="remove" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{% bootstrap_icon "remove" %}</a>
@@ -86,6 +87,8 @@
                 </div>
               </div>
             </div>
+            {% endif %}
+
             {% endif %}
           </td>
           <th>

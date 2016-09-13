@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from polymorphic.models import PolymorphicModel
+from polymorphic.manager import PolymorphicManager
 import uuid
 from Crypto.Cipher import AES
 import base64
@@ -29,12 +31,13 @@ cipher = AES.new(whale4.settings.SECRET_KEY)
 # models #####################################################################
 
 
-class User(models.Model):
+class User(PolymorphicModel):
+
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     nickname = models.CharField(verbose_name=_('Nickname *'), max_length=30)
 
 
-class WhaleUserManager(BaseUserManager):
+class WhaleUserManager(PolymorphicManager,BaseUserManager):
     def create_user(self, email, nickname, password=None,*args,**kwargs):
         user = self.model(email=self.normalize_email(email), nickname=nickname,*args,**kwargs)
         user.set_password(password)
@@ -49,11 +52,11 @@ class WhaleUserManager(BaseUserManager):
 
 
 class WhaleUser(User, AbstractBaseUser):
+    objects = WhaleUserManager()
     email = models.EmailField(verbose_name=_('Email address *'), max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    objects = WhaleUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nickname']
