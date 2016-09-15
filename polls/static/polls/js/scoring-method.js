@@ -176,28 +176,30 @@ function scoring_plot(scoring) {
 
 function curve_approval(data) {
 
-    var margin = {top: 20, right: 20, bottom: 60, left: 40},
-        width  = $("#graph").width()-margin.right-margin.left,
+    var margin = {top: 20, right: 20, bottom: 60, left: 60},
+        width  = $("#graph").width()-margin.right-margin.left-140,
         height = window.innerHeight/2;
 
 
 
 // Set the ranges
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width]);
+    var x = d3.scale.linear().range([0,width]);
     var y = d3.scale.linear().range([height, 0]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+        .innerTickSize(-height)
+        .outerTickSize(0);
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left");
 
+
     var color = d3.scale.category10();
 
-    
+
     
     var line = d3.svg.line()
         .x(function(d) { return x(d.x); })
@@ -206,13 +208,14 @@ function curve_approval(data) {
 
   d3.select("svg").remove();
   var svg = d3.select("#graph").append("svg")
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left + margin.right+140)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
 
-    x.domain(data.map(function(d) { return d.x; }));
+
+    x.domain(d3.extent(data.map(function(d) { return d.x;} )))
 
     y.domain([0, d3.max(data, function(d) { return d.y; })]);
 
@@ -234,11 +237,13 @@ function curve_approval(data) {
             .attr("x", 10)
             .attr("transform",  "translate(" + x(d.values[d.values.length -1].x) + "," + i*30 + ")" )
             .attr("dy", "0.35em")
-            .style("font", "10px sans-serif")
-            .style("stroke",  color(d.key) )
+            .style("fill",  color(d.key) )
             .text( d.key);
 
     });
+
+
+
 
     // Add the X Axis
     svg.append("g")
@@ -246,10 +251,26 @@ function curve_approval(data) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
+      svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(" Approval Scores");
+
     // Add the Y Axis
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+
+     svg.append("text")
+      .attr("y", height+margin.bottom/2)
+      .attr("x",width/ 2)
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(" Approval Threshold");
+
 
 
 }

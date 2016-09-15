@@ -775,14 +775,14 @@ def scoring_method(candidates,preference_model,votes):
             for score in scores[c.id]:
                 sum_approval = sum_approval + (1 if score >= y else 0)
             th.append({"x": str(c), "y": sum_approval})
-            curve_approval.append({"candidate": str(c), "x": y, "y": sum_approval})
+            curve_approval.append({"candidate": str(c), "x": preference_model.value2text(y), "y": sum_approval})
 
         approval_scores.append(th)
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
         approval["threshold"] = [x + 1 for x in preference_model.values[1:]]
         approval["scores"] = approval_scores
-
+        curve_approval.reverse()
         score_method = dict()
         score_method["borda"] = borda_scores
         score_method["plurality"] = plurality_scores

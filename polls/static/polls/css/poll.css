@@ -1117,6 +1117,9 @@ table tbody tr td.controls a.remove:hover {
 	  stroke: #000;
 	  shape-rendering: crispEdges;
 	}
+    .tick line{
+    opacity: 0.2;
+  }
 
     .node {
 		cursor: pointer;
