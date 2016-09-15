@@ -8,6 +8,7 @@ function graph() {
     d3.json(url, function(error, data) {
 
         d3.select("#controlApproval").style("visibility","hidden");
+        d3.select("#controlCondorcet").style("visibility","hidden");
         method= parseInt(method);
 
         switch(method) {
@@ -35,6 +36,7 @@ graph();
 d3.select("#option").on("change", graph);
 
 d3.select("#approval").on("change", graph);
+d3.select("#graph_type").on("change", graph);
 
 d3.select(window).on('resize', graph);
 

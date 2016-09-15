@@ -765,7 +765,7 @@ def result_scores(request, pk):
     links=condorcet(n, nodes)
 
     n = len(candi)
-    matrix1,list4= runoff_function(matrix, n,poll)
+    matrix1,list4= runoff_function(poll)
 
     approval["scores"] = approval_scores
 
@@ -908,7 +908,7 @@ def search(name, *parameters):
             return x
 
 
-def runoff_function(matrix,n,poll):
+def runoff_function(poll):
     voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
     list_voters = []
     for i in voters:
@@ -938,6 +938,7 @@ def runoff_function(matrix,n,poll):
     list4= copy.deepcopy(list3)
 
     list3 = sorted(list3, key=itemgetter('plurality', 'borda'), reverse=True)
+
 
     list2=[]
 

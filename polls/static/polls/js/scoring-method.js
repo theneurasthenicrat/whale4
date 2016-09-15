@@ -69,9 +69,7 @@ function scoring_plot(scoring) {
 
     var color = d3.scale.linear()
         .range(["red", "#e1dd38", "green"]);
-
-
-
+     
 
 
     d3.select("svg").remove();
@@ -85,15 +83,7 @@ function scoring_plot(scoring) {
     y.domain([0, d3.max(data, function(d) { return d.y; })]);
     color.domain([d3.min(data, function(d) { return d.y; }),d3.mean(data, function(d) { return d.y; }),d3.max(data, function(d) { return d.y; })]);
 
-
-
-
-
-
-
-
-
-
+     
     var bars = svg.selectAll(".bar").data(data)
 
     bars.exit()

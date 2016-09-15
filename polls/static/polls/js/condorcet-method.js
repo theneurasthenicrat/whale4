@@ -1,13 +1,31 @@
 
 function condorcet_plot(data) {
-    var margin = {top:80, right: 10, bottom: 20, left: 80};
+      d3.selectAll("svg").remove();
+    d3.select("#controlCondorcet").style("visibility", "visible");
+
+
+    var option = d3.select("#graph_type").node().value;
+
+    switch (option) {
+        case 'node':
+
+            nodes_links(data);
+            break;
+        case 'matrix':
+
+            matrix_graph(data);
+    }
+
+}
+
+function nodes_links(data) {
+        var margin = {top:80, right: 10, bottom: 20, left: 80};
     var nodes = data.nodes,
         links = data.links,
         colorTab = ["red", "#e1dd38", "green"],
-        width =  ( $(window).width()>970) ? $("#graph").width()/2 : $("#graph").width(),
+        width =   $("#graph").width()/1.5,
         height = window.innerHeight / 2,
-        width1 = width-margin.right-margin.left,
-        height1 = width-margin.right-margin.left,
+
         minNodeValue = d3.min(nodes, function (d) {
             return d.value;
         }),
@@ -25,43 +43,6 @@ function condorcet_plot(data) {
 
 
 
-    var maxLinkValue = d3.max(links, function (d) {
-        return d.value;
-    });
-
-
-    var x = d3.scale.ordinal().rangeBands([0, width1-margin.right-margin.left]),
-        z = d3.scale.linear().domain([0, 4]).clamp(true);
-
-
-    var color1 = d3.scale.linear()
-        .domain([-maxLinkValue, 0, maxLinkValue])
-        .range(["red", "#e1dd38", "green"]);
-
-    var matrix = [],
-        n = nodes.length;
-
-
-    var i;
-
-    for (i = 0; i < nodes.length; i++) {
-        matrix[i] = d3.range(n).map(function (j) {
-            return {x: j, y: i, z: 0};
-        });
-    }
-
-
-    // Convert links to matrix; count character occurrences.
-    links.forEach(function (link) {
-        matrix[link.source][link.target].z = link.value;
-        matrix[link.target][link.source].z = 0 - link.value;
-
-    });
-
-
-    // The default sort order.
-    x.domain(d3.range(n));
-
     var force = d3.layout.force()
         .nodes(d3.values(nodes))
         .links(links)
@@ -70,10 +51,7 @@ function condorcet_plot(data) {
         .on("tick", tick)
         .start();
 
-    d3.selectAll("svg").remove();
-
-
-    var svg = d3.select("#graph").append("div").attr("class", "col-md-6")
+       var svg = d3.select("#graph")
         .append("svg")
         .attr("width", width )
         .attr("height", width);
@@ -145,7 +123,78 @@ function condorcet_plot(data) {
             });
     }
 
-    var matrixSvg = d3.select("#graph").append("div").attr("class", "col-md-6")
+}
+
+function matrix_graph(data){
+
+    var margin = {top:80, right: 10, bottom: 20, left: 80};
+    var nodes = data.nodes,
+        links = data.links,
+        colorTab = ["red", "#e1dd38", "green"],
+        width =  ( $(window).width()>970) ? $("#graph").width()/2 : $("#graph").width(),
+        height = window.innerHeight / 2,
+        width1 = width-margin.right-margin.left,
+        height1 = width-margin.right-margin.left,
+        minNodeValue = d3.min(nodes, function (d) {
+            return d.value;
+        }),
+        meanNodeValue = d3.mean(nodes, function (d) {
+            return d.value;
+        }),
+        maxNodeValue = d3.max(nodes, function (d) {
+            return d.value;
+        });
+
+    var color = d3.scale.linear()
+        .domain([nodes.length, 5,0])
+        .range(colorTab);
+
+
+
+
+    var maxLinkValue = d3.max(links, function (d) {
+        return d.value;
+    });
+
+
+    var x = d3.scale.ordinal().rangeBands([0, width1-margin.right-margin.left]),
+        z = d3.scale.linear().domain([0, 4]).clamp(true);
+
+
+    var color1 = d3.scale.linear()
+        .domain([-maxLinkValue, 0, maxLinkValue])
+        .range(["red", "#e1dd38", "green"]);
+
+    var matrix = [],
+        n = nodes.length;
+
+
+    var i;
+
+    for (i = 0; i < nodes.length; i++) {
+        matrix[i] = d3.range(n).map(function (j) {
+            return {x: j, y: i, z: 0};
+        });
+    }
+
+
+    // Convert links to matrix; count character occurrences.
+    links.forEach(function (link) {
+        matrix[link.source][link.target].z = link.value;
+        matrix[link.target][link.source].z = 0 - link.value;
+
+    });
+
+
+    // The default sort order.
+    x.domain(d3.range(n));
+
+
+
+
+
+
+    var matrixSvg = d3.select("#graph")
         .append("svg")
         .attr("width", width1 )
         .attr("height", height1 + margin.top + margin.bottom)
@@ -176,7 +225,7 @@ function condorcet_plot(data) {
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
         .style("fill", function (d, i) {
-            return color(nodes[i].value);
+            return color(i);
         })
         .text(function (d, i) {
             return nodes[i].name;
@@ -200,7 +249,7 @@ function condorcet_plot(data) {
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {
-            return color(nodes[i].value);
+            return color(i);
         })
         .text(function (d, i) {
             return nodes[i].name;
