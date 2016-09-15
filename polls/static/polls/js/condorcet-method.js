@@ -3,7 +3,6 @@ function condorcet_plot(data) {
       d3.selectAll("svg").remove();
     d3.select("#controlCondorcet").style("visibility", "visible");
 
-
     var option = d3.select("#graph_type").node().value;
 
     switch (option) {

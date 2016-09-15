@@ -11,7 +11,7 @@
 
     <div class="container">
 
-        <input type="hidden" id="url_poll" value="{% url 'scores' poll.id  %}" />
+        <input type="hidden" id="url_poll" value="{% url 'scores' pk=poll.id method=method %}" />
         <input type="hidden" id="method" value="{{ method }}" />
         <div class="thumbnail clearfix">
            <h2>{{ poll.title }}</h2>

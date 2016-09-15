@@ -1,4 +1,5 @@
 function scoring_plot(scoring) {
+     d3.select("#controlApproval").style("visibility","hidden");
     var option = d3.select("#option").node().value;
     var data;
     switch (option) {
@@ -46,7 +47,7 @@ function scoring_plot(scoring) {
 
 
  function bar_char(data) {
-    var margin = {top: 40, right: 20, bottom: 120, left: 60},
+    var margin = {top: 40, right: 20, bottom: 150, left: 60},
         width  = $("#graph").width()-margin.right-margin.left,
         height = window.innerHeight/2;
 
@@ -80,7 +81,9 @@ function scoring_plot(scoring) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     x.domain(data.map(function(d) { return d.x; }));
-    y.domain([0, d3.max(data, function(d) { return d.y; })]);
+   var yMax=d3.max(data, function(d) { return d.y });
+     var yMin=d3.min(data, function(d) { return d.y });
+    y.domain([Math.min(0, yMin),yMax ]);
     color.domain([d3.min(data, function(d) { return d.y; }),d3.mean(data, function(d) { return d.y; }),d3.max(data, function(d) { return d.y; })]);
 
      
@@ -102,13 +105,13 @@ function scoring_plot(scoring) {
     bars.transition().duration(750)
         .attr("x", function(d) { return x(d.x); })
         .attr("width", x.rangeBand())
-        .attr("y", function(d) { return y(d.y); })
+        .attr("y", function(d) { return y(Math.max(0, d.y)); })
         .attr("fill",function(d) { return color(d.y); })
-        .attr("height", function(d) { return height - y(d.y); });
+        .attr("height", function(d) { return Math.abs( y(d.y)-y(0 ));})
 
      bars.enter().append("text")
          .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
-         .attr("y", function(d) { return y(d.y)+10; })
+         .attr("y", function(d) { return  d.y >0 ?y(d.y):y(d.y)+30; })
          .attr("text-anchor", "middle")
          .attr("dy", "-1em")
          .attr("fill",function(d) { return color(d.y); })
@@ -117,10 +120,12 @@ function scoring_plot(scoring) {
 
          svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + y(0) + ")")
         .call(xAxis)
         .selectAll("text")
-        .call(wrap,x.rangeBand());
+             .attr("transform", function() { return  data[0].y >0 ?"rotate(45)":"rotate(90)"; })
+             .style("text-anchor", "start")
+             .call(wrap,x.rangeBand());
 
 
     svg.append("g")
@@ -163,6 +168,8 @@ function scoring_plot(scoring) {
 
 
  }
+
+
 
 
 

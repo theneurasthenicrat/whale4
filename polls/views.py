@@ -3,6 +3,7 @@ from operator import itemgetter
 import json
 import string
 import copy
+import numpy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -698,14 +699,44 @@ def result_view(request, pk ,method):
     return render(request, 'polls/detail_result.html', locals())
 
 
-def result_scores(request, pk):
+def result_scores(request, pk,method):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
+    candidates = (
+    DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+        poll_id=poll.id))
 
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
 
     preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
+
+    list_voters = []
+    for i in voters:
+        if i not in list_voters:
+            list_voters.append(i)
+
+    data= dict()
+    method = int(method)
+    if method == 1:
+        data["scoring"]=scoring_method(candidates,preference_model,votes)
+    if method == 2:
+        data["condorcet"] = condorcet(list_voters,candidates,votes)
+    if method == 3:
+        data["runoff"] = runoff_function(candidates,list_voters,preference_model,votes)
+    if method == 4:
+       data["randomized"] = randomized_round(candidates,votes,list_voters)
+
+    return HttpResponse(json.dumps(data, indent=4, sort_keys=True), content_type="application/json")
+
+
+def data_page(request, pk ):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    return render(request, 'polls/data.html', locals())
+
+
+def scoring_method(candidates,preference_model,votes):
+
     scores = {}
     for c in candidates:
         scores[c.id] = []
@@ -719,102 +750,52 @@ def result_scores(request, pk):
     borda_scores = []
     plurality_scores = []
     veto_scores = []
-    letter=list(string.ascii_uppercase)
-    nodes=[]
-    matrix=[]
-    for i,c in enumerate(candidates):
+
+    for i, c in enumerate(candidates):
         sum_borda = 0
         sum_plurality = 0
         sum_veto = 0
-        node={}
-        runoff={}
+
         for score in scores[c.id]:
             sum_borda = sum_borda + (score if score != UNDEFINED_VALUE else 0)
             sum_plurality = sum_plurality + (1 if score == preference_model.max() else 0)
-            sum_veto = sum_veto + (1 if score != (preference_model.min()) else 0)
+            sum_veto = sum_veto + (0 if score != (preference_model.min()) else -1)
         candi.append(str(c))
-        node["name"]=str(c)
-        node["value"]=sum_borda
-        runoff["name"]=letter[i]
-        runoff["plurality"]=sum_plurality
-        runoff["borda"]=sum_borda
-        matrix.append(runoff)
-        nodes.append(node)
-        borda_scores.append({"x":str(c),"y":sum_borda})
-        plurality_scores.append({"x":str(c),"y":sum_plurality})
 
-        veto_scores.append({"x":str(c),"y":sum_veto})
+        borda_scores.append({"x": str(c), "y": sum_borda})
+        plurality_scores.append({"x": str(c), "y": sum_plurality})
+
+        veto_scores.append({"x": str(c), "y": sum_veto})
     approval_scores = []
-    curve_approval=[]
+    curve_approval = []
     for y in approval["threshold"]:
         th = []
         for c in candidates:
             sum_approval = 0
             for score in scores[c.id]:
                 sum_approval = sum_approval + (1 if score >= y else 0)
-            th.append({"x":str(c),"y":sum_approval})
-            curve_approval.append({"candidate":str(c),"x":y,"y":sum_approval})
+            th.append({"x": str(c), "y": sum_approval})
+            curve_approval.append({"candidate": str(c), "x": y, "y": sum_approval})
 
         approval_scores.append(th)
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
-        approval["threshold"] = [x+1 for x in preference_model.values[1:]]
+        approval["threshold"] = [x + 1 for x in preference_model.values[1:]]
+        approval["scores"] = approval_scores
+
+        score_method = dict()
+        score_method["borda"] = borda_scores
+        score_method["plurality"] = plurality_scores
+        score_method["veto"] = veto_scores
+        score_method["approval"] = approval
+        score_method["curve_approval"] = curve_approval
+    return score_method
 
 
-    n = len(candi)
-    links=condorcet(n, nodes)
+def randomized_round(candidates,votes,list_voters):
 
-    n = len(candi)
-    matrix1,list4= runoff_function(poll)
-
-    approval["scores"] = approval_scores
-
-
-    score_method = dict()
-    score_method["borda"] = borda_scores
-    score_method["plurality"] = plurality_scores
-    score_method["veto"] = veto_scores
-    score_method["approval"] = approval
-    score_method["curve_approval"] = curve_approval
-    condorcet_method = dict()
-    condorcet_method["nodes"] = nodes
-    condorcet_method["links"] = links
-
-    runoff_method = dict()
-    runoff_method["stv"]= matrix1
-    runoff_method["list"]= list4
-    runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
-
-    round,list_a=randomized_round(poll)
-
-    randomized_method = {"list":list_a,"round":round}
-
-
-    method= dict()
-    method["scoring"]=score_method
-    method["condorcet"] = condorcet_method
-    method["runoff"] = runoff_method
-    method["randomized"] = randomized_method
-    return HttpResponse(json.dumps(method, indent=4, sort_keys=True), content_type="application/json")
-
-
-def data_page(request, pk ):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    return render(request, 'polls/data.html', locals())
-
-
-def randomized_round(poll):
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
-    list_voters = []
-    for i in voters:
-        if i not in list_voters:
-            list_voters.append(i)
-
-    candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
     candidates1 = [{"value": x.id, "name": str(x), "parent": x.candidate} for x in candidates]
     len_cand = len(candidates)
-
 
     a, b = modf(log2(len_cand))
     if a != 0:
@@ -852,7 +833,7 @@ def randomized_round(poll):
         list1 = list_round[:]
         j = j - 1
 
-    return round,list1
+    return {"list":list1,"round":round}
 
 
 def round_randomized(votes,list_voters,cand1,cand2,*parameters):
@@ -878,10 +859,30 @@ def round_randomized(votes,list_voters,cand1,cand2,*parameters):
     parameters[0].append({"name": parent["name"],"value": parent["value"], "parent": "null", "children": [cand1, cand2]})
 
 
-def condorcet(n,nodes):
+def condorcet(list_voters,candidates,votes):
+
+    nodes = [{'name':str(x),'value':0} for x in candidates]
+    n = len(candidates)
+    sum2 = numpy.zeros((n, n))
+
+
+    for v in list_voters:
+        for i,c1 in enumerate(candidates):
+            sum1=0
+            for j,c2 in enumerate(candidates):
+                if c1.id!=c2.id:
+                    vote1 = votes.get(voter=v, candidate=c1.id)
+                    vote2 = votes.get(voter=v, candidate=c2.id)
+                    if vote1.value > vote2.value:
+                        sum1 = sum1 + 1
+                        sum2[i][j]+= 1
+            nodes[i]['value']+=sum1
+
+
     i = 0
     links = []
     nodes = sorted(nodes, key=itemgetter('value'), reverse=True)
+
     while (i < n - 1):
         j = i + 1
         while (j < n):
@@ -900,26 +901,15 @@ def condorcet(n,nodes):
             links.append(link)
             j = j + 1
         i = i + 1
-    return links
-
-def search(name, *parameters):
-    for x in parameters[0]:
-        if x["name"]== name:
-            return x
+    condorcet_method = dict()
+    condorcet_method["nodes"] = nodes
+    condorcet_method["links"] = links
+    return condorcet_method
 
 
-def runoff_function(poll):
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
-    list_voters = []
-    for i in voters:
-        if i not in list_voters:
-            list_voters.append(i)
 
-    candidates = (
-    DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-        poll_id=poll.id))
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+def runoff_function(candidates,list_voters,preference_model,votes):
+
     list3=[]
     letter = list(string.ascii_uppercase)
     for i,c in enumerate(candidates):
@@ -965,10 +955,14 @@ def runoff_function(poll):
         list2.append(list1)
 
         z-=1
+    runoff_method = dict()
+    runoff_method["stv"] = list2
+    runoff_method["list"] = list4
+    runoff_method["trm"] = [list2[0],list2[-2], list2[-1]]
 
 
 
 
-    return list2,list4
+    return  runoff_method
 
 

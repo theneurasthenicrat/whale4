@@ -2,13 +2,14 @@
 
 var url=d3.select("#url_poll").property("value");
 var method=d3.select("#method").property("value");
+    d3.select("#controlApproval").style("visibility","hidden");
+d3.select("#controlCondorcet").style("visibility","hidden");
+
 
 function graph() {
 
     d3.json(url, function(error, data) {
 
-        d3.select("#controlApproval").style("visibility","hidden");
-        d3.select("#controlCondorcet").style("visibility","hidden");
         method= parseInt(method);
 
         switch(method) {
