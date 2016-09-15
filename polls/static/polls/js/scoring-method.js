@@ -89,26 +89,7 @@ function scoring_plot(scoring) {
 
 
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-        .selectAll("text")
-        .call(wrap,x.rangeBand());
 
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-
-      svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Scores");
 
 
 
@@ -143,6 +124,27 @@ function scoring_plot(scoring) {
          .attr("fill",function(d) { return color(d.y); })
          .style("font-weight","bold")
          .text( function(d) { return d.y; });
+
+         svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .call(wrap,x.rangeBand());
+
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+
+      svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Scores");
 
 
     function wrap(text, width) {
@@ -197,9 +199,10 @@ function curve_approval(data) {
         .orient("left");
 
     var color = d3.scale.category10();
-// Define the line
-    var line = d3.svg.line()
 
+    
+    
+    var line = d3.svg.line()
         .x(function(d) { return x(d.x); })
         .y(function(d) { return y(d.y); })
       .interpolate("basis");
@@ -210,11 +213,7 @@ function curve_approval(data) {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
-
-
+    
 
     x.domain(data.map(function(d) { return d.x; }));
 

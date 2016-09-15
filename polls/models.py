@@ -136,8 +136,8 @@ class PreferenceModel:
 
 class Ranking(PreferenceModel):
     def __init__(self, ties_allowed, nb_cand ):
-        values = [x for x in range(nb_cand-1,-1,-1 )]
-        texts = [str(x) for x in range(1,nb_cand+1 )]
+        texts = [str(x) for x in range(nb_cand,-1,-1 )]
+        values = [x for x in range(0,nb_cand )]
         PreferenceModel.__init__(self,"ranking"+ ("WithTies" if ties_allowed == 1 else "NoTies"),texts,values)
 
 

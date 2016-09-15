@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from operator import itemgetter
 import json
-
+import string
+import copy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -718,10 +719,10 @@ def result_scores(request, pk):
     borda_scores = []
     plurality_scores = []
     veto_scores = []
-
+    letter=list(string.ascii_uppercase)
     nodes=[]
     matrix=[]
-    for c in candidates:
+    for i,c in enumerate(candidates):
         sum_borda = 0
         sum_plurality = 0
         sum_veto = 0
@@ -734,7 +735,7 @@ def result_scores(request, pk):
         candi.append(str(c))
         node["name"]=str(c)
         node["value"]=sum_borda
-        runoff["name"]=str(c)
+        runoff["name"]=letter[i]
         runoff["plurality"]=sum_plurality
         runoff["borda"]=sum_borda
         matrix.append(runoff)
@@ -764,9 +765,10 @@ def result_scores(request, pk):
     links=condorcet(n, nodes)
 
     n = len(candi)
-    matrix1= runoff_function(matrix, n)
+    matrix1,list4= runoff_function(matrix, n,poll)
 
     approval["scores"] = approval_scores
+
 
     score_method = dict()
     score_method["borda"] = borda_scores
@@ -774,13 +776,13 @@ def result_scores(request, pk):
     score_method["veto"] = veto_scores
     score_method["approval"] = approval
     score_method["curve_approval"] = curve_approval
-
     condorcet_method = dict()
     condorcet_method["nodes"] = nodes
     condorcet_method["links"] = links
 
     runoff_method = dict()
     runoff_method["stv"]= matrix1
+    runoff_method["list"]= list4
     runoff_method["trm"]= [matrix,matrix[:2],matrix[:1]]
 
     round,list_a=randomized_round(poll)
@@ -900,14 +902,72 @@ def condorcet(n,nodes):
         i = i + 1
     return links
 
-def runoff_function(matrix,n):
-    matrix= sorted(matrix, key=itemgetter('plurality','borda'),reverse=True)
+def search(name, *parameters):
+    for x in parameters[0]:
+        if x["name"]== name:
+            return x
 
-    matrix1=[]
-    while n>0:
-        matrix1.append(matrix[:n])
-        n=n-1
 
-    return matrix1
+def runoff_function(matrix,n,poll):
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
+    list_voters = []
+    for i in voters:
+        if i not in list_voters:
+            list_voters.append(i)
+
+    candidates = (
+    DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
+        poll_id=poll.id))
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+    list3=[]
+    letter = list(string.ascii_uppercase)
+    for i,c in enumerate(candidates):
+        sum_borda = 0
+        sum_plurality = 0
+        list_first=[]
+        for v in list_voters:
+            vote = votes.get(voter=v, candidate=c.id)
+            sum_borda=sum_borda+(vote.value if vote.value != UNDEFINED_VALUE else 0)
+
+            if preference_model.values[-1]== vote.value:
+                sum_plurality=sum_plurality+1
+                list_first.append(v)
+
+        list3.append({'name':str(c),'letter':letter[i],'plurality':sum_plurality,'borda':sum_borda,'list_first':list_first})
+    list4= copy.deepcopy(list3)
+
+    list3 = sorted(list3, key=itemgetter('plurality', 'borda'), reverse=True)
+
+    list2=[]
+
+    list1= copy.deepcopy(list3)
+    list2.append(list3)
+
+    z=preference_model.len()-1
+
+    while  z > 0:
+        cand=list1[-1]
+        list1 = copy.deepcopy(list1[:-1])
+
+        for c in candidates:
+            for v in cand["list_first"]:
+                vote = votes.get(voter=v, candidate=c.id)
+                if preference_model.values[z] == vote.value:
+                    for x in list1:
+                        if x['name'] == str(c):
+                            x["plurality"] += 1
+                            x["list_first"].append(v)
+
+
+        list1 = sorted(list1, key=itemgetter('plurality', 'borda'), reverse=True)
+        list2.append(list1)
+
+        z-=1
+
+
+
+
+    return list2,list4
 
 

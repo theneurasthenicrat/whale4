@@ -1,13 +1,15 @@
 function runoff_plot(runoff) {
     var option= d3.select("#option").node().value;
     var data;
+    var list;
     switch(option) {
         case 'stv':
             data = runoff.stv;
-
+            list = runoff.list;
             break;
         case 'trm':
             data = runoff.trm;
+            list = runoff.list;
 
     }
     var colorTab = [ "green","#e1dd38","red"],
@@ -107,6 +109,20 @@ function runoff_plot(runoff) {
         .attr("x", cand_width/2)
         .attr("y",cand_height/2)
         .attr("dy", ".35em")
-        .text(function(d){return d.name+" ("+d.plurality+")";});
+        .text(function(d){return d.letter+" ("+d.plurality+")";});
+
+
+    matrixSvg.selectAll(".cand")
+        .data(list).enter()
+        .append("text")
+        .attr("fill", "black")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("x", 50)
+        .attr("y",10)
+        .attr("transform", function(d, j) {return "translate(" + (j*round_step) + "," + (height)+ ")"; })
+        .attr("dy", ".35em")
+        .attr("class",'cand')
+        .text(function(d){return d.letter+":"+d.name;});
 
 }
