@@ -684,8 +684,8 @@ def result_view(request, pk ,method):
     if method == 2:
         title = _('condorcet method title')
         label = _('condorcet label')
-        options = [{'value': 'Copeland 0', 'name': _('Copeland 0')}, {'value': _('Copeland 1'), 'name': _('Copeland 1')},
-                     {'value': 'Simpson', 'name': _('Simpson')}]
+        options = [{'value': 'copeland0', 'name': _('Copeland 0')}, {'value': 'copeland1', 'name': _('Copeland 1')},
+                     {'value': 'simpson', 'name': _('Simpson')}]
         explanation = mark_safe(_('condorcet method explanation'))
 
     if method == 3:
@@ -866,33 +866,47 @@ def round_randomized(scores,list_voters,cand1,cand2,*parameters):
 def condorcet(list_voters,candidates,scores):
 
     nodes = [{'name':str(x),'value':0} for x in candidates]
+    nodes1 = copy.deepcopy(nodes)
 
     n = len(candidates)
 
     Matrix = [[{"x":x,"y":y,"z":0} for x in range(n)] for y in range(n)]
+    Matrix1 = copy.deepcopy(Matrix)
 
     for v in list_voters:
         for i,c1 in enumerate(candidates):
             sum1=0
+            sum2=0
+
             for j,c2 in enumerate(candidates):
                 if c1.id!=c2.id:
                     if scores[v][c1.id] > scores[v][c2.id] :
                         sum1 = sum1 + 1
+                        sum2 = sum2 + 1
                         Matrix[i][j]["z"]+=1
-
+                        Matrix1[i][j]["z"]+=1
+                    if scores[v][c1.id]== scores[v][c2.id]:
+                        sum2 = sum2 + 1
+                        Matrix1[i][j]["z"] += 1
             nodes[i]['value']+=sum1
+            nodes1[i]['value']+=sum2
 
     i = 0
     links = []
+    links1 = []
 
     while (i < n - 1):
         j = i + 1
         while (j < n):
 
             a = nodes[i]["value"]
+            a1 = nodes1[i]["value"]
             b = nodes[j]["value"]
+            b1 = nodes1[j]["value"]
             link = {}
+            link1 = {}
             link["value"] = abs(a - b)
+            link1["value"] = abs(a1 - b1)
             if a - b >= 0:
                 link["source"] = i
                 link["target"] = j
@@ -900,11 +914,19 @@ def condorcet(list_voters,candidates,scores):
             else:
                 link["source"] = j
                 link["target"] = i
+            if a1 - b1 >= 0:
+                link1["source"] = i
+                link1["target"] = j
+
+            else:
+                link1["source"] = j
+                link1["target"] = i
             links.append(link)
+            links1.append(link1)
             j = j + 1
         i = i + 1
 
-    return {"nodes":nodes,"links":links,"matrix":Matrix}
+    return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links1,"matrix":Matrix1}}
 
 
 def runoff_function(candidates,list_voters,preference_model,scores):

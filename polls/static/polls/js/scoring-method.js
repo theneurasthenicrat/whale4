@@ -241,9 +241,7 @@ function curve_approval(data) {
             .text( d.key);
 
     });
-
-
-
+    
 
     // Add the X Axis
     svg.append("g")
