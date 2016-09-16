@@ -566,6 +566,11 @@ def view_poll(request, pk):
     for i in voters:
         if i not in list_voters:
             list_voters.append(i)
+    scores = {}
+    for v in voting:
+        if v.voter.id not in scores:
+            scores[v.voter.id] = {}
+        scores[v.voter.id][v.candidate.id] = v.value
 
     len_voters=len(list_voters)
     list_json_votes = []
@@ -583,7 +588,7 @@ def view_poll(request, pk):
         g=[user.nickname]
         j=[]
         for c in candidates:
-            score=voting.get(voter=v,candidate=c).value
+            score=scores[v][c.id]
             k["values"].append(score)
             h['scores'].append(
                 {'value': score,
@@ -715,17 +720,22 @@ def result_scores(request, pk,method):
     for i in voters:
         if i not in list_voters:
             list_voters.append(i)
+    scores = {}
+    for v in votes:
+        if v.voter.id not in scores:
+            scores[v.voter.id] = {}
+        scores[v.voter.id][v.candidate.id] = v.value
 
     data= dict()
     method = int(method)
     if method == 1:
         data["scoring"]=scoring_method(candidates,preference_model,votes)
     if method == 2:
-        data["condorcet"] = condorcet(list_voters,candidates,votes)
+        data["condorcet"] = condorcet(list_voters,candidates,scores)
     if method == 3:
-        data["runoff"] = runoff_function(candidates,list_voters,preference_model,votes)
+        data["runoff"] = runoff_function(candidates,list_voters,preference_model,scores)
     if method == 4:
-       data["randomized"] = randomized_round(candidates,votes,list_voters)
+       data["randomized"] = randomized_round(candidates,scores,list_voters)
 
     return HttpResponse(json.dumps(data, indent=4, sort_keys=True), content_type="application/json")
 
@@ -783,16 +793,11 @@ def scoring_method(candidates,preference_model,votes):
         approval["threshold"] = [x + 1 for x in preference_model.values[1:]]
         approval["scores"] = approval_scores
         curve_approval.reverse()
-        score_method = dict()
-        score_method["borda"] = borda_scores
-        score_method["plurality"] = plurality_scores
-        score_method["veto"] = veto_scores
-        score_method["approval"] = approval
-        score_method["curve_approval"] = curve_approval
-    return score_method
+
+    return{"borda":borda_scores,"plurality":plurality_scores,"veto":veto_scores,"approval":approval,"curve_approval":curve_approval}
 
 
-def randomized_round(candidates,votes,list_voters):
+def randomized_round(candidates,scores,list_voters):
 
     candidates1 = [{"value": x.id, "name": str(x), "parent": x.candidate} for x in candidates]
     len_cand = len(candidates)
@@ -808,7 +813,7 @@ def randomized_round(candidates,votes,list_voters):
         k = sample(candidates1, 2)
         cand1 = k[0]
         cand2 = k[1]
-        round_randomized(votes, list_voters, cand1, cand2, list1)
+        round_randomized(scores, list_voters, cand1, cand2, list1)
         candidates1.remove(cand1)
         candidates1.remove(cand2)
         n = n - 1
@@ -827,7 +832,7 @@ def randomized_round(candidates,votes,list_voters):
         while (i < n):
             cand1 = list1[i]
             cand2 = list1[i + 1]
-            round_randomized(votes, list_voters, cand1, cand2, list_round)
+            round_randomized(scores, list_voters, cand1, cand2, list_round)
             i = i + 2
         n = len(list_round)
         list1 = list_round[:]
@@ -836,13 +841,12 @@ def randomized_round(candidates,votes,list_voters):
     return {"list":list1,"round":round}
 
 
-def round_randomized(votes,list_voters,cand1,cand2,*parameters):
+def round_randomized(scores,list_voters,cand1,cand2,*parameters):
     sum1 = 0
     sum2 = 0
     for v in list_voters:
-        vote1 = votes.get(voter=v, candidate=cand1["value"])
-        vote2 = votes.get(voter=v, candidate=cand2["value"])
-        if vote1.value > vote2.value:
+
+        if scores[v][cand1["value"]] > scores[v][cand2["value"]] :
             sum1 = sum1 + 1
         else:
             sum2 = sum2 + 1
@@ -859,29 +863,27 @@ def round_randomized(votes,list_voters,cand1,cand2,*parameters):
     parameters[0].append({"name": parent["name"],"value": parent["value"], "parent": "null", "children": [cand1, cand2]})
 
 
-def condorcet(list_voters,candidates,votes):
+def condorcet(list_voters,candidates,scores):
 
     nodes = [{'name':str(x),'value':0} for x in candidates]
-    n = len(candidates)
-    sum2 = numpy.zeros((n, n))
 
+    n = len(candidates)
+
+    Matrix = [[{"x":x,"y":y,"z":0} for x in range(n)] for y in range(n)]
 
     for v in list_voters:
         for i,c1 in enumerate(candidates):
             sum1=0
             for j,c2 in enumerate(candidates):
                 if c1.id!=c2.id:
-                    vote1 = votes.get(voter=v, candidate=c1.id)
-                    vote2 = votes.get(voter=v, candidate=c2.id)
-                    if vote1.value > vote2.value:
+                    if scores[v][c1.id] > scores[v][c2.id] :
                         sum1 = sum1 + 1
-                        sum2[i][j]+= 1
-            nodes[i]['value']+=sum1
+                        Matrix[i][j]["z"]+=1
 
+            nodes[i]['value']+=sum1
 
     i = 0
     links = []
-    nodes = sorted(nodes, key=itemgetter('value'), reverse=True)
 
     while (i < n - 1):
         j = i + 1
@@ -901,14 +903,11 @@ def condorcet(list_voters,candidates,votes):
             links.append(link)
             j = j + 1
         i = i + 1
-    condorcet_method = dict()
-    condorcet_method["nodes"] = nodes
-    condorcet_method["links"] = links
-    return condorcet_method
+
+    return {"nodes":nodes,"links":links,"matrix":Matrix}
 
 
-
-def runoff_function(candidates,list_voters,preference_model,votes):
+def runoff_function(candidates,list_voters,preference_model,scores):
 
     list3=[]
     letter = list(string.ascii_uppercase)
@@ -917,10 +916,10 @@ def runoff_function(candidates,list_voters,preference_model,votes):
         sum_plurality = 0
         list_first=[]
         for v in list_voters:
-            vote = votes.get(voter=v, candidate=c.id)
-            sum_borda=sum_borda+(vote.value if vote.value != UNDEFINED_VALUE else 0)
+            vote = scores[v][c.id]
+            sum_borda=sum_borda+(vote if vote != UNDEFINED_VALUE else 0)
 
-            if preference_model.values[-1]== vote.value:
+            if preference_model.values[-1]== vote:
                 sum_plurality=sum_plurality+1
                 list_first.append(v)
 
@@ -943,8 +942,8 @@ def runoff_function(candidates,list_voters,preference_model,votes):
 
         for c in candidates:
             for v in cand["list_first"]:
-                vote = votes.get(voter=v, candidate=c.id)
-                if preference_model.values[z] == vote.value:
+                vote = scores[v][c.id]
+                if preference_model.values[z] == vote:
                     for x in list1:
                         if x['name'] == str(c):
                             x["plurality"] += 1
@@ -959,9 +958,6 @@ def runoff_function(candidates,list_voters,preference_model,votes):
     runoff_method["stv"] = list2
     runoff_method["list"] = list4
     runoff_method["trm"] = [list2[0],list2[-2], list2[-1]]
-
-
-
 
     return  runoff_method
 

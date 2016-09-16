@@ -9,7 +9,7 @@
   <div class="well clearfix">
     <h2>{{ poll.title }}</h2>
     <p class="description">{{ poll.description }}</p>
-      <p class="text-center">{% trans 'The number of participants is:' %}  <label class="label label-primary">{{len_voters }}</label></p>
+      <p class="text-center">{% trans 'The number of participants is:' %}  <span class="badge">{{len_voters }}</span></p>
   </div>
 
   {% if votes %}

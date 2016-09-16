@@ -126,72 +126,26 @@ function nodes_links(data) {
 
 function matrix_graph(data){
 
-    var margin = {top:80, right: 10, bottom: 20, left: 80};
-    var nodes = data.nodes,
-        links = data.links,
+    var margin = {top:100, right: 10, bottom: 20, left: 100},
+        nodes = data.nodes,
+        matrix = data.matrix,
+        n = nodes.length,
         colorTab = ["red", "#e1dd38", "green"],
-        width =  ( $(window).width()>970) ? $("#graph").width()/2 : $("#graph").width(),
+        width =  ( $(window).width()>970) ? $("#graph").width()/1.7 : $("#graph").width(),
         height = window.innerHeight / 2,
         width1 = width-margin.right-margin.left,
         height1 = width-margin.right-margin.left,
-        minNodeValue = d3.min(nodes, function (d) {
-            return d.value;
-        }),
-        meanNodeValue = d3.mean(nodes, function (d) {
-            return d.value;
-        }),
-        maxNodeValue = d3.max(nodes, function (d) {
-            return d.value;
-        });
-
-    var color = d3.scale.linear()
-        .domain([nodes.length, 5,0])
-        .range(colorTab);
-
-
-
-
-    var maxLinkValue = d3.max(links, function (d) {
-        return d.value;
-    });
-
-
-    var x = d3.scale.ordinal().rangeBands([0, width1-margin.right-margin.left]),
-        z = d3.scale.linear().domain([0, 4]).clamp(true);
-
-
-    var color1 = d3.scale.linear()
-        .domain([-maxLinkValue, 0, maxLinkValue])
-        .range(["red", "#e1dd38", "green"]);
-
-    var matrix = [],
-        n = nodes.length;
-
-
-    var i;
-
-    for (i = 0; i < nodes.length; i++) {
-        matrix[i] = d3.range(n).map(function (j) {
-            return {x: j, y: i, z: 0};
-        });
-    }
-
-
-    // Convert links to matrix; count character occurrences.
-    links.forEach(function (link) {
-        matrix[link.source][link.target].z = link.value;
-        matrix[link.target][link.source].z = 0 - link.value;
-
-    });
-
-
-    // The default sort order.
-    x.domain(d3.range(n));
-
-
-
-
-
+        minNodeValue = d3.min(nodes, function (d) {return d.value;}),
+        meanNodeValue = d3.mean(nodes, function (d) {return d.value;}),
+        maxNodeValue = d3.max(nodes, function (d) {return d.value;}),
+        orders = d3.range(n).sort(function(a, b) { return nodes[b].value- nodes[a].value; })
+        max = d3.max(matrix.map(function(array) {return d3.max(array, function (d) {return d.z;});})),
+        mean = d3.mean(matrix.map(function(array) {return d3.mean(array, function (d) {return d.z;});})),
+        min = d3.min(matrix.map(function(array) {return d3.min(array, function (d) {return d.z==0?max:d.z;});})),
+        color = d3.scale.linear().domain([minNodeValue,meanNodeValue,maxNodeValue]).range(colorTab),
+        x = d3.scale.ordinal().rangeBands([0, width1-margin.right-margin.left]).domain(orders),
+        z = d3.scale.linear().domain([0, 4]).clamp(true),
+        color1 = d3.scale.linear().domain([min, mean, max]).range(colorTab);
 
     var matrixSvg = d3.select("#graph")
         .append("svg")
@@ -201,8 +155,6 @@ function matrix_graph(data){
         .style("margin-top", margin.top + "px")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
 
 
     var row = matrixSvg.selectAll(".row")
@@ -224,7 +176,7 @@ function matrix_graph(data){
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
         .style("fill", function (d, i) {
-            return color(i);
+            return color(nodes[i].value);
         })
         .text(function (d, i) {
             return nodes[i].name;
@@ -248,7 +200,7 @@ function matrix_graph(data){
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {
-            return color(i);
+            return color(nodes[i].value);
         })
         .text(function (d, i) {
             return nodes[i].name;
@@ -257,7 +209,9 @@ function matrix_graph(data){
     function row(row) {
         var cell = d3.select(this).selectAll(".cell")
             .data(row)
-            .enter().append("rect")
+            .enter().append("g");
+
+            cell.append("rect")
             .attr("class", "cell")
             .attr("x", function (d) {
                 return x(d.x);
@@ -267,6 +221,20 @@ function matrix_graph(data){
             .style("fill", function (d) {
                 return d.z == 0 ? "#ccc" : color1(d.z);
             });
+
+        cell.append("text")
+         .attr("x", function (d) {
+                return x(d.x)+x.rangeBand() / 2;
+            })
+             .attr("y", x.rangeBand() / 2)
+
+        .attr("dy", ".32em")
+        .attr("text-anchor", "middle")
+        .style("fill", "white")
+        .text(function (d) {
+            return d.z;
+        });
+
 
     }
 
