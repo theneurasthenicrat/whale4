@@ -2,7 +2,7 @@
 
 # imports ####################################################################
 
-from django.forms import ModelForm, Form, widgets,BaseInlineFormSet
+from django.forms import ModelForm, Form, widgets
 from polls.models import VotingPoll, Candidate, DateCandidate, UNDEFINED_VALUE
 from django import forms
 import re
@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 class BasePollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','status','option_shuffle','option_close_poll']
+        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','option_shuffle','status_poll']
         widgets = {
             'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
@@ -22,7 +22,7 @@ class BasePollForm(ModelForm):
             'option_choice': widgets.CheckboxInput(attrs={'data-on-text':_("Yes-option"),'data-off-text':_("No-option")}),
             'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
             'option_shuffle': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
-            'option_close_poll': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
+            'status_poll': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"), 'data-off-text': _("No-option")}),
 
         }
 
@@ -38,13 +38,14 @@ class OptionForm(ModelForm):
 
 
 class PollUpdateForm(ModelForm):
-    class Meta(VotingPollForm.Meta):
-        fields = ['title', 'description', 'closing_date','option_choice','option_modify','option_shuffle','option_close_poll']
+    class Meta(BasePollForm.Meta):
+        fields = ['title', 'description', 'closing_date','option_choice','option_modify','option_shuffle']
 
 
 class StatusForm(ModelForm):
-    class Meta(BasePollForm.Meta):
-        fields = ['status']
+    class Meta (BasePollForm.Meta):
+        fields = ['status_poll']
+
 
 
 class CandidateForm(ModelForm):

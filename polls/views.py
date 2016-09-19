@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from operator import itemgetter
+
 import json
 import string
 import copy
-import numpy
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -15,7 +15,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
-from datetime import datetime,date
+from datetime import datetime
 from random import sample, shuffle
 from math import log2, modf,pow
 from django.db.models import Count
@@ -46,10 +46,10 @@ def with_voter_rights(fn):
     def wrapped(request, pk,voter):
         poll = get_object_or_404(VotingPoll, id=pk)
         user = get_object_or_404(User, id=voter)
-        if poll.option_experimental:
+        if poll.ballot_type =="Experimental":
             messages.error(request, mark_safe(_('Experimental vote can not be updated')))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-        if poll.option_ballots :
+        if poll.ballot_type =="Secret" :
             if "user" in request.session and request.session["user"]==user.id:
                 return fn(request, pk, voter)
             else:
@@ -68,10 +68,10 @@ def with_voter_rights(fn):
 def with_view_rights(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.option_experimental and (request.user is None or request.user != poll.admin):
+        if poll.ballot_type=="Experimental" and (request.user is None or request.user != poll.admin):
             messages.error(request,  mark_safe(_("you are not the poll administrator")))
             return redirect(reverse_lazy('redirectPage'))
-        elif poll.option_ballots and poll.closing_poll():
+        elif poll.ballot_type=="Secret" and poll.closing_poll():
             messages.error(request, mark_safe(_("The poll is not closed")))
             return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
@@ -83,7 +83,7 @@ def certificate_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         path = request.get_full_path()
         poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.option_ballots and "user" not in request.session:
+        if poll.ballot_type=="Secret" and "user" not in request.session:
             return redirect('/polls/certificate/'+str(poll.id)+ '?next=' +str(path))
         return fn(request, pk, *args, **kwargs)
     return wrapped
@@ -92,7 +92,7 @@ def certificate_required(fn):
 def status_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.option_experimental and (not poll.status):
+        if poll.ballot_type=="Experimental" and (not poll.status_poll):
             return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
     return wrapped
@@ -101,8 +101,7 @@ def status_required(fn):
 def minimum_candidates_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        candidates = (DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-                poll_id=poll.id))
+        candidates =  Candidate.objects.filter(poll_id=poll.id)
         if candidates.count() < 2:
             messages.error(request, mark_safe(_('You must add at least two candidates')))
             return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
@@ -154,22 +153,23 @@ def admin_poll(request, pk):
 
 @login_required
 def new_poll(request, choice ):
+
     form = VotingPollForm()
 
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
 
     if request.method == 'POST':
-        form = VotingPollForm(request.POST)
+        form =  VotingPollForm(request.POST)
         if form.is_valid():
             poll = form.save(commit=False)
             poll.admin = request.user
             if int(choice) == 21:
                 poll.poll_type = 'Date'
             if int(choice) == 22:
-                poll.option_ballots = True
+                poll.ballot_type = 'Secret'
             if int(choice) ==23:
-              poll.option_experimental = True
+                poll.ballot_type = 'Experimental'
 
             poll.save()
             messages.success(request, mark_safe(_('General parameters successfully created!')))
@@ -190,8 +190,6 @@ def update_voting_poll(request, pk):
     if request.method == 'POST':
         form = VotingPollForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
-            if poll.option_close_poll:
-                poll.closing_date= date.today()
             poll = form.save()
             if update_poll:
                 messages.success(request, mark_safe(_('General parameters successfully updated!')))
@@ -329,7 +327,7 @@ def success(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
-    if poll.option_ballots:
+    if poll.ballot_type=="Secret":
         inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
     if request.method == 'POST':
         form = InviteForm(request.POST)
@@ -402,8 +400,7 @@ def certificate(request, pk):
 def vote(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidates = ( DateCandidate.objects.filter(poll_id=poll.id) \
-                       if poll.poll_type == 'Date'else Candidate.objects.filter(poll_id=poll.id))
+    candidates =Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
         candidates=list(candidates)
         shuffle(candidates)
@@ -413,8 +410,8 @@ def vote(request, pk):
         (days, months) = days_months(candidates)
 
     read = True
-    if not poll.option_ballots:
-        if poll.option_experimental:
+    if not poll.ballot_type=="Secret":
+        if poll.ballot_type=="Experimental":
             voter = UserAnonymous(nickname=UserAnonymous.nickname_generator(poll.id), poll=poll)
         elif request.user.is_authenticated():
             voter=request.user
@@ -435,7 +432,7 @@ def vote(request, pk):
     form1= NickNameForm(read,initial={'nickname':voter.nickname})
     cand = [c.candidate for c in candidates if c.candidate]
     if request.method == 'POST':
-        if poll.option_ballots and "user" in request.session:
+        if poll.ballot_type=="Secret" and "user" in request.session:
             del request.session["user"]
         form = VotingForm(candidates, preference_model,poll,request.POST)
         form1 = NickNameForm(read, request.POST)
@@ -447,10 +444,10 @@ def vote(request, pk):
             for c in candidates:
                 VotingScore.objects.create(candidate=c,last_modification=today, voter=voter, value=form.cleaned_data['value' + str(c.id)])
             messages.success(request,  mark_safe(_('Your vote has been added to the poll, thank you!')))
-            if poll.option_ballots:
+            if poll.ballot_type=="Secret":
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
-            elif poll.option_experimental:
-                poll.status=False
+            elif poll.ballot_type=="Experimental":
+                poll.status_poll=False
                 poll.save()
                 messages.info(request, mark_safe(_('Thank you for voting')))
                 return redirect(reverse_lazy('redirectPage'))
@@ -464,9 +461,7 @@ def vote(request, pk):
 @with_voter_rights
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
-    candidates = (
-        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
+    candidates =Candidate.objects.filter(poll_id=poll.id)
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     voter = User.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
@@ -475,7 +470,7 @@ def update_vote(request, pk, voter):
     for v in votes:
         initial['value' + str(v.candidate.id)] = v.value
     read = True
-    if not poll.option_ballots and not request.user.is_authenticated():
+    if not poll.ballot_type=="Secret" and not request.user.is_authenticated():
         read = False
 
     if poll.poll_type == 'Date':
@@ -488,7 +483,7 @@ def update_vote(request, pk, voter):
     if request.method == 'POST':
         form = VotingForm(candidates, preference_model,poll, request.POST)
         form1 = NickNameForm(read, request.POST)
-        if poll.option_ballots and "user" in request.session:
+        if poll.ballot_type=="Secret" and "user" in request.session:
             del request.session["user"]
         if form.is_valid() and form1.is_valid():
             data = form.cleaned_data
@@ -500,7 +495,7 @@ def update_vote(request, pk, voter):
                 v.last_modification= today
                 v.save()
             messages.success(request,  mark_safe(_('Your vote has been updated, thank you!')))
-            if poll.option_ballots:
+            if poll.ballot_type=="Secret":
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
@@ -516,10 +511,10 @@ def delete_vote(request, pk, voter):
     voter = get_object_or_404(User, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     votes.delete()
-    if poll.option_ballots:
+    if poll.ballot_type=="Secret":
         del request.session["user"]
     messages.success(request,  mark_safe(_('Your vote has been deleted!')))
-    if poll.option_ballots:
+    if poll.ballot_type=="Secret":
         return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
     else:
         return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
@@ -551,9 +546,7 @@ def view_poll(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
     closing_poll=poll.closing_poll()
-    candidates = (
-        DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-            poll_id=poll.id))
+    candidates =  Candidate.objects.filter(poll_id=poll.id)
     cand = [ c.candidate for c in candidates if c.candidate]
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
@@ -706,9 +699,7 @@ def result_view(request, pk ,method):
 
 def result_scores(request, pk,method):
     poll = get_object_or_404(VotingPoll, id=pk)
-    candidates = (
-    DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-        poll_id=poll.id))
+    candidates = Candidate.objects.filter(poll_id=poll.id)
 
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
 

@@ -61,9 +61,9 @@
         {% for v in votes %}
         <tr>
           <td class="controls">
-            {% if poll.option_experimental%}		      
+            {% if poll.ballot_type == "Experimental"%}
 
-            {% elif poll.option_ballots %}		      
+            {% elif poll.ballot_type == "Secret" %}
             {% else %}
             {% if v.modify%}
             <a href="{% url 'updateVote' pk=poll.id voter=v.id %}" >{% bootstrap_icon "pencil" %}</a>
@@ -94,7 +94,7 @@
           <th>
             {{ v.nickname }}
           </th>
-          {% if poll.option_ballots and  closing_poll%}
+          {% if poll.ballot_type == "Secret" and  closing_poll%}
 
           {% else %}
           {% for s in v.scores %}

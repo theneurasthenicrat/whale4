@@ -27,7 +27,7 @@
                 </ol>
             </div>
         {% endif %}
-            {% if poll.option_ballots %}
+            {% if poll.ballot_type == "Secret" %}
                 <div class="well-lg">
                     <ul class="nav nav-tabs nav-justified ">
                         <li class="active" ><a href="#tab1">{% trans 'Add the voters' %}</a></li>

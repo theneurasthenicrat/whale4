@@ -51,10 +51,7 @@ def data_poll():
     json_polls = dict()
     for i, poll in enumerate(polls):
         json_object = dict()
-        candidates = (
-            DateCandidate.objects.filter(
-                poll_id=poll.id) if poll.poll_type == 'Date'else Candidate.objects.filter(
-                poll_id=poll.id))
+        candidates =  Candidate.objects.filter(poll_id=poll.id)
         votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
         preference_model = preference_model_from_text(poll.preference_model, len(candidates))
         scores = {}

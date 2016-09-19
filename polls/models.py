@@ -4,9 +4,10 @@ from datetime import date, timedelta
 from django.db import models
 from accounts.models import WhaleUser,User
 from django.utils.translation import ugettext_lazy as _
+from polymorphic.models import PolymorphicModel
 
 
-class Poll(models.Model):
+class Poll(PolymorphicModel):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250,verbose_name= _("title *"))
     description = models.TextField(blank=True,null=True,verbose_name= _("description"))
@@ -20,32 +21,31 @@ class Poll(models.Model):
 
 class VotingPoll(Poll):
     PREFERENCE_MODELS = (
-        ('PositiveNegative', _('Positive Negative scale (--, -, 0, +, ++)')),
-        ('Approval', _('Approval Voting (Yes / No)')),
-        ('Ranks#1', _('Ranking with ties')),
-        ('Ranks#0', _('Ranking (no ties)')),
-        ('Numbers#0#10', _('Scores'))
-        )
+                        ('PositiveNegative', _('Positive Negative scale (--, -, 0, +, ++)')),
+                        ('Approval', _('Approval Voting (Yes / No)')),
+                        ('Ranks#1', _('Ranking with ties')),
+                        ('Ranks#0', _('Ranking (no ties)')),
+                        ('Numbers#0#10', _('Scores')) )
+
     POLL_TYPES = (
-        ('Standard', _('Standard Poll')),
-        ('Date', _('Date Poll'))
-        )
+                    ('Standard', _('Standard Poll')),
+                    ('Date', _('Date Poll')))
+
+    BALLOT_TYPES=(
+                    ('Open',_('Open Ballot')),
+                    ('Secret',_('Secret Ballot')),
+                    ('Experimental',_('Experimental Ballot')))
+
     poll_type = models.CharField(max_length=20,choices=POLL_TYPES,default='Standard',verbose_name= _("poll type"))
-    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',
-                                        verbose_name= _("Preference model * "))
-    option_ballots=models.BooleanField(default=False)
-    option_choice=models.BooleanField(default=True,
-                                      verbose_name=_("Choice \"I don't know\" is allowed"))
-    option_modify=models.BooleanField(default=True,
-                                      verbose_name=_("Add or remove candidates is allowed"))
-    option_experimental=models.BooleanField(default=False)
-    option_shuffle=models.BooleanField(default=False,verbose_name=_("option shuffle"))
-    option_close_poll=models.BooleanField(default=False,verbose_name=_("option close the poll"))
-
-    status=models.BooleanField(default=True,verbose_name=_("Poll's status"))
+    preference_model = models.CharField(max_length=50, choices=PREFERENCE_MODELS, default='PositiveNegative',verbose_name= _("Preference model * "))
+    ballot_type = models.CharField(max_length=50, choices=BALLOT_TYPES, default='Open',verbose_name= _("Ballot Type"))
+    option_choice=models.BooleanField(default=True,verbose_name=_("Option choice explanation"))
+    option_modify=models.BooleanField(default=True,verbose_name=_("Modify choice explanation"))
+    option_shuffle=models.BooleanField(default=False,verbose_name=_("Option shuffle explanation"))
+    status_poll=models.BooleanField(default=True,verbose_name=_("Status of poll explanation"))
 
 
-class Candidate(models.Model):
+class Candidate(PolymorphicModel):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
     candidate = models.CharField(max_length=50,verbose_name= _('candidate'))
 
