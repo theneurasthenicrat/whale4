@@ -13,7 +13,9 @@
         <div class="well">
               <h3>{% trans 'Vote!' %}</h3>
             <h2>{{ poll.title }}</h2>
+             {% if poll.description %}
             <p class="description">{{ poll.description }}</p>
+             {% endif %}
         </div>
         {% if poll.preference_model == "Ranks#0" %}
             <div class="thumbnail clearfix ">

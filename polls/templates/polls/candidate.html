@@ -31,7 +31,7 @@
          {% endif %}
             <div class="container-fluid ">
 
-             {% if poll.option_choice %}
+             {% if  update_poll and poll.option_choice %}
                 <div class=" well-lg col-md-7 ">
                     <form action="" method="post" >
                         {% csrf_token %}
@@ -47,7 +47,7 @@
              {% endif %}
 
                 <div class="col-md-5">
-                    {% if candidates %}
+
                         <div class="container-fluid form-login margin1">
 
                             <h4>{% trans 'List of current candidates'%}</h4>
@@ -78,11 +78,13 @@
                                         </div>
 
                                     </li>
+                                     {% empty %}
+                                    <li class="list-group-item">{% trans 'Not yet Candidates' %} </li>
                                 {% endfor %}
                             </ul>
 
                         </div>
-                    {% endif %}
+
                 </div>
 
             </div>

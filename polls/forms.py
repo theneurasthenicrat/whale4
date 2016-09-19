@@ -47,7 +47,6 @@ class StatusForm(ModelForm):
         fields = ['status_poll']
 
 
-
 class CandidateForm(ModelForm):
     class Meta:
         model = Candidate

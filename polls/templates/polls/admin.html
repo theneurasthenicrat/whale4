@@ -19,7 +19,7 @@
             <a  href="{% url 'success' poll.id %}" class="list-group-item ">
                 <h4 class="list-group-item-heading"><i class="fa fa-share-square-o"></i> {% trans 'Invite the voters'%}</h4>
             </a>
-            {% if poll.option_experimental %}
+            {% if poll.ballot_type == "Experimental" %}
                 <a  href="{% url 'status' poll.id %}" class="list-group-item ">
                     <h4 class="list-group-item-heading"><i class="fa fa-star"></i> {% trans 'Change the status of poll'%}</h4>
                 </a>

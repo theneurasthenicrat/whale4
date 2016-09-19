@@ -1141,3 +1141,7 @@ table tbody tr td.controls a.remove:hover {
 	  stroke: #ccc;
 	  stroke-width: 2px;
 	}
+
+    .margin-right{
+        margin-right: 10px;
+    }

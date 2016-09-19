@@ -8,7 +8,9 @@
 <div class="container">
   <div class="well clearfix">
     <h2>{{ poll.title }}</h2>
+       {% if poll.description %}
     <p class="description">{{ poll.description }}</p>
+       {% endif %}
       <p class="text-center">{% trans 'The number of participants is:' %}  <span class="badge">{{len_voters }}</span></p>
   </div>
 
@@ -116,7 +118,7 @@
     {% trans '(unless the poll creator decides to close it before).' %} </p>
 </div>
   <div class="row">
-    <div class="col-md-3 col-lg-3"></div>
+    <div class="col-md-2 col-lg-2"></div>
     <div class=" col-xs-12 col-sm-4 col-md-2 col-lg-2 margin2">
       <a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
     </div>
@@ -127,9 +129,9 @@
       <a href="{% url 'admin' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "cog" %} {% trans 'settings' %}</a>
     </div>
  <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
-     <a href="{% url 'data' poll.id %}" class="btn btn-custom btn-lg ">{% bootstrap_icon "download-alt" %} {% trans 'Goto data download' %} </a>
+     <a href="{% url 'data' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "download-alt" %} {% trans 'Data page' %} </a>
     </div>
-    <div class="col-md-3 col-lg-3"></div>
+    <div class="col-md-2 col-lg-2"></div>
   </div>
 
 

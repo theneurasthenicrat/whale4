@@ -531,3 +531,23 @@ fieldset[disabled] .btn-success.active {
     font-size: 1.5em;
     transition: all .2s linear;	
 }
+
+.dropdown-header-custom {
+  display: block;
+  padding: 3px 20px;
+  line-height: 1.42857143;
+  color: #3375b3;
+  white-space: nowrap;
+}
+
+.flag {
+    border-width: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: transparent;
+}
+
+.flag img {
+    margin-top: -2px;
+    margin-right: 10px;
+}

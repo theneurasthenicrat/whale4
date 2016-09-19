@@ -46,7 +46,7 @@ function nodes_links(data) {
         meanNodeValue = d3.mean(nodes, function (d) {return d.value;}),
         maxNodeValue = d3.max(nodes, function (d) {return d.value;});
         color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(colorTab)
-        strokeRange = d3.scale.linear().domain([minNodeValue, maxNodeValue]).range([3,10]);
+        strokeRange = d3.scale.linear().domain([minNodeValue, maxNodeValue]).range([0.5,3]);
     
     var force = d3.layout.force()
         .nodes(d3.values(nodes))

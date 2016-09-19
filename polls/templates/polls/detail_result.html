@@ -40,7 +40,7 @@
                     </div>
                 </div>
             <div class="form-group" id="controlApproval">
-                    <label class="col-xs-2 control-label" for ='approval'> approval threshold</label>
+                    <label class="col-xs-2 control-label" for ='approval'> {% trans 'approval threshold' %} </label>
                     <div class="col-xs-2 selectContainer">
                         <select id="approval" class="form-control" >
 
@@ -48,11 +48,11 @@
                     </div>
                 </div>
             <div class="form-group" id="controlCondorcet" >
-                    <label class="col-xs-3 control-label" for ='graph_type'> Type of Graph</label>
+                    <label class="col-xs-3 control-label" for ='graph_type'>{% trans ' Type of Graph' %} </label>
                     <div class="col-xs-5 selectContainer">
                         <select id="graph_type" class="form-control" >
-                        <option value="node">Nodes Links</option>
-                            <option value="matrix">Matrix</option>
+                        <option value="node">{% trans 'Nodes Links' %}</option>
+                            <option value="matrix">{% trans 'Matrix' %}</option>
                         </select>
                     </div>
                 </div>
