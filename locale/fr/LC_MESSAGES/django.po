@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 12:22+0000\n"
+"POT-Creation-Date: 2016-09-19 14:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr "Confirmez votre mot de passe"
 msgid "Password confirmation *"
 msgstr "Confirmation de mot de passe"
 
-#: accounts/forms.py:22 polls/forms.py:84
+#: accounts/forms.py:22 polls/forms.py:86
 msgid "Enter your nickname"
 msgstr "Votre pseudonyme"
 
@@ -54,7 +54,7 @@ msgstr "Les mots de passe ne concordent pas..."
 msgid "Email address"
 msgstr "Adresse e-mail"
 
-#: accounts/models.py:37 polls/forms.py:84
+#: accounts/models.py:37 polls/forms.py:86
 msgid "Nickname *"
 msgstr "Pseudonyme *"
 
@@ -195,32 +195,38 @@ msgid "Enter description"
 msgstr "La description du sondage"
 
 #: polls/forms.py:22 polls/forms.py:23 polls/forms.py:24 polls/forms.py:25
+#: polls/forms.py:41
 msgid "Yes-option"
 msgstr "Oui"
 
 #: polls/forms.py:22 polls/forms.py:23 polls/forms.py:24 polls/forms.py:25
+#: polls/forms.py:41
 msgid "No-option"
 msgstr "Non"
 
-#: polls/forms.py:55
+#: polls/forms.py:41
+msgid "close now"
+msgstr "Fermer le sondage maintenant."
+
+#: polls/forms.py:57
 msgid "Candidate"
 msgstr "Candidat"
 
-#: polls/forms.py:73
+#: polls/forms.py:75
 msgid "Give a label for the time slot to add (e.g. Morning, 10AM-12AM,...)"
 msgstr ""
 "Donnez une étiquette au créneau à ajouter (par exemple « matin », ou "
 "« 10h-12h »...)"
 
-#: polls/forms.py:102
+#: polls/forms.py:104
 msgid "you must order all candidates"
 msgstr "Vous devez ordonner tous les candidats"
 
-#: polls/forms.py:109
+#: polls/forms.py:111
 msgid "You must give a score to at least one candidate!"
 msgstr "Notez au moins un candidat !"
 
-#: polls/forms.py:134
+#: polls/forms.py:136
 msgid "certificate"
 msgstr "certificat"
 
@@ -369,7 +375,7 @@ msgstr "La page du sondage"
 msgid "See the results of poll"
 msgstr "Visualiser les résultats du sondage"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:670
+#: polls/templates/polls/all_result.html:23 polls/views.py:674
 msgid "scoring method title"
 msgstr "Méthodes de calcul des scores"
 
@@ -377,7 +383,7 @@ msgstr "Méthodes de calcul des scores"
 msgid "scoring method message"
 msgstr "Où l'on compte un nombre de points par candidat..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:678
+#: polls/templates/polls/all_result.html:33 polls/views.py:682
 msgid "condorcet method title"
 msgstr "Méthodes de Condorcet"
 
@@ -385,7 +391,7 @@ msgstr "Méthodes de Condorcet"
 msgid "condorcet method message"
 msgstr "Où l'on engage des duels entre tous les candidats..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:685
+#: polls/templates/polls/all_result.html:44 polls/views.py:689
 msgid "runoff method title"
 msgstr "Méthodes à plusieurs tours"
 
@@ -393,7 +399,7 @@ msgstr "Méthodes à plusieurs tours"
 msgid "runoff method message"
 msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:691
+#: polls/templates/polls/all_result.html:54 polls/views.py:695
 msgid "randomized method title"
 msgstr "Méthode de tournois aléatoires"
 
@@ -451,10 +457,8 @@ msgstr "Ajouter des candidats au sondage"
 
 #: polls/templates/polls/candidate.html:17
 #: polls/templates/polls/date_candidate.html:23
-#, fuzzy
-#| msgid "Add or remove candidates"
 msgid "Remove candidates"
-msgstr "Ajouter / supprimer des candidats"
+msgstr "Supprimer des candidats"
 
 #: polls/templates/polls/candidate.html:25
 #: polls/templates/polls/date_candidate.html:31
@@ -934,146 +938,146 @@ msgstr ""
 "<h4>Sondage créé</h4><p>Votre sondage a été créé. Maintenant, ajoutez des "
 "candidats et réglez les paramètres avancés.</p>"
 
-#: polls/views.py:195
+#: polls/views.py:199
 msgid "General parameters successfully updated!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres généraux du sondage ont été "
 "mis à jour.</p>"
 
-#: polls/views.py:198
+#: polls/views.py:202
 msgid "Parameters are successfully updated!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
 "été mis à jour.</p>"
 
-#: polls/views.py:209
+#: polls/views.py:213
 msgid "Your poll has been deleted!"
 msgstr ""
 "<h4>Effacement confirmé</h4><p>Le sondage (ainsi que tous les votes "
 "associés) a bien été supprimé de la base.</p>"
 
-#: polls/views.py:223
+#: polls/views.py:227
 msgid "Options are successfully added!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
 "été mis à jour.</p>"
 
-#: polls/views.py:237
+#: polls/views.py:241
 msgid "Status is successfully changed!"
 msgstr ""
 "<h4>Statut mis à jour</h4><p>Le statut de votre sondage a bien été mis à "
 "jour.</p>"
 
-#: polls/views.py:252
+#: polls/views.py:256
 #, fuzzy
 #| msgid "Add or remove candidates"
 msgid "Add or remove candidates is not allowed!"
 msgstr "Ajouter / supprimer des candidats"
 
-#: polls/views.py:273 polls/views.py:303
+#: polls/views.py:277 polls/views.py:307
 #, python-format
 msgid "Candidates must be distinct (%(c)s)"
 msgstr ""
 "<h4>S'il-vous-plaît...</h4><p>...Donnez des noms différents à des candidats "
 "différents (%(c)s est déjà dans la liste des candidats).</p>"
 
-#: polls/views.py:277
+#: polls/views.py:281
 #, python-format
 msgid "Candidate %(c)s successfully added!"
 msgstr ""
 "<h4>Candidat ajouté</h4><p>Le candidat %(c)s a été ajouté au sondage.</p>"
 
-#: polls/views.py:308
+#: polls/views.py:312
 msgid "Candidates are successfully added!"
 msgstr ""
 "<h4>Candidats ajoutés</h4><p>Les candidats ont bien été ajoutés à la liste.</"
 "p>"
 
-#: polls/views.py:320
+#: polls/views.py:324
 #, python-format
 msgid "Candidate has been deleted (%(c)s)!"
 msgstr ""
 "<h4>Candidat supprimé</h4><p>%(c)s a bien été supprimé de la liste des "
 "candidats.</p>"
 
-#: polls/views.py:352
+#: polls/views.py:356
 msgid "Invited voters successfully added!"
 msgstr ""
 "<h4>Invités ajoutés</h4><p>Les personnes que vous avez spécifiées ont bien "
 "été ajoutés à la liste des votants.</p>"
 
-#: polls/views.py:367
+#: polls/views.py:371
 msgid "anonymous voter has been deleted!"
 msgstr ""
 "<h4>Votant supprimé</h4><p>Le votant anonyme a bien été supprimé de la liste."
 "</p>"
 
-#: polls/views.py:384
+#: polls/views.py:388
 msgid "your certificate is correct"
 msgstr ""
 "<h4>Autorisation accordée</h4><p>Votre certificat est valide. Vous pouvez "
 "voter !</p>"
 
-#: polls/views.py:392
+#: polls/views.py:396
 msgid "your certificate is incorrect"
 msgstr ""
 "<h4>Certificat incorrect</h4><p>Hum, il semblerait que le certificat que "
 "vous avez entré ne correspond pas à un certificat valide. Faute de frappe ? "
 "Prenez une grande inspiration et tapez-le à nouveau.</p>"
 
-#: polls/views.py:427
+#: polls/views.py:431
 msgid "you have already voted, now you can update your vote"
 msgstr ""
 "<h4>Bienvenue à nouveau...</h4><p>Vous avez déjà voté. Si vous voulez, vous "
 "pouvez modifier votre vote.</p>"
 
-#: polls/views.py:446
+#: polls/views.py:450
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 "<h4>A voté!</h4><p>Votre vote a bien été pris en compte. Merci d'avoir "
 "utilisé Whale !</p>"
 
-#: polls/views.py:452
+#: polls/views.py:456
 msgid "Thank you for voting"
 msgstr "Merci de votre participation!"
 
-#: polls/views.py:497
+#: polls/views.py:501
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 "<h4>A voté! (à nouveau)</h4><p>La modification de votre vote a bien été "
 "prise en compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:516
+#: polls/views.py:520
 msgid "Your vote has been deleted!"
 msgstr ""
 "<h4>Vote supprimé</h4><p>La suppression de votre vote a bien été prise en "
 "compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:671
+#: polls/views.py:675
 msgid "scoring label"
 msgstr "Vecteur de score"
 
-#: polls/views.py:672
+#: polls/views.py:676
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:672
+#: polls/views.py:676
 msgid "Plurality"
 msgstr "Pluralité"
 
-#: polls/views.py:673
+#: polls/views.py:677
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:674
+#: polls/views.py:678
 msgid "Approval"
 msgstr "Approbation"
 
-#: polls/views.py:674
+#: polls/views.py:678
 msgid "Curve Approval"
 msgstr "Courbe d'approbation"
 
-#: polls/views.py:675
+#: polls/views.py:679
 msgid "scoring method explanation"
 msgstr ""
 "<section><p>On compte un nombre de points pour chaque candidat, de la "
@@ -1087,54 +1091,52 @@ msgstr ""
 "répresentant les points d'approbation en fonction du seuil d'approbation.</"
 "li></ul></section>"
 
-#: polls/views.py:679
+#: polls/views.py:683
 msgid "condorcet label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:680
+#: polls/views.py:684
 msgid "Copeland 0"
 msgstr ""
 
-#: polls/views.py:680
+#: polls/views.py:684
 msgid "Copeland 1"
 msgstr ""
 
-#: polls/views.py:681
+#: polls/views.py:685
 msgid "Simpson"
 msgstr ""
 
-#: polls/views.py:682
+#: polls/views.py:686
 msgid "condorcet method explanation"
 msgstr ""
-"<section><p>On réalise des duels entre les candidats :</p>"
-"<ul><label > Méthode de calcul : </label> "
-"<li > Copeland 0 : . Un candidat gagne 0 point chaque fois qu'il est à égalité avec un autre candidat.</li> "
-"<li > Copeland 1 : . Un candidat gagne 1 point chaque fois qu'il est à égalité avec un autre candidat.</li> "
-"</ul> "
-"<ul> <label> Type de graphique : </label>"
-"<li> Noeuds liens : <br>  Pour un candidat A et un candidat B,on met une flèche de A vers B si une majorité de "
-"votants préfèrent A à B, et vice-versa.<br> L'épaisseur de la flèche dénote la "
-"différence de voix entre les deux candidats. <br>Il y a un trait pointillé si "
-"les deux candidats sont à égalité.</li>"
-"<li> Matrice du graphe orienté: <br>La matrice représente le graphe orienté.<br>"
-"La valeur représente le nombre de fois qu'une majorité des électeurs préfère le candidat A (en ligne) pour le candidat B ( en colonne ).<br>"
-"</li></ul></section>"
+"<section><p>On réalise des duels entre les candidats :</p><ul><label > "
+"Méthode de calcul : </label> <li > Copeland 0 : . Un candidat gagne 0 point "
+"chaque fois qu'il est à égalité avec un autre candidat.</li> <li > Copeland "
+"1 : . Un candidat gagne 1 point chaque fois qu'il est à égalité avec un "
+"autre candidat.</li> </ul> <ul> <label> Type de graphique : </label><li> "
+"Noeuds liens : <br>  Pour un candidat A et un candidat B,on met une flèche "
+"de A vers B si une majorité de votants préfèrent A à B, et vice-versa.<br> "
+"L'épaisseur de la flèche dénote la différence de voix entre les deux "
+"candidats. <br>Il y a un trait pointillé si les deux candidats sont à "
+"égalité.</li><li> Matrice du graphe orienté: <br>La matrice représente le "
+"graphe orienté.<br>La valeur représente le nombre de fois qu'une majorité "
+"des électeurs préfère le candidat A (en ligne) pour le candidat B ( en "
+"colonne ).<br></li></ul></section>"
 
-
-
-#: polls/views.py:686
+#: polls/views.py:690
 msgid "runoff label"
 msgstr ""
 
-#: polls/views.py:687
+#: polls/views.py:691
 msgid "STV"
 msgstr ""
 
-#: polls/views.py:687
+#: polls/views.py:691
 msgid "Two Round majority"
 msgstr ""
 
-#: polls/views.py:688
+#: polls/views.py:692
 msgid "runoff method explanation"
 msgstr ""
 "<section><p>Ces méthodes fonctionnent par élimination successive de "
@@ -1148,15 +1150,15 @@ msgstr ""
 "aequo). Au second tour, on élit le candidat ayant le plus haut score de "
 "pluralité.</li></ul></section>"
 
-#: polls/views.py:692
+#: polls/views.py:696
 msgid "randomized label"
 msgstr ""
 
-#: polls/views.py:694
+#: polls/views.py:698
 msgid "Shuffle candidates for the first round"
 msgstr "Nouveau tirage aleatoire au premier tour"
 
-#: polls/views.py:695
+#: polls/views.py:699
 msgid "randomized method explanation"
 msgstr ""
 "<section><p>Cette méthode fonctionne exactement à la manière d'un tournoi "
@@ -1174,8 +1176,4 @@ msgstr "Français"
 msgid "English"
 msgstr "Anglais"
 
-#~ msgid "option close the poll"
-#~ msgstr "Fermer le sondage maintenant."
 
-#~ msgid "See"
-#~ msgstr "Voir"

@@ -38,8 +38,10 @@ class OptionForm(ModelForm):
 
 
 class PollUpdateForm(ModelForm):
+    close_now = forms.BooleanField(label=_('close now'),required=False, widget=forms.CheckboxInput(attrs={'data-on-text': _("Yes-option"), 'data-off-text': _("No-option")}))
+
     class Meta(BasePollForm.Meta):
-        fields = ['title', 'description', 'closing_date','option_choice','option_modify','option_shuffle']
+        fields = ['title', 'description', 'closing_date','close_now','option_choice','option_modify','option_shuffle']
 
 
 class StatusForm(ModelForm):

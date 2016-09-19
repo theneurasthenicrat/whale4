@@ -15,7 +15,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
-from datetime import datetime
+from datetime import datetime,date
 from random import sample, shuffle
 from math import log2, modf,pow
 from django.db.models import Count
@@ -190,7 +190,11 @@ def update_voting_poll(request, pk):
     if request.method == 'POST':
         form = VotingPollForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
-            poll = form.save()
+            poll = form.save(commit=False)
+            close_now_option = form.cleaned_data['close_now']
+            if close_now_option:
+                poll.closing_date= date.today()
+            poll.save()
             if update_poll:
                 messages.success(request, mark_safe(_('General parameters successfully updated!')))
                 return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
