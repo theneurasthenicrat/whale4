@@ -722,9 +722,9 @@ def result_scores(request, pk,method):
             list_voters.append(i)
     scores = {}
     for v in votes:
-        if v.voter.id not in scores:
-            scores[v.voter.id] = {}
-        scores[v.voter.id][v.candidate.id] = v.value
+        if str(v.voter.id) not in scores:
+            scores[str(v.voter.id)] = {}
+        scores[str(v.voter.id)][str(v.candidate.id)] = v.value
 
     data= dict()
     method = int(method)
@@ -799,7 +799,7 @@ def scoring_method(candidates,preference_model,votes):
 
 def randomized_round(candidates,scores,list_voters):
 
-    candidates1 = [{"value": x.id, "name": str(x), "parent": x.candidate} for x in candidates]
+    candidates1 = [{"value": str(x.id), "name": str(x), "parent": x.candidate} for x in candidates]
     len_cand = len(candidates)
 
     a, b = modf(log2(len_cand))
@@ -846,7 +846,7 @@ def round_randomized(scores,list_voters,cand1,cand2,*parameters):
     sum2 = 0
     for v in list_voters:
 
-        if scores[v][cand1["value"]] > scores[v][cand2["value"]] :
+        if scores[str(v)][cand1["value"]] > scores[str(v)][cand2["value"]] :
             sum1 = sum1 + 1
         else:
             sum2 = sum2 + 1
@@ -880,12 +880,12 @@ def condorcet(list_voters,candidates,scores):
 
             for j,c2 in enumerate(candidates):
                 if c1.id!=c2.id:
-                    if scores[v][c1.id] > scores[v][c2.id] :
+                    if scores[str(v)][str(c1.id)] > scores[str(v)][str(c2.id)] :
                         sum1 = sum1 + 1
                         sum2 = sum2 + 1
                         Matrix[i][j]["z"]+=1
                         Matrix1[i][j]["z"]+=1
-                    if scores[v][c1.id]== scores[v][c2.id]:
+                    if scores[str(v)][str(c1.id)]== scores[str(v)][str(c2.id)]:
                         sum2 = sum2 + 1
                         Matrix1[i][j]["z"] += 1
             nodes[i]['value']+=sum1
@@ -938,33 +938,39 @@ def runoff_function(candidates,list_voters,preference_model,scores):
         sum_plurality = 0
         list_first=[]
         for v in list_voters:
-            vote = scores[v][c.id]
+            vote = scores[str(v)][str(c.id)]
             sum_borda=sum_borda+(vote if vote != UNDEFINED_VALUE else 0)
 
             if preference_model.values[-1]== vote:
                 sum_plurality=sum_plurality+1
                 list_first.append(v)
 
-        list3.append({'name':str(c),'letter':letter[i],'plurality':sum_plurality,'borda':sum_borda,'list_first':list_first})
+        list3.append({"id":str(c.id),'name':str(c),'letter':letter[i],'plurality':sum_plurality,'borda':sum_borda,'list_first':list_first})
     list4= copy.deepcopy(list3)
 
     list3 = sorted(list3, key=itemgetter('plurality', 'borda'), reverse=True)
-
 
     list2=[]
 
     list1= copy.deepcopy(list3)
     list2.append(list3)
-
+    n=len(candidates)
     z=preference_model.len()-1
 
-    while  z > 0:
+    while  n> 1:
         cand=list1[-1]
         list1 = copy.deepcopy(list1[:-1])
 
-        for c in candidates:
-            for v in cand["list_first"]:
-                vote = scores[v][c.id]
+        for v in cand["list_first"]:
+            score = scores[str(v)]
+            print(score)
+
+            if "13" in score:
+                del score["13"]
+            print(score)
+
+            for c in candidates:
+                vote = scores[str(v)][str(c.id)]
                 if preference_model.values[z] == vote:
                     for x in list1:
                         if x['name'] == str(c):
@@ -976,6 +982,7 @@ def runoff_function(candidates,list_voters,preference_model,scores):
         list2.append(list1)
 
         z-=1
+        n-=1
     runoff_method = dict()
     runoff_method["stv"] = list2
     runoff_method["list"] = list4

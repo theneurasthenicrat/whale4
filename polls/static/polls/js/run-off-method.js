@@ -13,7 +13,7 @@ function runoff_plot(runoff) {
 
     }
     var colorTab = [ "green","#e1dd38","red"],
-        width = $("#graph").width()-50,
+        width = $("#graph").width()-150,
         height = window.innerHeight/2;
 
     var matrix = data;
@@ -21,7 +21,7 @@ function runoff_plot(runoff) {
         .domain([0,0.5,1])
         .range(colorTab);
 
-    var margin = {top: 20, right: 20, bottom: 20, left: 20};
+    var margin = {top: 20, right: 100, bottom: 20, left: 20};
 
     var n= matrix[0].length;
     var round= matrix.length;
@@ -117,12 +117,12 @@ function runoff_plot(runoff) {
         .append("text")
         .attr("fill", "black")
         .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("x", 50)
+        .attr("text-anchor", "start")
+        .attr("x", 0)
         .attr("y",10)
-        .attr("transform", function(d, j) {return "translate(" + (j*round_step) + "," + (height)+ ")"; })
+        .attr("transform", function(d, j) {return "translate(" + (width) + "," + (j*height/n)+ ")"; })
         .attr("dy", ".35em")
         .attr("class",'cand')
-        .text(function(d){return d.letter+":"+d.name;});
+        .text(function(d){return d.letter+": "+d.name;});
 
 }
