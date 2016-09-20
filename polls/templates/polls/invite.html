@@ -190,7 +190,7 @@
               <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
 
           {% else %}
-              <a href="{% url 'admin' poll.id %}"  class="btn btn-custom next"> {% trans 'Back to admin page' %}</a>
+              <a href="{% url 'admin' poll.id %}"  class="btn btn-custom pull-right"> {% trans 'Back to admin page' %}</a>
          {% endif %}
 
         </div>
