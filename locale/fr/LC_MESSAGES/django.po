@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 12:28+0000\n"
+"POT-Creation-Date: 2016-09-21 14:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -375,7 +375,7 @@ msgstr "La page du sondage"
 msgid "See the results of poll"
 msgstr "Visualiser les résultats du sondage"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:674
+#: polls/templates/polls/all_result.html:23 polls/views.py:675
 msgid "scoring method title"
 msgstr "Méthodes de calcul des scores"
 
@@ -383,7 +383,7 @@ msgstr "Méthodes de calcul des scores"
 msgid "scoring method message"
 msgstr "Où l'on compte un nombre de points par candidat..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:682
+#: polls/templates/polls/all_result.html:33 polls/views.py:686
 msgid "condorcet method title"
 msgstr "Méthodes de Condorcet"
 
@@ -391,7 +391,7 @@ msgstr "Méthodes de Condorcet"
 msgid "condorcet method message"
 msgstr "Où l'on engage des duels entre tous les candidats..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:689
+#: polls/templates/polls/all_result.html:44 polls/views.py:693
 msgid "runoff method title"
 msgstr "Méthodes à plusieurs tours"
 
@@ -399,7 +399,7 @@ msgstr "Méthodes à plusieurs tours"
 msgid "runoff method message"
 msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:695
+#: polls/templates/polls/all_result.html:54 polls/views.py:699
 msgid "randomized method title"
 msgstr "Méthode de tournois aléatoires"
 
@@ -587,49 +587,46 @@ msgstr "Ajouter un candidat"
 msgid "Pick one or several dates"
 msgstr "Choisissez un ou plusieurs dates"
 
-#: polls/templates/polls/detail_result.html:16
+#: polls/templates/polls/detail_result.html:17
 msgid "Round"
 msgstr "Tour"
 
-#: polls/templates/polls/detail_result.html:17
+#: polls/templates/polls/detail_result.html:18
 msgid "Winner"
 msgstr "Gagnant"
 
-#: polls/templates/polls/detail_result.html:18
+#: polls/templates/polls/detail_result.html:19
+#: polls/templates/polls/detail_result.html:57
 msgid "Approval threshold"
 msgstr "Seuil d'approbation"
 
-#: polls/templates/polls/detail_result.html:19
+#: polls/templates/polls/detail_result.html:20
 msgid "Approval scores"
 msgstr " Scores d'approbation"
 
-#: polls/templates/polls/detail_result.html:25
+#: polls/templates/polls/detail_result.html:26
 msgid "More about the"
 msgstr "À propos des"
 
-#: polls/templates/polls/detail_result.html:28
+#: polls/templates/polls/detail_result.html:29
 msgid "Back to the results"
 msgstr "Retour aux résultats"
 
-#: polls/templates/polls/detail_result.html:48
-msgid "approval threshold"
-msgstr "Seuil d'approbation"
+#: polls/templates/polls/detail_result.html:41 polls/views.py:702
+msgid "Shuffle candidates for the first round"
+msgstr "Nouveau tirage aleatoire au premier tour"
 
-#: polls/templates/polls/detail_result.html:56
+#: polls/templates/polls/detail_result.html:67
 msgid " Type of Graph"
 msgstr " Type de graphique"
 
-#: polls/templates/polls/detail_result.html:59
+#: polls/templates/polls/detail_result.html:70
 msgid "Nodes Links"
 msgstr "Noeuds Liens"
 
-#: polls/templates/polls/detail_result.html:60
+#: polls/templates/polls/detail_result.html:71
 msgid "Matrix"
 msgstr "Matrice du graphe orienté"
-
-#: polls/templates/polls/detail_result.html:68 polls/views.py:698
-msgid "Shuffle candidates for the first round"
-msgstr "Nouveau tirage aleatoire au premier tour"
 
 #: polls/templates/polls/email.html:11
 msgid " Whale4 - WHich ALternative is Elected"
@@ -1073,59 +1070,67 @@ msgstr ""
 "<h4>Vote supprimé</h4><p>La suppression de votre vote a bien été prise en "
 "compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:675
+#: polls/views.py:676
 msgid "scoring label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:676
+#: polls/views.py:677
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:676
+#: polls/views.py:677
 msgid "Plurality"
 msgstr "Pluralité"
 
-#: polls/views.py:677
+#: polls/views.py:678
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:678
+#: polls/views.py:679
 msgid "Approval"
 msgstr "Approbation"
 
-#: polls/views.py:678
+#: polls/views.py:679
 msgid "Curve Approval"
 msgstr "Courbe d'approbation"
 
-#: polls/views.py:679
-msgid "scoring method explanation"
+#: polls/views.py:681
+
+msgid "Approval scoring method explanation"
 msgstr ""
-"<section><p>On compte un nombre de points pour chaque candidat, de la manière suivante :</p><ul>"
-"<li>Borda : un candidat gagne n - 1 points chaque fois qu'il est classé en premier,<br>"
-"n - 2 points chaque fois qu'il est classé en second, etc. (n est le nombre de candidats).</li>"
-"<li>Pluralité : un candidat gagne 1 point chaque fois qu'il est classé en premier.</li>"
-"<li>Veto : un candidat gagne -1 point chaque fois qu'il est classé dernier.</li>"
-"<li>Approbation : un candidat gagne 1 point chaque fois qu'il est au dessus d'un seuil spécifié.</li>"
-"<li>Courbe d'approbation : La courbe répresentant les points d'approbation en fonction du seuil d'approbation.</li>"
-"</ul></section>"
+"<section> Pour chaque candidat, on compte le nombre de <label class='label label-primary'> Oui</label>.</section>"
 
 #: polls/views.py:683
+msgid "scoring method explanation"
+msgstr ""
+"<section><p>On compte un nombre de points pour chaque candidat, de la "
+"manière suivante :</p><ul><li>Borda : un candidat gagne n - 1 points chaque "
+"fois qu'il est classé en premier,<br>n - 2 points chaque fois qu'il est "
+"classé en second, etc. (n est le nombre de candidats).</li><li>Pluralité : "
+"un candidat gagne 1 point chaque fois qu'il est classé en premier.</"
+"li><li>Veto : un candidat gagne -1 point chaque fois qu'il est classé "
+"dernier.</li><li>Approbation : un candidat gagne 1 point chaque fois qu'il "
+"est au dessus d'un seuil spécifié.</li><li>Courbe d'approbation : La courbe "
+"répresentant les points d'approbation en fonction du seuil d'approbation.</"
+"li></ul></section>"
+
+#: polls/views.py:687
 msgid "condorcet label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:684
+#: polls/views.py:688
 msgid "Copeland 0"
 msgstr ""
 
-#: polls/views.py:684
+#: polls/views.py:688
 msgid "Copeland 1"
 msgstr ""
 
-#: polls/views.py:685
+#: polls/views.py:689
 msgid "Simpson"
 msgstr ""
 
-#: polls/views.py:686
+#: polls/views.py:690
 msgid "condorcet method explanation"
 msgstr ""
 "<section><p>On réalise des duels entre les candidats :</p><ul><label > "
@@ -1142,19 +1147,19 @@ msgstr ""
 "des électeurs préfère le candidat A (en ligne) pour le candidat B ( en "
 "colonne ).<br></li></ul></section>"
 
-#: polls/views.py:690
+#: polls/views.py:694
 msgid "runoff label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:691
+#: polls/views.py:695
 msgid "STV"
 msgstr ""
 
-#: polls/views.py:691
+#: polls/views.py:695
 msgid "Two Round majority"
 msgstr "Scrutin Majoritaire à Deux Tours"
 
-#: polls/views.py:692
+#: polls/views.py:696
 msgid "runoff method explanation"
 msgstr ""
 "<section><p>Ces méthodes fonctionnent par élimination successive de "
@@ -1168,19 +1173,19 @@ msgstr ""
 "aequo). Au second tour, on élit le candidat ayant le plus haut score de "
 "pluralité.</li></ul></section>"
 
-#: polls/views.py:696
+#: polls/views.py:700
 msgid "randomized label"
 msgstr ""
 
-#: polls/views.py:699
+#: polls/views.py:703
 msgid "randomized method explanation"
 msgstr ""
 "<section><p>Cette méthode fonctionne exactement à la manière d'un tournoi "
-"sportif par élimination.<br>À chaque tour,les candidats "
-"s'affrontent par paire.<br>Le meilleur de chaque paire (celui qui est préféré "
-"par une majorité de votants) va au tour suivant.<br>Deux candidats ex-"
-"aequo à un tour donné sont départagés aléatoirement.<br> Le tirage initial du "
-"premier tour est aléatoire.</section>"
+"sportif par élimination.<br>À chaque tour,les candidats s'affrontent par "
+"paire.<br>Le meilleur de chaque paire (celui qui est préféré par une "
+"majorité de votants) va au tour suivant.<br>Deux candidats ex-aequo à un "
+"tour donné sont départagés aléatoirement.<br> Le tirage initial du premier "
+"tour est aléatoire.</section>"
 
 #: whale4/settings.py:101
 msgid "French"
@@ -1189,3 +1194,6 @@ msgstr "Français"
 #: whale4/settings.py:102
 msgid "English"
 msgstr "Anglais"
+
+#~ msgid "approval threshold"
+#~ msgstr "Seuil d'approbation"

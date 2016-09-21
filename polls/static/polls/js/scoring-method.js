@@ -1,94 +1,66 @@
 function scoring_plot(scoring) {
-     d3.select("#controlApproval").style("visibility","hidden");
 
-    var option = d3.select("#option").node().value;
-    var data;
+    d3.select("#controlApproval").style("visibility","hidden");
+    var option = d3.select("#option").node().value,
+        data;
     switch (option) {
         case 'borda':
             data = scoring.borda;
-            bar_char(data);
+            bar_chart(data);
             break;
         case 'plurality':
             data = scoring.plurality;
-            bar_char(data);
+            bar_chart(data);
             break;
         case 'veto':
             data = scoring.veto;
-            bar_char(data);
+            bar_chart(data);
             break;
         case 'approval':
             d3.select("#controlApproval").style("visibility", "visible");
             var theMiddle = Math.floor(scoring.approval.threshold.length/2);
-            var approval_select = d3.select("#approval")
+            d3.select("#approval")
                 .selectAll("option")
                 .data(scoring.approval.threshold)
                 .enter().append("option")
-                .attr("value", function (d, i) {
-                    return i;
-                })
-                .attr("selected",function (d, i) {
-                    if (i==theMiddle ){return" selected"};
-                })
-                .text(function (d) {
-                    return d;
-                });
+                .attr("value", function (d, i) {return i;})
+                .attr("selected",function (d, i) {if (i==theMiddle ){return" selected"};})
+                .text(function (d) {return d;});
 
             var i = d3.select("#approval").node().value;
-
             data = scoring.approval.scores[i];
-            bar_char(data);
+            bar_chart(data);
             break;
         case 'curvea':
             data = scoring.curve_approval;
            curve_approval(data);
-
     }
+
 }
 
 
-
- function bar_char(data) {
+function bar_chart(data) {
     var margin = {top: 40, right: 20, bottom: 150, left: 60},
         width  = $("#graph").width()-margin.right-margin.left,
-        height = window.innerHeight/2;
-
-
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
-
-    var color = d3.scale.linear()
-        .range(["red", "#e1dd38", "green"]);
-     
-
+        height = window.innerHeight/2,
+        yMax=d3.max(data, function(d) { return d.y }),
+        yMin=d3.min(data, function(d) { return d.y }),
+        yMean=d3.mean(data, function(d) { return d.y }),
+        x = d3.scale.ordinal().rangeRoundBands([0, width], .1).domain(data.map(function(d) { return d.x; })),
+        y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),yMax ]),
+        xAxis = d3.svg.axis().scale(x).orient("bottom"),
+        yAxis = d3.svg.axis().scale(y).orient("left"),
+        color = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([yMin,yMean,yMax]);
 
     d3.select("svg").remove();
+
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    x.domain(data.map(function(d) { return d.x; }));
-   var yMax=d3.max(data, function(d) { return d.y });
-     var yMin=d3.min(data, function(d) { return d.y });
-    y.domain([Math.min(0, yMin),yMax ]);
-    color.domain([d3.min(data, function(d) { return d.y; }),d3.mean(data, function(d) { return d.y; }),d3.max(data, function(d) { return d.y; })]);
-
-     
-    var bars = svg.selectAll(".bar").data(data)
+    var bars = svg.selectAll(".bar").data(data);
 
     bars.exit()
         .transition()
@@ -108,126 +80,66 @@ function scoring_plot(scoring) {
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(Math.max(0, d.y)); })
         .attr("fill",function(d) { return color(d.y); })
-        .attr("height", function(d) { return Math.abs( y(d.y)-y(0 ));})
+        .attr("height", function(d) { return Math.abs( y(d.y)-y(0 ));});
 
-     bars.enter().append("text")
-         .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
-         .attr("y", function(d) { return  d.y >0 ?y(d.y):y(d.y)+30; })
-         .attr("text-anchor", "middle")
-         .attr("dy", "-1em")
-         .attr("fill",function(d) { return color(d.y); })
-         .style("font-weight","bold")
-         .text( function(d) { return d.y; });
+    bars.enter().append("text")
+        .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
+        .attr("y", function(d) { return  d.y >0 ?y(d.y):y(d.y)+30; })
+        .attr("text-anchor", "middle")
+        .attr("dy", "-1em")
+        .attr("fill",function(d) { return color(d.y); })
+        .style("font-weight","bold")
+        .text( function(d) { return d.y; });
 
-         svg.append("g")
+    svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + y(0) + ")")
         .call(xAxis)
         .selectAll("text")
-             .attr("transform", function() { return  data[0].y >0 ?"rotate(45)":"rotate(90)"; })
-             .style("text-anchor", "start")
-             .call(wrap,x.rangeBand());
+        .attr("transform", function() { return  yMin >=0 ?"rotate(45)":"rotate(90)"; })
+        .style("text-anchor", "start");
 
 
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
 
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Scores");
 
-      svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Scores");
-
-
-    function wrap(text, width) {
-  text.each(function() {
-    var text = d3.select(this),
-        words = text.text().split("#").reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  });
 }
 
 
- }
-
-
-
-
-
-
 function curve_approval(data) {
-          var approval_text=d3.select("#approval_text").property("value");
-       var scores_text=d3.select("#scores_text").property("value");
-
-    var margin = {top: 20, right: 20, bottom: 60, left: 60},
+    var approval_text=d3.select("#approval_text").property("value"),
+        scores_text=d3.select("#scores_text").property("value"),
+        margin = {top: 20, right: 20, bottom: 60, left: 60},
         width  = $("#graph").width()-margin.right-margin.left-140,
-        height = window.innerHeight/2;
+        height = window.innerHeight/2,
+        x = d3.scale.ordinal().rangeRoundBands([0, width], .1).domain(data.map(function(d) { return d.x; })),
+        y = d3.scale.linear().range([height, 0]).domain([0, d3.max(data, function(d) { return d.y; })]),
+        xAxis = d3.svg.axis().scale(x).orient("bottom").innerTickSize(-height).outerTickSize(0),
+        yAxis = d3.svg.axis().scale(y).orient("left"),
+        color = d3.scale.category10(),
+        line = d3.svg.line().x(function(d) { return x(d.x)+x.rangeBand()/2; }).y(function(d) { return y(d.y); }).interpolate("monotone");
 
+    d3.select("svg").remove();
 
-
-// Set the ranges
-    var x = d3.scale.linear().range([0,width]);
-    var y = d3.scale.linear().range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .innerTickSize(-height)
-        .outerTickSize(0);
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
-
-
-    var color = d3.scale.category10();
-
-
-    
-    var line = d3.svg.line()
-        .x(function(d) { return x(d.x); })
-        .y(function(d) { return y(d.y); })
-      .interpolate("basis");
-
-  d3.select("svg").remove();
-  var svg = d3.select("#graph").append("svg")
+    var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.left + margin.right+140)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
 
-
-    x.domain(d3.extent(data.map(function(d) { return d.x;} )))
-
-    y.domain([0, d3.max(data, function(d) { return d.y; })]);
-
-    // Nest the entries by symbol
     var dataNest = d3.nest()
         .key(function(d) {return d.candidate;})
         .entries(data);
 
-    // Loop through each symbol / key
     dataNest.forEach(function(d,i) {
 
         svg.append("path")
@@ -238,40 +150,35 @@ function curve_approval(data) {
 
         svg.append("text")
             .attr("x", 10)
-            .attr("transform",  "translate(" + x(d.values[d.values.length -1].x) + "," + i*30 + ")" )
+            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + i*30 + ")" )
             .attr("dy", "0.35em")
             .style("fill",  color(d.key) )
             .text( d.key);
 
     });
-    
 
-    // Add the X Axis
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
-      svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text(scores_text);
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x",0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(scores_text);
 
-    // Add the Y Axis
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
 
-     svg.append("text")
-      .attr("y", height+margin.bottom/2)
-      .attr("x",width/ 2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text(approval_text);
-
-
+    svg.append("text")
+        .attr("y", height+margin.bottom/2)
+        .attr("x",width/ 2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(approval_text);
 
 }

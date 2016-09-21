@@ -671,12 +671,16 @@ def result_view(request, pk ,method):
     poll = get_object_or_404(VotingPoll, id=pk)
     method=int(method)
     if method ==1:
+
         title = _('scoring method title')
         label = _('scoring label')
         options = [{'value': 'borda', 'name': _('Borda')}, {'value': 'plurality', 'name': _('Plurality')},
                      {'value': 'veto', 'name': _('Veto')},
                      {'value': 'approval', 'name': _('Approval')}, {'value': 'curvea', 'name': _('Curve Approval')}]
-        explanation =  mark_safe(_('scoring method explanation'))
+        if poll.preference_model== "Approval":
+            explanation = mark_safe(_('Approval scoring method explanation'))
+        else:
+            explanation =  mark_safe(_('scoring method explanation'))
 
     if method == 2:
         title = _('condorcet method title')
@@ -923,14 +927,34 @@ def condorcet(list_voters,candidates,scores):
 
     return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links1,"matrix":Matrix1}}
 
+def runoff_compute(cand,n,*parameters):
+    while (n > 0):
+        for h in parameters[1]:
 
+            for c in cand:
+                if c["id"] == h[0]["id"]:
+                    c["plurality"] += 1
+                j = [i for i, x in enumerate(h) if x["id"] == c["id"]]
+                c["borda"] += n - 1 - j[0]
+        cand = sorted(cand, key=itemgetter('plurality', 'borda'), reverse=True)
+        parameters[0].append(cand[:])
+
+        last = cand[-1]["id"]
+
+        for h in parameters[1]:
+            for x in h:
+                if x["id"] == last:
+                    h.remove(x)
+
+        cand.remove(cand[-1])
+        cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
+        n = len(cand)
+    return parameters[0]
 
 
 
 def runoff_function(candidates,list_voters,scores):
     round1=[]
-
-
     for v in list_voters:
         score = scores[str(v)]
         d = [{"id": x, "value":score[x]} for x in score]
@@ -948,27 +972,7 @@ def runoff_function(candidates,list_voters,scores):
 
     list_cand=[]
 
-    while(n>0):
-        for h in round1:
-
-            for c in cand:
-                if c["id"] == h[0]["id"]:
-                    c["plurality"] += 1
-                j = [i for i, x in enumerate(h) if x["id"] == c["id"]]
-                c["borda"] += n - 1 - j[0]
-        cand = sorted(cand, key=itemgetter('plurality', 'borda'), reverse=True)
-        list_cand.append(cand[:])
-
-        last = cand[-1]["id"]
-
-        for h in round1:
-            for x in h:
-                if x["id"] == last:
-                    h.remove(x)
-
-        cand.remove(cand[-1])
-        cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
-        n=len(cand)
+    list_cand = runoff_compute(cand, n, list_cand, round1)
 
     list_cand1=list_cand[0]
     list_cand2=[list_cand1]
@@ -985,27 +989,7 @@ def runoff_function(candidates,list_voters,scores):
 
     cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in list1]
     n=2
-    while (n > 0):
-        for h in round2:
-
-            for c in cand:
-                if c["id"] == h[0]["id"]:
-                    c["plurality"] += 1
-                j = [i for i, x in enumerate(h) if x["id"] == c["id"]]
-                c["borda"] += n - 1 - j[0]
-        cand = sorted(cand, key=itemgetter('plurality', 'borda'), reverse=True)
-        list_cand2.append(cand[:])
-
-        last = cand[-1]["id"]
-
-        for h in round2:
-            for x in h:
-                if x["id"] == last:
-                    h.remove(x)
-
-        cand.remove(cand[-1])
-        cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
-        n = len(cand)
+    list_cand2=runoff_compute(cand, n,list_cand2,round2)
 
 
     runoff_method = dict()

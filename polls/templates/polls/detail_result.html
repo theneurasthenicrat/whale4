@@ -13,6 +13,7 @@
 
         <input type="hidden" id="url_poll" value="{% url 'scores' pk=poll.id method=method %}" />
         <input type="hidden" id="method" value="{{ method }}" />
+        <input type="hidden" id="preference" value="{{ poll.preference_model }}" />
         <input type="hidden" id="round" value="{% trans 'Round' %}" />
         <input type="hidden" id="winner" value="{% trans 'Winner' %}" />
         <input type="hidden" id="approval_text" value="{% trans 'Approval threshold' %}" />
@@ -20,7 +21,7 @@
 
         <div class="thumbnail clearfix">
             <h2>{{ poll.title }}</h2>
-            <div class=" text-center margin1">
+            <div class=" text-center margin5">
                 <button class="btn btn-custom btn-lg " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     {% trans 'More about the' %}  {{ title }} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
 
@@ -41,37 +42,38 @@
             </button>
             {% else %}
             <div class="container-fluid " id="control">
-                <div class="form-group">
-                    <label class="col-xs-2 control-label" for ='option'> {{ label }}</label>
-                    <div class="col-xs-4 selectContainer">
+            <form class="form-inline text-center">
+
+                <div class="form-group ">
+                    <label class="control-label" for ='option'> {{ label }}:</label>
                         <select id="option" class="form-control" >
                             {% for option in options %}
                                 <option value="{{option.value}}">{{option.name}}</option>
                             {% endfor %}
                         </select>
-                    </div>
                 </div>
               {% if method == 1 %}
                 <div class="form-group" id="controlApproval">
-                    <label class="col-xs-2 control-label" for ='approval'> {% trans 'approval threshold' %} </label>
-                    <div class="col-xs-4 selectContainer">
+                    <label class=" control-label" for ='approval'> {% trans 'Approval threshold' %}: </label>
+
                         <select id="approval" class="form-control" >
 
                         </select>
-                    </div>
                 </div>
              {% endif %}
+
             {% if method == 2 %}
                 <div class="form-group" id="controlCondorcet" >
-                    <label class="col-xs-2 control-label" for ='graph_type'>{% trans ' Type of Graph' %} </label>
-                    <div class="col-xs-4 selectContainer">
+                    <label class=" control-label" for ='graph_type'>{% trans ' Type of Graph' %} :</label>
+
                         <select id="graph_type" class="form-control" >
                             <option value="node">{% trans 'Nodes Links' %}</option>
                             <option value="matrix">{% trans 'Matrix' %}</option>
                         </select>
-                    </div>
                 </div>
+
               {% endif %}
+              </form>
             </div>
             {% endif %}
 
