@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 14:38+0000\n"
+"POT-Creation-Date: 2016-09-20 12:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -587,29 +587,49 @@ msgstr "Ajouter un candidat"
 msgid "Pick one or several dates"
 msgstr "Choisissez un ou plusieurs dates"
 
-#: polls/templates/polls/detail_result.html:20
+#: polls/templates/polls/detail_result.html:16
+msgid "Round"
+msgstr "Tour"
+
+#: polls/templates/polls/detail_result.html:17
+msgid "Winner"
+msgstr "Gagnant"
+
+#: polls/templates/polls/detail_result.html:18
+msgid "Approval threshold"
+msgstr "Seuil d'approbation"
+
+#: polls/templates/polls/detail_result.html:19
+msgid "Approval scores"
+msgstr " Scores d'approbation"
+
+#: polls/templates/polls/detail_result.html:25
 msgid "More about the"
 msgstr "À propos des"
 
-#: polls/templates/polls/detail_result.html:23
+#: polls/templates/polls/detail_result.html:28
 msgid "Back to the results"
 msgstr "Retour aux résultats"
 
-#: polls/templates/polls/detail_result.html:43
+#: polls/templates/polls/detail_result.html:48
 msgid "approval threshold"
 msgstr "Seuil d'approbation"
 
-#: polls/templates/polls/detail_result.html:51
+#: polls/templates/polls/detail_result.html:56
 msgid " Type of Graph"
 msgstr " Type de graphique"
 
-#: polls/templates/polls/detail_result.html:54
+#: polls/templates/polls/detail_result.html:59
 msgid "Nodes Links"
 msgstr "Noeuds Liens"
 
-#: polls/templates/polls/detail_result.html:55
+#: polls/templates/polls/detail_result.html:60
 msgid "Matrix"
 msgstr "Matrice du graphe orienté"
+
+#: polls/templates/polls/detail_result.html:68 polls/views.py:698
+msgid "Shuffle candidates for the first round"
+msgstr "Nouveau tirage aleatoire au premier tour"
 
 #: polls/templates/polls/email.html:11
 msgid " Whale4 - WHich ALternative is Elected"
@@ -1055,7 +1075,7 @@ msgstr ""
 
 #: polls/views.py:675
 msgid "scoring label"
-msgstr "Vecteur de score"
+msgstr "Méthode de calcul"
 
 #: polls/views.py:676
 msgid "Borda"
@@ -1080,16 +1100,14 @@ msgstr "Courbe d'approbation"
 #: polls/views.py:679
 msgid "scoring method explanation"
 msgstr ""
-"<section><p>On compte un nombre de points pour chaque candidat, de la "
-"manière suivante :</p><ul><li>Borda : un candidat gagne n - 1 points chaque "
-"fois qu'il est classé en premier, n - 2 points chaque fois qu'il est classé "
-"en second, etc. (n est le nombre de candidats).</li><li>Pluralité : un "
-"candidat gagne 1 point chaque fois qu'il est classé en premier.</"
-"li><li>Veto : un candidat gagne -1 point chaque fois qu'il est classé "
-"dernier.</li><li>Approbation : un candidat gagne 1 point chaque fois qu'il "
-"est au dessus d'un seuil spécifié.</li><li>Courbe d'approbation : La courbe "
-"répresentant les points d'approbation en fonction du seuil d'approbation.</"
-"li></ul></section>"
+"<section><p>On compte un nombre de points pour chaque candidat, de la manière suivante :</p><ul>"
+"<li>Borda : un candidat gagne n - 1 points chaque fois qu'il est classé en premier,<br>"
+"n - 2 points chaque fois qu'il est classé en second, etc. (n est le nombre de candidats).</li>"
+"<li>Pluralité : un candidat gagne 1 point chaque fois qu'il est classé en premier.</li>"
+"<li>Veto : un candidat gagne -1 point chaque fois qu'il est classé dernier.</li>"
+"<li>Approbation : un candidat gagne 1 point chaque fois qu'il est au dessus d'un seuil spécifié.</li>"
+"<li>Courbe d'approbation : La courbe répresentant les points d'approbation en fonction du seuil d'approbation.</li>"
+"</ul></section>"
 
 #: polls/views.py:683
 msgid "condorcet label"
@@ -1126,7 +1144,7 @@ msgstr ""
 
 #: polls/views.py:690
 msgid "runoff label"
-msgstr ""
+msgstr "Méthode de calcul"
 
 #: polls/views.py:691
 msgid "STV"
@@ -1134,7 +1152,7 @@ msgstr ""
 
 #: polls/views.py:691
 msgid "Two Round majority"
-msgstr ""
+msgstr "Scrutin Majoritaire à Deux Tours"
 
 #: polls/views.py:692
 msgid "runoff method explanation"
@@ -1154,19 +1172,15 @@ msgstr ""
 msgid "randomized label"
 msgstr ""
 
-#: polls/views.py:698
-msgid "Shuffle candidates for the first round"
-msgstr "Nouveau tirage aleatoire au premier tour"
-
 #: polls/views.py:699
 msgid "randomized method explanation"
 msgstr ""
 "<section><p>Cette méthode fonctionne exactement à la manière d'un tournoi "
-"sportif par élimination.</p><ul><li> À chaque tour,les candidats "
-"s'affrontent par paire. Le meilleur de chaque paire (celui qui est préféré "
-"par une majorité de votants) va au tour suivant.</li><li>Deux candidats ex-"
-"aequo à un tour donné sont départagés aléatoirement. Le tirage initial du "
-"premier tour est aléatoire.</li></ul></section>"
+"sportif par élimination.<br>À chaque tour,les candidats "
+"s'affrontent par paire.<br>Le meilleur de chaque paire (celui qui est préféré "
+"par une majorité de votants) va au tour suivant.<br>Deux candidats ex-"
+"aequo à un tour donné sont départagés aléatoirement.<br> Le tirage initial du "
+"premier tour est aléatoire.</section>"
 
 #: whale4/settings.py:101
 msgid "French"
@@ -1175,5 +1189,3 @@ msgstr "Français"
 #: whale4/settings.py:102
 msgid "English"
 msgstr "Anglais"
-
-

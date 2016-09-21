@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 14:38+0000\n"
+"POT-Creation-Date: 2016-09-20 12:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -588,31 +588,55 @@ msgstr "Add candidates"
 msgid "Pick one or several dates"
 msgstr "Pick one or several dates"
 
-#: polls/templates/polls/detail_result.html:20
+#: polls/templates/polls/detail_result.html:16
+msgid "Round"
+msgstr ""
+
+#: polls/templates/polls/detail_result.html:17
+msgid "Winner"
+msgstr ""
+
+#: polls/templates/polls/detail_result.html:18
+#, fuzzy
+#| msgid "Approval threshold"
+msgid "Approval threshold"
+msgstr "Approval threshold"
+
+#: polls/templates/polls/detail_result.html:19
+#, fuzzy
+#| msgid "Approval"
+msgid "Approval scores"
+msgstr "Approval"
+
+#: polls/templates/polls/detail_result.html:25
 msgid "More about the"
 msgstr "More about the"
 
-#: polls/templates/polls/detail_result.html:23
+#: polls/templates/polls/detail_result.html:28
 msgid "Back to the results"
 msgstr "Back to the results"
 
-#: polls/templates/polls/detail_result.html:43
+#: polls/templates/polls/detail_result.html:48
 #, fuzzy
 #| msgid "Approval threshold"
 msgid "approval threshold"
 msgstr "Approval threshold"
 
-#: polls/templates/polls/detail_result.html:51
+#: polls/templates/polls/detail_result.html:56
 msgid " Type of Graph"
 msgstr " Type of graph"
 
-#: polls/templates/polls/detail_result.html:54
+#: polls/templates/polls/detail_result.html:59
 msgid "Nodes Links"
 msgstr ""
 
-#: polls/templates/polls/detail_result.html:55
+#: polls/templates/polls/detail_result.html:60
 msgid "Matrix"
 msgstr ""
+
+#: polls/templates/polls/detail_result.html:68 polls/views.py:698
+msgid "Shuffle candidates for the first round"
+msgstr "Shuffle candidates for the first round"
 
 #: polls/templates/polls/email.html:11
 msgid " Whale4 - WHich ALternative is Elected"
@@ -1057,7 +1081,7 @@ msgstr ""
 
 #: polls/views.py:675
 msgid "scoring label"
-msgstr "Scoring vector"
+msgstr "Computation method"
 
 #: polls/views.py:676
 msgid "Borda"
@@ -1126,15 +1150,15 @@ msgstr ""
 
 #: polls/views.py:690
 msgid "runoff label"
-msgstr "Procedure"
+msgstr "Computation method"
 
 #: polls/views.py:691
 msgid "STV"
-msgstr "STV"
+msgstr "Single Transferable Vote"
 
 #: polls/views.py:691
 msgid "Two Round majority"
-msgstr "Two Round majority"
+msgstr "Two Round Majority"
 
 #: polls/views.py:692
 msgid "runoff method explanation"
@@ -1153,10 +1177,6 @@ msgstr ""
 msgid "randomized label"
 msgstr "randomized method"
 
-#: polls/views.py:698
-msgid "Shuffle candidates for the first round"
-msgstr "Shuffle candidates for the first round"
-
 #: polls/views.py:699
 msgid "randomized method explanation"
 msgstr ""
@@ -1174,10 +1194,3 @@ msgstr "Français"
 msgid "English"
 msgstr "English"
 
-#~ msgid "option close the poll"
-#~ msgstr "Close the poll now."
-
-#, fuzzy
-#~| msgid "Email address"
-#~ msgid "Enter your email address"
-#~ msgstr "Email address"

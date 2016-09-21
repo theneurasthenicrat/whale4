@@ -1,5 +1,6 @@
 function scoring_plot(scoring) {
      d3.select("#controlApproval").style("visibility","hidden");
+
     var option = d3.select("#option").node().value;
     var data;
     switch (option) {
@@ -175,6 +176,8 @@ function scoring_plot(scoring) {
 
 
 function curve_approval(data) {
+          var approval_text=d3.select("#approval_text").property("value");
+       var scores_text=d3.select("#scores_text").property("value");
 
     var margin = {top: 20, right: 20, bottom: 60, left: 60},
         width  = $("#graph").width()-margin.right-margin.left-140,
@@ -255,7 +258,7 @@ function curve_approval(data) {
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text(" Approval Scores");
+      .text(scores_text);
 
     // Add the Y Axis
     svg.append("g")
@@ -267,7 +270,7 @@ function curve_approval(data) {
       .attr("x",width/ 2)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text(" Approval Threshold");
+      .text(approval_text);
 
 
 

@@ -728,7 +728,7 @@ def result_scores(request, pk,method):
     if method == 2:
         data["condorcet"] = condorcet(list_voters,candidates,scores)
     if method == 3:
-        data["runoff"] = runoff_function(candidates,list_voters,preference_model,scores)
+        data["runoff"] = runoff_function(candidates,list_voters,scores)
     if method == 4:
        data["randomized"] = randomized_round(candidates,scores,list_voters)
 
@@ -924,64 +924,94 @@ def condorcet(list_voters,candidates,scores):
     return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links1,"matrix":Matrix1}}
 
 
-def runoff_function(candidates,list_voters,preference_model,scores):
 
-    list3=[]
+
+
+def runoff_function(candidates,list_voters,scores):
+    round1=[]
+
+
+    for v in list_voters:
+        score = scores[str(v)]
+        d = [{"id": x, "value":score[x]} for x in score]
+        d = sorted(d, key=itemgetter('value'), reverse=True)
+        round1.append(d)
+
+    round2 = copy.deepcopy(round1)
     letter = list(string.ascii_uppercase)
-    for i,c in enumerate(candidates):
-        sum_borda = 0
-        sum_plurality = 0
-        list_first=[]
-        for v in list_voters:
-            vote = scores[str(v)][str(c.id)]
-            sum_borda=sum_borda+(vote if vote != UNDEFINED_VALUE else 0)
+    cand=[]
+    for i, c in enumerate(candidates):
+        cand.append({"id": str(c.id), 'name': str(c), 'letter': letter[i], 'plurality': 0, 'borda': 0})
 
-            if preference_model.values[-1]== vote:
-                sum_plurality=sum_plurality+1
-                list_first.append(v)
+    list4 = cand[:]
+    n=len(cand)
 
-        list3.append({"id":str(c.id),'name':str(c),'letter':letter[i],'plurality':sum_plurality,'borda':sum_borda,'list_first':list_first})
-    list4= copy.deepcopy(list3)
+    list_cand=[]
 
-    list3 = sorted(list3, key=itemgetter('plurality', 'borda'), reverse=True)
+    while(n>0):
+        for h in round1:
 
-    list2=[]
+            for c in cand:
+                if c["id"] == h[0]["id"]:
+                    c["plurality"] += 1
+                j = [i for i, x in enumerate(h) if x["id"] == c["id"]]
+                c["borda"] += n - 1 - j[0]
+        cand = sorted(cand, key=itemgetter('plurality', 'borda'), reverse=True)
+        list_cand.append(cand[:])
 
-    list1= copy.deepcopy(list3)
-    list2.append(list3)
-    n=len(candidates)
-    z=preference_model.len()-1
+        last = cand[-1]["id"]
 
-    while  n> 1:
-        cand=list1[-1]
-        list1 = copy.deepcopy(list1[:-1])
+        for h in round1:
+            for x in h:
+                if x["id"] == last:
+                    h.remove(x)
 
-        for v in cand["list_first"]:
-            score = scores[str(v)]
-            print(score)
+        cand.remove(cand[-1])
+        cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
+        n=len(cand)
 
-            if "13" in score:
-                del score["13"]
-            print(score)
+    list_cand1=list_cand[0]
+    list_cand2=[list_cand1]
+    n = len(list_cand1)
+    list1=list_cand1[0:2]
+    list2=list_cand1[2:n]
 
-            for c in candidates:
-                vote = scores[str(v)][str(c.id)]
-                if preference_model.values[z] == vote:
-                    for x in list1:
-                        if x['name'] == str(c):
-                            x["plurality"] += 1
-                            x["list_first"].append(v)
+    for z in list2:
+        last = z["id"]
+        for h in round2:
+            for x in h:
+                if x["id"] == last:
+                    h.remove(x)
+
+    cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in list1]
+    n=2
+    while (n > 0):
+        for h in round2:
+
+            for c in cand:
+                if c["id"] == h[0]["id"]:
+                    c["plurality"] += 1
+                j = [i for i, x in enumerate(h) if x["id"] == c["id"]]
+                c["borda"] += n - 1 - j[0]
+        cand = sorted(cand, key=itemgetter('plurality', 'borda'), reverse=True)
+        list_cand2.append(cand[:])
+
+        last = cand[-1]["id"]
+
+        for h in round2:
+            for x in h:
+                if x["id"] == last:
+                    h.remove(x)
+
+        cand.remove(cand[-1])
+        cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
+        n = len(cand)
 
 
-        list1 = sorted(list1, key=itemgetter('plurality', 'borda'), reverse=True)
-        list2.append(list1)
-
-        z-=1
-        n-=1
     runoff_method = dict()
-    runoff_method["stv"] = list2
+    runoff_method["stv"] = list_cand
     runoff_method["list"] = list4
-    runoff_method["trm"] = [list2[0],list2[-2], list2[-1]]
+    runoff_method["trm"] = list_cand2
 
     return  runoff_method
 

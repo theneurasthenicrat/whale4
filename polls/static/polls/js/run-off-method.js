@@ -1,5 +1,8 @@
 function runoff_plot(runoff) {
     var option= d3.select("#option").node().value;
+    var round_text=d3.select("#round").property("value");
+    var winner_text=d3.select("#winner").property("value");
+
     var data;
     var list;
     switch(option) {
@@ -76,7 +79,7 @@ function runoff_plot(runoff) {
          .attr("y",margin_text_round)
         .attr("dy", ".35em")
         .attr("text-anchor", "middle")
-        .text(function(d, i) {return i == (matrix.length-1) ? "Winner" : "Round " + (i+1);});
+        .text(function(d, i) {return i == (matrix.length-1) ? winner_text : round_text +" "+ (i+1);});
 
 
     var roundElmt = row.selectAll(".round")

@@ -20,17 +20,10 @@ function randomized(data){
 
     d3.select("svg").remove();
     d3.select("div#control").remove();
+d3.select("#Shuffle_randomized").style("visibility","visible");
 
-
-    d3.select("#graph").append("div").attr("id","control")
-        .append("input")
-        .attr("type","button")
-        .attr("class","btn btn-success")
-        .attr("id"," Shuffle_randomized")
-        .attr("value","Shuffle candidates for the first round")
+    d3.select("#Shuffle_randomized")
         .on("click",graph);
-
-
 
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.right + margin.left)
