@@ -47,7 +47,7 @@ function bar_chart(data) {
         yMin=d3.min(data, function(d) { return d.y }),
         yMean=d3.mean(data, function(d) { return d.y }),
         x = d3.scale.ordinal().rangeRoundBands([0, width], .1).domain(data.map(function(d) { return d.x; })),
-        y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),yMax ]),
+        y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),Math.max(0, yMax) ]),
         xAxis = d3.svg.axis().scale(x).orient("bottom"),
         yAxis = d3.svg.axis().scale(y).orient("left"),
         color = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([yMin,yMean,yMax]);
@@ -96,6 +96,8 @@ function bar_chart(data) {
         .attr("transform", "translate(0," + y(0) + ")")
         .call(xAxis)
         .selectAll("text")
+        .attr("x", 12)
+        .attr("y", 0)
         .attr("transform", function() { return  yMin >=0 ?"rotate(45)":"rotate(90)"; })
         .style("text-anchor", "start");
 

@@ -3,7 +3,7 @@
 var url=d3.select("#url_poll").property("value");
 var method=d3.select("#method").property("value");
 var preference=d3.select("#preference").property("value");
-    d3.select("#controlApproval").style("visibility","hidden");
+d3.select("#controlApproval").style("visibility","hidden");
 d3.select("#controlCondorcet").style("visibility","hidden");
 d3.select("#Shuffle_randomized").style("visibility","hidden");
 
@@ -34,8 +34,6 @@ function graph() {
         }
     });
 }
-
-
 
 
 
