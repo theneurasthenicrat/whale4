@@ -37,6 +37,8 @@ function graph() {
 
 
 
+
+
 graph();
 
 d3.select("#option").on("change", graph);

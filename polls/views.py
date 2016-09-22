@@ -191,9 +191,10 @@ def update_voting_poll(request, pk):
         form = VotingPollForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
         if form.is_valid():
             poll = form.save(commit=False)
-            close_now_option = form.cleaned_data['close_now']
-            if close_now_option:
-                poll.closing_date= date.today()
+            if "update" in request.session and int(request.session["update"]) == 1:
+                close_now_option = form.cleaned_data['close_now']
+                if close_now_option:
+                    poll.closing_date= date.today()
             poll.save()
             if update_poll:
                 messages.success(request, mark_safe(_('General parameters successfully updated!')))
@@ -555,19 +556,19 @@ def view_poll(request, pk):
     if poll.poll_type == 'Date':
         (days, months) = days_months(candidates)
 
-    voting = VotingScore.objects.filter(candidate__poll__id=poll.id)
+    voting =  VotingScore.objects.filter(candidate__poll__id=poll.id).values('voter__id', 'candidate__id', 'value')
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).annotate(vote=Count('voter'))
 
-    list_voters=[]
-    for i in voters:
-        if i not in list_voters:
-            list_voters.append(i)
+    list_voters = []
     scores = {}
+    for v in voters:
+        if v not in list_voters:
+            list_voters.append(v)
+            scores[str(v)] = {}
+
     for v in voting:
-        if v.voter.id not in scores:
-            scores[v.voter.id] = {}
-        scores[v.voter.id][v.candidate.id] = v.value
+        scores[v["voter__id"]][v["candidate__id"]] = v["value"]
 
     len_voters=len(list_voters)
     list_json_votes = []
@@ -708,26 +709,22 @@ def result_view(request, pk ,method):
 def result_scores(request, pk,method):
     poll = get_object_or_404(VotingPoll, id=pk)
     candidates = Candidate.objects.filter(poll_id=poll.id)
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).values('voter__id','candidate__id','value')
+    voters = VotingScore.objects.values_list('voter__id', flat=True).filter(candidate__poll__id=poll.id)
+    list_voters =list(set(voters))
 
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-
-    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-
-    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id)
-
-    list_voters = []
-    for i in voters:
-        if i not in list_voters:
-            list_voters.append(i)
     scores = {}
+
+    for v in list_voters:
+        scores[str(v)] = {}
+
     for v in votes:
-        if str(v.voter.id) not in scores:
-            scores[str(v.voter.id)] = {}
-        scores[str(v.voter.id)][str(v.candidate.id)] = v.value
+        scores[str(v["voter__id"])] [str(v["candidate__id"])] = v["value"]
 
     data= dict()
     method = int(method)
     if method == 1:
+        preference_model = preference_model_from_text(poll.preference_model, len(candidates))
         data["scoring"]=scoring_method(candidates,preference_model,votes)
     if method == 2:
         data["condorcet"] = condorcet(list_voters,candidates,scores)
@@ -750,7 +747,7 @@ def scoring_method(candidates,preference_model,votes):
     for c in candidates:
         scores[c.id] = []
     for v in votes:
-        scores[v.candidate.id].append(v.value)
+        scores[v["candidate__id"]].append(v["value"])
 
     approval = dict()
 
