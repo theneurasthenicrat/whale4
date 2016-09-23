@@ -39,6 +39,7 @@ function graph() {
 
 graph();
 
+
 d3.select("#option").on("change", graph);
 
 d3.select("#approval").on("change", graph);

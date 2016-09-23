@@ -671,6 +671,11 @@ def result_all(request, pk ):
 def result_view(request, pk ,method):
     poll = get_object_or_404(VotingPoll, id=pk)
     method=int(method)
+    voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).annotate(
+        vote=Count('voter'))
+
+    len_voters = len(list(set(voters)))
+
     if method ==1:
 
         title = _('scoring method title')

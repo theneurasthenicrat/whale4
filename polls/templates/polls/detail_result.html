@@ -9,6 +9,9 @@
 
 {% block content %}
 
+
+
+
     <div class="container">
 
         <input type="hidden" id="url_poll" value="{% url 'scores' pk=poll.id method=method %}" />
@@ -20,30 +23,36 @@
         <input type="hidden" id="scores_text" value="{% trans 'Approval scores' %}" />
 
         <div class="thumbnail clearfix">
-            <h2>{{ poll.title }}</h2>
-            <div class=" text-center margin5">
-                <button class="btn btn-custom btn-lg " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    {% trans 'More about the' %}  {{ title }} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+        <h3>{{ poll.title }}</h3>
+          <p class="text-center">    {% trans 'The number of participants is:' %}  <span class="badge">{{len_voters }}</span></p>
 
-                </button>
-                <a href="{% url 'results' poll.id %}"   class="btn btn-custom  btn-lg  ">{% bootstrap_icon "list" %} {% trans 'Back to the results' %}</a>
-            </div>
-            <div class="collapse " id="collapseExample">
-                <blockquote class=' well text-justify'>
-                    {{ explanation }}
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
 
-                </blockquote>
-            </div>
+    </div>
 
 
-            {% if method == 4 %}
-            <button class="btn btn-success btn-lg center-block" type="button" id="Shuffle_randomized"> <i class="fa fa-random" aria-hidden="true"></i>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+ <ul class="nav navbar-nav ">
+     <li><a  data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    {% trans 'More about the' %}  {{ title }}
+                </a></li>
+      </ul>
+      <form class="navbar-form navbar-left">
+       {% if method == 4 %}
+            <button  class='btn btn-custom' type="button" id="Shuffle_randomized"> <i class="fa fa-random" aria-hidden="true"></i>
                 {% trans 'Shuffle candidates for the first round' %}
             </button>
             {% else %}
-            <div class="container-fluid " id="control">
-            <form class="form-inline text-center">
-
+            <div  id="control">
                 <div class="form-group ">
                     <label class="control-label" for ='option'> {{ label }}:</label>
                         <select id="option" class="form-control" >
@@ -73,11 +82,33 @@
                 </div>
 
               {% endif %}
-              </form>
+
             </div>
             {% endif %}
+      </form>
+      <ul class="nav navbar-nav navbar-right ">
+
+          <li>      <a href="{% url 'results' poll.id %}"> {% trans 'Back to the results' %}</a></li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+            <div class="collapse " id="collapseExample">
+                <blockquote class=' well text-justify'>
+                    {{ explanation }}
+                </blockquote>
+            </div>
+
+
+
 
             <div id="graph" class="text-center"> </div>
+
 
         </div>
 
