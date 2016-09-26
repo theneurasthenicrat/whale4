@@ -789,6 +789,7 @@ def scoring_method(candidates,preference_model,votes):
             curve_approval.append({"candidate": str(c), "x": preference_model.value2text(y), "y": sum_approval})
 
         approval_scores.append(th)
+
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
         approval_scores.reverse()
         approval["threshold"] = [x + 1 for x in preference_model.values[1:]]
@@ -800,7 +801,7 @@ def scoring_method(candidates,preference_model,votes):
 
 def randomized_round(candidates,scores,list_voters):
 
-    candidates1 = [{"value": str(x.id), "name": str(x), "parent": x.candidate} for x in candidates]
+    candidates1 = [{"value": str(x.id),"group":1, "name": str(x), "parent": x.candidate} for x in candidates]
     len_cand = len(candidates)
 
     a, b = modf(log2(len_cand))
@@ -819,7 +820,7 @@ def randomized_round(candidates,scores,list_voters):
         candidates1.remove(cand2)
         n = n - 1
 
-    list_x1 = [{"name": x["name"], "value": x["value"], "parent": "null", "children": [x]} for x in candidates1]
+    list_x1 = [{"name": x["name"], "value": x["value"],"group":1, "parent": "null", "children": [x]} for x in candidates1]
 
     list1.extend(list_x1)
     n = len(list1)
@@ -839,7 +840,19 @@ def randomized_round(candidates,scores,list_voters):
         list1 = list_round[:]
         j = j - 1
 
+    color_group(list1[0],round+1)
+
     return {"list":list1,"round":round}
+
+
+def color_group(root,n):
+    if root["parent"]!=root["name"]:
+        root["group"]=n
+
+    if 'children' in root:
+        for x in root["children"]:
+            x["group"] = root["group"]
+            color_group(x, n-1)
 
 
 def round_randomized(scores,list_voters,cand1,cand2,*parameters):
@@ -861,7 +874,7 @@ def round_randomized(scores,list_voters,cand1,cand2,*parameters):
     cand1["diff"] = sum1
     cand2["diff"] = sum2
 
-    parameters[0].append({"name": parent["name"],"value": parent["value"], "parent": "null", "children": [cand1, cand2]})
+    parameters[0].append({"name": parent["name"],"value": parent["value"], "group":1,"parent": "null", "children": [cand1, cand2]})
 
 
 def condorcet(list_voters,candidates,scores):
@@ -890,11 +903,10 @@ def condorcet(list_voters,candidates,scores):
                         sum2 = sum2 + 1
                         Matrix1[i][j]["z"] += 1
             nodes[i]['score']+=sum1
-            nodes1[i]['score']+=sum2
+            nodes1[i]['value']= sum2
 
     i = 0
     links = []
-
 
     while (i < n - 1):
         j = i + 1
@@ -909,19 +921,17 @@ def condorcet(list_voters,candidates,scores):
                 link["source"] = i
                 link["target"] = j
                 nodes[i]['value'] += 1
-                nodes1[i]['value'] += 1
 
             if a - b < 0:
                 link["source"] = j
                 link["target"] = i
                 nodes[j]['value'] += 1
-                nodes1[j]['value'] += 1
 
             if a - b == 0:
                 link["source"] = j
                 link["target"] = i
-                nodes1[i]['value'] += 1
-                nodes1[j]['value'] += 1
+                nodes[i]['value'] += 1/2
+                nodes[j]['value'] += 1/2
 
             links.append(link)
 
@@ -930,7 +940,9 @@ def condorcet(list_voters,candidates,scores):
 
     return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links,"matrix":Matrix1}}
 
-def runoff_compute(cand,n,*parameters):
+
+def runoff_compute(n,cand,*parameters):
+    letter = list(string.ascii_uppercase)
     while (n > 0):
         for h in parameters[1]:
 
@@ -943,6 +955,7 @@ def runoff_compute(cand,n,*parameters):
         parameters[0].append(cand[:])
 
         last = cand[-1]["id"]
+        parameters[2].append(last)
 
         for h in parameters[1]:
             for x in h:
@@ -952,8 +965,13 @@ def runoff_compute(cand,n,*parameters):
         cand.remove(cand[-1])
         cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in cand]
         n = len(cand)
-    return parameters[0]
+    parameters[2].reverse()
 
+    for candi in parameters[0]:
+        for x in candi:
+            index = parameters[2].index(x['id'])
+            x['letter'] = letter[index]
+    return parameters[0]
 
 
 def runoff_function(candidates,list_voters,scores):
@@ -965,39 +983,41 @@ def runoff_function(candidates,list_voters,scores):
         round1.append(d)
 
     round2 = copy.deepcopy(round1)
-    letter = list(string.ascii_uppercase)
     cand=[]
     for i, c in enumerate(candidates):
-        cand.append({"id": str(c.id), 'name': str(c), 'letter': letter[i], 'plurality': 0, 'borda': 0})
+        cand.append({"id": str(c.id), 'name': str(c), 'letter': "", 'plurality': 0, 'borda': 0})
 
-    list4 = cand[:]
     n=len(cand)
-
     list_cand=[]
+    order=[]
+    list_cand = runoff_compute( n,cand, list_cand, round1,order)
 
-    list_cand = runoff_compute(cand, n, list_cand, round1)
-
-    list_cand1=list_cand[0]
+    list_cand1= copy.deepcopy(list_cand[0])
     list_cand2=[list_cand1]
     n = len(list_cand1)
     list1=list_cand1[0:2]
     list2=list_cand1[2:n]
-
+    order1=[]
     for z in list2:
         last = z["id"]
+        order1.append(last)
         for h in round2:
             for x in h:
                 if x["id"] == last:
                     h.remove(x)
 
-    cand = [{"id": x["id"], 'name': x["name"], 'letter': x["letter"], 'plurality': 0, 'borda': 0} for x in list1]
+    cand1 = [{"id": x["id"], 'name': x["name"], 'letter': "", 'plurality': 0, 'borda': 0} for x in list1]
     n=2
-    list_cand2=runoff_compute(cand, n,list_cand2,round2)
+    order1.reverse()
+    list_cand2=runoff_compute(n,cand1,list_cand2,round2,order1)
 
+    stv_list = sorted(list_cand[0], key=itemgetter('letter'))
+    trm_list = sorted(list_cand2[0], key=itemgetter('letter'))
 
     runoff_method = dict()
     runoff_method["stv"] = list_cand
-    runoff_method["list"] = list4
+    runoff_method["stv_list"] = stv_list
+    runoff_method["trm_list"] = trm_list
     runoff_method["trm"] = list_cand2
 
     return  runoff_method

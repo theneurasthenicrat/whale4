@@ -5,11 +5,12 @@ function randomized(data){
     var treeData = data.list;
     var round=data.round;
 
+
     var margin = {top: 20, right: 60, bottom: 20, left: 60},
         width = $("#graph").width() - margin.right - margin.left,
         height = window.innerHeight/1.4- margin.top - margin.bottom;
 
-    var colorRange = d3.scale.category20();
+    var colorRange = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([1,(round+1)/2,round+1]);
 
     var i = 0;
 
@@ -63,8 +64,8 @@ d3.select("#Shuffle_randomized").style("visibility","visible");
 
         nodeEnter.append("circle")
             .attr("r", 10)
-            .style("fill", function (d) {return colorRange(d.name);})
-            .style("stroke", function (d) {return colorRange(d.name);});
+            .style("fill", function (d) {return colorRange(d.group);})
+            .style("stroke", function (d) {return colorRange(d.group);});
 
         nodeEnter.append("text")
             .attr("x", 0)
@@ -72,7 +73,7 @@ d3.select("#Shuffle_randomized").style("visibility","visible");
             .attr("dy", ".35em")
             .attr("text-anchor", "middle")
             .text(function (d) {return d.name;})
-            .style("fill", function (d) {return colorRange(d.name);});
+            .style("fill", function (d) {return colorRange(d.group);});
 
         nodeEnter.append("text")
             .attr("x", width/(round*2)-10)
@@ -80,7 +81,7 @@ d3.select("#Shuffle_randomized").style("visibility","visible");
             .attr("dy", ".35em")
             .attr("text-anchor", "middle")
             .text(function (d) {return d.diff;})
-            .style("fill", function (d) {return colorRange(d.name);});
+            .style("fill", function (d) {return colorRange(d.group);});
 
 
         var link = svg.selectAll("path.link")

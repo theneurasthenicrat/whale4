@@ -8,14 +8,14 @@ function runoff_plot(runoff) {
     switch(option) {
         case 'stv':
             data = runoff.stv;
-            list = runoff.list;
+            list = runoff.stv_list;
             break;
         case 'trm':
             data = runoff.trm;
-            list = runoff.list;
+            list = runoff.trm_list;
 
     }
-    var colorTab = [ "green","#e1dd38","red"],
+    var colorTab = [ "red","#e1dd38","green"],
         width = $("#graph").width()-150,
         height = window.innerHeight/2;
 
@@ -101,7 +101,8 @@ function runoff_plot(runoff) {
         .attr("x", "10px")
         .attr("width",cand_width)
         .attr("height",cand_height)
-        .style("fill",function(d, i,j) {return matrix[j].length==1?color(i): color((i)/(matrix[j].length-1));})
+        .style("fill",function(d,i,j) {return  d3.min(matrix[j], function (d) {return d.plurality;}) == d3.max(matrix[j], function (d) {return d.plurality;}) ? color(1) :color((d.plurality-d3.min(matrix[j], function (d) {return d.plurality;}))/
+            (d3.max(matrix[j], function (d) {return d.plurality;})-d3.min(matrix[j], function (d) {return d.plurality;})));})
         .attr("opacity", 0.8);
 
     insideG
@@ -109,7 +110,7 @@ function runoff_plot(runoff) {
         .attr("fill", "#fff")
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
-        .attr("x", cand_width/2)
+        .attr("x", 10+cand_width/2)
         .attr("y",cand_height/2)
         .attr("dy", ".35em")
         .text(function(d){return d.letter+" ("+d.plurality+")";});
