@@ -46,6 +46,23 @@ def voters_undefined(poll):
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
 
+def poll_as_dict(poll):
+    """Serializes a poll as a dictionnary.
+
+    Arguments:
+    poll -- the poll to be serialized"""
+    poll_dict = {}
+    candidates = poll.candidate_list()
+    poll_dict['candidates'] = candidates
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+    poll_dict['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice\
+                                   else preference_model.as_dict()
+    poll_dict['type'] = 1 if poll.poll_type == 'Date' else 0
+    poll_dict['votes'] = []
+    for vote in poll.voting_profile():
+        poll_dict['votes'].append({'name': vote['voter'].nickname, 'values': vote['scores']})
+    return poll_dict
+
 def data_poll():
     polls = VotingPoll.objects.all()
     json_polls = dict()
