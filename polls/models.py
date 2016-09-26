@@ -44,6 +44,25 @@ class VotingPoll(Poll):
     option_shuffle=models.BooleanField(default=False,verbose_name=_("Option shuffle explanation"))
     status_poll=models.BooleanField(default=True,verbose_name=_("Status of poll explanation"))
 
+    def candidate_list(self):
+        return [c.candidate for c in self.candidates.all()]
+    
+    def voting_profile(self):
+        candidates = list(self.candidates.all())
+        nb_candidates = len(candidates)
+        iterator = iter(VotingScore.objects.filter(candidate__poll=self).order_by('last_modification', 'candidate'))
+        finished = False
+        while not finished:
+            try:
+                scores = [UNDEFINED_VALUE] * nb_candidates
+                for i, c in enumerate(candidates):
+                    current = next(iterator)
+                    if current.candidate == c:
+                        scores[i] = current.value
+                yield {'voter': current.voter, 'scores': scores}
+            except StopIteration:
+                finished = True
+    
 
 class Candidate(PolymorphicModel):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
