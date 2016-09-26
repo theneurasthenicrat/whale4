@@ -866,7 +866,7 @@ def round_randomized(scores,list_voters,cand1,cand2,*parameters):
 
 def condorcet(list_voters,candidates,scores):
 
-    nodes = [{'name':str(x),'value':0} for x in candidates]
+    nodes = [{'name':str(x),'value':0,'score':0} for x in candidates]
     nodes1 = copy.deepcopy(nodes)
 
     n = len(candidates)
@@ -889,45 +889,46 @@ def condorcet(list_voters,candidates,scores):
                     if scores[str(v)][str(c1.id)]== scores[str(v)][str(c2.id)]:
                         sum2 = sum2 + 1
                         Matrix1[i][j]["z"] += 1
-            nodes[i]['value']+=sum1
-            nodes1[i]['value']+=sum2
+            nodes[i]['score']+=sum1
+            nodes1[i]['score']+=sum2
 
     i = 0
     links = []
-    links1 = []
+
 
     while (i < n - 1):
         j = i + 1
         while (j < n):
-
-            a = nodes[i]["value"]
-            a1 = nodes1[i]["value"]
-            b = nodes[j]["value"]
-            b1 = nodes1[j]["value"]
+            a = nodes[i]["score"]
+            b = nodes[j]["score"]
             link = {}
-            link1 = {}
+
             link["value"] = abs(a - b)
-            link1["value"] = abs(a1 - b1)
-            if a - b >= 0:
+
+            if a - b > 0:
                 link["source"] = i
                 link["target"] = j
+                nodes[i]['value'] += 1
+                nodes1[i]['value'] += 1
 
-            else:
+            if a - b < 0:
                 link["source"] = j
                 link["target"] = i
-            if a1 - b1 >= 0:
-                link1["source"] = i
-                link1["target"] = j
+                nodes[j]['value'] += 1
+                nodes1[j]['value'] += 1
 
-            else:
-                link1["source"] = j
-                link1["target"] = i
+            if a - b == 0:
+                link["source"] = j
+                link["target"] = i
+                nodes1[i]['value'] += 1
+                nodes1[j]['value'] += 1
+
             links.append(link)
-            links1.append(link1)
+
             j = j + 1
         i = i + 1
 
-    return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links1,"matrix":Matrix1}}
+    return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links,"matrix":Matrix1}}
 
 def runoff_compute(cand,n,*parameters):
     while (n > 0):

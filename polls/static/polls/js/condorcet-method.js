@@ -43,10 +43,12 @@ function nodes_links(data) {
         width =   $("#graph").width()/1.5,
         height = window.innerHeight / 2,
         minNodeValue = d3.min(nodes, function (d) {return d.value;}),
+        minlinkValue = d3.min(links, function (d) {return d.value;}),
         meanNodeValue = d3.mean(nodes, function (d) {return d.value;}),
-        maxNodeValue = d3.max(nodes, function (d) {return d.value;});
+        maxNodeValue = d3.max(nodes, function (d) {return d.value;}),
+        maxlinkValue = d3.max(links, function (d) {return d.value;}),
         color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(colorTab)
-        strokeRange = d3.scale.linear().domain([minNodeValue, maxNodeValue]).range([0.5,3]);
+        strokeRange = d3.scale.linear().domain([minlinkValue, maxlinkValue]).range([0.5,3]);
     
     var force = d3.layout.force()
         .nodes(d3.values(nodes))
@@ -129,6 +131,7 @@ function nodes_links(data) {
 function matrix_graph(data){
 
     var margin = {top:100, right: 10, bottom: 20, left: 100},
+        duel_text=d3.select("#duel_text").property("value"),
         nodes = data.nodes,
         matrix = data.matrix,
         n = nodes.length,
@@ -164,9 +167,16 @@ function matrix_graph(data){
         .attr("transform", function (d, i) {return "translate(0," + x(i) + ")";})
         .each(row);
 
+    row.append("rect")
+        .attr("x",width-margin.left-margin.right+1)
+        .attr("y", 0)
+        .attr("width", x.rangeBand())
+        .attr("height", x.rangeBand())
+        .style("fill", "#ccc");
+
     row.append("line")
-        .attr("x2", width)
-        .style("stroke", "#fff");
+        .attr("x2", width-margin.left-margin.right+x.rangeBand())
+        .style("stroke","#fff");
 
     row.append("text")
         .attr("x", -6)
@@ -176,6 +186,15 @@ function matrix_graph(data){
         .style("fill", function (d, i) {return color(nodes[i].value);})
         .text(function (d, i) {return nodes[i].name;});
 
+
+    row.append("text")
+        .attr("x",width-margin.left+10)
+        .attr("y", x.rangeBand() / 2)
+        .attr("dy", ".32em")
+        .attr("text-anchor", "middle")
+          .style("fill", "white")
+        .text(function (d, i) {return nodes[i].value;});
+
     var column = matrixSvg.selectAll(".column")
         .data(matrix)
         .enter().append("g")
@@ -183,8 +202,8 @@ function matrix_graph(data){
         .attr("transform", function (d, i) {return "translate(" + x(i) + ")rotate(-90)";});
 
     column.append("line")
-        .attr("x1", -width)
-        .style("stroke", "#fff");
+        .attr("x1", -(width-margin.top-10))
+        .style("stroke","#fff");
 
     column.append("text")
         .attr("x", 6)
@@ -193,6 +212,14 @@ function matrix_graph(data){
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {return color(nodes[i].value);})
         .text(function (d, i) {return nodes[i].name;});
+
+    matrixSvg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y",width-margin.left-margin.right+x.rangeBand() / 2)
+        .attr("x",6)
+        .attr("dy", ".32em")
+        .style("text-anchor", "start")
+        .text(duel_text);
 
     function row(row) {
         var cell = d3.select(this).selectAll(".cell")

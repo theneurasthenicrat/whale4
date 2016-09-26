@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-21 14:12+0000\n"
+"POT-Creation-Date: 2016-09-26 08:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -372,7 +372,7 @@ msgstr "Back to the poll page"
 msgid "See the results of poll"
 msgstr "See the results of poll"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:675
+#: polls/templates/polls/all_result.html:23 polls/views.py:681
 msgid "scoring method title"
 msgstr "Scoring methods"
 
@@ -380,7 +380,7 @@ msgstr "Scoring methods"
 msgid "scoring method message"
 msgstr "Where each candidate gets some points according to its ranks..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:686
+#: polls/templates/polls/all_result.html:33 polls/views.py:692
 msgid "condorcet method title"
 msgstr "Condorcet-based methods"
 
@@ -388,7 +388,7 @@ msgstr "Condorcet-based methods"
 msgid "condorcet method message"
 msgstr "Where candidates fight with each other..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:693
+#: polls/templates/polls/all_result.html:44 polls/views.py:699
 msgid "runoff method title"
 msgstr "Run-off methods"
 
@@ -396,7 +396,7 @@ msgstr "Run-off methods"
 msgid "runoff method message"
 msgstr "Where candidates are successively eliminated..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:699
+#: polls/templates/polls/all_result.html:54 polls/views.py:705
 msgid "randomized method title"
 msgstr "Randomized cups"
 
@@ -588,50 +588,59 @@ msgstr "Add candidates"
 msgid "Pick one or several dates"
 msgstr "Pick one or several dates"
 
-#: polls/templates/polls/detail_result.html:17
+#: polls/templates/polls/detail_result.html:20
 msgid "Round"
 msgstr ""
 
-#: polls/templates/polls/detail_result.html:18
+#: polls/templates/polls/detail_result.html:21
 msgid "Winner"
 msgstr ""
 
-#: polls/templates/polls/detail_result.html:19
-#: polls/templates/polls/detail_result.html:57
+#: polls/templates/polls/detail_result.html:22
+#: polls/templates/polls/detail_result.html:67
 #, fuzzy
 #| msgid "Approval threshold"
 msgid "Approval threshold"
 msgstr "Approval threshold"
 
-#: polls/templates/polls/detail_result.html:20
+#: polls/templates/polls/detail_result.html:23
 #, fuzzy
 #| msgid "Approval"
 msgid "Approval scores"
 msgstr "Approval"
 
-#: polls/templates/polls/detail_result.html:26
+#: polls/templates/polls/detail_result.html:24
+msgid "Duels won"
+msgstr ""
+
+#: polls/templates/polls/detail_result.html:28
+#: polls/templates/polls/view_poll.html:14
+msgid "The number of participants is:"
+msgstr ""
+
+#: polls/templates/polls/detail_result.html:47
 msgid "More about the"
 msgstr "More about the"
 
-#: polls/templates/polls/detail_result.html:29
-msgid "Back to the results"
-msgstr "Back to the results"
-
-#: polls/templates/polls/detail_result.html:41 polls/views.py:702
+#: polls/templates/polls/detail_result.html:53 polls/views.py:708
 msgid "Shuffle candidates for the first round"
 msgstr "Shuffle candidates for the first round"
 
-#: polls/templates/polls/detail_result.html:67
+#: polls/templates/polls/detail_result.html:77
 msgid " Type of Graph"
 msgstr " Type of graph"
 
-#: polls/templates/polls/detail_result.html:70
+#: polls/templates/polls/detail_result.html:80
 msgid "Nodes Links"
 msgstr ""
 
-#: polls/templates/polls/detail_result.html:71
+#: polls/templates/polls/detail_result.html:81
 msgid "Matrix"
 msgstr ""
+
+#: polls/templates/polls/detail_result.html:92
+msgid "Back to the results"
+msgstr "Back to the results"
 
 #: polls/templates/polls/email.html:11
 msgid " Whale4 - WHich ALternative is Elected"
@@ -861,10 +870,6 @@ msgstr "Poll:"
 msgid "change the status of poll"
 msgstr "Change the poll status"
 
-#: polls/templates/polls/view_poll.html:14
-msgid "The number of participants is:"
-msgstr ""
-
 #: polls/templates/polls/view_poll.html:113
 msgid "No vote yet... Do you want to be the first one?"
 msgstr "No vote yet... Do you want to be the first one?"
@@ -957,36 +962,36 @@ msgstr ""
 "<h4>Poll created</h4><p>Your poll has been created. Now you can add "
 "candidates to it and setup advanced parameters.</p>"
 
-#: polls/views.py:199
+#: polls/views.py:200
 msgid "General parameters successfully updated!"
 msgstr ""
 "<h4>Parameters updated</h4><p>The general parameters have been successfully "
 "updated.</p>"
 
-#: polls/views.py:202
+#: polls/views.py:203
 msgid "Parameters are successfully updated!"
 msgstr ""
 "<h4>Parameters updated</h4><p>The parameters have been successfully updated."
 "</p>"
 
-#: polls/views.py:213
+#: polls/views.py:214
 msgid "Your poll has been deleted!"
 msgstr ""
 "<h4>Deletion confirmed</h4><p>The poll (as well as the associated votes) has "
 "been deleted from the database.</p>"
 
-#: polls/views.py:227
+#: polls/views.py:228
 msgid "Options are successfully added!"
 msgstr ""
 "<h4>Options set</h4><p>The advanced parameters have been successfully set.</"
 "p>"
 
-#: polls/views.py:241
+#: polls/views.py:242
 msgid "Status is successfully changed!"
 msgstr ""
 "<h4>Status changed</h4><p>The poll status has been successfully updated.</p>"
 
-#: polls/views.py:256
+#: polls/views.py:257
 #, fuzzy
 #| msgid "Add or remove candidates is allowed"
 msgid "Add or remove candidates is not allowed!"
@@ -994,197 +999,206 @@ msgstr ""
 "The administrator (that is, you) can add or remove candidates whenever he / "
 "she wants."
 
-#: polls/views.py:277 polls/views.py:307
+#: polls/views.py:278 polls/views.py:308
 #, python-format
 msgid "Candidates must be distinct (%(c)s)"
 msgstr ""
 "<h4>Please...</h4><p>...Give different names to different candidates (%(c)s "
 "is already in the list of candidates)</p>"
 
-#: polls/views.py:281
+#: polls/views.py:282
 #, python-format
 msgid "Candidate %(c)s successfully added!"
 msgstr ""
 "<h4>Candidate added</h4><p>%(c)s has been added to the list of candidates.</"
 "p>"
 
-#: polls/views.py:312
+#: polls/views.py:313
 msgid "Candidates are successfully added!"
 msgstr ""
 "<h4>Candidates added</h4><p>The candidates have been successfully added to "
 "the list.</p>"
 
-#: polls/views.py:324
+#: polls/views.py:325
 #, python-format
 msgid "Candidate has been deleted (%(c)s)!"
 msgstr ""
 "<h4>Candidate deleted</h4><p>%(c)s has been successfully removed from the "
 "list of candidates.</p>"
 
-#: polls/views.py:356
+#: polls/views.py:357
 msgid "Invited voters successfully added!"
 msgstr ""
 "<h4>Voters added</h4><p>The invited voters have been successfully added to "
 "the poll.</p>"
 
-#: polls/views.py:371
+#: polls/views.py:372
 msgid "anonymous voter has been deleted!"
 msgstr ""
 "<h4>Anonymous voter deleted</h4><p>The anonymous voter has been successfully "
 "removed from the poll.</p>"
 
-#: polls/views.py:388
+#: polls/views.py:389
 msgid "your certificate is correct"
 msgstr ""
 "<h4>Authorization granted</h4><p>Your certificate is valid. You can vote!</p>"
 
-#: polls/views.py:396
+#: polls/views.py:397
 msgid "your certificate is incorrect"
 msgstr ""
 "<h4>Incorrect certificate</h4><p>Woops, it seems that the certificate you "
 "entered does not correspond to a valid certificate. Take a deep breath and "
 "type again.</p>"
 
-#: polls/views.py:431
+#: polls/views.py:432
 msgid "you have already voted, now you can update your vote"
 msgstr ""
 "<h4>Welcome back...</h4><p>You have already voted. If you want, you can "
 "update your vote.</p>"
 
-#: polls/views.py:450
+#: polls/views.py:451
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 "<h4>A voté!</h4><p>Your vote has been successfully taken into account. "
 "Thanks for using Whale!</p><p><small>(PS: \"A voté\" is a French official "
 "idiom used when someone casts a ballot in a political election)</small></p>"
 
-#: polls/views.py:456
+#: polls/views.py:457
 msgid "Thank you for voting"
 msgstr "Thanks for your participation"
 
-#: polls/views.py:501
+#: polls/views.py:502
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 "<h4>A voté! (once again)</h4><p>Your vote has been successfully updated. "
 "Thanks again for using Whale!</p>"
 
-#: polls/views.py:520
+#: polls/views.py:521
 msgid "Your vote has been deleted!"
 msgstr ""
 "<h4>Vote deleted</h4><p>Your vote has been successfully deleted from the "
 "poll.</p>"
 
-#: polls/views.py:676
+#: polls/views.py:682
 msgid "scoring label"
 msgstr "Computation method"
 
-#: polls/views.py:677
+#: polls/views.py:683
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:677
+#: polls/views.py:683
 msgid "Plurality"
 msgstr "Plurality"
 
-#: polls/views.py:678
+#: polls/views.py:684
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:679
+#: polls/views.py:685
 msgid "Approval"
 msgstr "Approval"
 
-#: polls/views.py:679
+#: polls/views.py:685
 msgid "Curve Approval"
 msgstr "Curve of approval"
 
-#: polls/views.py:681
+#: polls/views.py:687
 msgid "Approval scoring method explanation"
 msgstr ""
-"<section> For each candidate, we count a number of <label class='label label-primary'> Yes</label>.</section>"
+"<section> For each candidate, we count a number of <label class='label label-"
+"primary'> Yes</label>.</section>"
 
-#: polls/views.py:683
+#: polls/views.py:689
 msgid "scoring method explanation"
 msgstr ""
 "<p>We compute a number of points for each candidate as follows:</"
-"p><ul><li><span class='text-warning'>Borda </span>: a candidate wins <i>n-1</i> points every time it is ranked "
-"first, <i>n-2</i> points every time it is ranked second, and so on <span class='label label-info'>n is the "
-"number of candidates</span>.</li><li><span class='text-warning'>Plurality</span>: a candidate wins <i>1</i>point every "
-"time it is ranked first <span class='label label-info'>of a given voter</span>.</li><li><span class='text-warning'>Veto </span> : "
-"a candidate receives a negative every time it is ranked last."
-"</li><li><span class='text-warning'>Approval</span>: a candidate wins <i>1 </i>"
-"point every time it is ranked above the specified threshold.</li><li><span class='text-warning'>Curve "
-"of approval</span>: the curve representing the points of approval based on approval "
-"threshold.</li></ul>"
+"p><ul><li><span class='text-warning'>Borda </span>: a candidate wins <i>n-1</"
+"i> points every time it is ranked first, <i>n-2</i> points every time it is "
+"ranked second, and so on <span class='label label-info'>n is the number of "
+"candidates</span>.</li><li><span class='text-warning'>Plurality</span>: a "
+"candidate wins <i>1</i>point every time it is ranked first <span "
+"class='label label-info'>of a given voter</span>.</li><li><span class='text-"
+"warning'>Veto </span> : a candidate receives a negative every time it is "
+"ranked last.</li><li><span class='text-warning'>Approval</span>: a candidate "
+"wins <i>1 </i>point every time it is ranked above the specified threshold.</"
+"li><li><span class='text-warning'>Curve of approval</span>: the curve "
+"representing the points of approval based on approval threshold.</li></ul>"
 
-#: polls/views.py:687
+#: polls/views.py:693
 msgid "condorcet label"
 msgstr "Computation method"
 
-#: polls/views.py:688
+#: polls/views.py:694
 msgid "Copeland 0"
 msgstr "Copeland 0"
 
-#: polls/views.py:688
+#: polls/views.py:694
 msgid "Copeland 1"
 msgstr "Copeland 1"
 
-#: polls/views.py:689
+#: polls/views.py:695
 msgid "Simpson"
 msgstr "Simpson (maxmin)"
 
-#: polls/views.py:690
+#: polls/views.py:696
 msgid "condorcet method explanation"
 msgstr ""
 "<p>We organize a duel between each pair of candidates:</p><ul> "
-"<label>Computation method:</label><li><span class='text-warning'>Copeland 0</span>: a candidate wins 0 point "
-"whenever it is tied with another candidate.</li><li><span class='text-warning'>Copeland 1</span>: a candidate "
-"wins 1 point whenever it is tied with another candidate.</li></ul><ul> "
-"<label>Type of graph:</label><li> <span class='text-warning'>Nodes links</span>: For a candidate A and a "
-"candidate B,there is an arrow from A to B if a majority of voters prefers A "
-"to B,and vice-versa.The more voters prefer A to B, the thicker the "
-"arrow. A dotted line replaces the arrow if two candidates are tie. The "
-"score is the number of times a candidate prefers over other candidates.</"
-"li><li><span class='text-warning'>Matrix</span> : The matrix represents the oriented graph.The value "
-"represents the number of times a majority of voters prefers candidate A <span class='label label-info'>in "
-"row</span> to candidate B <span class='label label-info'>in column</span>. </li></ul>"
+"<label>Computation method:</label><li><span class='text-warning'>Copeland 0</"
+"span>: a candidate wins 0 point whenever it is tied with another candidate.</"
+"li><li><span class='text-warning'>Copeland 1</span>: a candidate wins 1 "
+"point whenever it is tied with another candidate.</li></ul><ul> <label>Type "
+"of graph:</label><li> <span class='text-warning'>Nodes links</span>: For a "
+"candidate A and a candidate B,there is an arrow from A to B if a majority of "
+"voters prefers A to B,and vice-versa.The more voters prefer A to B, the "
+"thicker the arrow. A dotted line replaces the arrow if two candidates are "
+"tie. The score is the number of times a candidate prefers over other "
+"candidates.</li><li><span class='text-warning'>Matrix</span> : The matrix "
+"represents the oriented graph.The value represents the number of times a "
+"majority of voters prefers candidate A <span class='label label-info'>in "
+"row</span> to candidate B <span class='label label-info'>in column</span>. </"
+"li></ul>"
 
-#: polls/views.py:694
+#: polls/views.py:700
 msgid "runoff label"
 msgstr "Computation method"
 
-#: polls/views.py:695
+#: polls/views.py:701
 msgid "STV"
 msgstr "Single Transferable Vote"
 
-#: polls/views.py:695
+#: polls/views.py:701
 msgid "Two Round majority"
 msgstr "Two Round Majority"
 
-#: polls/views.py:696
+#: polls/views.py:702
 msgid "runoff method explanation"
 msgstr ""
-"<p>These methods successively eliminate candidates. After each "
-"round, the votes for each eliminated candidates are properly transfered to "
-"the remaining ones.</p><ul><li><span class='text-warning'>Single Transferrable Vote</span>: At each round, the "
-"candidates are ranked according to their plurality score <span class='label label-info'>see the scoring "
-"methods</span>. Ties are broken according their Borda score. After each round, the "
-"worst candidate is eliminated.</li><li><span class='text-warning'>Two Rounds Majority</span>: We keep for the "
-"second round the candidates having the highest plurality score <span class='label label-info'>ties "
-"randomly broken</span>. The winner is the second round candidate having the highest "
-"plurality score (once again, ties randomly broken).</li></ul>"
+"<p>These methods successively eliminate candidates. After each round, the "
+"votes for each eliminated candidates are properly transfered to the "
+"remaining ones.</p><ul><li><span class='text-warning'>Single Transferrable "
+"Vote</span>: At each round, the candidates are ranked according to their "
+"plurality score <span class='label label-info'>see the scoring methods</"
+"span>. Ties are broken according their Borda score. After each round, the "
+"worst candidate is eliminated.</li><li><span class='text-warning'>Two Rounds "
+"Majority</span>: We keep for the second round the candidates having the "
+"highest plurality score <span class='label label-info'>ties randomly broken</"
+"span>. The winner is the second round candidate having the highest plurality "
+"score (once again, ties randomly broken).</li></ul>"
 
-#: polls/views.py:700
+#: polls/views.py:706
 msgid "randomized label"
 msgstr "randomized method"
 
-#: polls/views.py:703
+#: polls/views.py:709
 msgid "randomized method explanation"
 msgstr ""
-"This method simulates a sport championship. At each round, the "
-"candidates fight by pairs. The best candidate of each pair   <span class='label label-info'>the one who "
-"is prefered by a majority of voters</span> goes to the next round. Ties are "
-"randomly broken. Fights for the initial round are randomly chosen."
+"This method simulates a sport championship. At each round, the candidates "
+"fight by pairs. The best candidate of each pair   <span class='label label-"
+"info'>the one who is prefered by a majority of voters</span> goes to the "
+"next round. Ties are randomly broken. Fights for the initial round are "
+"randomly chosen."
 
 #: whale4/settings.py:101
 msgid "French"
