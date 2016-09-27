@@ -97,7 +97,7 @@ function bar_chart(data) {
         .call(xAxis)
         .selectAll("text")
         .attr("x", 12)
-        .attr("y", 0)
+        .attr("y", -2)
         .attr("transform", function() { return  yMin >=0 ?"rotate(45)":"rotate(90)"; })
         .style("text-anchor", "start");
 
