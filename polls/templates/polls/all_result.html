@@ -39,7 +39,7 @@
             <div class="col-md-3 col-sm-6 ">
                 <a href="{% url 'viewResult' pk=poll.pk method=3 %}" class="thumbnail">
 
-                    <img src="{% static 'polls/images/runoff.png' %}"  class="img-thumbnail" alt="">
+                    <img src="{% static 'polls/images/runoff.png' %}" class="img-thumbnail" alt="">
             <span class="caption">
             <h4> {% trans 'runoff method title' %}</h4>
                         <blockquote>{% trans 'runoff method message' %}</blockquote>
@@ -49,7 +49,7 @@
 
             <div class="col-md-3 col-sm-6 "><a href="{% url 'viewResult' pk=poll.pk method=4 %}" class="thumbnail" >
 
-                <img src="{% static 'polls/images/randomTournaments.png' %}" class="img-thumbnail" alt="">
+                <img src="{% static 'polls/images/randomized.png' %}" class="img-thumbnail" alt="">
                     <span class="caption">
                         <h4>{% trans 'randomized method title' %}</h4>
                         <blockquote>{% trans 'randomized method message' %}</blockquote>

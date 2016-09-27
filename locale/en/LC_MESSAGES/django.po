@@ -628,15 +628,15 @@ msgstr "Shuffle candidates for the first round"
 
 #: polls/templates/polls/detail_result.html:77
 msgid " Type of Graph"
-msgstr " Type of graph"
+msgstr " Type of representation"
 
 #: polls/templates/polls/detail_result.html:80
 msgid "Nodes Links"
-msgstr ""
+msgstr "Graph"
 
 #: polls/templates/polls/detail_result.html:81
 msgid "Matrix"
-msgstr ""
+msgstr "Scoring Matrix"
 
 #: polls/templates/polls/detail_result.html:92
 msgid "Back to the results"
@@ -1144,21 +1144,26 @@ msgstr "Simpson (maxmin)"
 #: polls/views.py:696
 msgid "condorcet method explanation"
 msgstr ""
-"<p>We organize a duel between each pair of candidates:</p><ul> "
-"<label>Computation method:</label><li><span class='text-warning'>Copeland 0</"
-"span>: a candidate wins 0 point whenever it is tied with another candidate.</"
-"li><li><span class='text-warning'>Copeland 1</span>: a candidate wins 1 "
-"point whenever it is tied with another candidate.</li></ul><ul> <label>Type "
-"of graph:</label><li> <span class='text-warning'>Nodes links</span>: For a "
-"candidate A and a candidate B,there is an arrow from A to B if a majority of "
-"voters prefers A to B,and vice-versa.The more voters prefer A to B, the "
-"thicker the arrow. A dotted line replaces the arrow if two candidates are "
-"tie. The score is the number of times a candidate prefers over other "
-"candidates.</li><li><span class='text-warning'>Matrix</span> : The matrix "
-"represents the oriented graph.The value represents the number of times a "
-"majority of voters prefers candidate A <span class='label label-info'>in "
-"row</span> to candidate B <span class='label label-info'>in column</span>. </"
-"li></ul>"
+"<p>We make all possible electoral duels between candidates."
+" Candidate A wins his duel against candidate B when a majority of voters prefer candidate A rather than candidate B."
+" The common point of all Condorcet methods is that when a candidate wins all his duels, it is automatically declared winner the election."
+" This case is quite common in practice, so you will notice that often the methods presented here give the same result."
+" These methods may differ in the rare cases where no candidate manages to win all duels."
+"</p><ul> "
+"<label>Computation method:</label><li><span class='text-warning'>Copeland </"
+"span>: a candidate wins a point for each duel won and half a point for each tie.</"
+"li><li><span class='text-warning'>Simpson (maxmin)</span>:"
+" The score of a candidate is the score of the worst duel. For example, if his worst result is 35 votes against 65, so his score is 35.<br>"
+" N.B. If a candidate wins all his duels, his score is greater than half the number of voters!.</li></ul><ul> <label>Type "
+"of representation:</label><li> <span class='text-warning'>Graph</span>:  "
+" We draw an arrow to each won duel: "
+" an arrow of a candidate A to candidate B means that A wins the duel against B,"
+" otherwise a majority of voters prefer A rather than B. the thickness of the arrow represents the difference in votes between the two candidates. "
+" There is a dotted line if the two candidates are tied. "
+"</li><li><span class='text-warning'>Scoring Matrix</span> :"
+" Candidate A in line and candidate B in column, the score means the number of voters who prefer candidate A than candidate B"
+"</li></ul>"
+
 
 #: polls/views.py:700
 msgid "runoff label"
@@ -1166,7 +1171,7 @@ msgstr "Computation method"
 
 #: polls/views.py:701
 msgid "STV"
-msgstr "Single Transferable Vote"
+msgstr "Alternative Vote"
 
 #: polls/views.py:701
 msgid "Two Round majority"
@@ -1177,8 +1182,8 @@ msgid "runoff method explanation"
 msgstr ""
 "<p>These methods successively eliminate candidates. After each round, the "
 "votes for each eliminated candidates are properly transfered to the "
-"remaining ones.</p><ul><li><span class='text-warning'>Single Transferrable "
-"Vote</span>: At each round, the candidates are ranked according to their "
+"remaining ones.</p><ul><li><span class='text-warning'> Alternative Vote"
+"</span>: At each round, the candidates are ranked according to their "
 "plurality score <span class='label label-info'>see the scoring methods</"
 "span>. Ties are broken according their Borda score. After each round, the "
 "worst candidate is eliminated.</li><li><span class='text-warning'>Two Rounds "

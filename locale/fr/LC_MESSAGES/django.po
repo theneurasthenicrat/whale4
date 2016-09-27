@@ -623,15 +623,15 @@ msgstr "Nouveau tirage aléatoire au premier tour"
 
 #: polls/templates/polls/detail_result.html:77
 msgid " Type of Graph"
-msgstr " Type de graphique"
+msgstr " Type de représentation"
 
 #: polls/templates/polls/detail_result.html:80
 msgid "Nodes Links"
-msgstr "Noeuds Liens"
+msgstr "Graphe"
 
 #: polls/templates/polls/detail_result.html:81
 msgid "Matrix"
-msgstr "Matrice du graphe orienté"
+msgstr "Tableau des scores"
 
 #: polls/templates/polls/detail_result.html:92
 msgid "Back to the results"
@@ -1141,22 +1141,27 @@ msgstr ""
 #: polls/views.py:696
 msgid "condorcet method explanation"
 msgstr ""
-"<p>On réalise des duels entre les candidats :</p><ul><label > Méthode de "
-"calcul : </label> <li > <span class='text-warning'>Copeland 0 </span>: Un "
-"candidat gagne 0 point chaque fois qu'il est à égalité avec un autre "
-"candidat.</li> <li ><span class='text-warning'>Copeland 1</span> : Un "
-"candidat gagne 1 point chaque fois qu'il est à égalité avec un autre "
-"candidat.</li> </ul> <ul> <label> Type de graphique : </label><li> <span "
-"class='text-warning'>Noeuds liens</span> :  Pour un candidat A et un "
-"candidat B,on met une flèche de A vers B si une majorité de votants "
-"préfèrent A à B, et vice-versa. L'épaisseur de la flèche dénote la "
-"différence de voix entre les deux candidats. Il y a un trait pointillé si "
-"les deux candidats sont à égalité.</li><li> <span class='text-"
-"warning'>Matrice du graphe orienté</span>: La matrice représente le graphe "
-"orienté. La valeur représente le nombre de fois qu'une majorité des "
-"électeurs préfère le candidat A <span class='label label-info'>en ligne</"
-"span> pour le candidat B <span class='label label-info'> en colonne</span>."
-"<br></li></ul>"
+"<p>On réalise tous les duels électoraux possibles entre les candidats."
+" Le candidat A gagne son duel contre le candidat B quand une majorité des électeurs préfère le candidat A plutôt que le candidat B. "
+" Le point commun de toutes les méthodes de Condorcet est que quand un candidat gagne tous ses duels,"
+" il est automatiquement déclaré vainqueur de l'élection. "
+"Ce cas est assez fréquent en pratique : vous observerez donc"
+" souvent que les méthodes présentées ici donnent le même résultat. Ceci dit,"
+" ces méthodes peuvent différer dans les cas plus rares où aucun candidat ne parvient à remporter tous ses duels.</p><ul><label >"
+"Méthode de calcul: </label> <li > <span class='text-warning'>Copeland </span>:"
+" Un candidat gagne un point pour chaque duel gagné et un demi-point pour chaque égalité."
+"</li> <li ><span class='text-warning'>Simpson (maxmin)</span> :"
+" Le score d'un candidat est le score obtenu dans son pire duel. Par exemple,"
+" si son pire résultat est 35 voix contre 65, alors son score est 35. <br> "
+"N.B. : si un candidat gagne tous ses duels, son score est plus grand que la moitié du nombre d'électeurs!</li> </ul> <ul> <label> Type de représentation : </label><li> <span "
+"class='text-warning'>Graphe</span> : On trace une flèche pour chaque duel gagné : "
+"une flèche d'un candidat A vers un candidat B signifie que A gagne le duel contre B,"
+"c'est-à-dire qu'une majorité de votants préfère A plutôt que B."
+" L'épaisseur de la flèche représente la différence de voix entre les deux candidats. "
+"Il y a un trait pointillé si les deux candidats sont à égalité.</li>"
+"<li> <span class='text-warning'>Tableau des scores</span>: À la ligne du candidat A et à la colonne du candidat B, "
+" on indique le nombre d'électeurs qui préfèrent le candidat A plutôt que le candidat B.</li></ul>"
+
 
 #: polls/views.py:700
 msgid "runoff label"
@@ -1164,7 +1169,7 @@ msgstr "Méthode de calcul"
 
 #: polls/views.py:701
 msgid "STV"
-msgstr ""
+msgstr "Vote Alternatif"
 
 #: polls/views.py:701
 msgid "Two Round majority"
@@ -1175,7 +1180,7 @@ msgid "runoff method explanation"
 msgstr ""
 "<p>Ces méthodes fonctionnent par élimination successive de candidats. À "
 "chaque étape, les voix pour les candidats éliminés sont reportés sur les "
-"autres.</p><ul><li '><span class='text-warning'>Single Transferrable Vote</"
+"autres.</p><ul><li '><span class='text-warning'>Vote Alternatif </"
 "span>: À chaque tour, les candidats sont classés selon leur score de "
 "pluralité <span class='label label-info'>voir méthodes de calcul de scores</"
 "span>.S'il y a des ex-aequo, on considère en plus le score de Borda. À "
