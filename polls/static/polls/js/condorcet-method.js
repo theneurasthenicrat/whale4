@@ -3,16 +3,13 @@ function condorcet_plot( condorcet) {
     var option = d3.select("#option").node().value;
     var data;
     switch (option) {
-        case 'copeland0':
-            data = condorcet.copeland0;
+        case 'copeland':
+            data = condorcet.copeland;
             condorcet_chart(data);
             break;
-        case 'copeland1':
-            data =  condorcet.copeland1;
-            condorcet_chart(data);
-            break;
+
         case 'simpson':
-            data =  condorcet.copeland1;
+            data =  condorcet.simpson;
             condorcet_chart(data);
 
     }

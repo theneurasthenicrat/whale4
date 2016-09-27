@@ -138,9 +138,17 @@ function curve_approval(data) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    data.sort(function(a, b){
+    return a.y-b.y;
+});
+
+
+
     var dataNest = d3.nest()
         .key(function(d) {return d.candidate;})
         .entries(data);
+
+    var n=dataNest.length;
 
     dataNest.forEach(function(d,i) {
 
@@ -152,7 +160,7 @@ function curve_approval(data) {
 
         svg.append("text")
             .attr("x", 10)
-            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + i*30 + ")" )
+            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + (n-i)*30 + ")" )
             .attr("dy", "0.35em")
             .style("fill",  color(d.key) )
             .text( d.key);

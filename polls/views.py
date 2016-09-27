@@ -691,7 +691,7 @@ def result_view(request, pk ,method):
     if method == 2:
         title = _('condorcet method title')
         label = _('condorcet label')
-        options = [{'value': 'copeland0', 'name': _('Copeland 0')}, {'value': 'copeland1', 'name': _('Copeland 1')},
+        options = [{'value': 'copeland', 'name': _('Copeland')},
                      {'value': 'simpson', 'name': _('Simpson')}]
         explanation = mark_safe(_('condorcet method explanation'))
 
@@ -791,10 +791,10 @@ def scoring_method(candidates,preference_model,votes):
         approval_scores.append(th)
 
     if preference_model.id == "rankingNoTies" or preference_model.id == "rankingWithTies":
-        approval_scores.reverse()
         approval["threshold"] = [x + 1 for x in preference_model.values[1:]]
-        approval["scores"] = approval_scores
-        curve_approval.reverse()
+        approval["threshold"].reverse()
+    curve_approval.reverse()
+    approval["scores"] = approval_scores
 
     return{"borda":borda_scores,"plurality":plurality_scores,"veto":veto_scores,"approval":approval,"curve_approval":curve_approval}
 
@@ -885,61 +885,61 @@ def condorcet(list_voters,candidates,scores):
     n = len(candidates)
 
     Matrix = [[{"x":x,"y":y,"z":0} for x in range(n)] for y in range(n)]
-    Matrix1 = copy.deepcopy(Matrix)
 
     for v in list_voters:
         for i,c1 in enumerate(candidates):
-            sum1=0
-            sum2=0
-
             for j,c2 in enumerate(candidates):
                 if c1.id!=c2.id:
                     if scores[str(v)][str(c1.id)] > scores[str(v)][str(c2.id)] :
-                        sum1 = sum1 + 1
-                        sum2 = sum2 + 1
                         Matrix[i][j]["z"]+=1
-                        Matrix1[i][j]["z"]+=1
-                    if scores[str(v)][str(c1.id)]== scores[str(v)][str(c2.id)]:
-                        sum2 = sum2 + 1
-                        Matrix1[i][j]["z"] += 1
-            nodes[i]['score']+=sum1
-            nodes1[i]['value']= sum2
 
+    for i, c in enumerate(candidates):
+        list_value=[]
+        list_value1=[]
+        for j, x in enumerate(Matrix[i]):
+            if i!=j:
+                a=x["z"]
+                b=Matrix[j][i]["z"]
+                list_value.append(a)
+
+                if a>b:
+                    list_value1.append(1)
+                if a==b:
+                    list_value1.append(1/2)
+
+        nodes[i]['value'] = sum(list_value1)
+        nodes1[i]['value'] = min(list_value)
+    links=compute_links(nodes,n)
+    links1=compute_links(nodes1,n)
+
+    return {"copeland":{"nodes":nodes,"links":links,"matrix":Matrix},"simpson":{"nodes":nodes1,"links":links1,"matrix":Matrix}}
+
+
+def compute_links(nodes,n):
     i = 0
     links = []
 
     while (i < n - 1):
         j = i + 1
         while (j < n):
-            a = nodes[i]["score"]
-            b = nodes[j]["score"]
+            a = nodes[i]["value"]
+            b = nodes[j]["value"]
             link = {}
 
             link["value"] = abs(a - b)
-
-            if a - b > 0:
+            if a - b >= 0:
                 link["source"] = i
                 link["target"] = j
-                nodes[i]['value'] += 1
 
             if a - b < 0:
                 link["source"] = j
                 link["target"] = i
-                nodes[j]['value'] += 1
-
-            if a - b == 0:
-                link["source"] = j
-                link["target"] = i
-                nodes[i]['value'] += 1/2
-                nodes[j]['value'] += 1/2
 
             links.append(link)
 
             j = j + 1
         i = i + 1
-
-    return {"copeland0":{"nodes":nodes,"links":links,"matrix":Matrix},"copeland1":{"nodes":nodes1,"links":links,"matrix":Matrix1}}
-
+    return links
 
 def runoff_compute(n,cand,*parameters):
     letter = list(string.ascii_uppercase)
