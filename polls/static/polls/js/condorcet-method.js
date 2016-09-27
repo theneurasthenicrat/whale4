@@ -181,7 +181,8 @@ function matrix_graph(data){
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
         .style("fill", function (d, i) {return color(nodes[i].value);})
-        .text(function (d, i) {return nodes[i].name;});
+        .text(function (d, i) {return nodes[i].name;})
+        .call(wrap,margin.left);
 
 
     row.append("text")
@@ -191,6 +192,7 @@ function matrix_graph(data){
         .attr("text-anchor", "middle")
           .style("fill", "white")
         .text(function (d, i) {return nodes[i].value;});
+
 
     var column = matrixSvg.selectAll(".column")
         .data(matrix)
@@ -208,7 +210,8 @@ function matrix_graph(data){
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {return color(nodes[i].value);})
-        .text(function (d, i) {return nodes[i].name;});
+        .text(function (d, i) {return nodes[i].name;})
+        .call(wrap,margin.top);
 
     matrixSvg.append("text")
         .attr("transform", "rotate(-90)")

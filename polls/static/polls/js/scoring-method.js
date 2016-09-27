@@ -102,6 +102,7 @@ function bar_chart(data) {
         .style("text-anchor", "start");
 
 
+
     svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);

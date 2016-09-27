@@ -127,6 +127,7 @@ function runoff_plot(runoff) {
         .attr("transform", function(d, j) {return "translate(" + (width) + "," + (j*height/n)+ ")"; })
         .attr("dy", ".35em")
         .attr("class",'cand')
-        .text(function(d){return d.letter+": "+d.name;});
+        .text(function(d){return d.letter+": "+d.name;})
+        .call(wrap,margin.right);
 
 }
