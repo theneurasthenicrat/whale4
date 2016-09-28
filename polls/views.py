@@ -601,7 +601,7 @@ def _view_poll_as_csv(poll):
     response.write(','.join([str(c) for c in poll.candidate_list()]))
     response.write('\n')
     for vote in poll.voting_profile():
-        response.write(vote['voter'].nickname + ',')
+        response.write(vote['nickname'] + ',')
         response.write(','.join([str(s) for s in vote['scores']]))
         response.write('\n')
     return response
