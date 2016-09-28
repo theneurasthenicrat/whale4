@@ -106,7 +106,7 @@
                                     <div class="well">
                                         <h5 >{% trans 'Copy this link' %}</h5>
                                         <div class="input-group ">
-                                           <input type="text" class="form-control" id="copy_url"  value="{{ request.get_host }}{% url 'vote' poll.id  %}">
+                                           <input type="text" class="form-control" id="copy_url"  value="http://{{ request.get_host }}{% url 'vote' poll.id  %}">
                                             <span class=" input-group-addon" data-clipboard-target="#copy_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@
                         <div class="well">
                             <h5 >{% trans 'Copy this link' %}</h5>
                             <div class="input-group ">
-                                <input type="text" class="form-control" id="copy_url"  value="{{ request.get_host }}{% url 'vote' poll.id  %}">
+                                <input type="text" class="form-control" id="copy_url"  value="http://{{ request.get_host }}{% url 'vote' poll.id  %}">
                                 <span class=" input-group-addon" data-clipboard-target="#copy_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                             </div>
                         </div>

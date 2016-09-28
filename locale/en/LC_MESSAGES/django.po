@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-26 08:50+0000\n"
+"POT-Creation-Date: 2016-09-28 09:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -256,7 +256,7 @@ msgstr "Ranking with ties"
 msgid "Ranking (no ties)"
 msgstr "Full ranking (no ties)"
 
-#: polls/models.py:28
+#: polls/models.py:28 polls/templates/polls/detail_result.html:24
 msgid "Scores"
 msgstr "Scores"
 
@@ -364,7 +364,7 @@ msgstr "Invite voters"
 msgid "Change the status of poll"
 msgstr "Change the status"
 
-#: polls/templates/polls/admin.html:28 polls/templates/polls/invite.html:190
+#: polls/templates/polls/admin.html:28 polls/templates/polls/invite.html:189
 msgid "Go to the poll"
 msgstr "Back to the poll page"
 
@@ -404,8 +404,8 @@ msgstr "Randomized cups"
 msgid "randomized method message"
 msgstr "Where we simulate a sport cup between candidates..."
 
-#: polls/templates/polls/all_result.html:65 polls/templates/polls/data.html:55
-#: polls/templates/polls/vote.html:138
+#: polls/templates/polls/all_result.html:65 polls/templates/polls/data.html:56
+#: polls/templates/polls/vote.html:143
 msgid "Back to the poll"
 msgstr "Back to the poll"
 
@@ -534,7 +534,7 @@ msgstr "No candidates yet"
 
 #: polls/templates/polls/candidate.html:92
 #: polls/templates/polls/date_candidate.html:100
-#: polls/templates/polls/invite.html:189 polls/templates/polls/option.html:28
+#: polls/templates/polls/invite.html:188 polls/templates/polls/option.html:28
 msgid "Previous"
 msgstr "Previous"
 
@@ -547,7 +547,7 @@ msgstr "Next"
 
 #: polls/templates/polls/candidate.html:95
 #: polls/templates/polls/date_candidate.html:103
-#: polls/templates/polls/invite.html:193
+#: polls/templates/polls/invite.html:192
 msgid "Back to admin page"
 msgstr "Back to the administration page"
 
@@ -560,24 +560,25 @@ msgid "Save"
 msgstr "Save"
 
 #: polls/templates/polls/data.html:13
-#, fuzzy
-#| msgid "Date poll"
 msgid "Data of poll"
-msgstr "Date poll"
+msgstr "Data of poll"
 
-#: polls/templates/polls/data.html:23
+#: polls/templates/polls/data.html:14
+
+msgid "data explanation"
+msgstr "This page is for advanced users. Don't worry, if you don't understand."
+
+#: polls/templates/polls/data.html:24
 msgid "JSON"
 msgstr ""
 
-#: polls/templates/polls/data.html:33
+#: polls/templates/polls/data.html:34
 msgid "PREFLIB"
 msgstr ""
 
-#: polls/templates/polls/data.html:44
-#, fuzzy
-#| msgid "STV"
+#: polls/templates/polls/data.html:45
 msgid "CSV"
-msgstr "STV"
+msgstr "CSV"
 
 #: polls/templates/polls/date_candidate.html:32
 #: polls/templates/polls/invite.html:24 polls/templates/polls/option.html:15
@@ -608,10 +609,6 @@ msgstr "Approval threshold"
 #| msgid "Approval"
 msgid "Approval scores"
 msgstr "Approval"
-
-#: polls/templates/polls/detail_result.html:24
-msgid "Duels won"
-msgstr ""
 
 #: polls/templates/polls/detail_result.html:28
 #: polls/templates/polls/view_poll.html:14
@@ -754,8 +751,8 @@ msgstr "Give the list of email addresses of the voters (one per line)"
 
 #: polls/templates/polls/invite.html:52
 #: polls/templates/polls/parameters_poll.html:37
-#: polls/templates/polls/status_poll.html:17 polls/templates/polls/vote.html:61
-#: polls/templates/polls/vote.html.py:141
+#: polls/templates/polls/status_poll.html:17 polls/templates/polls/vote.html:66
+#: polls/templates/polls/vote.html.py:146
 msgid "Submit"
 msgstr "Submit"
 
@@ -767,19 +764,19 @@ msgstr "List of voters"
 msgid "No voter yet"
 msgstr "No voter yet"
 
-#: polls/templates/polls/invite.html:100 polls/templates/polls/invite.html:146
+#: polls/templates/polls/invite.html:100 polls/templates/polls/invite.html:145
 msgid "Vote to this poll"
 msgstr "Vote to this poll"
 
-#: polls/templates/polls/invite.html:101 polls/templates/polls/invite.html:147
+#: polls/templates/polls/invite.html:101 polls/templates/polls/invite.html:146
 msgid "Vote"
 msgstr "Vote"
 
-#: polls/templates/polls/invite.html:107 polls/templates/polls/invite.html:153
+#: polls/templates/polls/invite.html:107 polls/templates/polls/invite.html:152
 msgid "Copy this link"
 msgstr "Copy this link"
 
-#: polls/templates/polls/invite.html:116 polls/templates/polls/invite.html:162
+#: polls/templates/polls/invite.html:116 polls/templates/polls/invite.html:161
 msgid "Share on social network"
 msgstr "You are a social person? Share:"
 
@@ -841,6 +838,7 @@ msgstr ""
 "control the way they participate and can see the results."
 
 #: polls/templates/polls/parameters_poll.html:12
+#: polls/templates/polls/vote.html:6
 msgid "Poll"
 msgstr "Poll"
 
@@ -886,25 +884,25 @@ msgstr ""
 
 #: polls/templates/polls/view_poll.html:123
 msgid "vote"
-msgstr "vote"
+msgstr "Vote"
 
 #: polls/templates/polls/view_poll.html:126
 msgid "results"
-msgstr "results"
+msgstr "Results"
 
 #: polls/templates/polls/view_poll.html:129
 msgid "settings"
-msgstr "settings"
+msgstr "Settings"
 
 #: polls/templates/polls/view_poll.html:132
 msgid "Data page"
-msgstr ""
+msgstr "Data page"
 
-#: polls/templates/polls/vote.html:14
+#: polls/templates/polls/vote.html:19
 msgid "Vote!"
 msgstr "Vote!"
 
-#: polls/templates/polls/vote.html:37
+#: polls/templates/polls/vote.html:42
 msgid ""
 " Click on the names of the unsorted candidates <span class=\"label label-"
 "default\">left frame</span>\n"
@@ -912,11 +910,11 @@ msgid ""
 "default\">right frame</span> ."
 msgstr ""
 
-#: polls/templates/polls/vote.html:40
+#: polls/templates/polls/vote.html:45
 msgid "Unsorted candidates"
 msgstr "Candidates still to rank"
 
-#: polls/templates/polls/vote.html:49
+#: polls/templates/polls/vote.html:54
 msgid ""
 " You can put back a sorted candidate <span class=\"label label-default"
 "\">right</span>\n"
@@ -928,7 +926,7 @@ msgstr ""
 "                                to the pool of unsorted candidates <span "
 "class=\"label label-default\">left</span>  by clicking on it."
 
-#: polls/templates/polls/vote.html:52
+#: polls/templates/polls/vote.html:57
 msgid "Sorted candidates"
 msgstr "Ranked candidates"
 
@@ -1130,12 +1128,10 @@ msgid "condorcet label"
 msgstr "Computation method"
 
 #: polls/views.py:694
-msgid "Copeland 0"
+#, fuzzy
+#| msgid "Copeland 0"
+msgid "Copeland"
 msgstr "Copeland 0"
-
-#: polls/views.py:694
-msgid "Copeland 1"
-msgstr "Copeland 1"
 
 #: polls/views.py:695
 msgid "Simpson"
@@ -1144,26 +1140,28 @@ msgstr "Simpson (maxmin)"
 #: polls/views.py:696
 msgid "condorcet method explanation"
 msgstr ""
-"<p>We make all possible electoral duels between candidates."
-" Candidate A wins his duel against candidate B when a majority of voters prefer candidate A rather than candidate B."
-" The common point of all Condorcet methods is that when a candidate wins all his duels, it is automatically declared winner the election."
-" This case is quite common in practice, so you will notice that often the methods presented here give the same result."
-" These methods may differ in the rare cases where no candidate manages to win all duels."
-"</p><ul> "
-"<label>Computation method:</label><li><span class='text-warning'>Copeland </"
-"span>: a candidate wins a point for each duel won and half a point for each tie.</"
-"li><li><span class='text-warning'>Simpson (maxmin)</span>:"
-" The score of a candidate is the score of the worst duel. For example, if his worst result is 35 votes against 65, so his score is 35.<br>"
-" N.B. If a candidate wins all his duels, his score is greater than half the number of voters!.</li></ul><ul> <label>Type "
-"of representation:</label><li> <span class='text-warning'>Graph</span>:  "
-" We draw an arrow to each won duel: "
-" an arrow of a candidate A to candidate B means that A wins the duel against B,"
-" otherwise a majority of voters prefer A rather than B. the thickness of the arrow represents the difference in votes between the two candidates. "
-" There is a dotted line if the two candidates are tied. "
-"</li><li><span class='text-warning'>Scoring Matrix</span> :"
-" Candidate A in line and candidate B in column, the score means the number of voters who prefer candidate A than candidate B"
-"</li></ul>"
-
+"<p>We make all possible electoral duels between candidates. Candidate A wins "
+"his duel against candidate B when a majority of voters prefer candidate A "
+"rather than candidate B. The common point of all Condorcet methods is that "
+"when a candidate wins all his duels, it is automatically declared winner the "
+"election. This case is quite common in practice, so you will notice that "
+"often the methods presented here give the same result. These methods may "
+"differ in the rare cases where no candidate manages to win all duels.</"
+"p><ul> <label>Computation method:</label><li><span class='text-"
+"warning'>Copeland </span>: a candidate wins a point for each duel won and "
+"half a point for each tie.</li><li><span class='text-warning'>Simpson "
+"(maxmin)</span>: The score of a candidate is the score of the worst duel. "
+"For example, if his worst result is 35 votes against 65, so his score is 35."
+"<br> N.B. If a candidate wins all his duels, his score is greater than half "
+"the number of voters!.</li></ul><ul> <label>Type of representation:</"
+"label><li> <span class='text-warning'>Graph</span>:   We draw an arrow to "
+"each won duel:  an arrow of a candidate A to candidate B means that A wins "
+"the duel against B, otherwise a majority of voters prefer A rather than B. "
+"the thickness of the arrow represents the difference in votes between the "
+"two candidates.  There is a dotted line if the two candidates are tied. </"
+"li><li><span class='text-warning'>Scoring Matrix</span> : Candidate A in "
+"line and candidate B in column, the score means the number of voters who "
+"prefer candidate A than candidate B</li></ul>"
 
 #: polls/views.py:700
 msgid "runoff label"
@@ -1182,11 +1180,11 @@ msgid "runoff method explanation"
 msgstr ""
 "<p>These methods successively eliminate candidates. After each round, the "
 "votes for each eliminated candidates are properly transfered to the "
-"remaining ones.</p><ul><li><span class='text-warning'> Alternative Vote"
-"</span>: At each round, the candidates are ranked according to their "
-"plurality score <span class='label label-info'>see the scoring methods</"
-"span>. Ties are broken according their Borda score. After each round, the "
-"worst candidate is eliminated.</li><li><span class='text-warning'>Two Rounds "
+"remaining ones.</p><ul><li><span class='text-warning'> Alternative Vote</"
+"span>: At each round, the candidates are ranked according to their plurality "
+"score <span class='label label-info'>see the scoring methods</span>. Ties "
+"are broken according their Borda score. After each round, the worst "
+"candidate is eliminated.</li><li><span class='text-warning'>Two Rounds "
 "Majority</span>: We keep for the second round the candidates having the "
 "highest plurality score <span class='label label-info'>ties randomly broken</"
 "span>. The winner is the second round candidate having the highest plurality "
@@ -1212,6 +1210,9 @@ msgstr "Français"
 #: whale4/settings.py:102
 msgid "English"
 msgstr "English"
+
+#~ msgid "Copeland 1"
+#~ msgstr "Copeland 1"
 
 #, fuzzy
 #~| msgid "Approval threshold"
