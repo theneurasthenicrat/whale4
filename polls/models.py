@@ -84,6 +84,20 @@ class VotingPoll(Poll):
             matrix.append([vote['scores']])
         return matrix
 
+    def __iter__(self):
+        """Creates an iterator on the poll (serializes the poll as a dictionnary)."""
+        candidates = self.candidate_list()
+        yield 'candidates', candidates
+        preference_model = preference_model_from_text(self.preference_model, len(candidates))
+        yield 'preferenceModel', preference_model.as_dict_option() if self.option_choice\
+            else preference_model.as_dict()
+        yield 'type', 1 if self.poll_type == 'Date' else 0
+        votes = []
+        for vote in self.voting_profile():
+            votes.append({'name': vote['nickname'], 'values': vote['scores']})
+        yield 'votes', votes
+
+
 class Candidate(PolymorphicModel):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
     candidate = models.CharField(max_length=50,verbose_name= _('candidate'))

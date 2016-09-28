@@ -24,7 +24,7 @@ from polls.models import VotingPoll, Candidate, preference_model_from_text, Voti
     DateCandidate
 
 from polls.utils import days_months, voters_undefined, scoring_method,\
-    condorcet_method, runoff_method, randomized_method, poll_as_dict
+    condorcet_method, runoff_method, randomized_method
 
 
 # decorators #################################################################
@@ -591,7 +591,7 @@ def view_poll(request, pk):
     })
 
 def _view_poll_as_json(poll):
-    return HttpResponse(json.dumps(poll_as_dict(poll), indent=4, sort_keys=True),
+    return HttpResponse(json.dumps(dict(poll), indent=4, sort_keys=True),
                         content_type="application/json")
 
 def _view_poll_as_csv(poll):
@@ -609,14 +609,14 @@ def _view_poll_as_csv(poll):
 def _view_poll_as_preflib(poll):
     response = HttpResponse(content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename="poll-{id}.soc"'.format(id=poll.id)
-    dict = poll_as_dict(poll)
-    response.write(str(len(dict['candidates'])) + '\n')
-    for i, c in enumerate(dict['candidates']):
+    poll_dict = dict(poll)
+    response.write(str(len(poll_dict['candidates'])) + '\n')
+    for i, c in enumerate(poll_dict['candidates']):
         response.write('{n},{l}\n'.format(n=i+1, l=str(c)))
-    nb_votes = len(dict['votes'])
+    nb_votes = len(poll_dict['votes'])
     response.write('{a},{b},{c}\n'.format(a=nb_votes, b=nb_votes, c=nb_votes))
 
-    for v in dict['votes']:
+    for v in poll_dict['votes']:
         response.write('1,')
         order = sorted(enumerate(v['values']), key=lambda x: x[1], reverse=True)
         response.write(','.join((str(x[0] + 1) for x in order)))

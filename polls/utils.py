@@ -49,24 +49,6 @@ def voters_undefined(poll):
                 voter = get_object_or_404(User, id=voter)
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
-
-def poll_as_dict(poll):
-    """Serializes a poll as a dictionnary.
-
-    Arguments:
-    poll -- the poll to be serialized"""
-    poll_dict = {}
-    candidates = poll.candidate_list()
-    poll_dict['candidates'] = candidates
-    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-    poll_dict['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice\
-                                   else preference_model.as_dict()
-    poll_dict['type'] = 1 if poll.poll_type == 'Date' else 0
-    poll_dict['votes'] = []
-    for vote in poll.voting_profile():
-        poll_dict['votes'].append({'name': vote['voter'].nickname, 'values': vote['scores']})
-    return poll_dict
-
 def dump_polls_as_json(filename='polls/data.json'):
     """Dumps all the polls in JSON format.
 
@@ -80,7 +62,7 @@ def dump_polls_as_json(filename='polls/data.json'):
     polls = VotingPoll.objects.all()
     polls_dict = []
     for poll in polls:
-        polls_dict.append(poll_as_dict(poll))
+        polls_dict.append(dict(poll))
 
     with open(filename, 'w') as outfile:
         json.dump(polls_dict, outfile, indent=4, sort_keys=True)
