@@ -680,13 +680,13 @@ def result_view(request, pk ,method):
 
         title = _('scoring method title')
         label = _('scoring label')
-        options = [{'value': 'borda', 'name': _('Borda')}, {'value': 'plurality', 'name': _('Plurality')},
+        options = [{'value': 'borda', 'name': _('Borda') if poll.preference_model== "Ranks#0" else _('Semi-Borda') }, {'value': 'plurality', 'name': _('Plurality')},
                      {'value': 'veto', 'name': _('Veto')},
                      {'value': 'approval', 'name': _('Approval')}, {'value': 'curvea', 'name': _('Curve Approval')}]
         if poll.preference_model== "Approval":
             explanation = mark_safe(_('Approval scoring method explanation'))
         else:
-            explanation =  mark_safe(_('scoring method explanation'))
+            explanation =  mark_safe(_('scoring method explanation')) if poll.preference_model== "Ranks#0" else mark_safe(_('scoring method explanation without Ranks#0'))
 
     if method == 2:
         title = _('condorcet method title')

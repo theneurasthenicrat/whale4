@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-28 09:30+0000\n"
+"POT-Creation-Date: 2016-09-28 12:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -567,9 +567,10 @@ msgid "Data of poll"
 msgstr "Les données du sondage"
 
 #: polls/templates/polls/data.html:14
-
 msgid "data explanation"
-msgstr "Cette page est destinée aux utilisateurs avancés. Pas de panique, si vous ne comprenez pas."
+msgstr ""
+"Cette page est destinée aux utilisateurs avancés. Pas de panique, si vous ne "
+"comprenez pas."
 
 #: polls/templates/polls/data.html:24
 msgid "JSON"
@@ -1086,6 +1087,10 @@ msgid "Borda"
 msgstr "Borda"
 
 #: polls/views.py:683
+msgid "Semi-Borda"
+msgstr "Semi-Borda"
+
+#: polls/views.py:683
 msgid "Plurality"
 msgstr "Pluralité"
 
@@ -1115,6 +1120,21 @@ msgstr ""
 "gagne <i>n-1</i> points chaque fois qu'il est classé en premier, </i>n-2</i> "
 "points chaque fois qu'il est classé en second, etc.<span class='label label-"
 "info'>n est le nombre de candidats</span></li><li><span class='text-"
+"warning'>Pluralité </span>: un candidat gagne <i>1 </i>point chaque fois "
+"qu'il est classé en premier.</li><li><span class='text-warning'>Veto </"
+"span> : un candidat reçoit un point négatif chaque fois qu'il est classé "
+"dernier.</li><li><span class='text-warning'>Approbation </span>: un candidat "
+"gagne 1 point chaque fois qu'il est au dessus d'un seuil spécifié.</"
+"li><li><span class='text-warning'>Courbe d'approbation </span>: la courbe "
+"répresentant les points d'approbation en fonction du seuil d'approbation.</"
+"li></ul>"
+
+#: polls/views.py:689
+msgid "scoring method explanation without Ranks#0"
+msgstr ""
+"<p>On compte un nombre de points pour chaque candidat, de la manière "
+"suivante :</p><ul><li><span class='text-warning'>Semi-Borda </span>: un candidat "
+"gagne des points correspondant à son score.</li><li><span class='text-"
 "warning'>Pluralité </span>: un candidat gagne <i>1 </i>point chaque fois "
 "qu'il est classé en premier.</li><li><span class='text-warning'>Veto </"
 "span> : un candidat reçoit un point négatif chaque fois qu'il est classé "
@@ -1205,11 +1225,11 @@ msgstr ""
 "candidats ex-aequo à un tour donné sont départagés aléatoirement. Le tirage "
 "initial du premier tour est aléatoire."
 
-#: whale4/settings.py:101
+#: whale4/settings.py:102
 msgid "French"
 msgstr "Français"
 
-#: whale4/settings.py:102
+#: whale4/settings.py:103
 msgid "English"
 msgstr "Anglais"
 

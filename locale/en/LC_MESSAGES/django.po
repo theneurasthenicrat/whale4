@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-28 09:30+0000\n"
+"POT-Creation-Date: 2016-09-28 12:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -564,7 +564,6 @@ msgid "Data of poll"
 msgstr "Data of poll"
 
 #: polls/templates/polls/data.html:14
-
 msgid "data explanation"
 msgstr "This page is for advanced users. Don't worry, if you don't understand."
 
@@ -1086,6 +1085,10 @@ msgid "Borda"
 msgstr "Borda"
 
 #: polls/views.py:683
+msgid "Semi-Borda"
+msgstr "Semi-Borda"
+
+#: polls/views.py:683
 msgid "Plurality"
 msgstr "Plurality"
 
@@ -1115,6 +1118,20 @@ msgstr ""
 "i> points every time it is ranked first, <i>n-2</i> points every time it is "
 "ranked second, and so on <span class='label label-info'>n is the number of "
 "candidates</span>.</li><li><span class='text-warning'>Plurality</span>: a "
+"candidate wins <i>1</i>point every time it is ranked first <span "
+"class='label label-info'>of a given voter</span>.</li><li><span class='text-"
+"warning'>Veto </span> : a candidate receives a negative every time it is "
+"ranked last.</li><li><span class='text-warning'>Approval</span>: a candidate "
+"wins <i>1 </i>point every time it is ranked above the specified threshold.</"
+"li><li><span class='text-warning'>Curve of approval</span>: the curve "
+"representing the points of approval based on approval threshold.</li></ul>"
+
+#: polls/views.py:689
+msgid "scoring method explanation without Ranks#0"
+msgstr ""
+"<p>We compute a number of points for each candidate as follows:</"
+"p><ul><li><span class='text-warning'>Semi-Borda </span>: a candidate wins"
+" points corresponding to its score.</li><li><span class='text-warning'>Plurality</span>: a "
 "candidate wins <i>1</i>point every time it is ranked first <span "
 "class='label label-info'>of a given voter</span>.</li><li><span class='text-"
 "warning'>Veto </span> : a candidate receives a negative every time it is "
@@ -1203,11 +1220,11 @@ msgstr ""
 "next round. Ties are randomly broken. Fights for the initial round are "
 "randomly chosen."
 
-#: whale4/settings.py:101
+#: whale4/settings.py:102
 msgid "French"
 msgstr "Français"
 
-#: whale4/settings.py:102
+#: whale4/settings.py:103
 msgid "English"
 msgstr "English"
 

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'polls',
     'bootstrap3',
     'polymorphic',
+
 )
 
 MIDDLEWARE_CLASSES = (
