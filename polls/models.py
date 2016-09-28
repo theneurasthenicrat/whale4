@@ -5,7 +5,8 @@ from django.db import models
 from accounts.models import WhaleUser,User
 from django.utils.translation import ugettext_lazy as _
 from polymorphic.models import PolymorphicModel
-
+from django.contrib.contenttypes.models import ContentType
+from accounts.models import WhaleUser
 
 class Poll(PolymorphicModel):
     id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
@@ -50,16 +51,25 @@ class VotingPoll(Poll):
     def voting_profile(self):
         candidates = list(self.candidates.all())
         nb_candidates = len(candidates)
-        iterator = iter(VotingScore.objects.filter(candidate__poll=self).order_by('last_modification', 'candidate'))
+        iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
+                        .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
+                        .order_by('last_modification', 'candidate'))
+
+        content_type = ContentType.objects.get_for_model(WhaleUser)
         finished = False
         while not finished:
             try:
                 scores = [UNDEFINED_VALUE] * nb_candidates
                 for i, c in enumerate(candidates):
                     current = next(iterator)
-                    if current.candidate == c:
-                        scores[i] = current.value
-                yield {'voter': current.voter, 'scores': scores}
+                    if current['candidate__id'] == c.id:
+                        scores[i] = current['value']
+                yield {
+                    'id': current['voter__id'],
+                    'nickname': current['voter__nickname'],
+                    'scores': scores,
+                    'whaleuser': current['voter__polymorphic_ctype'] == content_type
+                }
             except StopIteration:
                 finished = True
 

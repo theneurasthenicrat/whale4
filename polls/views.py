@@ -572,9 +572,9 @@ def view_poll(request, pk):
                  'text': preference_model.value2text(s)}
                 for s in vote['scores']
             ],
-            'voter': vote['voter'],
-            'modify': (not(isinstance(vote['voter'], WhaleUser))
-                       or (request.user and request.user.id == vote['voter'].id))
+            'id': vote['id'],
+            'nickname': vote['nickname'],
+            'modify': (not vote['whaleuser'] or (request.user and request.user.id == vote['id']))
         }
         for vote in profile]
 
