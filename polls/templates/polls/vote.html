@@ -63,8 +63,9 @@
                         </div>
                     </div>
                     {{ form }}
-                    <button id="submit" type="submit" class="btn btn-custom pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{%trans 'Submit' %}</button>
+                    <button id="submit" type="submit" class="btn btn-success pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{% bootstrap_icon "ok" %} {%trans 'Submit' %}</button>
                 </form>
+            <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 ">{% bootstrap_icon "list" %} {% trans 'Back to the poll' %}</a>
             </div>
 
         {% else %}
@@ -80,7 +81,7 @@
                                     <td  class="border" colspan="1" ></td>
                                     {% for m in months %}
                                         <th colspan="{{ m.value }}">
-                                            {{ m.label }}
+                                            {{ m.label|date:"F/Y" }}
                                         </th>
                                     {% endfor %}
                                 </tr>
@@ -88,11 +89,11 @@
                                     <td class="border" colspan="1" ></td>
                                     {% for d in days %}
                                         <th colspan="{{ d.value }}">
-                                            {{ d.label }}
+                                            {{ d.label|date:"D/d " }}
                                         </th>
                                     {% endfor %}
                                 </tr>
-                                {% if  cand %}
+
                                     <tr>
                                         <td class="border" colspan="1" ></td>
                                         {% for c in candidates %}
@@ -103,7 +104,7 @@
 
                                         {% endfor %}
                                     </tr>
-                                {% endif %}
+
                             {% else %}
                                 <tr>
                                     <td class="border" colspan="1" ></td>

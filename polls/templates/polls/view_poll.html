@@ -20,11 +20,13 @@
     <table class="table poll-table">
       <thead>
         {% if poll.poll_type == "Date" %}
+
         <tr>
           <td class="border" colspan="2" ></td>
           {% for m in months %}
           <th colspan="{{ m.value }}">
-            {{ m.label }}
+            {{ m.label|date:"F/Y" }}
+
           </th>
           {% endfor %}
         </tr>
@@ -32,20 +34,22 @@
           <td class="border" colspan="2" ></td>
           {% for d in days %}
           <th colspan="{{ d.value }}">
-            {{ d.label }}
+            {{ d.label|date:"D/d " }}
           </th>
           {% endfor %}
         </tr>
-        {% if cand %}
+
+
         <tr>
           <td class="border" colspan="2" ></td>
           {% for c in candidates %}
           <th>
+
             {{ c.candidate }}
           </th>
           {% endfor %}
         </tr>
-        {% endif %}
+
         {% else %}
 
         <tr>
