@@ -62,7 +62,17 @@ class VotingPoll(Poll):
                 yield {'voter': current.voter, 'scores': scores}
             except StopIteration:
                 finished = True
-    
+
+    def voting_profile_matrix(self):
+        """Returns the voting profile as a matrix.
+
+        In the matrix returned by the function, each row represents
+        a vote, and each column represents a candidate. Each cell
+        then contains the value given by a vote to a candidate."""
+        matrix = []
+        for vote in self.voting_profile():
+            matrix.append([vote['scores']])
+        return matrix
 
 class Candidate(PolymorphicModel):
     poll = models.ForeignKey(VotingPoll,on_delete=models.CASCADE,related_name='candidates')
@@ -136,10 +146,14 @@ class PreferenceModel:
         return max(self.values[1:])
 
     def text2value(self,text):
+        if text == UNDEFINED_TEXT:
+            return UNDEFINED_VALUE
         index= self.texts.index(text)
         return self.values[index]
 
     def value2text(self,value):
+        if value == UNDEFINED_VALUE:
+            return UNDEFINED_TEXT
         index= self.values.index(value)
         return self.texts[index]
 
