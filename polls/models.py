@@ -46,7 +46,7 @@ class VotingPoll(Poll):
     status_poll=models.BooleanField(default=True,verbose_name=_("Status of poll explanation"))
 
     def candidate_list(self):
-        return self.candidates.all().values_list("candidate", flat=True)
+        return list(self.candidates.all().values_list("candidate", flat=True))
 
     def voting_profile(self):
         candidates = list(self.candidates.all())
