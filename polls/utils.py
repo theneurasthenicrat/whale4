@@ -50,35 +50,40 @@ def voters_undefined(poll):
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
 
-def data_poll():
+def poll_as_dict(poll):
+    """Serializes a poll as a dictionnary.
+
+    Arguments:
+    poll -- the poll to be serialized"""
+    poll_dict = {}
+    candidates = poll.candidate_list()
+    poll_dict['candidates'] = candidates
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+    poll_dict['preferenceModel'] = preference_model.as_dict_option() if poll.option_choice\
+                                   else preference_model.as_dict()
+    poll_dict['type'] = 1 if poll.poll_type == 'Date' else 0
+    poll_dict['votes'] = []
+    for vote in poll.voting_profile():
+        poll_dict['votes'].append({'name': vote['voter'].nickname, 'values': vote['scores']})
+    return poll_dict
+
+def dump_polls_as_json(filename='polls/data.json'):
+    """Dumps all the polls in JSON format.
+
+    This function retrieves all the polls from the database
+    and dumps them in JSON format in a file. This function
+    is intended to be run periodically to provide a snapshot
+    of the database.
+
+    Keyword arguments:
+    filename -- the file name in which it should be dumped (default: 'polls/data.json')"""
     polls = VotingPoll.objects.all()
-    json_polls = dict()
-    for i, poll in enumerate(polls):
-        json_object = dict()
-        candidates =  Candidate.objects.filter(poll_id=poll.id)
-        votes = VotingScore.objects.filter(candidate__poll__id=poll.id)
-        preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-        scores = {}
-        for v in votes:
-            if v.voter.id not in scores:
-                scores[v.voter.id] = {}
-            scores[v.voter.id][v.candidate.id] = v.value
-        tab = {}
-        for v in votes:
-            id = v.voter.id
-            tab[id] = []
-            for c in candidates:
-                tab[id].append(scores[id][c.id])
+    polls_dict = []
+    for poll in polls:
+        polls_dict.append(poll_as_dict(poll))
 
-        json_object[
-            'preferenceModel'] = preference_model.as_dict_option() if poll.option_choice else preference_model.as_dict()
-        json_object['type'] = 1 if poll.poll_type == 'Date' else 0
-        json_object['candidates'] = ['candidate' + str(i + 1) for i, c in enumerate(candidates)]
-        json_object['votes'] = [('voter' + str(i + 1), score) for i, score in enumerate(tab.values())]
-        json_polls['poll' + str(i + 1)] = json_object
-
-    with open('polls/data.json', 'w') as outfile:
-        json.dump(json_polls, outfile, indent=4, sort_keys=True)
+    with open(filename, 'w') as outfile:
+        json.dump(polls_dict, outfile, indent=4, sort_keys=True)
 
 
 def scoring_method(candidates,preference_model,votes):
@@ -341,4 +346,3 @@ def runoff_method(candidates,list_voters,scores):
 
 
     return {"stv":stv,"stv_list": stv_list,"trm_list":trm_list,"trm":trm}
-
