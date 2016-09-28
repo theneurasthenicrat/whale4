@@ -106,7 +106,7 @@
                                     <div class="well">
                                         <h5 >{% trans 'Copy this link' %}</h5>
                                         <div class="input-group ">
-                                           <input type="text" class="form-control" id="copy_url"  value="{{ request.get_host }}{% url 'vote' poll.id  %}">
+                                           <input type="text" class="form-control" id="copy_url"  value="http://{{ request.get_host }}{% url 'vote' poll.id  %}">
                                             <span class=" input-group-addon" data-clipboard-target="#copy_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                                         </div>
                                     </div>
@@ -115,17 +115,16 @@
                                     <div class="well">
                                         <h5 >{% trans 'Share on social network' %}</h5>
                                         <div class="  container-fluid ">
-
-                                               <a href="http://twitter.com/share?url={{ request.get_host }}{% url 'vote' poll.id  %}&text=whale4&via=whale4ad" target="_blank" class="btn twitter">
+                                            <a href="https://twitter.com/intent/tweet?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}&text=whale4&via=whale4ad" target="_blank" class="btn twitter">
                                         <i class="fa fa-twitter"></i>
                                     </a>
-                                    <a href="https://plus.google.com/share?url={{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn google-plus">
+                                    <a href="https://plus.google.com/share?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn google-plus">
                                         <i class="fa fa-google-plus"></i>
                                     </a>
-                                    <a href="http://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn facebook">
+                                    <a href="http://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn facebook">
                                         <i class="fa fa-facebook"></i>
                                     </a>
-                                    <a href="http://www.linkedin.com/shareArticle?url={{ request.get_host }}{% url 'vote' poll.id  %}&title={{ title }}&summary={{ summary }}
+                                    <a href="http://www.linkedin.com/shareArticle?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}&title={{ title }}&summary={{ summary }}
                                     &source={{ source_url }}" target="_blank" class="btn linkedin">
                                         <i class="fa fa-linkedin"></i>
                                     </a>
@@ -152,7 +151,7 @@
                         <div class="well">
                             <h5 >{% trans 'Copy this link' %}</h5>
                             <div class="input-group ">
-                                <input type="text" class="form-control" id="copy_url"  value="{{ request.get_host }}{% url 'vote' poll.id  %}">
+                                <input type="text" class="form-control" id="copy_url"  value="http://{{ request.get_host }}{% url 'vote' poll.id  %}">
                                 <span class=" input-group-addon" data-clipboard-target="#copy_url" id="copy-button"><i class="fa fa-clipboard"></i></span>
                             </div>
                         </div>
@@ -163,16 +162,16 @@
                             <div class="  container-fluid ">
 
 
-                                    <a href="http://twitter.com/share?url={{ request.get_host }}{% url 'vote' poll.id  %}&text=whale4&via=whale4ad" target="_blank" class="btn twitter">
+                                   <a href="https://twitter.com/intent/tweet?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}&text=whale4&via=whale4ad" target="_blank" class="btn twitter">
                                         <i class="fa fa-twitter"></i>
                                     </a>
-                                    <a href="https://plus.google.com/share?url={{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn google-plus">
+                                    <a href="https://plus.google.com/share?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn google-plus">
                                         <i class="fa fa-google-plus"></i>
                                     </a>
-                                    <a href="http://www.facebook.com/sharer/sharer.php?u={{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn facebook">
+                                    <a href="http://www.facebook.com/sharer/sharer.php?u=http://{{ request.get_host }}{% url 'vote' poll.id  %}" target="_blank" class="btn facebook">
                                         <i class="fa fa-facebook"></i>
                                     </a>
-                                    <a href="http://www.linkedin.com/shareArticle?url={{ request.get_host }}{% url 'vote' poll.id  %}&title={{ title }}&summary={{ summary }}
+                                    <a href="http://www.linkedin.com/shareArticle?url=http://{{ request.get_host }}{% url 'vote' poll.id  %}&title={{ title }}&summary={{ summary }}
                                     &source={{ source_url }}" target="_blank" class="btn linkedin">
                                         <i class="fa fa-linkedin"></i>
                                     </a>

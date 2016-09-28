@@ -47,7 +47,7 @@ function bar_chart(data) {
         yMin=d3.min(data, function(d) { return d.y }),
         yMean=d3.mean(data, function(d) { return d.y }),
         x = d3.scale.ordinal().rangeRoundBands([0, width], .1).domain(data.map(function(d) { return d.x; })),
-        y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),yMax ]),
+        y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),Math.max(0, yMax) ]),
         xAxis = d3.svg.axis().scale(x).orient("bottom"),
         yAxis = d3.svg.axis().scale(y).orient("left"),
         color = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([yMin,yMean,yMax]);
@@ -96,8 +96,11 @@ function bar_chart(data) {
         .attr("transform", "translate(0," + y(0) + ")")
         .call(xAxis)
         .selectAll("text")
+        .attr("x", 12)
+        .attr("y", -2)
         .attr("transform", function() { return  yMin >=0 ?"rotate(45)":"rotate(90)"; })
         .style("text-anchor", "start");
+
 
 
     svg.append("g")
@@ -136,9 +139,17 @@ function curve_approval(data) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    data.sort(function(a, b){
+    return a.y-b.y;
+});
+
+
+
     var dataNest = d3.nest()
         .key(function(d) {return d.candidate;})
         .entries(data);
+
+    var n=dataNest.length;
 
     dataNest.forEach(function(d,i) {
 
@@ -150,7 +161,7 @@ function curve_approval(data) {
 
         svg.append("text")
             .attr("x", 10)
-            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + i*30 + ")" )
+            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + (n-i)*30 + ")" )
             .attr("dy", "0.35em")
             .style("fill",  color(d.key) )
             .text( d.key);
