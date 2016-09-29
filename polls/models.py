@@ -44,6 +44,7 @@ class VotingPoll(Poll):
     option_modify=models.BooleanField(default=True,verbose_name=_("Modify choice explanation"))
     option_shuffle=models.BooleanField(default=False,verbose_name=_("Option shuffle explanation"))
     status_poll=models.BooleanField(default=True,verbose_name=_("Status of poll explanation"))
+    option_blocking_poll=models.BooleanField(default=True,verbose_name=_("blocking option explanation"))
 
     def candidate_list(self, anonymize=False):
         if anonymize:

@@ -90,7 +90,7 @@ def certificate_required(fn):
 def status_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.ballot_type=="Experimental" and (not poll.status_poll):
+        if poll.ballot_type=="Experimental" and (  poll.option_blocking_poll and not poll.status_poll):
             return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
     return wrapped
@@ -450,8 +450,9 @@ def vote(request, pk):
             if poll.ballot_type=="Secret":
                 return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
             elif poll.ballot_type=="Experimental":
-                poll.status_poll=False
-                poll.save()
+                if poll.option_blocking_poll:
+                    poll.status_poll=False
+                    poll.save()
                 messages.info(request, mark_safe(_('Thank you for voting')))
                 return redirect(reverse_lazy('redirectPage'))
             else:

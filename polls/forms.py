@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 class BasePollForm(ModelForm):
     class Meta:
         model = VotingPoll
-        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','option_shuffle','status_poll']
+        fields = ['title','description','closing_date','preference_model','option_choice','option_modify','option_shuffle','status_poll','option_blocking_poll']
         widgets = {
             'title': widgets.TextInput(attrs={ 'placeholder': _('Enter title')}),
             'closing_date': widgets.DateInput(attrs={'class': 'datepicker','placeholder': _('Enter closing date')}),
@@ -23,6 +23,7 @@ class BasePollForm(ModelForm):
             'option_modify': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
             'option_shuffle': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"),'data-off-text':_("No-option")}),
             'status_poll': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"), 'data-off-text': _("No-option")}),
+            'option_blocking_poll': widgets.CheckboxInput(attrs={'data-on-text': _("Yes-option"), 'data-off-text': _("No-option")}),
 
         }
 
@@ -33,15 +34,28 @@ class VotingPollForm(ModelForm):
 
 
 class OptionForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(OptionForm, self).__init__(*args, **kwargs)
+        if self.instance.ballot_type != 'Experimental':
+            del self.fields['option_blocking_poll']
+
     class Meta(BasePollForm.Meta):
-        fields = ['closing_date','option_choice', 'option_modify','option_shuffle']
+        fields = ['closing_date','option_choice', 'option_modify','option_shuffle','option_blocking_poll']
 
 
 class PollUpdateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PollUpdateForm, self).__init__(*args, **kwargs)
+        if self.instance.ballot_type != 'Experimental':
+            del self.fields['option_blocking_poll']
+            del self.fields['status_poll']
+        if not self.instance.option_blocking_poll:
+            del self.fields['status_poll']
     close_now = forms.BooleanField(label=_('close now'),required=False, widget=forms.CheckboxInput(attrs={'data-on-text': _("Yes-option"), 'data-off-text': _("No-option")}))
 
     class Meta(BasePollForm.Meta):
-        fields = ['title', 'description', 'closing_date','close_now','option_choice','option_modify','option_shuffle']
+        fields = ['title', 'description', 'closing_date','close_now','option_choice','option_modify','option_shuffle','option_blocking_poll','status_poll']
 
 
 class StatusForm(ModelForm):
