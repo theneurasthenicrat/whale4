@@ -9,3 +9,4 @@ message.txt
 locale/en/LC_MESSAGES/django.mo
 locale/fr/LC_MESSAGES/django.mo
 sql/
+polls/data.json

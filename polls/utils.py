@@ -62,7 +62,7 @@ def dump_polls_as_json(filename='polls/data.json'):
     polls = VotingPoll.objects.all()
     polls_dict = []
     for poll in polls:
-        polls_dict.append(dict(poll))
+        polls_dict.append(dict(poll.__iter__(anonymize=True)))
 
     with open(filename, 'w') as outfile:
         json.dump(polls_dict, outfile, indent=4, sort_keys=True)

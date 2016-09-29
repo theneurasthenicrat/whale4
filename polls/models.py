@@ -45,7 +45,10 @@ class VotingPoll(Poll):
     option_shuffle=models.BooleanField(default=False,verbose_name=_("Option shuffle explanation"))
     status_poll=models.BooleanField(default=True,verbose_name=_("Status of poll explanation"))
 
-    def candidate_list(self):
+    def candidate_list(self, anonymize=False):
+        if anonymize:
+            nb_candidates = self.candidates.all().count()
+            return ["Candidate #" + str(i) for i in range(1, nb_candidates + 1)]
         return list(self.candidates.all().values_list("candidate", flat=True))
 
     def voting_profile(self):
@@ -84,17 +87,18 @@ class VotingPoll(Poll):
             matrix.append([vote['scores']])
         return matrix
 
-    def __iter__(self):
+    def __iter__(self, anonymize=False):
         """Creates an iterator on the poll (serializes the poll as a dictionnary)."""
-        candidates = self.candidate_list()
+        candidates = self.candidate_list(anonymize)
         yield 'candidates', candidates
         preference_model = preference_model_from_text(self.preference_model, len(candidates))
         yield 'preferenceModel', preference_model.as_dict_option() if self.option_choice\
             else preference_model.as_dict()
         yield 'type', 1 if self.poll_type == 'Date' else 0
         votes = []
-        for vote in self.voting_profile():
-            votes.append({'name': vote['nickname'], 'values': vote['scores']})
+        for i, vote in enumerate(self.voting_profile()):
+            votes.append({'name': 'Voter #' + str(i + 1) if anonymize else vote['nickname'],
+                          'values': vote['scores']})
         yield 'votes', votes
 
 
