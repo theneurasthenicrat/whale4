@@ -68,8 +68,12 @@ def dump_polls_as_json(filename='polls/static/polls/data.json'):
         json.dump(polls_dict, outfile, indent=4, sort_keys=True)
 
 
-def scoring_method(candidates,preference_model,votes):
-
+def scoring_method(candidates,preference_model,votes,list_voters,scores):
+    dict_cand1 = dict_candidates(candidates)
+    order_votes = order_votes_matrix(list_voters, scores)
+    plurality = plurality_method(order_votes, dict_cand1)
+    dict_cand = dict_candidates(candidates)
+    veto = veto_method(order_votes, dict_cand)
     scores = {}
     for c in candidates:
         scores[c.id] = []
@@ -79,27 +83,16 @@ def scoring_method(candidates,preference_model,votes):
     approval = dict()
 
     approval["threshold"] = preference_model.values[1:]
-    candi = []
+
     borda_scores = []
-    plurality_scores = []
-    veto_scores = []
 
     for i, c in enumerate(candidates):
         sum_borda = 0
-        sum_plurality = 0
-        sum_veto = 0
 
         for score in scores[c.id]:
             sum_borda = sum_borda + (score if score != UNDEFINED_VALUE else 0)
-
-            sum_plurality = sum_plurality + (1 if score == preference_model.max() else 0)
-            sum_veto = sum_veto + (0 if score != (preference_model.min()) else -1)
-        candi.append(str(c))
-
         borda_scores.append({"x": str(c), "y": sum_borda})
-        plurality_scores.append({"x": str(c), "y": sum_plurality})
 
-        veto_scores.append({"x": str(c), "y": sum_veto})
     approval_scores = []
     curve_approval = []
     for y in approval["threshold"]:
@@ -116,7 +109,48 @@ def scoring_method(candidates,preference_model,votes):
     curve_approval.reverse()
     approval["scores"] = approval_scores
 
-    return{"borda":borda_scores,"plurality":plurality_scores,"veto":veto_scores,"approval":approval,"curve_approval":curve_approval}
+    return{"borda":borda_scores,"plurality":plurality,"veto":veto,"approval":approval,"curve_approval":curve_approval}
+
+
+def order_votes_matrix(list_voters, scores):
+    order_votes = []
+    for v in list_voters:
+        score = scores[str(v)]
+        d = [{"id": x, "value": score[x]} for x in score if score[x] != UNDEFINED_VALUE]
+        d = sorted(d, key=itemgetter('value'), reverse=True)
+        order_votes.append(d)
+
+    return order_votes
+
+
+def dict_candidates(candidates):
+    dict_cand = {}
+    for c in candidates:
+        dict_cand[str(c.id)] = {'x': str(c), 'y': 0}
+
+    return dict_cand
+
+
+def plurality_method(order_votes, dict_cand):
+    for v in order_votes:
+        if len(v) > 1:
+            if v[0]["value"] != v[1]["value"]:
+                dict_cand[v[0]["id"]]['y'] += 1
+        else:
+            dict_cand[v[0]["id"]]['y'] += 1
+
+    return list(dict_cand.values())
+
+
+def veto_method(order_votes, dict_cand):
+    for v in order_votes:
+        if len(v) > 1:
+            if v[-1]["value"] != v[-2]["value"]:
+                dict_cand[v[-1]["id"]]['y'] -= 1
+        else:
+            dict_cand[v[-1]["id"]]['y'] -= 1
+
+    return list(dict_cand.values())
 
 
 def randomized_method(candidates,scores,list_voters):
@@ -296,8 +330,11 @@ def runoff_compute( cand,list_cand, round1,order):
     return list_cand
 
 
+
+
 def runoff_method(candidates,list_voters,scores):
     round=[]
+
     for v in list_voters:
         score = scores[str(v)]
         d = [{"id": x, "value":score[x]} for x in score]

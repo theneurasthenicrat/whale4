@@ -143,7 +143,7 @@ function matrix_graph(data){
         mean = d3.mean(matrix.map(function(array) {return d3.mean(array, function (d) {return d.z;});})),
         min = d3.min(matrix.map(function(array) {return d3.min(array, function (d) {return d.z==0?max:d.z;});})),
         color = d3.scale.linear().domain([minNodeValue,meanNodeValue,maxNodeValue]).range(colorTab),
-        x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(orders),
+        x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(d3.range(n+1)),
         z = d3.scale.linear().domain([0, 4]).clamp(true),
         color1 = d3.scale.linear().domain([min, mean, max]).range(colorTab);
 
@@ -165,14 +165,14 @@ function matrix_graph(data){
         .each(row);
 
     row.append("rect")
-        .attr("x",width-margin.left-margin.right+1)
+        .attr("x",n*x.rangeBand()+1)
         .attr("y", 0)
         .attr("width", x.rangeBand())
         .attr("height", x.rangeBand())
         .style("fill", "#ccc");
 
     row.append("line")
-        .attr("x2", width-margin.left-margin.right+x.rangeBand())
+        .attr("x2", width-margin.left-margin.right)
         .style("stroke","#fff");
 
     row.append("text")
@@ -186,11 +186,11 @@ function matrix_graph(data){
 
 
     row.append("text")
-        .attr("x",width-margin.left+10)
+        .attr("x",n*x.rangeBand()+(x.rangeBand() / 2))
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "middle")
-          .style("fill", "white")
+        .style("fill", "white")
         .text(function (d, i) {return nodes[i].value;});
 
 
@@ -201,7 +201,7 @@ function matrix_graph(data){
         .attr("transform", function (d, i) {return "translate(" + x(i) + ")rotate(-90)";});
 
     column.append("line")
-        .attr("x1", -(width-margin.top-10))
+        .attr("x1", -(width-margin.top-x.rangeBand()-10))
         .style("stroke","#fff");
 
     column.append("text")
@@ -215,7 +215,7 @@ function matrix_graph(data){
 
     matrixSvg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y",width-margin.left-margin.right+x.rangeBand() / 2)
+        .attr("y",n*x.rangeBand()+(x.rangeBand() / 2))
         .attr("x",6)
         .attr("dy", ".32em")
         .style("text-anchor", "start")

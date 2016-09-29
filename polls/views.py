@@ -694,7 +694,7 @@ def result_scores(request, pk,method):
     method = int(method)
     if method == 1:
         preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-        data["scoring"]=scoring_method(candidates,preference_model,votes)
+        data["scoring"]=scoring_method(candidates,preference_model,votes,list_voters,scores)
     if method == 2:
         data["condorcet"] = condorcet_method(list_voters,candidates,scores)
     if method == 3:
