@@ -59,6 +59,7 @@ class VotingPoll(Poll):
                         .order_by('last_modification', 'candidate'))
 
         content_type = ContentType.objects.get_for_model(WhaleUser)
+
         finished = False
         while not finished:
             try:
@@ -67,6 +68,7 @@ class VotingPoll(Poll):
                     current = next(iterator)
                     if current['candidate__id'] == c.id:
                         scores[i] = current['value']
+
                 yield {
                     'id': current['voter__id'],
                     'nickname': current['voter__nickname'],

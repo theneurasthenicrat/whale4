@@ -710,7 +710,7 @@ msgstr ""
 "liglab.fr/\">Grenoble Informatics Laboratory</a> and has been partly "
 "supported by ANR Project CoCoRICo-CoDec on <a href=\"http://www.illc.uva.nl/"
 "COMSOC/\">Computational Social Choice</a>.</p><p>You can catch a glimpse at "
-"<a href=\"/polls/contact\">the contact page</a> to see the list of "
+"<a href=\"/polls/about\">the contact page</a> to see the list of "
 "contributors and to see how to contact <a href=\"http://recherche.noiraudes."
 "net/\">the current Whalekeeper</a>.</p>"
 

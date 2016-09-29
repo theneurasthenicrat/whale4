@@ -1,0 +1,16 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="container">
+    <div class="well">
+            <h2>{% trans 'Data of all polls' %} </h2>
+        </div>
+
+ <div class="thumbnail text-center clearfix ">
+     <p class="well-lg">{% trans 'Informations about the format of data ' %}  </p>
+    <a href="{% static 'polls/data.json' %}" class="btn btn-custom btn-lg" download> {% trans 'Data download' %} {% bootstrap_icon "download-alt" %}</a>
+    </div>
+ </div>
+{% endblock %}

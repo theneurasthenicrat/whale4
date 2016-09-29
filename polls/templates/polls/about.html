@@ -1,0 +1,81 @@
+{% extends "polls/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="container">
+        <div class="form-login ">
+            <h4> {% trans 'List of Contributors' %} </h4>
+            <div class="table-responsive ">
+                <table class="table"  >
+                    <thead>
+                    <tr>
+                        <th>
+                            {% trans 'Name' %}
+                        </th>
+                        <th>
+                            {% trans 'Email Adress' %}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td >
+                            Sylvain BOUVERET
+                        </td>
+                        <td>
+                            sylvain.bouveret@imag.fr
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            Marie Jeanne NATETE
+                        </td>
+                        <td>
+                            mariejeanne.natete@gmail.com
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-login ">
+            <h4> {% trans 'Informations' %} </h4>
+
+            <div class="table-responsive ">
+                <table class="table"  >
+                    <thead>
+                    <tr>
+                        <th>
+                            {% trans 'Title' %}
+                        </th>
+                        <th>
+                            {% trans 'Link' %}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td >
+                            {% trans 'Code' %}
+                        </td>
+                        <td>
+                        <a href="https://github.com/theneurasthenicrat/whale4" >{% trans 'Get the code' %}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                           {% trans 'Licence' %}
+                        </td>
+                        <td>
+                            <a href="https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE" >{% trans 'Licence of project' %}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

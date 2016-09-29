@@ -49,7 +49,7 @@ def voters_undefined(poll):
                 voter = get_object_or_404(User, id=voter)
                 VotingScore.objects.create(candidate=c, voter=voter, value=UNDEFINED_VALUE)
 
-def dump_polls_as_json(filename='polls/data.json'):
+def dump_polls_as_json(filename='polls/static/polls/data.json'):
     """Dumps all the polls in JSON format.
 
     This function retrieves all the polls from the database

@@ -574,7 +574,7 @@ def view_poll(request, pk):
             ],
             'id': vote['id'],
             'nickname': vote['nickname'],
-            'modify': (not vote['whaleuser'] or (request.user and request.user.id == vote['id']))
+            'modify': (not vote['whaleuser'] or (request.user is not None and request.user.id == vote['id']))
         }
         for vote in profile]
 
@@ -587,7 +587,8 @@ def view_poll(request, pk):
         'candidates': candidates,
         'votes': enhanced_profile,
         'days': days,
-        'months': months
+        'months': months,
+        'closing_poll':closing_poll
     })
 
 def _view_poll_as_json(poll):

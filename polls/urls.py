@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from polls import views
 
 uuid4="[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
@@ -29,6 +30,8 @@ urlpatterns = [
     url(r'^viewResult/(?P<pk>'+uuid4+')/(?P<method>[^/]+)/$', views.result_view, name='viewResult'),
     url(r'^scores/(?P<pk>'+uuid4+')/(?P<method>[^/]+)/$', views.result_scores, name='scores'),
     url(r'^data/(?P<pk>'+uuid4+')', views.data_page, name='data'),
+    url(r'^allData$', TemplateView.as_view(template_name='polls/all_data.html'), name='allData'),
+    url(r'^about$', TemplateView.as_view(template_name='polls/about.html'), name='about'),
 
 
 ]
