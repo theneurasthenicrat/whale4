@@ -59,7 +59,7 @@ class VotingPoll(Poll):
                         .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
                         .order_by('last_modification', 'candidate'))
 
-        content_type = ContentType.objects.get_for_model(WhaleUser)
+        content_type = ContentType.objects.get_for_model(WhaleUser).id
 
         finished = False
         while not finished:
