@@ -121,9 +121,12 @@ function nodes_links(data) {
             .attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
+
     }
 
 }
+
+
 
 function matrix_graph(data){
 
@@ -143,13 +146,13 @@ function matrix_graph(data){
         mean = d3.mean(matrix.map(function(array) {return d3.mean(array, function (d) {return d.z;});})),
         min = d3.min(matrix.map(function(array) {return d3.min(array, function (d) {return d.z==0?max:d.z;});})),
         color = d3.scale.linear().domain([minNodeValue,meanNodeValue,maxNodeValue]).range(colorTab),
-        x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(d3.range(n+1)),
+        x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(orders),
         z = d3.scale.linear().domain([0, 4]).clamp(true),
         color1 = d3.scale.linear().domain([min, mean, max]).range(colorTab);
 
     var matrixSvg = d3.select("#graph")
         .append("svg")
-        .attr("width", width+margin.left+margin.right )
+        .attr("width", width+margin.left+margin.right+100 )
         .attr("height", height + margin.top + margin.bottom)
         .style("margin-left", margin.left + "px")
         .style("margin-top", margin.top + "px")
