@@ -91,6 +91,7 @@ def status_required(fn):
     def wrapped(request, pk, *args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
         if poll.ballot_type=="Experimental" and (  poll.option_blocking_poll and not poll.status_poll):
+            messages.error(request, mark_safe(_("the poll is blocked")))
             return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
     return wrapped
@@ -453,8 +454,7 @@ def vote(request, pk):
                 if poll.option_blocking_poll:
                     poll.status_poll=False
                     poll.save()
-                messages.info(request, mark_safe(_('Thank you for voting')))
-                return redirect(reverse_lazy('redirectPage'))
+                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
@@ -592,9 +592,11 @@ def view_poll(request, pk):
         'closing_poll':closing_poll
     })
 
+
 def _view_poll_as_json(poll):
     return HttpResponse(json.dumps(dict(poll), indent=4, sort_keys=True),
                         content_type="application/json")
+
 
 def _view_poll_as_csv(poll):
     response = HttpResponse(content_type='text/csv')
@@ -607,6 +609,7 @@ def _view_poll_as_csv(poll):
         response.write(','.join([str(s) for s in vote['scores']]))
         response.write('\n')
     return response
+
 
 def _view_poll_as_preflib(poll):
     response = HttpResponse(content_type='text/plain')
