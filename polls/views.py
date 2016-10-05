@@ -149,6 +149,14 @@ def admin_poll(request, pk):
     request.session["update"] = 1
     return render(request, 'polls/admin.html',locals())
 
+@login_required
+@with_admin_rights
+def reset_poll(request, pk):
+    poll = get_object_or_404(VotingPoll, id=pk)
+    VotingScore.objects.filter(candidate__poll__id=poll.id).delete()
+    messages.success(request, mark_safe(_('Poll successfully reset.')))
+    return render(request, 'polls/admin.html', locals())
+
 
 @login_required
 def new_poll(request, choice ):

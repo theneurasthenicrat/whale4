@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^vote/(?P<pk>'+uuid4+')', views.vote, name='vote'),
     url(r'^success/(?P<pk>'+uuid4+')/$', views.success, name='success'),
     url(r'^admin/(?P<pk>'+uuid4+')/$', views.admin_poll, name='admin'),
+    url(r'^resetPoll/(?P<pk>'+uuid4+')/$', views.reset_poll, name='resetPoll'),
     url(r'^option/(?P<pk>'+uuid4+')/$', views.option, name='option'),
     url(r'^deleteVotingPoll/(?P<pk>' + uuid4 +')/$', views.delete_poll, name='deleteVotingPoll'),
     url(r'^certificate/(?P<pk>'+uuid4+')', views.certificate, name='certificate'),
