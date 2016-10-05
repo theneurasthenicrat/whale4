@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from django.db import models
 from accounts.models import WhaleUser,User
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from polymorphic.models import PolymorphicModel
 from django.contrib.contenttypes.models import ContentType
 from accounts.models import WhaleUser
@@ -211,9 +212,14 @@ class Numbers(PreferenceModel):
         texts =[str(x) for x in values]
         PreferenceModel.__init__(self, "scores", texts, values)
 
-positiveNegative=PreferenceModel("positiveNegative", ["--", "-", "0", "+", "++"], [-2, -1, 0, 1, 2])
+positiveNegative=PreferenceModel("positiveNegative",
+                                 [ugettext("--"), ugettext("-"), ugettext("0"),
+                                  ugettext("+"), ugettext("++")],
+                                 [-2, -1, 0, 1, 2])
 
-approval=PreferenceModel("approval", ["no", "yes"], [0, 1])
+approval=PreferenceModel("approval",
+                         [ugettext("no"), ugettext("yes")],
+                         [0, 1])
 
         
 def preference_model_from_text(desc,len_cand):
