@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-05 14:45+0000\n"
+"POT-Creation-Date: 2016-10-05 14:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1191,8 +1191,8 @@ msgid "Borda"
 msgstr "Borda"
 
 #: polls/views.py:658
-msgid "Semi-Borda"
-msgstr "Semi-Borda"
+msgid "Range Voting"
+msgstr "Vote par notation"
 
 #: polls/views.py:658
 msgid "Plurality"
@@ -1237,7 +1237,7 @@ msgstr ""
 msgid "scoring method explanation without Ranks#0"
 msgstr ""
 "<p>On compte un nombre de points pour chaque candidat, de la manière "
-"suivante :</p><ul><li><span class='text-warning'>Semi-Borda </span>: un "
+"suivante :</p><ul><li><span class='text-warning'>Vote par notation </span>: un "
 "candidat gagne des points correspondant à son score.</li><li><span "
 "class='text-warning'>Pluralité </span>: un candidat gagne <i>1 </i>point "
 "chaque fois qu'il est classé en premier.</li><li><span class='text-"
@@ -1337,12 +1337,3 @@ msgstr "Français"
 #: whale4/settings.py:103
 msgid "English"
 msgstr "Anglais"
-
-#~ msgid "Thank you for voting"
-#~ msgstr "Merci de votre participation!"
-
-#~ msgid "Duels won"
-#~ msgstr "Duels gagnés"
-
-#~ msgid "approval threshold"
-#~ msgstr "Seuil d'approbation"

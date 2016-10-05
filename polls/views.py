@@ -655,7 +655,7 @@ def result_view(request, pk ,method):
 
         title = _('scoring method title')
         label = _('scoring label')
-        options = [{'value': 'borda', 'name': _('Borda') if poll.preference_model== "Ranks#0" else _('Semi-Borda') }, {'value': 'plurality', 'name': _('Plurality')},
+        options = [{'value': 'borda', 'name': _('Borda') if poll.preference_model== "Ranks#0" else _('Range Voting') }, {'value': 'plurality', 'name': _('Plurality')},
                      {'value': 'veto', 'name': _('Veto')},
                      {'value': 'approval', 'name': _('Approval')}, {'value': 'curvea', 'name': _('Curve Approval')}]
         if poll.preference_model== "Approval":

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-05 14:45+0000\n"
+"POT-Creation-Date: 2016-10-05 14:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1192,8 +1192,8 @@ msgid "Borda"
 msgstr "Borda"
 
 #: polls/views.py:658
-msgid "Semi-Borda"
-msgstr "Semi-Borda"
+msgid "Range Voting"
+msgstr "Range Voting"
 
 #: polls/views.py:658
 msgid "Plurality"
@@ -1237,7 +1237,7 @@ msgstr ""
 msgid "scoring method explanation without Ranks#0"
 msgstr ""
 "<p>We compute a number of points for each candidate as follows:</"
-"p><ul><li><span class='text-warning'>Semi-Borda </span>: a candidate wins "
+"p><ul><li><span class='text-warning'>Range Voting </span>: a candidate wins "
 "points corresponding to its score.</li><li><span class='text-"
 "warning'>Plurality</span>: a candidate wins <i>1</i>point every time it is "
 "ranked first <span class='label label-info'>of a given voter</span>.</"
@@ -1335,13 +1335,3 @@ msgstr "Français"
 msgid "English"
 msgstr "English"
 
-#~ msgid "Thank you for voting"
-#~ msgstr "Thanks for your participation"
-
-#~ msgid "Copeland 1"
-#~ msgstr "Copeland 1"
-
-#, fuzzy
-#~| msgid "Approval threshold"
-#~ msgid "approval threshold"
-#~ msgstr "Approval threshold"
