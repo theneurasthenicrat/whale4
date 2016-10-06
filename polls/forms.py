@@ -107,10 +107,12 @@ class VotingForm(forms.Form):
         super(VotingForm, self).__init__(*args, **kwargs)
         self.candidates = candidates
 
+        choices=list(preference_model.zip_preference() if not poll.option_choice else preference_model.zip_preference_option())
+        choices.reverse()
         if poll.preference_model != "Ranks#0":
             for c in candidates:
                 self.fields['value' + str(c.id)] = forms.ChoiceField(widget=forms.RadioSelect,
-                                                                     choices=preference_model.zip_preference() if not poll.option_choice else preference_model.zip_preference_option(),
+                                                                     choices=choices,
                                                                      initial=preference_model.first() if not poll.option_choice else preference_model.first_option() ,
                                                                       label=c.candidate)
         else:

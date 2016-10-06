@@ -206,7 +206,7 @@ class Ranking(PreferenceModel):
 
 class Numbers(PreferenceModel):
     def __init__(self, nb_min, nb_max):
-        values = [  nb_max - x  for x in range(nb_min, nb_max + 1) ]  
+        values = [x for x in range(nb_min, nb_max + 1)]
         texts =[str(x) for x in values]
         PreferenceModel.__init__(self, "scores", texts, values)
 
