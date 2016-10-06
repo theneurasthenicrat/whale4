@@ -53,8 +53,8 @@ class VotingPoll(Poll):
         return list(self.candidates.all().values_list("candidate", flat=True))
 
     def voting_profile(self):
-        candidates = list(self.candidates.all())
-        nb_candidates = len(candidates)
+        candidate_indexes = {c.id: index for (index, c) in enumerate(self.candidates.all())}
+        nb_candidates = self.candidates.count()
         iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
                         .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
                         .order_by('last_modification', 'candidate'))
@@ -65,10 +65,9 @@ class VotingPoll(Poll):
         while not finished:
             try:
                 scores = [UNDEFINED_VALUE] * nb_candidates
-                for i, c in enumerate(candidates):
+                for _ in range(nb_candidates):
                     current = next(iterator)
-                    if current['candidate__id'] == c.id:
-                        scores[i] = current['value']
+                    scores[candidate_indexes[current['candidate__id']]] = current['value']
 
                 yield {
                     'id': current['voter__id'],
