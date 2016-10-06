@@ -4,7 +4,6 @@ from datetime import date, timedelta
 from django.db import models
 from accounts.models import WhaleUser,User
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
 from polymorphic.models import PolymorphicModel
 from django.contrib.contenttypes.models import ContentType
 from accounts.models import WhaleUser
@@ -151,10 +150,10 @@ class PreferenceModel:
         self.values = values
 
     def zip_preference(self):
-        return zip(self.values[1:], self.texts[1:])
+        return zip(self.values[1:], [_(t) for t in self.texts[1:]])
 
     def zip_preference_option(self):
-        return zip(self.values, self.texts)
+        return zip(self.values, [_(t) for t in self.texts])
 
     def last(self):
         return self.values[-1]
@@ -213,12 +212,12 @@ class Numbers(PreferenceModel):
         PreferenceModel.__init__(self, "scores", texts, values)
 
 positiveNegative=PreferenceModel("positiveNegative",
-                                 [ugettext("--"), ugettext("-"), ugettext("0"),
-                                  ugettext("+"), ugettext("++")],
+                                 ["--", "-", "0",
+                                  "+", "++"],
                                  [-2, -1, 0, 1, 2])
 
 approval=PreferenceModel("approval",
-                         [ugettext("no"), ugettext("yes")],
+                         ["no", "yes"],
                          [0, 1])
 
         
