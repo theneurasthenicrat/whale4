@@ -474,6 +474,9 @@ def vote(request, pk):
 def update_vote(request, pk, voter):
     poll = VotingPoll.objects.get(id=pk)
     candidates =Candidate.objects.filter(poll_id=poll.id)
+    if poll.option_shuffle:
+        candidates=list(candidates)
+        shuffle(candidates)
     preference_model = preference_model_from_text(poll.preference_model,len(candidates))
     voter = User.objects.get(id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
