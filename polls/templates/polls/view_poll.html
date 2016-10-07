@@ -1,19 +1,44 @@
-{% extends "polls/base.html" %}
+{% extends "polls/base-view.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
 {% csrf_token %}
 
-<div class="container">
-  <div class="well clearfix">
-    <h2>{{ poll.title }}</h2>
-       {% if poll.description %}
-    <p class="description">{{ poll.description }}</p>
-       {% endif %}
-      <p class="text-center">{% trans 'The number of participants is:' %}  <span class="badge">{{ votes|length }}</span></p>
+<div class="polltitle">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h2>{{ poll.title }}</h2>
+    </div>
+    <div class=" col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      {% if poll.description %}
+      <p class="description">{{ poll.description }}</p>
+      {% endif %}
+    </div>
+    <div class=" col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	{% blocktrans count counter=votes|length %}{{ counter }} voter have participated in this poll.{% plural %}{{ counter }} voters have participated in this poll.{% endblocktrans %}
+      </div>
+      <div class=" col-xs-6 col-sm-6 col-md-6 col-lg-4 margin2">
+	<a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 margin2">
+	<a href="{% url 'results' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "stats" %} {% trans 'results' %}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container-fluid">
+  <div class="container">
+        {% bootstrap_messages %}
   </div>
 
+
+<div class="container">
+    
   {% if votes %}
 
   <div class="table-responsive">
@@ -140,9 +165,6 @@
     </div>
     <div class="col-md-2 col-lg-2"></div>
   </div>
-
-
-
 </div>
 
 {% endblock %}

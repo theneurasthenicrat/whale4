@@ -600,7 +600,8 @@ def view_poll(request, pk):
         'votes': enhanced_profile,
         'days': days,
         'months': months,
-        'closing_poll':closing_poll
+        'closing_poll': closing_poll,
+        'col_width': int(85 / len(candidates))
     })
 
 

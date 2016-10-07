@@ -7,7 +7,7 @@ body {
     font-family: 'Lato', Verdana, Arial, Sans-Serif;
     color: #444;
     margin: 0px;
-    padding-top: 70px;
+    padding-top: 62px;
 }
 
 /* Color scheme
@@ -93,41 +93,6 @@ footer {
     height: 50px;    
 }
 
-p.description {
-    white-space: pre-wrap;       /* css-3 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    //white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */      
-    background: rgba(51, 117, 179, 0.9);
-    color: #fff;
-    padding: 10px;
-    width: 50%;
-    margin: 20px auto;
-    display: block;
-    position: relative;
-}
-
-p.description:before {
-    content: ' ';
-    padding: 0px;
-    margin: 0px;
-    margin-left: -10px;
-    display: block;
-    position: relative;
-    top: -20px;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-left: 10px solid #fafafa;
-    border-right: 10px solid #fafafa;
-    border-bottom: 10px solid rgba(51, 117, 179, 0.9);
-}
-
-@media (max-width: 767px) {
-    p.description {
-	width: 100%;
-    }
-}
 
 #radioBtn .notActive{
     color: #3276b1;
@@ -147,6 +112,7 @@ p.description:before {
 .navbar-custom {
     background-color: #2C3E50;
     border: none;
+    margin: 0px;
 }
 
 .navbar-custom .navbar-brand {
@@ -347,6 +313,36 @@ p.description:before {
 /***********************************************************
   WELLS
 ***********************************************************/
+
+.polltitle {
+    margin: 0px 0px 30px 0px;
+    padding: 10px;
+    background: #efefef;
+    border-bottom: #ddd 1px solid;
+}
+
+.polltitle h2 {
+    color: #444;
+    text-align: left;
+    padding: 10px;
+    margin: 0px;
+}
+
+@media (max-width: 767px) {
+    p.description {
+	width: 100%;
+    }
+}
+
+.polltitle p.description {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    //white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    padding: 10px;
+    background-color: #ddd;
+}
+
 
 .well {
 	min-height: 20px;
