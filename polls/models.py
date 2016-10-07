@@ -73,7 +73,7 @@ class VotingPoll(Poll):
 
                 yield {
                     'id': current['voter__id'],
-                    'nickname': current['voter__nickname'],
+                    'nickname': current['voter__nickname'] if self.ballot_type != 'Secret' else '(Anonymous)',
                     'scores': scores,
                     'whaleuser': current['voter__polymorphic_ctype'] == content_type
                 }
