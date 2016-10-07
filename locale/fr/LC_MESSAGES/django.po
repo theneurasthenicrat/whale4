@@ -977,10 +977,8 @@ msgid "No vote yet... Do you want to be the first one?"
 msgstr "Pas de vote pour l'instant... Voulez vous être le premier ?"
 
 #: polls/templates/polls/view_poll.html:153
-#, fuzzy
-#| msgid "The poll is not closed"
 msgid "The poll is closed since"
-msgstr "<h4>Soyez patient...</h4><p>Le sondage n'est pas encore clôt...</p>"
+msgstr "Le sondage est clôt depuis le"
 
 #: polls/templates/polls/view_poll.html:155
 msgid "The poll is opened until"
