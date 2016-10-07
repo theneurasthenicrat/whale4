@@ -82,7 +82,9 @@ def certificate_required(fn):
         path = request.get_full_path()
         poll = get_object_or_404(VotingPoll, id=pk)
         if poll.ballot_type=="Secret" and "user" not in request.session:
-            return redirect('/polls/certificate/'+str(poll.id)+ '?next=' +str(path))
+            return redirect("{url}?next={path}".format(
+                url = reverse_lazy(certificate, kwargs={'pk': poll.id, }),
+                path = str(path)))
         return fn(request, pk, *args, **kwargs)
     return wrapped
 
