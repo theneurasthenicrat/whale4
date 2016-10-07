@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-07 18:49+0000\n"
+"POT-Creation-Date: 2016-10-07 20:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -468,7 +468,7 @@ msgstr "Les données"
 msgid "See the results of poll"
 msgstr "Visualiser les résultats du sondage"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:660
+#: polls/templates/polls/all_result.html:23 polls/views.py:665
 msgid "scoring method title"
 msgstr "Méthodes de calcul des scores"
 
@@ -476,7 +476,7 @@ msgstr "Méthodes de calcul des scores"
 msgid "scoring method message"
 msgstr "Où l'on compte un nombre de points par candidat..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:671
+#: polls/templates/polls/all_result.html:33 polls/views.py:676
 msgid "condorcet method title"
 msgstr "Méthodes de Condorcet"
 
@@ -484,7 +484,7 @@ msgstr "Méthodes de Condorcet"
 msgid "condorcet method message"
 msgstr "Où l'on engage des duels entre tous les candidats..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:678
+#: polls/templates/polls/all_result.html:44 polls/views.py:683
 msgid "runoff method title"
 msgstr "Méthodes à plusieurs tours"
 
@@ -492,7 +492,7 @@ msgstr "Méthodes à plusieurs tours"
 msgid "runoff method message"
 msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:684
+#: polls/templates/polls/all_result.html:54 polls/views.py:689
 msgid "randomized method title"
 msgstr "Méthode de tournois aléatoires"
 
@@ -695,7 +695,7 @@ msgstr "Le nombre de participants est:"
 msgid "More about the"
 msgstr "À propos des"
 
-#: polls/templates/polls/detail_result.html:53 polls/views.py:687
+#: polls/templates/polls/detail_result.html:53 polls/views.py:692
 msgid "Shuffle candidates for the first round"
 msgstr "Nouveau tirage aléatoire au premier tour"
 
@@ -723,10 +723,20 @@ msgstr "Whale4 - WHich ALternative is Elected"
 msgid "WHich ALternative is Elected"
 msgstr "Whale4 - WHich ALternative is Elected"
 
-#: polls/templates/polls/email.html:17
+#: polls/templates/polls/email.html:17 polls/templates/polls/email.txt:2
+#: polls/views.py:361
 #, python-format
 msgid "Email text template with url %(url)s and certificate %(certi)s."
 msgstr ""
+"Dear voter,\n\nYou have been invited to participate to a vote on the "
+"Whale4 platform.\n"
+"If you want to vote, follow the following link:\n"
+"%(url)s."
+"\n\n"
+"Then, enter your personal certificate which is the following one:\n"
+"%(certi)s."
+"\n\n"
+"The Whale thanks you for using Whale4."
 
 #: polls/templates/polls/home.html:46
 msgid "About"
@@ -943,10 +953,13 @@ msgid "change the status of poll"
 msgstr "Changer le statut du sondage"
 
 #: polls/templates/polls/view_poll.html:20
+#, python-format
 msgid "%(counter)s voter have participated in this poll."
 msgid_plural "%(counter)s voters have participated in this poll."
-msgstr[0] "Nombre de votants : <span class='badge'>%(counter)s</span> pour l'instant."
-msgstr[1] "<span class='badge'>%(counter)s</span> personnes ont pris part à ce sondage."
+msgstr[0] ""
+"Nombre de votants : <span class='badge'>%(counter)s</span> pour l'instant."
+msgstr[1] ""
+"<span class='badge'>%(counter)s</span> personnes ont pris part à ce sondage."
 
 #: polls/templates/polls/view_poll.html:23
 #: polls/templates/polls/view_poll.html:155
@@ -1118,90 +1131,90 @@ msgstr ""
 "<h4>Candidat supprimé</h4><p>%(c)s a bien été supprimé de la liste des "
 "candidats.</p>"
 
-#: polls/views.py:364
+#: polls/views.py:369
 msgid "Invited voters successfully added!"
 msgstr ""
 "<h4>Invités ajoutés</h4><p>Les personnes que vous avez spécifiées ont bien "
 "été ajoutés à la liste des votants.</p>"
 
-#: polls/views.py:379
+#: polls/views.py:384
 msgid "anonymous voter has been deleted!"
 msgstr ""
 "<h4>Votant supprimé</h4><p>Le votant anonyme a bien été supprimé de la liste."
 "</p>"
 
-#: polls/views.py:396
+#: polls/views.py:401
 msgid "your certificate is correct"
 msgstr ""
 "<h4>Autorisation accordée</h4><p>Votre certificat est valide. Vous pouvez "
 "voter !</p>"
 
-#: polls/views.py:404
+#: polls/views.py:409
 msgid "your certificate is incorrect"
 msgstr ""
 "<h4>Certificat incorrect</h4><p>Hum, il semblerait que le certificat que "
 "vous avez entré ne correspond pas à un certificat valide. Faute de frappe ? "
 "Prenez une grande inspiration et tapez-le à nouveau.</p>"
 
-#: polls/views.py:439
+#: polls/views.py:444
 msgid "you have already voted, now you can update your vote"
 msgstr ""
 "<h4>Bienvenue à nouveau...</h4><p>Vous avez déjà voté. Si vous voulez, vous "
 "pouvez modifier votre vote.</p>"
 
-#: polls/views.py:458
+#: polls/views.py:463
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 "<h4>A voté!</h4><p>Votre vote a bien été pris en compte. Merci d'avoir "
 "utilisé Whale !</p>"
 
-#: polls/views.py:512
+#: polls/views.py:517
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 "<h4>A voté! (à nouveau)</h4><p>La modification de votre vote a bien été "
 "prise en compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:531
+#: polls/views.py:536
 msgid "Your vote has been deleted!"
 msgstr ""
 "<h4>Vote supprimé</h4><p>La suppression de votre vote a bien été prise en "
 "compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:661
+#: polls/views.py:666
 msgid "scoring label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:662
+#: polls/views.py:667
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:662
+#: polls/views.py:667
 msgid "Range Voting"
 msgstr "Vote par notation"
 
-#: polls/views.py:662
+#: polls/views.py:667
 msgid "Plurality"
 msgstr "Pluralité"
 
-#: polls/views.py:663
+#: polls/views.py:668
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:664
+#: polls/views.py:669
 msgid "Approval"
 msgstr "Approbation"
 
-#: polls/views.py:664
+#: polls/views.py:669
 msgid "Curve Approval"
 msgstr "Courbe d'approbation"
 
-#: polls/views.py:666
+#: polls/views.py:671
 msgid "Approval scoring method explanation"
 msgstr ""
 "<section> Pour chaque candidat, on compte le nombre de <label class='label "
 "label-primary'> Oui</label>.</section>"
 
-#: polls/views.py:668
+#: polls/views.py:673
 msgid "scoring method explanation"
 msgstr ""
 "<p>On compte un nombre de points pour chaque candidat, de la manière "
@@ -1218,7 +1231,7 @@ msgstr ""
 "répresentant les points d'approbation en fonction du seuil d'approbation.</"
 "li></ul>"
 
-#: polls/views.py:668
+#: polls/views.py:673
 msgid "scoring method explanation without Ranks#0"
 msgstr ""
 "<p>On compte un nombre de points pour chaque candidat, de la manière "
@@ -1233,19 +1246,19 @@ msgstr ""
 "la courbe répresentant les points d'approbation en fonction du seuil "
 "d'approbation.</li></ul>"
 
-#: polls/views.py:672
+#: polls/views.py:677
 msgid "condorcet label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:673
+#: polls/views.py:678
 msgid "Copeland"
 msgstr ""
 
-#: polls/views.py:674
+#: polls/views.py:679
 msgid "Simpson"
 msgstr ""
 
-#: polls/views.py:675
+#: polls/views.py:680
 msgid "condorcet method explanation"
 msgstr ""
 "<p>On réalise tous les duels électoraux possibles entre les candidats. Le "
@@ -1273,19 +1286,19 @@ msgstr ""
 "ligne du candidat A et à la colonne du candidat B,  on indique le nombre "
 "d'électeurs qui préfèrent le candidat A plutôt que le candidat B.</li></ul>"
 
-#: polls/views.py:679
+#: polls/views.py:684
 msgid "runoff label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:680
+#: polls/views.py:685
 msgid "STV"
 msgstr "Vote Alternatif"
 
-#: polls/views.py:680
+#: polls/views.py:685
 msgid "Two Round majority"
 msgstr "Scrutin Majoritaire à Deux Tours"
 
-#: polls/views.py:681
+#: polls/views.py:686
 msgid "runoff method explanation"
 msgstr ""
 "<p>Ces méthodes fonctionnent par éliminations successives de candidats. À  "
@@ -1301,11 +1314,11 @@ msgstr ""
 "tour, on garde uniquement les deux candidats qui ont reçu le plus de voix.</"
 "li> </ul>"
 
-#: polls/views.py:685
+#: polls/views.py:690
 msgid "randomized label"
 msgstr ""
 
-#: polls/views.py:688
+#: polls/views.py:693
 msgid "randomized method explanation"
 msgstr ""
 " Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "
@@ -1322,6 +1335,15 @@ msgstr "Français"
 #: whale4/settings.py:103
 msgid "English"
 msgstr "Anglais"
+
+#, fuzzy
+#~| msgid "Email text template with url %(url)s and certificate %(certi)s."
+#~ msgid "\"Email text template with url %(url)s and certificate %(certi)s."
+#~ msgstr ""
+#~ "Dear voter,You have been invited to participate to a vote on the "
+#~ "Whale4platform.If you want to vote, follow the following link:"
+#~ "%(url)sThen, enter your personal certificate which is the following one:"
+#~ "%(certi)s.The Whale thanks you for using Whale4."
 
 #~ msgid "--"
 #~ msgstr "--"

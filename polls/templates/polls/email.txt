@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans with url=url certi=certi %}Email text template with url {{ url }} and certificate {{ certi }}.{% endblocktrans %}
