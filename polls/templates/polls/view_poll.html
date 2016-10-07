@@ -55,7 +55,7 @@
         <tr>
           <td class="border" colspan="2" ></td>
           {% for c in candidates %}
-          <th>
+          <th style="min-width: {{ col_width }}%">
             {{ c.candidate }}
           </th>
           {% endfor %}
@@ -66,12 +66,13 @@
       <tbody>
         {% for v in votes %}
         <tr>
-          <td class="controls">
-            {% if poll.ballot_type == "Experimental"%}
-
+          {% if poll.ballot_type == "Experimental"%}
+	  <td class="no-controls">
             {% elif poll.ballot_type == "Secret" %}
+	  <td class="no-controls">
             {% else %}
-            {% if v.modify%}
+            {% if v.modify %}
+          <td class="controls">
             <a href="{% url 'updateVote' pk=poll.id voter=v.id %}" >{% bootstrap_icon "pencil" %}</a>
 	    
             <a href="#" class="remove" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{% bootstrap_icon "remove" %}</a>
@@ -93,6 +94,8 @@
                 </div>
               </div>
             </div>
+	    {% else %}
+	    <td class="no-controls">
             {% endif %}
 
             {% endif %}

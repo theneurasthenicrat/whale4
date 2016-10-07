@@ -862,23 +862,25 @@ background-color: #f6f8ff
 ***********************************************************/
 
 .poll-table tr{
-    border-bottom: 2px solid rgb(255, 255, 255);
+    border: 2px solid rgb(255, 255, 255);
 }
 
 .poll-table thead tr td {
     background-color: #fff;
-    border-bottom: 1px solid rgb(255, 255, 255);
+    border: 2px solid rgb(255, 255, 255);
 }
 
 .poll-table thead tr th {
-    background-color: #fafafa;
-    border-bottom: 1px solid rgb(255, 255, 255);
+    color: #fafafa;
+    background-color: rgba(51, 117, 179, 0.8);
+    border: 2px solid rgb(255, 255, 255);
 }
 
 .poll-table tr td,
 .poll-table tr th {
-    background-color: #fafafa;
-    border-bottom: 1px solid rgb(255, 255, 255);
+    color: #fafafa;
+    background-color: rgba(51, 117, 179, 0.8);
+    border: 2px solid rgb(255, 255, 255);
 }
 
 
@@ -893,34 +895,42 @@ background-color: #f6f8ff
 
 .poll-table tr td.poll-80percent {
     background: rgba(166, 215, 126, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-70percent {
     background: rgba(195, 227, 135, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-60percent {
     background: rgba(224, 239, 144, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-50percent {
     background: rgba(255, 255, 153, 1);
+    color: #444;
 }
 
 .poll-table tr td.poll-40percent {
     background: rgba(240, 217, 133, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-30percent {
     background: rgba(228, 179, 115, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-20percent {
     background: rgba(216, 141, 97, 0.8);
+    color: #444;
 }
 
 .poll-table tr td.poll-10percent {
     background: rgba(204, 103, 79, 0.8);
+    color: #444;
 }
 
 .poll-table  tr td.poll-0percent {
@@ -929,13 +939,19 @@ background-color: #f6f8ff
 }
 
 .poll-table tr td.poll-undefined {
-	background: rgb(85.0%, 85.0%, 85.0%)
+    background: rgb(85.0%, 85.0%, 85.0%)
 }
 
+table tbody tr td.no-controls {
+    width: 64px;
+    background: transparent;
+    color: #fff;    
+}
 
 table tbody tr td.controls {
     width: 64px;
-    background: transparent;
+    background-color: rgba(51, 117, 179, 0.2);
+    border-radius: 0px 0px 0px 20px;
     color: #fff;    
 }
 
