@@ -69,7 +69,7 @@ def with_view_rights(fn):
         if poll.ballot_type=="Experimental" and (request.user is None or request.user != poll.admin):
             messages.error(request,  mark_safe(_("you are not the poll administrator")))
             return redirect(reverse_lazy('redirectPage'))
-        elif poll.ballot_type=="Secret" and poll.closing_poll():
+        elif poll.ballot_type=="Secret" and not poll.is_closed():
             messages.error(request, mark_safe(_("The poll is not closed")))
             return redirect(reverse_lazy('redirectPage'))
         return fn(request, pk, *args, **kwargs)
@@ -418,6 +418,10 @@ def certificate(request, pk):
 def vote(request, pk):
 
     poll = get_object_or_404(VotingPoll, id=pk)
+    if poll.is_closed():
+        messages.error (request,  mark_safe(_('poll closed, you cannot vote anymore')))
+        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+        
     candidates =Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
         candidates=list(candidates)
@@ -574,7 +578,7 @@ def view_poll(request, pk):
         if request.GET['format'] == 'preflib':
             return _view_poll_as_preflib(poll)
 
-    closing_poll = poll.closing_poll()
+    is_closed = poll.is_closed()
     candidates = DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'\
                  else poll.candidates.all()
     profile = poll.voting_profile()
@@ -606,7 +610,7 @@ def view_poll(request, pk):
         'votes': enhanced_profile,
         'days': days,
         'months': months,
-        'closing_poll': closing_poll,
+        'is_closed': is_closed,
         'col_width': int(85 / len(candidates))
     })
 

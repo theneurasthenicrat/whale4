@@ -16,8 +16,10 @@ class Poll(PolymorphicModel):
     closing_date = models.DateField(default=date.today()+timedelta(days=1000),verbose_name= _("closing date * "))
     admin = models.ForeignKey(WhaleUser, on_delete=models.CASCADE,related_name='polls')
 
-    def closing_poll(self):
-        return self.closing_date >= date.today()
+    def is_closed(self):
+        print(self.closing_date)
+        print(date.today())
+        return self.closing_date <= date.today()
 
 
 class VotingPoll(Poll):

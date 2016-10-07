@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-07 20:26+0000\n"
+"POT-Creation-Date: 2016-10-07 21:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -245,103 +245,103 @@ msgstr "description"
 msgid "closing date * "
 msgstr "date de fin du sondage "
 
-#: polls/models.py:25
+#: polls/models.py:27
 msgid "Positive Negative scale (--, -, 0, +, ++)"
 msgstr "5 niveaux Positifs/Négatifs (--, -, 0, +, ++)"
 
-#: polls/models.py:26
+#: polls/models.py:28
 msgid "Approval Voting (Yes / No)"
 msgstr "Approbation (Oui/Non)"
 
-#: polls/models.py:27
+#: polls/models.py:29
 msgid "Ranking with ties"
 msgstr "Ordre avec ex-aequo"
 
-#: polls/models.py:28
+#: polls/models.py:30
 msgid "Ranking (no ties)"
 msgstr "Ordre sans ex-aequo"
 
-#: polls/models.py:29 polls/templates/polls/detail_result.html:24
+#: polls/models.py:31 polls/templates/polls/detail_result.html:24
 msgid "Scores"
 msgstr "Scores"
 
-#: polls/models.py:32
+#: polls/models.py:34
 msgid "Standard Poll"
 msgstr "Sondage classique"
 
-#: polls/models.py:33
+#: polls/models.py:35
 msgid "Date Poll"
 msgstr "Sondage type date"
 
-#: polls/models.py:36
+#: polls/models.py:38
 #, fuzzy
 #| msgid "Open ballot"
 msgid "Open Ballot"
 msgstr "Sondage ouvert"
 
-#: polls/models.py:37
+#: polls/models.py:39
 #, fuzzy
 #| msgid "Secret ballot"
 msgid "Secret Ballot"
 msgstr "Sondage à bulletins secrets"
 
-#: polls/models.py:38
+#: polls/models.py:40
 #, fuzzy
 #| msgid "Experimental ballot"
 msgid "Experimental Ballot"
 msgstr "Expérimentation de vote"
 
-#: polls/models.py:40
+#: polls/models.py:42
 msgid "poll type"
 msgstr "type de sondage"
 
-#: polls/models.py:41
+#: polls/models.py:43
 msgid "Preference model * "
 msgstr "Préférences *"
 
-#: polls/models.py:42
+#: polls/models.py:44
 msgid "Ballot Type"
 msgstr ""
 
-#: polls/models.py:43
+#: polls/models.py:45
 msgid "Option choice explanation"
 msgstr ""
 "Un votant peut laisser des candidats non classés (<i>i.e.</i> donner la "
 "valeur <span class='label label-primary'>Je ne sais pas</span> à des "
 "candidats)"
 
-#: polls/models.py:44
+#: polls/models.py:46
 msgid "Modify choice explanation"
 msgstr ""
 "L'administrateur (vous, donc) peut ajouter ou retirer des candidats pendant "
 "la vie du sondage"
 
-#: polls/models.py:45
+#: polls/models.py:47
 msgid "Option shuffle explanation"
 msgstr "Les candidats apparaitront d'une façon aléatoire dans la page de vote."
 
-#: polls/models.py:46
+#: polls/models.py:48
 msgid "Status of poll explanation"
 msgstr ""
 "Un participant peut voter. Ce qui veut dire que le sondage n'est pas bloqué."
 
-#: polls/models.py:47
+#: polls/models.py:49
 msgid "blocking option explanation"
 msgstr "Le sondage est bloqué après chaque vote."
 
-#: polls/models.py:109
+#: polls/models.py:111
 msgid "candidate"
 msgstr "candidat"
 
-#: polls/models.py:119
+#: polls/models.py:121
 msgid "date"
 msgstr "date"
 
-#: polls/models.py:130
+#: polls/models.py:132
 msgid "voter"
 msgstr "votant"
 
-#: polls/models.py:131
+#: polls/models.py:133
 msgid "value"
 msgstr "valeur"
 
@@ -436,7 +436,7 @@ msgstr ""
 #: polls/templates/polls/date_candidate.html:79
 #: polls/templates/polls/invite.html:77
 #: polls/templates/polls/secret_view.html:44
-#: polls/templates/polls/view_poll.html:115
+#: polls/templates/polls/view_poll.html:117
 msgid "OK"
 msgstr "Oui !"
 
@@ -444,7 +444,7 @@ msgstr "Oui !"
 #: polls/templates/polls/date_candidate.html:78
 #: polls/templates/polls/invite.html:78
 #: polls/templates/polls/secret_view.html:45
-#: polls/templates/polls/view_poll.html:116
+#: polls/templates/polls/view_poll.html:118
 msgid "Cancel"
 msgstr "Tout compte fait, non"
 
@@ -468,7 +468,7 @@ msgstr "Les données"
 msgid "See the results of poll"
 msgstr "Visualiser les résultats du sondage"
 
-#: polls/templates/polls/all_result.html:23 polls/views.py:665
+#: polls/templates/polls/all_result.html:23 polls/views.py:670
 msgid "scoring method title"
 msgstr "Méthodes de calcul des scores"
 
@@ -476,7 +476,7 @@ msgstr "Méthodes de calcul des scores"
 msgid "scoring method message"
 msgstr "Où l'on compte un nombre de points par candidat..."
 
-#: polls/templates/polls/all_result.html:33 polls/views.py:676
+#: polls/templates/polls/all_result.html:33 polls/views.py:681
 msgid "condorcet method title"
 msgstr "Méthodes de Condorcet"
 
@@ -484,7 +484,7 @@ msgstr "Méthodes de Condorcet"
 msgid "condorcet method message"
 msgstr "Où l'on engage des duels entre tous les candidats..."
 
-#: polls/templates/polls/all_result.html:44 polls/views.py:683
+#: polls/templates/polls/all_result.html:44 polls/views.py:688
 msgid "runoff method title"
 msgstr "Méthodes à plusieurs tours"
 
@@ -492,7 +492,7 @@ msgstr "Méthodes à plusieurs tours"
 msgid "runoff method message"
 msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
-#: polls/templates/polls/all_result.html:54 polls/views.py:689
+#: polls/templates/polls/all_result.html:54 polls/views.py:694
 msgid "randomized method title"
 msgstr "Méthode de tournois aléatoires"
 
@@ -695,7 +695,7 @@ msgstr "Le nombre de participants est:"
 msgid "More about the"
 msgstr "À propos des"
 
-#: polls/templates/polls/detail_result.html:53 polls/views.py:692
+#: polls/templates/polls/detail_result.html:53 polls/views.py:697
 msgid "Shuffle candidates for the first round"
 msgstr "Nouveau tirage aléatoire au premier tour"
 
@@ -724,18 +724,19 @@ msgid "WHich ALternative is Elected"
 msgstr "Whale4 - WHich ALternative is Elected"
 
 #: polls/templates/polls/email.html:17 polls/templates/polls/email.txt:2
-#: polls/views.py:361
+#: polls/views.py:363
 #, python-format
 msgid "Email text template with url %(url)s and certificate %(certi)s."
 msgstr ""
-"Dear voter,\n\nYou have been invited to participate to a vote on the "
-"Whale4 platform.\n"
+"Dear voter,\n"
+"\n"
+"You have been invited to participate to a vote on the Whale4 platform.\n"
 "If you want to vote, follow the following link:\n"
-"%(url)s."
-"\n\n"
+"%(url)s.\n"
+"\n"
 "Then, enter your personal certificate which is the following one:\n"
-"%(certi)s."
-"\n\n"
+"%(certi)s.\n"
+"\n"
 "The Whale thanks you for using Whale4."
 
 #: polls/templates/polls/home.html:46
@@ -931,12 +932,12 @@ msgid "Parameters"
 msgstr "Paramètres"
 
 #: polls/templates/polls/secret_view.html:38
-#: polls/templates/polls/view_poll.html:109
+#: polls/templates/polls/view_poll.html:111
 msgid "Delete this vote"
 msgstr "Supprimer ce vote"
 
 #: polls/templates/polls/secret_view.html:41
-#: polls/templates/polls/view_poll.html:112
+#: polls/templates/polls/view_poll.html:114
 msgid "Do you really want to delete this vote?"
 msgstr "Êtes-vous certain de vouloir effacer ce vote ?"
 
@@ -961,33 +962,39 @@ msgstr[0] ""
 msgstr[1] ""
 "<span class='badge'>%(counter)s</span> personnes ont pris part à ce sondage."
 
-#: polls/templates/polls/view_poll.html:23
-#: polls/templates/polls/view_poll.html:155
+#: polls/templates/polls/view_poll.html:24
+#: polls/templates/polls/view_poll.html:163
 msgid "vote"
 msgstr "Voter"
 
-#: polls/templates/polls/view_poll.html:26
-#: polls/templates/polls/view_poll.html:158
+#: polls/templates/polls/view_poll.html:28
+#: polls/templates/polls/view_poll.html:166
 msgid "results"
 msgstr "Résultats"
 
-#: polls/templates/polls/view_poll.html:145
+#: polls/templates/polls/view_poll.html:147
 msgid "No vote yet... Do you want to be the first one?"
 msgstr "Pas de vote pour l'instant... Voulez vous être le premier ?"
 
-#: polls/templates/polls/view_poll.html:149
+#: polls/templates/polls/view_poll.html:153
+#, fuzzy
+#| msgid "The poll is not closed"
+msgid "The poll is closed since"
+msgstr "<h4>Soyez patient...</h4><p>Le sondage n'est pas encore clôt...</p>"
+
+#: polls/templates/polls/view_poll.html:155
 msgid "The poll is opened until"
 msgstr " Le sondage est ouvert jusqu'au"
 
-#: polls/templates/polls/view_poll.html:150
+#: polls/templates/polls/view_poll.html:156
 msgid "(unless the poll creator decides to close it before)."
 msgstr "(à moins que l'administrateur du sondage décide de le fermer avant)."
 
-#: polls/templates/polls/view_poll.html:161
+#: polls/templates/polls/view_poll.html:169
 msgid "settings"
 msgstr "Paramètres"
 
-#: polls/templates/polls/view_poll.html:164
+#: polls/templates/polls/view_poll.html:172
 msgid "Data page"
 msgstr "Données"
 
@@ -1049,172 +1056,177 @@ msgstr ""
 msgid "The poll is not closed"
 msgstr "<h4>Soyez patient...</h4><p>Le sondage n'est pas encore clôt...</p>"
 
-#: polls/views.py:94
+#: polls/views.py:96
 msgid "the poll is blocked"
 msgstr ""
 "<h4>Oups...</h4><p>Vous ne pouvez pas voter pour l'instant. Demandez à "
 "l'administrateur du sondage de vous donner l'accès. </p>"
 
-#: polls/views.py:105
+#: polls/views.py:107
 msgid "You must add at least two candidates"
 msgstr "<h4>Oups...</h4><p>Vous devez ajouter au moins deux candidats.</p>"
 
-#: polls/views.py:157
+#: polls/views.py:159
 msgid "Poll successfully reset."
 msgstr "Remise à zéro réussie. Vous avez désormais un sondage flambant neuf..."
 
-#: polls/views.py:182
+#: polls/views.py:184
 msgid "General parameters successfully created!"
 msgstr ""
 "<h4>Sondage créé</h4><p>Votre sondage a été créé. Maintenant, ajoutez des "
 "candidats et réglez les paramètres avancés.</p>"
 
-#: polls/views.py:207
+#: polls/views.py:209
 msgid "General parameters successfully updated!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres généraux du sondage ont été "
 "mis à jour.</p>"
 
-#: polls/views.py:210
+#: polls/views.py:212
 msgid "Parameters are successfully updated!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
 "été mis à jour.</p>"
 
-#: polls/views.py:221
+#: polls/views.py:223
 msgid "Your poll has been deleted!"
 msgstr ""
 "<h4>Effacement confirmé</h4><p>Le sondage (ainsi que tous les votes "
 "associés) a bien été supprimé de la base.</p>"
 
-#: polls/views.py:235
+#: polls/views.py:237
 msgid "Options are successfully added!"
 msgstr ""
 "<h4>Paramètres mis à jour</h4><p>Les paramètres de votre sondage ont bien "
 "été mis à jour.</p>"
 
-#: polls/views.py:249
+#: polls/views.py:251
 msgid "Status is successfully changed!"
 msgstr ""
 "<h4>Statut mis à jour</h4><p>Le statut de votre sondage a bien été mis à "
 "jour.</p>"
 
-#: polls/views.py:264
+#: polls/views.py:266
 #, fuzzy
 #| msgid "Add or remove candidates"
 msgid "Add or remove candidates is not allowed!"
 msgstr "Ajouter / supprimer des candidats"
 
-#: polls/views.py:285 polls/views.py:315
+#: polls/views.py:287 polls/views.py:317
 #, python-format
 msgid "Candidates must be distinct (%(c)s)"
 msgstr ""
 "<h4>S'il-vous-plaît...</h4><p>...Donnez des noms différents à des candidats "
 "différents (%(c)s est déjà dans la liste des candidats).</p>"
 
-#: polls/views.py:289
+#: polls/views.py:291
 #, python-format
 msgid "Candidate %(c)s successfully added!"
 msgstr ""
 "<h4>Candidat ajouté</h4><p>Le candidat %(c)s a été ajouté au sondage.</p>"
 
-#: polls/views.py:320
+#: polls/views.py:322
 msgid "Candidates are successfully added!"
 msgstr ""
 "<h4>Candidats ajoutés</h4><p>Les candidats ont bien été ajoutés à la liste.</"
 "p>"
 
-#: polls/views.py:332
+#: polls/views.py:334
 #, python-format
 msgid "Candidate has been deleted (%(c)s)!"
 msgstr ""
 "<h4>Candidat supprimé</h4><p>%(c)s a bien été supprimé de la liste des "
 "candidats.</p>"
 
-#: polls/views.py:369
+#: polls/views.py:370
 msgid "Invited voters successfully added!"
 msgstr ""
 "<h4>Invités ajoutés</h4><p>Les personnes que vous avez spécifiées ont bien "
 "été ajoutés à la liste des votants.</p>"
 
-#: polls/views.py:384
+#: polls/views.py:385
 msgid "anonymous voter has been deleted!"
 msgstr ""
 "<h4>Votant supprimé</h4><p>Le votant anonyme a bien été supprimé de la liste."
 "</p>"
 
-#: polls/views.py:401
+#: polls/views.py:402
 msgid "your certificate is correct"
 msgstr ""
 "<h4>Autorisation accordée</h4><p>Votre certificat est valide. Vous pouvez "
 "voter !</p>"
 
-#: polls/views.py:409
+#: polls/views.py:410
 msgid "your certificate is incorrect"
 msgstr ""
 "<h4>Certificat incorrect</h4><p>Hum, il semblerait que le certificat que "
 "vous avez entré ne correspond pas à un certificat valide. Faute de frappe ? "
 "Prenez une grande inspiration et tapez-le à nouveau.</p>"
 
-#: polls/views.py:444
+#: polls/views.py:422
+msgid "poll closed, you cannot vote anymore"
+msgstr ""
+"<h4>Sondage fermé</h4><p>Désolé, vous ne pouvez plus voter car l'administrateur a clôturé le sondage.</p>"
+
+#: polls/views.py:449
 msgid "you have already voted, now you can update your vote"
 msgstr ""
 "<h4>Bienvenue à nouveau...</h4><p>Vous avez déjà voté. Si vous voulez, vous "
 "pouvez modifier votre vote.</p>"
 
-#: polls/views.py:463
+#: polls/views.py:468
 msgid "Your vote has been added to the poll, thank you!"
 msgstr ""
 "<h4>A voté!</h4><p>Votre vote a bien été pris en compte. Merci d'avoir "
 "utilisé Whale !</p>"
 
-#: polls/views.py:517
+#: polls/views.py:522
 msgid "Your vote has been updated, thank you!"
 msgstr ""
 "<h4>A voté! (à nouveau)</h4><p>La modification de votre vote a bien été "
 "prise en compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:536
+#: polls/views.py:541
 msgid "Your vote has been deleted!"
 msgstr ""
 "<h4>Vote supprimé</h4><p>La suppression de votre vote a bien été prise en "
 "compte. Merci d'avoir utilisé Whale !</p>"
 
-#: polls/views.py:666
+#: polls/views.py:671
 msgid "scoring label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:667
+#: polls/views.py:672
 msgid "Borda"
 msgstr "Borda"
 
-#: polls/views.py:667
+#: polls/views.py:672
 msgid "Range Voting"
 msgstr "Vote par notation"
 
-#: polls/views.py:667
+#: polls/views.py:672
 msgid "Plurality"
 msgstr "Pluralité"
 
-#: polls/views.py:668
+#: polls/views.py:673
 msgid "Veto"
 msgstr "Veto"
 
-#: polls/views.py:669
+#: polls/views.py:674
 msgid "Approval"
 msgstr "Approbation"
 
-#: polls/views.py:669
+#: polls/views.py:674
 msgid "Curve Approval"
 msgstr "Courbe d'approbation"
 
-#: polls/views.py:671
+#: polls/views.py:676
 msgid "Approval scoring method explanation"
 msgstr ""
 "<section> Pour chaque candidat, on compte le nombre de <label class='label "
 "label-primary'> Oui</label>.</section>"
 
-#: polls/views.py:673
+#: polls/views.py:678
 msgid "scoring method explanation"
 msgstr ""
 "<p>On compte un nombre de points pour chaque candidat, de la manière "
@@ -1231,7 +1243,7 @@ msgstr ""
 "répresentant les points d'approbation en fonction du seuil d'approbation.</"
 "li></ul>"
 
-#: polls/views.py:673
+#: polls/views.py:678
 msgid "scoring method explanation without Ranks#0"
 msgstr ""
 "<p>On compte un nombre de points pour chaque candidat, de la manière "
@@ -1246,19 +1258,19 @@ msgstr ""
 "la courbe répresentant les points d'approbation en fonction du seuil "
 "d'approbation.</li></ul>"
 
-#: polls/views.py:677
+#: polls/views.py:682
 msgid "condorcet label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:678
+#: polls/views.py:683
 msgid "Copeland"
 msgstr ""
 
-#: polls/views.py:679
+#: polls/views.py:684
 msgid "Simpson"
 msgstr ""
 
-#: polls/views.py:680
+#: polls/views.py:685
 msgid "condorcet method explanation"
 msgstr ""
 "<p>On réalise tous les duels électoraux possibles entre les candidats. Le "
@@ -1286,19 +1298,19 @@ msgstr ""
 "ligne du candidat A et à la colonne du candidat B,  on indique le nombre "
 "d'électeurs qui préfèrent le candidat A plutôt que le candidat B.</li></ul>"
 
-#: polls/views.py:684
+#: polls/views.py:689
 msgid "runoff label"
 msgstr "Méthode de calcul"
 
-#: polls/views.py:685
+#: polls/views.py:690
 msgid "STV"
 msgstr "Vote Alternatif"
 
-#: polls/views.py:685
+#: polls/views.py:690
 msgid "Two Round majority"
 msgstr "Scrutin Majoritaire à Deux Tours"
 
-#: polls/views.py:686
+#: polls/views.py:691
 msgid "runoff method explanation"
 msgstr ""
 "<p>Ces méthodes fonctionnent par éliminations successives de candidats. À  "
@@ -1314,11 +1326,11 @@ msgstr ""
 "tour, on garde uniquement les deux candidats qui ont reçu le plus de voix.</"
 "li> </ul>"
 
-#: polls/views.py:690
+#: polls/views.py:695
 msgid "randomized label"
 msgstr ""
 
-#: polls/views.py:693
+#: polls/views.py:698
 msgid "randomized method explanation"
 msgstr ""
 " Cette méthode fonctionne exactement à la manière d'un tournoi sportif par "

@@ -19,9 +19,11 @@
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	{% blocktrans count counter=votes|length %}{{ counter }} voter have participated in this poll.{% plural %}{{ counter }} voters have participated in this poll.{% endblocktrans %}
       </div>
+      {% if not is_closed %}
       <div class=" col-xs-6 col-sm-6 col-md-6 col-lg-4 margin2">
 	<a href="{% url 'vote' poll.id %}"  class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "pencil" %} {% trans 'vote' %}</a>
       </div>
+      {% endif %}
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 margin2">
 	<a href="{% url 'results' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "stats" %} {% trans 'results' %}</a>
       </div>
@@ -128,7 +130,7 @@
           <th>
             {{ v.nickname }}
           </th>
-          {% if poll.ballot_type == "Secret" and  closing_poll%}
+          {% if poll.ballot_type == "Secret" and not is_closed %}
 
           {% else %}
           {% for s in v.scores %}
@@ -146,8 +148,14 @@
   </div>
   {% endif %}
 <div class="well-sm">
-<p class="text-center">{% trans 'The poll is opened until' %} <label class="label label-danger">{{ poll.closing_date }}</label>
-    {% trans '(unless the poll creator decides to close it before).' %} </p>
+  <p class="text-center">
+    {% if is_closed %}
+    {% trans 'The poll is closed since' %} <label class="label label-danger">{{ poll.closing_date }}</label>
+    {% else %}
+    {% trans 'The poll is opened until' %} <label class="label label-danger">{{ poll.closing_date }}</label>
+    {% trans '(unless the poll creator decides to close it before).' %}
+    {% endif %}
+  </p>
 </div>
   <div class="row">
     <div class="col-md-2 col-lg-2"></div>
@@ -160,7 +168,7 @@
     <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
       <a href="{% url 'admin' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "cog" %} {% trans 'settings' %}</a>
     </div>
- <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
+    <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2  margin2">
      <a href="{% url 'data' poll.id %}" class="btn btn-custom btn-lg col-xs-12 col-sm-12 col-md-12 col-lg-12">{% bootstrap_icon "download-alt" %} {% trans 'Data page' %} </a>
     </div>
     <div class="col-md-2 col-lg-2"></div>
