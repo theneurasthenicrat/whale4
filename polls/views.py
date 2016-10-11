@@ -668,6 +668,8 @@ def result_view(request, pk ,method):
 
     len_voters = len(list(set(voters)))
 
+    url_poll = str(reverse_lazy(result_scores, kwargs={'pk': poll.id, 'method': method}))
+    
     if method ==1:
 
         title = _('scoring method title')
@@ -686,6 +688,8 @@ def result_view(request, pk ,method):
         options = [{'value': 'copeland', 'name': _('Copeland')},
                      {'value': 'simpson', 'name': _('Simpson')}]
         explanation = mark_safe(_('condorcet method explanation'))
+        url_poll = "{url}?aggregate=majority".format(
+            url = reverse_lazy(view_poll, kwargs={'pk': poll.id, }))
 
     if method == 3:
         title = _('runoff method title')

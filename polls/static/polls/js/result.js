@@ -8,44 +8,42 @@ d3.select("#controlCondorcet").style("visibility","hidden");
 d3.select("#Shuffle_randomized").style("visibility","hidden");
 
 
-function graph() {
-
+function drawGraph() {
     d3.json(url, function(error, data) {
+	d3.select("#option").on("change", function() {return updateGraph(data);});
+	
+	d3.select("#approval").on("change", function() {return updateGraph(data);});
+	d3.select("#graph_type").on("change", function() {return updateGraph(data);});
+	
+	d3.select(window).on('resize', function() {return updateGraph(data);});
 
-        method= parseInt(method);
-
-        switch(method) {
-            case 1:
-                if(preference == "Approval") {
-                d3.select("#control").style("visibility","hidden");
-                    }
-                scoring_plot(data.scoring);
-                break;
-            case 2:
-                condorcet_plot(data.condorcet);
-                break;
-
-            case 3:
-                runoff_plot(data.runoff);
-                break;
-            case 4:
-                randomized(data.randomized);
-
-        }
+	updateGraph(data);
     });
 }
 
+function updateGraph(data) {
+    method= parseInt(method);
+    
+    switch(method) {
+    case 1:
+        if(preference == "Approval") {
+            d3.select("#control").style("visibility","hidden");
+        }
+        scoring_plot(data.scoring);
+        break;
+    case 2:
+        condorcet_plot(data);
+        break;
+    case 3:
+        runoff_plot(data.runoff);
+        break;
+    case 4:
+        randomized(data.randomized);
+    }
+}
 
+drawGraph();
 
-graph();
-
-
-d3.select("#option").on("change", graph);
-
-d3.select("#approval").on("change", graph);
-d3.select("#graph_type").on("change", graph);
-
-d3.select(window).on('resize', graph);
 
 function wrap(text, width) {
     text.each(function() {

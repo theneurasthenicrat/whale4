@@ -1,20 +1,46 @@
 
-function condorcet_plot( condorcet) {
+function condorcet_plot(data) {
     var option = d3.select("#option").node().value;
-    var data;
+
     switch (option) {
-        case 'copeland':
-            data = condorcet.copeland;
-            condorcet_chart(data);
-            break;
-
-        case 'simpson':
-            data =  condorcet.simpson;
-            condorcet_chart(data);
-
+    case 'copeland':
+        data.scores = copeland(data);
+        break;	
+    case 'simpson':
+        data.scores = simpson(data);
     }
+    condorcet_chart(data);	
 }
 
+function simpson(data) {
+    scores = data.matrix.map(function(d, i) {
+	min = Number.MAX_SAFE_INTEGER;
+	for (var k in d) {
+	    if (i != k) {
+		if (min > d[k]) {
+		    min = d[k];
+		}
+	    }
+	}
+	return min});
+    return scores;
+}
+
+function copeland(data) {
+    scores = data.matrix.map(function(d) {
+	var score = 0;
+	for (var k in d){
+	    if (d[k] > data.nbVoters / 2) {
+		score++;
+	    }
+	    if (d[k] == data.nbVoters / 2) {
+		score += 0.5;
+	    }
+	}
+	return score;
+    });
+    return scores;
+}
 
 
 function condorcet_chart(data) {
@@ -24,7 +50,7 @@ function condorcet_chart(data) {
 
     switch (option) {
         case 'node':
-            nodes_links(data);
+            node_link(data);
             break;
         case 'matrix':
             matrix_graph(data);
@@ -32,23 +58,30 @@ function condorcet_chart(data) {
 
 }
 
-function nodes_links(data) {
+function node_link(data) {
+    var candidates = data.candidates;
+    var matrix = data.matrix;
+    var scores = data.scores;
+    var m = data.nbVoters;
+    var n = candidates.length;
+    
+    var width =   $("#graph").width()/1.5;
+    var height = window.innerHeight / 2;
 
-    var nodes = data.nodes,
-        links = data.links,
-        colorTab = ["red", "#e1dd38", "green"],
-        width =   $("#graph").width()/1.5,
-        height = window.innerHeight / 2,
-        minNodeValue = d3.min(nodes, function (d) {return d.value;}),
-        minlinkValue = d3.min(links, function (d) {return d.value;}),
-        meanNodeValue = d3.mean(nodes, function (d) {return d.value;}),
-        maxNodeValue = d3.max(nodes, function (d) {return d.value;}),
-        maxlinkValue = d3.max(links, function (d) {return d.value;}),
-        color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(colorTab)
-        strokeRange = d3.scale.linear().domain([minlinkValue, maxlinkValue]).range([0.5,3]);
+    var nodes = candidates.map(function(d, i) {return {"name": d, "value": scores[i]};});
+    var links = create_links(matrix);
+
+    var colorTab = ["red", "#e1dd38", "green"];
+    var minNodeValue = d3.min(scores);
+    var minlinkValue = d3.min(links, function (d) {return d.value;});
+    var meanNodeValue = d3.mean(scores);
+    var maxNodeValue = d3.max(scores);
+    var maxlinkValue = d3.max(links, function (d) {return d.value;});
+    var color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(colorTab);
+    var strokeRange = d3.scale.linear().domain([minlinkValue, maxlinkValue]).range([0.5,3]);
     
     var force = d3.layout.force()
-        .nodes(d3.values(nodes))
+        .nodes(nodes)
         .links(links)
         .size([width, width])
         .linkDistance(width/ 2)
@@ -123,34 +156,43 @@ function nodes_links(data) {
             });
 
     }
-
 }
 
-
+function create_links(matrix) {
+    links = [];
+    for (var i  = 0; i < matrix.length; i++) {
+	for (var j = i + 1; j < matrix[i].length; j++) {
+	    if (matrix[i][j] > matrix[j][i]) {
+		links.push({"source": i, "target": j, value: matrix[i][j] - matrix[j][i]});
+	    } else {
+		links.push({"source": j, "target": i, value: matrix[j][i] - matrix[i][j]});
+	    }
+	}
+    }
+    console.log(links);
+    return links;
+}
 
 function matrix_graph(data){
+    var candidates = data.candidates;
+    var matrix = data.matrix;
+    var scores = data.scores;
+    var m = data.nbVoters;
+    var n = candidates.length;
 
-    var margin = {top:100, right: 10, bottom: 20, left: 100},
-        duel_text=d3.select("#duel_text").property("value"),
-        nodes = data.nodes,
-        matrix = data.matrix,
-        n = nodes.length,
-        colorTab = ["red", "#e1dd38", "green"],
-        width =(( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left,
-        height = (( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left,
-        minNodeValue = d3.min(nodes, function (d) {return d.value;}),
-        meanNodeValue = d3.mean(nodes, function (d) {return d.value;}),
-        maxNodeValue = d3.max(nodes, function (d) {return d.value;}),
-        orders = d3.range(n).sort(function(a, b) { return nodes[b].value- nodes[a].value; })
-        max = d3.max(matrix.map(function(array) {return d3.max(array, function (d) {return d.z;});})),
-        mean = d3.mean(matrix.map(function(array) {return d3.mean(array, function (d) {return d.z;});})),
-        min = d3.min(matrix.map(function(array) {return d3.min(array, function (d) {return d.z==0?max:d.z;});})),
-        color = d3.scale.linear().domain([minNodeValue,meanNodeValue,maxNodeValue]).range(colorTab),
-        x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(orders),
-        z = d3.scale.linear().domain([0, 4]).clamp(true),
-        color1 = d3.scale.linear().domain([min, mean, max]).range(colorTab);
-
-    var matrixSvg = d3.select("#graph")
+    var margin = {top:100, right: 10, bottom: 20, left: 100};
+    var width =(( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left;
+    var height = (( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left;
+    var duel_text=d3.select("#duel_text").property("value");
+    var colorTab = ["red", "#e1dd38", "green"];
+    
+    var orders = d3.range(n).sort(function(a, b) { return data.scores[b] - data.scores[a]; });
+    var color_scores = d3.scale.linear().domain([d3.min(data.scores),d3.mean(data.scores),d3.max(data.scores)]).range(colorTab);
+    var color_majority = d3.scale.linear().domain([0, m / 2, m]).range(colorTab);
+    var x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(orders);
+    var z = d3.scale.linear().domain([0, 4]).clamp(true);
+    
+    var svg = d3.select("#graph")
         .append("svg")
         .attr("width", width+margin.left+margin.right+100 )
         .attr("height", height + margin.top + margin.bottom)
@@ -159,9 +201,8 @@ function matrix_graph(data){
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-    var row = matrixSvg.selectAll(".row")
-        .data(matrix)
+    var row = svg.selectAll(".row")
+        .data(data.matrix)
         .enter().append("g")
         .attr("class", "row")
         .attr("transform", function (d, i) {return "translate(0," + x(i) + ")";})
@@ -170,53 +211,50 @@ function matrix_graph(data){
     row.append("rect")
         .attr("x",n*x.rangeBand()+1)
         .attr("y", 0)
+	.transition()
         .attr("width", x.rangeBand())
         .attr("height", x.rangeBand())
-        .style("fill", "#ccc");
-
-    row.append("line")
-        .attr("x2", width-margin.left-margin.right)
-        .style("stroke","#fff");
+    	.style("stroke", "#fff")
+        .style("stroke-width", "2")
+        .style("fill", "#3375b3");
 
     row.append("text")
         .attr("x", -6)
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
-        .style("fill", function (d, i) {return color(nodes[i].value);})
-        .text(function (d, i) {return nodes[i].name;})
+	.transition()
+        .style("fill", function (d, i) {return color_scores(data.scores[i]);})
+        .text(function (d, i) {return candidates[i];})
         .call(wrap,margin.left);
-
-
+    
     row.append("text")
         .attr("x",n*x.rangeBand()+(x.rangeBand() / 2))
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "middle")
+	.transition()
         .style("fill", "white")
-        .text(function (d, i) {return nodes[i].value;});
+        .text(function (d, i) {return data.scores[i];});
 
-
-    var column = matrixSvg.selectAll(".column")
-        .data(matrix)
+    
+    var column = svg.selectAll(".column")
+        .data(data.matrix)
         .enter().append("g")
         .attr("class", "column")
         .attr("transform", function (d, i) {return "translate(" + x(i) + ")rotate(-90)";});
-
-    column.append("line")
-        .attr("x1", -(width-margin.top-x.rangeBand()-10))
-        .style("stroke","#fff");
 
     column.append("text")
         .attr("x", 6)
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
-        .style("fill", function (d, i) {return color(nodes[i].value);})
-        .text(function (d, i) {return nodes[i].name;})
-        .call(wrap,margin.top);
-
-    matrixSvg.append("text")
+	.transition()
+        .style("fill", function (d, i) {return color_scores(data.scores[i]);})
+        .text(function (d, i) {return candidates[i];})
+        .call(wrap, margin.top);
+    
+    svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y",n*x.rangeBand()+(x.rangeBand() / 2))
         .attr("x",6)
@@ -224,27 +262,28 @@ function matrix_graph(data){
         .style("text-anchor", "start")
         .text(duel_text);
 
-    function row(row) {
+    function row(row, i) {
         var cell = d3.select(this).selectAll(".cell")
             .data(row)
             .enter().append("g");
 
         cell.append("rect")
             .attr("class", "cell")
-            .attr("x", function (d) {return x(d.x);})
+	    .transition()
+	    .attr("x", function (d, j) {return x(j);})
             .attr("width", x.rangeBand())
             .attr("height", x.rangeBand())
-            .style("fill", function (d) {return d.z == 0 ? "#ccc" : color1(d.z);});
+	    .style("stroke", "#fff")
+            .style("stroke-width", "2")
+            .style("fill", function (d, j) {return i == j ? "#ccc" : color_majority(d);});
 
         cell.append("text")
-            .attr("x", function (d) {return x(d.x)+x.rangeBand() / 2;})
+            .attr("x", function (d, j) {return x(j)+x.rangeBand() / 2;})
             .attr("y", x.rangeBand() / 2)
             .attr("dy", ".32em")
             .attr("text-anchor", "middle")
+	    .transition()
             .style("fill", "white")
-            .text(function (d) {return d.z;});
-
-
+            .text(function (d) {return d;});
     }
-
 }

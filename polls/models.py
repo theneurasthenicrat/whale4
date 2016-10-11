@@ -81,6 +81,10 @@ class VotingPoll(Poll):
             except StopIteration:
                 finished = True
 
+    def nb_voters(self):
+        """Returns the number of voters of the poll (performs a DB query)."""
+        return VotingScore.objects.filter(candidate__poll=self).values('voter__id').distinct().count()
+                
     def voting_profile_matrix(self):
         """Returns the voting profile as a matrix.
 
@@ -126,9 +130,11 @@ class VotingPoll(Poll):
             for i, vote in enumerate(matrix):
                 votes.append({'name': 'Voter #' + str(i + 1) if anonymize else vote['nickname'],
                               'values': vote['scores']})
+            yield 'nbVoters', len(votes)
             yield 'votes', votes
         elif aggregate == 'majority':
             matrix = self.majority_margin_matrix()
+            yield 'nbVoters', self.nb_voters()
             yield 'matrix', matrix
         else:
             yield 'votes', 'Unknown aggregation method: ' + aggregate

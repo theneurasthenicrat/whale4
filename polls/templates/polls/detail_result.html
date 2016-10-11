@@ -14,7 +14,7 @@
 
     <div class="container">
 
-        <input type="hidden" id="url_poll" value="{% url 'scores' pk=poll.id method=method %}" />
+        <input type="hidden" id="url_poll" value="{{ url_poll }}" />
         <input type="hidden" id="method" value="{{ method }}" />
         <input type="hidden" id="preference" value="{{ poll.preference_model }}" />
         <input type="hidden" id="round" value="{% trans 'Round' %}" />
