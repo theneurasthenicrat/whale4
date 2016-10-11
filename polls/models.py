@@ -73,7 +73,8 @@ class VotingPoll(Poll):
 
                 yield {
                     'id': current['voter__id'],
-                    'nickname': current['voter__nickname'] if self.ballot_type != 'Secret' else '(Anonymous)',
+                    'nickname': (current['voter__nickname'] if self.ballot_type != 'Secret'
+                                 else '(Anonymous)'),
                     'scores': scores,
                     'whaleuser': current['voter__polymorphic_ctype'] == content_type
                 }
@@ -88,10 +89,30 @@ class VotingPoll(Poll):
         then contains the value given by a vote to a candidate."""
         matrix = []
         for vote in self.voting_profile():
-            matrix.append([vote['scores']])
+            matrix.append(vote['scores'])
         return matrix
 
-    def __iter__(self, anonymize=False):
+    def majority_margin_matrix(self):
+        """Returns the majority matrix of a profile.
+
+        The value at cell (i, j) is the number of voters that strictly prefer
+        candidate i to candidate j."""
+        profile = self.voting_profile_matrix()
+        nb_candidates = len(profile[0])
+        print(profile)
+        if not profile:
+            nb_candidates = self.candidates.count()
+        matrix = [[0] * nb_candidates for _ in range(nb_candidates)]
+        for i in range(nb_candidates):
+            for j in range(i + 1, nb_candidates):
+                for vect in profile:
+                    if vect[i] > vect[j]:
+                        matrix[i][j] += 1
+                    else:
+                        matrix[j][i] += 1
+        return matrix
+
+    def __iter__(self, anonymize=False, aggregate=None):
         """Creates an iterator on the poll (serializes the poll as a dictionnary)."""
         candidates = self.candidate_list(anonymize)
         yield 'candidates', candidates
@@ -100,10 +121,17 @@ class VotingPoll(Poll):
             else preference_model.as_dict()
         yield 'type', 1 if self.poll_type == 'Date' else 0
         votes = []
-        for i, vote in enumerate(self.voting_profile()):
-            votes.append({'name': 'Voter #' + str(i + 1) if anonymize else vote['nickname'],
-                          'values': vote['scores']})
-        yield 'votes', votes
+        if not aggregate:
+            matrix = self.voting_profile()
+            for i, vote in enumerate(matrix):
+                votes.append({'name': 'Voter #' + str(i + 1) if anonymize else vote['nickname'],
+                              'values': vote['scores']})
+            yield 'votes', votes
+        elif aggregate == 'majority':
+            matrix = self.majority_margin_matrix()
+            yield 'matrix', matrix
+        else:
+            yield 'votes', 'Unknown aggregation method: ' + aggregate
 
 
 class Candidate(PolymorphicModel):

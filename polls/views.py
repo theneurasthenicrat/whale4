@@ -578,6 +578,10 @@ def view_poll(request, pk):
         if request.GET['format'] == 'preflib':
             return _view_poll_as_preflib(poll)
 
+    if "aggregate" in request.GET:
+        return _view_poll_as_json(poll, aggregate=request.GET['aggregate'])
+            
+        
     is_closed = poll.is_closed()
     candidates = DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'\
                  else poll.candidates.all()
@@ -615,10 +619,9 @@ def view_poll(request, pk):
     })
 
 
-def _view_poll_as_json(poll):
-    return HttpResponse(json.dumps(dict(poll), indent=4, sort_keys=True),
+def _view_poll_as_json(poll, aggregate=None):
+    return HttpResponse(json.dumps(dict(poll.__iter__(aggregate=aggregate)), indent=4, sort_keys=True),
                         content_type="application/json")
-
 
 def _view_poll_as_csv(poll):
     response = HttpResponse(content_type='text/csv')
