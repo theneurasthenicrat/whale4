@@ -65,7 +65,7 @@ function node_link(data) {
     var m = data.nbVoters;
     var n = candidates.length;
     
-    var width =   $("#graph").width()/1.5;
+    var width = $("#graph").width()/1.5;
     var height = window.innerHeight / 2;
 
     var nodes = candidates.map(function(d, i) {return {"name": d, "value": scores[i]};});
@@ -181,8 +181,12 @@ function matrix_graph(data){
     var n = candidates.length;
 
     var margin = {top:100, right: 10, bottom: 20, left: 100};
-    var width =(( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left;
-    var height = (( $(window).width()>970) ? $("#graph").width()/1.6 : $("#graph").width())-margin.right-margin.left;
+    var init_graph_width = $(window).width() > 970 ? 3 * $(window).width() / 4 : $(window).width();
+    var init_graph_height = $(window).height() - 150;
+    var smallest_dim = init_graph_width < init_graph_height ? init_graph_width : init_graph_height;
+    console.log(smallest_dim);
+    var width = ((init_graph_width > 970) ? init_graph_width / 1.6 : init_graph_width) - margin.right - margin.left;
+    var height = ((init_graph_height > 970) ? init_graph_height / 1.6 : init_graph_height) - margin.right - margin.left;
     var duel_text=d3.select("#duel_text").property("value");
     var colorTab = ["red", "#e1dd38", "green"];
     
@@ -196,8 +200,8 @@ function matrix_graph(data){
         .append("svg")
         .attr("width", width+margin.left+margin.right+100 )
         .attr("height", height + margin.top + margin.bottom)
-        .style("margin-left", margin.left + "px")
-        .style("margin-top", margin.top + "px")
+        .style("margin-left", "10px")
+        .style("margin-top", "10px")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

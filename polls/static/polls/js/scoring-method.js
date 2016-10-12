@@ -40,9 +40,11 @@ function scoring_plot(scoring) {
 
 
 function bar_chart(data) {
-    var margin = {top: 40, right: 20, bottom: 150, left: 60},
-        width  = $("#graph").width()-margin.right-margin.left,
-        height = window.innerHeight/2,
+    var margin = {top: 40, right: 100, bottom: 70, left: 60},
+	init_graph_width = ($(window).width() > 970 ? 3 * $(window).width() / 4 : $(window).width()) - 50,
+	init_graph_height = $(window).height() - 230,
+        width  = init_graph_width - margin.right - margin.left,
+        height = init_graph_height - margin.top - margin.bottom,
         yMax=d3.max(data, function(d) { return d.y }),
         yMin=d3.min(data, function(d) { return d.y }),
         yMean=d3.mean(data, function(d) { return d.y }),
