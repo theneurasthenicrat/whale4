@@ -2,13 +2,25 @@
 /***********************************************************
   GENERAL RULES
 ***********************************************************/
+@import url('https://fonts.googleapis.com/css?family=Lato');
 
 body {
     font-family: 'Lato', Verdana, Arial, Sans-Serif;
     color: #444;
     margin: 0px;
-    padding-top: 62px;
 }
+
+@media (max-width: 991px) {
+    body {
+	padding-top: 50px;
+    }
+}
+@media (min-width: 992px) {
+    body {
+	padding-top: 62px;
+    }
+}
+
 
 /* Color scheme
 - Orange:
@@ -458,7 +470,8 @@ footer {
 .btn-custom {
     color: #ffffff;
     background-color: rgba(51, 117, 179, 0.9);
-    transition: all .2s linear;	
+    transition: all .2s linear;
+    white-space: normal;
 }
 
 .btn-custom.next {
@@ -492,11 +505,11 @@ footer {
     box-shadow: 0px 0px 5px #888888;
 }
 
-.btn-custom:active,
+/*.btn-custom:active,
 .btn-custom.active,
 .open .dropdown-toggle.btn-custom {
   background-image: none;
-}
+}*/
 
 .btn-custom.disabled,
 .btn-custom[disabled],
