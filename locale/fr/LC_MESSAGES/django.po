@@ -494,7 +494,7 @@ msgstr "Où l'on élimine les candidats un tour après l'autre..."
 
 #: polls/templates/polls/all_result.html:54 polls/views.py:694
 msgid "randomized method title"
-msgstr "Méthode de tournois aléatoires"
+msgstr "Tournois aléatoires"
 
 #: polls/templates/polls/all_result.html:55
 msgid "randomized method message"

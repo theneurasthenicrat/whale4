@@ -136,7 +136,7 @@ function node_link(data) {
         .attr("dy", ".35em")
         .attr("text-anchor", "middle")
         .style("fill", function (d) {return color(d.value);})
-        .text(function (d) {return d.name+"("+d.value+")";});
+        .text(function (d) {return d.name+" ("+d.value+")";});
 
     function tick() {
         path.attr("d", function (d) {
@@ -219,6 +219,7 @@ function matrix_graph(data){
         .style("fill", "#3375b3");
 
     row.append("text")
+	.attr("class", "machins")
         .attr("x", -6)
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
@@ -226,7 +227,7 @@ function matrix_graph(data){
 	.transition()
         .style("fill", function (d, i) {return color_scores(data.scores[i]);})
         .text(function (d, i) {return candidates[i];})
-        .call(wrap,margin.left);
+        .call(wrap, margin.left);
     
     row.append("text")
         .attr("x",n*x.rangeBand()+(x.rangeBand() / 2))
