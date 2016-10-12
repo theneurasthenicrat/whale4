@@ -24,7 +24,7 @@ function randomized(data){
 d3.select("#Shuffle_randomized").style("visibility","visible");
 
     d3.select("#Shuffle_randomized")
-        .on("click",graph);
+        .on("click",drawGraph);
 
     var svg = d3.select("#graph").append("svg")
         .attr("width", width + margin.right + margin.left)
