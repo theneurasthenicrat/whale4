@@ -27,18 +27,19 @@ function simpson(data) {
 }
 
 function copeland(data) {
-    scores = data.matrix.map(function(d) {
-	var score = 0;
-	for (var k in d){
-	    if (d[k] > data.nbVoters / 2) {
-		score++;
+    matrix = data.matrix;
+    scores = [];
+    for (var i in matrix) {
+	scores.push(0);
+	for (var j in matrix[i]) {
+	    if (matrix[i][j] > matrix[j][i]) {
+		scores[i]++;
 	    }
-	    if (d[k] == data.nbVoters / 2) {
-		score += 0.5;
+	    if (i != j && matrix[i][j] == matrix[j][i]) {
+		scores[i] += 0.5;
 	    }
 	}
-	return score;
-    });
+    }
     return scores;
 }
 
