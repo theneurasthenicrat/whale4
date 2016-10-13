@@ -86,7 +86,7 @@ function bar_chart(data) {
 
     bars.enter().append("text")
         .attr("x", function(d) { return x(d.x)+ x.rangeBand()/2; })
-        .attr("y", function(d) { return  d.y >0 ?y(d.y):y(d.y)+30; })
+        .attr("y", function(d) { return  d.y >= 0 ? y(d.y) : y(d.y) + 30; })
         .attr("text-anchor", "middle")
         .attr("dy", "-1em")
         .attr("fill",function(d) { return color(d.y); })
