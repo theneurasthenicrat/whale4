@@ -218,7 +218,7 @@ function matrix_graph(data){
         .attr("width", x.rangeBand())
         .attr("height", x.rangeBand())
     	.style("stroke", "#fff")
-        .style("stroke-width", function(d) {return x.rangeBand() > 15 ? "2" : "0";})
+        .style("stroke-width", function(d) {return x.rangeBand() > 25 ? "2" : "0";})
         .style("fill", "#3375b3");
 
     row.append("text")
@@ -228,7 +228,7 @@ function matrix_graph(data){
         .attr("text-anchor", "end")
         .style("fill", function (d, i) {return color_scores(data.scores[i]);})
         .text(function (d, i) {return (x.rangeBand() < 64 && candidates[i].length > 10) ? (candidates[i].slice(0,10) + " [...]") : candidates[i];})
-        .call(wrap, margin.left);
+        .call(wrap, margin.left - 5);
     
     row.append("text")
         .attr("x",n*x.rangeBand()+(x.rangeBand() / 2))
@@ -237,7 +237,7 @@ function matrix_graph(data){
         .attr("text-anchor", "middle")
 	.transition()
         .style("fill", "white")
-        .text(function (d, i) {return x.rangeBand() > 15 ? data.scores[i] : "";});
+        .text(function (d, i) {return x.rangeBand() > 18 ? data.scores[i] : "";});
 
     
     var column = svg.selectAll(".column")
@@ -253,7 +253,7 @@ function matrix_graph(data){
         .attr("text-anchor", "start")
         .style("fill", function (d, i) {return color_scores(data.scores[i]);})
         .text(function (d, i) {return (x.rangeBand() < 64 && candidates[i].length > 10) ? (candidates[i].slice(0,10) + " [...]") : candidates[i];})
-        .call(wrap, margin.top);
+        .call(wrap, margin.top - 5);
     
     svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -275,7 +275,7 @@ function matrix_graph(data){
             .attr("width", x.rangeBand())
             .attr("height", x.rangeBand())
 	    .style("stroke", "#fff")
-            .style("stroke-width", function(d) {return x.rangeBand() > 15 ? "2" : "0";})
+            .style("stroke-width", function(d) {return x.rangeBand() > 25 ? "2" : "0";})
             .style("fill", function (d, j) {return i == j ? "#ccc" : color_majority(d);});
 
         cell.append("text")
@@ -285,6 +285,6 @@ function matrix_graph(data){
             .attr("text-anchor", "middle")
 	    .transition()
             .style("fill", "white")
-            .text(function (d) {return x.rangeBand() > 15 ? d : "";});
+            .text(function (d) {return x.rangeBand() > 18 ? d : "";});
     }
 }
