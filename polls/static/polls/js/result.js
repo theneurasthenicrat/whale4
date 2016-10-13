@@ -46,9 +46,9 @@ drawGraph();
 
 
 function wrap(text, width) {
-    text.each(function() {
+    text.each(function(d) {
         var text = d3.select(this),
-            words = text.text().split("#").reverse(),
+	    words = text.text().split(/\s+|[#]/).reverse(),
             word,
             line = [],
             lineNumber = 0,
@@ -57,9 +57,9 @@ function wrap(text, width) {
             x = text.attr("x"),
             dy = parseFloat(text.attr("dy")),
             tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-        while (word = words.pop()) {
+	while (word = words.pop()) {
             line.push(word);
-            tspan.text(line.join("/"));
+            tspan.text(line.join(" "));
             if (tspan.node().getComputedTextLength() > width) {
                 line.pop();
                 tspan.text(line.join(" "));

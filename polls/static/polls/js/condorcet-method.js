@@ -180,28 +180,27 @@ function matrix_graph(data){
     var m = data.nbVoters;
     var n = candidates.length;
 
-    var margin = {top:100, right: 10, bottom: 20, left: 100};
-    var init_graph_width = $(window).width() > 970 ? 3 * $(window).width() / 4 : $(window).width();
-    var init_graph_height = $(window).height() - 150;
+    var margin = {top:100, right: 10, bottom: 10, left: 100};
+    var init_graph_width =  $("#graph").width() - 20;
+    var init_graph_height = $(window).height() - 40 - 60 - $(".polltitle").height();
     var smallest_dim = init_graph_width < init_graph_height ? init_graph_width : init_graph_height;
-    console.log(smallest_dim);
-    var width = ((init_graph_width > 970) ? init_graph_width / 1.6 : init_graph_width) - margin.right - margin.left;
-    var height = ((init_graph_height > 970) ? init_graph_height / 1.6 : init_graph_height) - margin.right - margin.left;
+    var width = smallest_dim - margin.right - margin.left;
+    var height = smallest_dim - margin.top - margin.bottom;
     var duel_text=d3.select("#duel_text").property("value");
     var colorTab = ["red", "#e1dd38", "green"];
     
     var orders = d3.range(n).sort(function(a, b) { return data.scores[b] - data.scores[a]; });
+    orders.push(n); // We do this because we need another column for the scores...
     var color_scores = d3.scale.linear().domain([d3.min(data.scores),d3.mean(data.scores),d3.max(data.scores)]).range(colorTab);
     var color_majority = d3.scale.linear().domain([0, m / 2, m]).range(colorTab);
-    var x = d3.scale.ordinal().rangeBands([0, width-margin.right-margin.left]).domain(orders);
+    var x = d3.scale.ordinal().rangeBands([0, smallest_dim-margin.right-margin.left]).domain(orders);
     var z = d3.scale.linear().domain([0, 4]).clamp(true);
     
     var svg = d3.select("#graph")
         .append("svg")
-        .attr("width", width+margin.left+margin.right+100 )
+        .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-        .style("margin-left", "10px")
-        .style("margin-top", "10px")
+        .style("margin", "10px")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -219,18 +218,16 @@ function matrix_graph(data){
         .attr("width", x.rangeBand())
         .attr("height", x.rangeBand())
     	.style("stroke", "#fff")
-        .style("stroke-width", "2")
+        .style("stroke-width", function(d) {return x.rangeBand() > 15 ? "2" : "0";})
         .style("fill", "#3375b3");
 
     row.append("text")
-	.attr("class", "machins")
         .attr("x", -6)
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "end")
-	.transition()
         .style("fill", function (d, i) {return color_scores(data.scores[i]);})
-        .text(function (d, i) {return candidates[i];})
+        .text(function (d, i) {return (x.rangeBand() < 64 && candidates[i].length > 10) ? (candidates[i].slice(0,10) + " [...]") : candidates[i];})
         .call(wrap, margin.left);
     
     row.append("text")
@@ -240,7 +237,7 @@ function matrix_graph(data){
         .attr("text-anchor", "middle")
 	.transition()
         .style("fill", "white")
-        .text(function (d, i) {return data.scores[i];});
+        .text(function (d, i) {return x.rangeBand() > 15 ? data.scores[i] : "";});
 
     
     var column = svg.selectAll(".column")
@@ -254,9 +251,8 @@ function matrix_graph(data){
         .attr("y", x.rangeBand() / 2)
         .attr("dy", ".32em")
         .attr("text-anchor", "start")
-	.transition()
         .style("fill", function (d, i) {return color_scores(data.scores[i]);})
-        .text(function (d, i) {return candidates[i];})
+        .text(function (d, i) {return (x.rangeBand() < 64 && candidates[i].length > 10) ? (candidates[i].slice(0,10) + " [...]") : candidates[i];})
         .call(wrap, margin.top);
     
     svg.append("text")
@@ -279,7 +275,7 @@ function matrix_graph(data){
             .attr("width", x.rangeBand())
             .attr("height", x.rangeBand())
 	    .style("stroke", "#fff")
-            .style("stroke-width", "2")
+            .style("stroke-width", function(d) {return x.rangeBand() > 15 ? "2" : "0";})
             .style("fill", function (d, j) {return i == j ? "#ccc" : color_majority(d);});
 
         cell.append("text")
@@ -289,6 +285,6 @@ function matrix_graph(data){
             .attr("text-anchor", "middle")
 	    .transition()
             .style("fill", "white")
-            .text(function (d) {return d;});
+            .text(function (d) {return x.rangeBand() > 15 ? d : "";});
     }
 }
