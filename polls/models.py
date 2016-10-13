@@ -112,7 +112,7 @@ class VotingPoll(Poll):
                 for vect in profile:
                     if vect[i] > vect[j]:
                         matrix[i][j] += 1
-                    else:
+                    elif vect[j] > vect[i]:
                         matrix[j][i] += 1
         return matrix
 
