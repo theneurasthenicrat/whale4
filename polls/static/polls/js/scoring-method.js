@@ -40,7 +40,10 @@ function scoring_plot(scoring) {
 
 
 function bar_chart(data) {
-    var margin = {top: 40, right: 100, bottom: 70, left: 60},
+    maxCandidateLength = d3.max(data, function(d) { return d.x.length });
+    maxCandidateWidth = d3.max(data, function(d) {return getTextWidth(d.x, 'Lato', 14) / 1.4;})
+
+    var margin = {top: 40, right: 100, bottom: 40 + maxCandidateWidth, left: 60},
 	init_graph_width = ($(window).width() > 970 ? 3 * $(window).width() / 4 : $(window).width()) - 50,
 	init_graph_height = $(window).height() - 230,
         width  = init_graph_width - margin.right - margin.left,
