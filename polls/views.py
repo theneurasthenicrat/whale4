@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
@@ -354,17 +354,14 @@ def success(request, pk):
                     nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
                     certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
                 )
-                subject, from_email, to = '[Whale4] Invitation to vote #' + str(poll.pk), 'whale4.ad@gmail.com', email
-                #                htmly = get_template('polls/email.html')
+                subject, from_email, to = '[Whale4] Invitation to participate in election #' + str(poll.pk), 'whale4.ad@gmail.com', email
+                htmly = get_template('polls/email.html')
                 url="http://strokes.imag.fr/whale4/polls/vote/"+str(poll.pk)
-                #                d = Context({'poll': poll, 'certi':certi,'url':url})
                 d = {'poll': poll, 'certi':certi,'url':url}
-                #               html_content = htmly.render(d)
                 txt_content = (_('Email text template with url %(url)s and certificate %(certi)s.')) % d
-                #msg = EmailMessage(subject, html_content, from_email, [to])
-                #msg.content_subtype = "html"
-                msg = EmailMessage(subject, txt_content, from_email, [to])
-                msg.content_subtype = "txt"
+                html_content = htmly.render(Context(d))
+                msg = EmailMultiAlternatives(subject, txt_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
                 msg.send()
 
             messages.success(request, mark_safe(_('Invited voters successfully added!')))

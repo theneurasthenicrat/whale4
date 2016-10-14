@@ -68,10 +68,10 @@
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            <h4 class="modal-title">{% blocktrans with c=c %}Delete "{{ c }}"{% endblocktrans %}</h4>
+                                                                            <h4 class="modal-title">{% blocktrans with c=v.email %}Delete "{{ c }}"{% endblocktrans %}</h4>
                                                                         </div>
                                                                         <div class="modal-body">
-                                                                            <p>{% blocktrans with c=c %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
+                                                                            <p>{% blocktrans with c=v.email %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                                                         </div>
                                                                         <div class="modal-footer">
                                                                             <a href="{% url 'deleteAnonymous' pk=poll.pk voter=v.id%}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>

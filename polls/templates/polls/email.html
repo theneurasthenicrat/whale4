@@ -12,9 +12,10 @@
 </head>
 <body >
 <div style="padding: 20px;">
- <h3>Whale4 <small>{% trans 'WHich ALternative is Elected' %}</small></h3>
+  <h3>Whale4</h3>
+  <h4>{% trans 'WHich ALternative is Elected' %}</h4>
 
-    {% blocktrans with url=url certi=certi %}Email text template with url {{ url }} and certificate {{ certi }}.{% endblocktrans %}
+    {% blocktrans with url=url certi=certi %}Email html template with url {{ url }} and certificate {{ certi }}.{% endblocktrans %}
 </div>
 </body>
 </html>
