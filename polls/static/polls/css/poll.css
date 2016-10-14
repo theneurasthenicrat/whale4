@@ -494,16 +494,23 @@ footer {
     }
 }
 
+
 .btn-custom:hover,
 .btn-custom:focus,
-.btn-custom:active,
-.btn-custom.active,
 .open .dropdown-toggle.btn-custom {
     color: #ffffff;
     background-color: rgba(51, 117, 179, 1);
     transition: all .2s linear;	
     box-shadow: 0px 0px 5px #888888;
 }
+
+.btn-custom:active,
+.btn-custom.active {
+    color: rgba(51, 117, 179, 0.9);
+    background-color: #ffffff;
+    transition: all .2s linear;
+}
+
 
 /*.btn-custom:active,
 .btn-custom.active,
