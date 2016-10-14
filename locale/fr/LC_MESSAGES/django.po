@@ -1370,23 +1370,23 @@ msgstr "Anglais"
 #~ "%(url)sThen, enter your personal certificate which is the following one:"
 #~ "%(certi)s.The Whale thanks you for using Whale4."
 
-#~ msgid "--"
-#~ msgstr "--"
+msgid "--"
+msgstr "--"
 
-#~ msgid "-"
-#~ msgstr "-"
+msgid "-"
+msgstr "-"
 
-#~ msgid "0"
-#~ msgstr "0"
+msgid "0"
+msgstr "0"
 
-#~ msgid "+"
-#~ msgstr "+"
+msgid "+"
+msgstr "+"
 
-#~ msgid "++"
-#~ msgstr "++"
+msgid "++"
+msgstr "++"
 
-#~ msgid "no"
-#~ msgstr "non"
+msgid "no"
+msgstr "non"
 
-#~ msgid "yes"
-#~ msgstr "oui"
+msgid "yes"
+msgstr "oui"
