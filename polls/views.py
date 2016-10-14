@@ -694,7 +694,7 @@ def result_view(request, pk ,method):
     if method == 3:
         title = _('runoff method title')
         label = _('runoff label')
-        options = [{'value': 'stv', 'name': _('STV')}, {'value': 'trm', 'name': _('Two Round majority')}]
+        options = [{'value': 'trm', 'name': _('Two Round majority')},{'value': 'stv', 'name': _('STV')}]
         explanation = mark_safe(_('runoff method explanation'))
 
     if method ==4:
