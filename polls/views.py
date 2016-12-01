@@ -77,18 +77,21 @@ def with_voter_rights(init_fn):
     return _wrapped
 
 
-def with_view_rights(fn):
-    def wrapped(request, pk, *args, **kwargs):
-        poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.ballot_type=="Experimental" and (request.user is None or request.user != poll.admin):
-            messages.error(request,  mark_safe(_("you are not the poll administrator")))
+def with_viewing_rights(init_fn):
+    """This decorator enriches a function by performing
+    an initial check to determine whether the user
+    has the right to see the requested poll."""
+    def _wrapped(request, poll, *args, **kwargs):
+        if poll.ballot_type == "Experimental"\
+           and (not request.user or request.user != poll.admin):
+            messages.error(request, mark_safe(_("you are not the poll administrator")))
             return redirect(reverse_lazy('redirectPage'))
-        elif poll.ballot_type=="Secret" and not poll.is_closed():
+        elif poll.ballot_type == "Secret" and not poll.is_closed():
             messages.error(request, mark_safe(_("The poll is not closed")))
             return redirect(reverse_lazy('redirectPage'))
-        return fn(request, pk, *args, **kwargs)
+        return init_fn(request, poll, *args, **kwargs)
 
-    return wrapped
+    return _wrapped
 
 
 def certificate_required(fn):
@@ -254,7 +257,7 @@ def option(request, pk):
 
 
 @login_required
-@with_view_rights
+@with_viewing_rights
 def status(request, pk):
     poll = get_object_or_404(VotingPoll, id=pk)
     form = StatusForm(instance=poll)
@@ -611,31 +614,13 @@ def delete_vote(request, poll, voter):
     else:
         return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
-def view_poll_secret(request, pk ,voter):
 
-    poll = get_object_or_404(VotingPoll, id=pk)
-    voter = get_object_or_404(User, id=voter)
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id).order_by('candidate')
-    candidates = Candidate.objects.filter(poll_id=poll.id)
-    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
-    tab = []
-    for v in votes:
-        score = v.value
-        tab.append({
-            'value': score,
-            'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
-                                                          1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
-            'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
-
-        })
-
-    return render(request, 'polls/secret_view.html',locals() )
+# different views on the polls #################################################
 
 
-@with_view_rights
-def view_poll(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
-
+@with_valid_poll
+@with_viewing_rights
+def view_poll(request, poll):
     if "format" in request.GET:
         if request.GET['format'] == 'json':
             return _view_poll_as_json(poll)
@@ -683,6 +668,28 @@ def view_poll(request, pk):
         'is_closed': is_closed,
         'col_width': int(85 / len(candidates))
     })
+
+
+def view_poll_secret(request, pk ,voter):
+
+    poll = get_object_or_404(VotingPoll, id=pk)
+    voter = get_object_or_404(User, id=voter)
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id).order_by('candidate')
+    candidates = Candidate.objects.filter(poll_id=poll.id)
+    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
+    tab = []
+    for v in votes:
+        score = v.value
+        tab.append({
+            'value': score,
+            'class': 'poll-{0:d}percent'.format(int(round(preference_model.evaluate(score),
+                                                          1) * 100)) if score != UNDEFINED_VALUE else 'poll-undefined',
+            'text': preference_model.value2text(score) if score != UNDEFINED_VALUE else "?"
+
+        })
+
+    return render(request, 'polls/secret_view.html',locals() )
+
 
 
 def _view_poll_as_json(poll, aggregate=None):

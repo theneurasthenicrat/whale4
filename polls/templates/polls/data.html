@@ -17,7 +17,7 @@
         <!-- Page Features -->
         <div class="row text-center result">
 
-            <div class="col-md-4 col-sm-6 "><a href= "{% url 'viewPoll' pk=poll.pk %}?format=json" class="thumbnail">
+            <div class="col-md-4 col-sm-6 "><a href= "{% url 'viewPoll' poll.pk %}?format=json" class="thumbnail">
 
                 <img src="{% static 'polls/images/data-json.jpeg' %}" class="img-thumbnail" alt="">
                 <span class="caption">
@@ -27,7 +27,7 @@
             </a>
             </div>
 
-            <div class="col-md-4 col-sm-6 " ><a href="{% url 'viewPoll' pk=poll.pk %}?format=preflib" class="thumbnail">
+            <div class="col-md-4 col-sm-6 " ><a href="{% url 'viewPoll' poll.pk %}?format=preflib" class="thumbnail">
 
                 <img src="{% static 'polls/images/data-preflib.jpeg' %}" class="img-thumbnail" alt="">
                 <span class="caption">
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col-md-4 col-sm-6 ">
-                <a href= "{% url 'viewPoll' pk=poll.pk %}?format=csv" class="thumbnail">
+                <a href= "{% url 'viewPoll' poll.pk %}?format=csv" class="thumbnail">
 
                     <img src="{% static 'polls/images/data-csv.png' %}"  class="img-thumbnail" alt="">
             <span class="caption">
