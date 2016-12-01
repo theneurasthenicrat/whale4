@@ -27,7 +27,7 @@ from polls.utils import days_months, voters_undefined, scoring_method,\
     condorcet_method, runoff_method, randomized_method
 
 
-# decorators #################################################################
+# decorators ###################################################################
 
 
 def with_valid_poll(init_fn):
@@ -423,6 +423,7 @@ def certificate(request, pk):
 
     return render(request, 'polls/certificate.html', locals())
 
+# vote modification (create/update/delete) #####################################
 
 @certificate_required
 @status_required
@@ -590,17 +591,25 @@ def update_vote(request, poll, voter):
 @with_valid_poll
 @with_voter_rights
 def delete_vote(request, poll, voter):
+    """This function deletes an existing vote.
 
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
-    votes.delete()
-    if poll.ballot_type=="Secret":
+    Arguments:
+    - the originating HTTP request
+    - the poll concerned
+    - the voter concerned"""
+
+    # First we get the scores associated to the voter...
+    scores = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+    # ...And delete them
+    scores.delete()
+    if poll.ballot_type == "Secret":
         del request.session["user"]
-    messages.success(request,  mark_safe(_('Your vote has been deleted!')))
-    if poll.ballot_type=="Secret":
+    messages.success(request, mark_safe(_('Your vote has been deleted!')))
+    # Then we redirect to the poll view page...
+    if poll.ballot_type == "Secret":
         return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
     else:
         return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
-
 
 def view_poll_secret(request, pk ,voter):
 
