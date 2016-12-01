@@ -35,7 +35,6 @@ def with_valid_poll(init_fn):
     actual poll object (or returns a 404 error if such
     a poll does not exist)..."""
     def _wrapped(request, poll_id, *args, **kwargs):
-        print(poll_id)
         poll = get_object_or_404(VotingPoll, id=poll_id)
         return init_fn(request, poll, *args, **kwargs)
     return _wrapped
@@ -427,68 +426,97 @@ def certificate(request, pk):
 
 @certificate_required
 @status_required
-def vote(request, pk):
+@with_valid_poll
+def vote(request, poll):
+    """This function creates a new vote.
 
-    poll = get_object_or_404(VotingPoll, id=pk)
+    Arguments:
+    - the originating HTTP request
+    - the poll concerned
+    - the voter concerned"""
+
     if poll.is_closed():
-        messages.error (request,  mark_safe(_('poll closed, you cannot vote anymore')))
+        messages.error(request, mark_safe(_('poll closed, you cannot vote anymore')))
         return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-        
-    candidates =Candidate.objects.filter(poll_id=poll.id)
+
+    # First we get all the objects we need:
+    # list of candidates, preference model, scores given by the voter
+    candidates = Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
-        candidates=list(candidates)
+        candidates = list(candidates)
         shuffle(candidates)
-
     preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-    if poll.poll_type == 'Date':
-        (days, months) = days_months(candidates)
 
-    read = True
-    if not poll.ballot_type=="Secret":
-        if poll.ballot_type=="Experimental":
+    # This variable determines whether the nickname can be set or not
+    read_only_nickname = True
+    # Here we will get the voter or create a new one
+    voter = None
+    if poll.ballot_type == "Secret":
+        voter = get_object_or_404(WhaleUserAnonymous, id=request.session["user"])
+    else:
+        if poll.ballot_type == "Experimental":
             voter = UserAnonymous(nickname=UserAnonymous.nickname_generator(poll.id), poll=poll)
         elif request.user.is_authenticated():
-            voter=request.user
+            voter = request.user
         else:
-            read=False
+            read_only_nickname = False
             voter = User()
-    else:
-        user_id = request.session["user"]
-        voter = get_object_or_404(WhaleUserAnonymous, id= user_id)
 
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
-    if votes:
-        messages.info(request,  mark_safe(_('you have already voted, now you can update your vote')))
+    scores = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+    if scores:
+        messages.info(request,
+                      mark_safe(_('you have already voted, now you can update your vote')))
         return redirect(reverse_lazy(update_vote, args=[poll.id, voter.id]))
 
-    form = VotingForm(candidates, preference_model,poll)
+    # The two forms in the page (nickname, voting form)
+    voting_form, nickname_form = None, None
 
-    form1= NickNameForm(read,initial={'nickname':voter.nickname})
-    cand = [c.candidate for c in candidates if c.candidate]
+    # If some data has already been posted, we need:
+    # - to check for errors
+    # - to update the voter's scores
     if request.method == 'POST':
-        if poll.ballot_type=="Secret" and "user" in request.session:
+        if poll.ballot_type == "Secret" and "user" in request.session:
             del request.session["user"]
-        form = VotingForm(candidates, preference_model,poll,request.POST)
-        form1 = NickNameForm(read, request.POST)
+        voting_form = VotingForm(candidates, preference_model, poll, request.POST)
+        nickname_form = NickNameForm(read_only_nickname, request.POST)
 
-        if form.is_valid() and form1.is_valid():
-            voter.nickname = form1.cleaned_data['nickname']
+        if voting_form.is_valid() and nickname_form.is_valid():
+            voter.nickname = nickname_form.cleaned_data['nickname']
             voter.save()
             today = datetime.now()
-            for c in candidates:
-                VotingScore.objects.create(candidate=c,last_modification=today, voter=voter, value=form.cleaned_data['value' + str(c.id)])
-            messages.success(request,  mark_safe(_('Your vote has been added to the poll, thank you!')))
-            if poll.ballot_type=="Secret":
-                return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk,'voter':voter.id}))
-            elif poll.ballot_type=="Experimental":
-                if poll.option_blocking_poll:
-                    poll.status_poll=False
+            for candidate in candidates:
+                VotingScore.objects.create(
+                    candidate=candidate,
+                    last_modification=today,
+                    voter=voter,
+                    value=voting_form.cleaned_data['value' + str(candidate.id)]
+                )
+            messages.success(request,
+                             mark_safe(_('Your vote has been added to the poll, thank you!')))
+            if poll.ballot_type == "Secret":
+                return redirect(reverse_lazy(
+                    view_poll_secret,
+                    kwargs={'pk': poll.pk, 'voter':voter.id}
+                ))
+            else:
+                if poll.ballot_type == "Experimental" and poll.option_blocking_poll:
+                    poll.status_poll = False
                     poll.save()
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
-            else:
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+    else: # a GET request...
+        voting_form = VotingForm(candidates, preference_model, poll)
+        nickname_form = NickNameForm(read_only_nickname, initial={'nickname': voter.nickname})
 
-    return render(request, 'polls/vote.html', locals())
+    days, months = days_months(candidates) if poll.poll_type == 'Date' else [], []
+
+    return render(request, 'polls/vote.html', {
+        'poll': poll,
+        'candidates': candidates,
+        'votingform': voting_form,
+        'nicknameform': nickname_form,
+        'days': days,
+        'months': months
+    })
 
 @certificate_required
 @with_valid_poll
