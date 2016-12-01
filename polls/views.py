@@ -444,7 +444,7 @@ def vote(request, pk):
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     if votes:
         messages.info(request,  mark_safe(_('you have already voted, now you can update your vote')))
-        return redirect(reverse_lazy(update_vote, kwargs={'pk': poll.id, 'voter': voter.id}))
+        return redirect(reverse_lazy(update_vote, kwargs={'poll_id': poll.id, 'voter_id': voter.id}))
 
     form = VotingForm(candidates, preference_model,poll)
 
@@ -478,51 +478,71 @@ def vote(request, pk):
 
 @certificate_required
 @with_voter_rights
-def update_vote(request, pk, voter):
-    poll = VotingPoll.objects.get(id=pk)
-    candidates =Candidate.objects.filter(poll_id=poll.id)
+def update_vote(request, poll_id, voter_id):
+    """This function creates modifies an existing vote.
+
+    Arguments:
+    - the originating HTTP request
+    - the poll's id
+    - the concerned voter's id"""
+
+    # First we get all the objects we need:
+    # poll, list of candidates, voter, scores given by this voter
+    poll = VotingPoll.objects.get(id=poll_id)
+    candidates = Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
-        candidates=list(candidates)
+        candidates = list(candidates)
         shuffle(candidates)
-    preference_model = preference_model_from_text(poll.preference_model,len(candidates))
-    voter = User.objects.get(id=voter)
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
+    preference_model = preference_model_from_text(poll.preference_model, len(candidates))
+    voter = User.objects.get(id=voter_id)
+    scores = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
 
-    initial = dict()
-    for v in votes:
-        initial['value' + str(v.candidate.id)] = v.value
-    read = True
-    if not poll.ballot_type=="Secret" and not request.user.is_authenticated():
-        read = False
+    # Creates the dictionnary of initial values
+    # Corresponding to previous votes
+    initial = {'value' + str(score.candidate.id): score.value for score in scores}
 
-    if poll.poll_type == 'Date':
-        (days, months) = days_months(candidates)
+    # This variable determines whether the nickname can be set or not
+    read_only_nickname = poll.ballot_type == "Secret" or request.user.is_authenticated()
 
+    # The two forms in the page (nickname, voting form)
+    voting_form = VotingForm(candidates, preference_model, poll, initial=initial)
+    nickname_form = NickNameForm(read_only_nickname, initial={'nickname': voter.nickname})
 
-    form = VotingForm(candidates, preference_model,poll, initial=initial)
-    form1 = NickNameForm(read,initial={'nickname':voter.nickname})
-    cand = [c.candidate for c in candidates if c.candidate]
+    # If some data has already been posted, we need:
+    # - to check for errors
+    # - to update the voter's scores
     if request.method == 'POST':
-        form = VotingForm(candidates, preference_model,poll, request.POST)
-        form1 = NickNameForm(read, request.POST)
-        if poll.ballot_type=="Secret" and "user" in request.session:
+        voting_form = VotingForm(candidates, preference_model, poll, request.POST)
+        nickname_form = NickNameForm(read_only_nickname, request.POST)
+        if poll.ballot_type == "Secret" and "user" in request.session:
             del request.session["user"]
-        if form.is_valid() and form1.is_valid():
-            data = form.cleaned_data
-            voter.nickname = form1.cleaned_data['nickname']
+        if voting_form.is_valid() and nickname_form.is_valid():
+            data = voting_form.cleaned_data
+            voter.nickname = nickname_form.cleaned_data['nickname']
             voter.save()
-            today=datetime.now()
-            for v in votes:
-                v.value = data['value' + str(v.candidate.id)]
-                v.last_modification= today
-                v.save()
-            messages.success(request,  mark_safe(_('Your vote has been updated, thank you!')))
-            if poll.ballot_type=="Secret":
-                return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
+            for score in scores:
+                score.value = data['value' + str(score.candidate.id)]
+                score.last_modification = datetime.now()
+                score.save()
+            messages.success(request, mark_safe(_('Your vote has been updated, thank you!')))
+            if poll.ballot_type == "Secret":
+                return redirect(reverse_lazy(
+                    view_poll_secret,
+                    kwargs={'pk': poll.pk, 'voter': voter.id}
+                ))
             else:
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
 
-    return render(request, 'polls/vote.html',locals())
+    days, months = days_months(candidates) if poll.poll_type == 'Date' else [], []
+
+    return render(request, 'polls/vote.html', {
+        'poll': poll,
+        'candidates': candidates,
+        'votingform': voting_form,
+        'nicknameform': nickname_form,
+        'days': days,
+        'months': months
+    })
 
 
 @certificate_required

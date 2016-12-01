@@ -29,7 +29,7 @@
                     {% csrf_token %}
                     <div class=" well-lg clearfix">
                         <div class=" col-lg-6">
-                            {% bootstrap_form form1 %}
+                            {% bootstrap_form nicknameform %}
                         </div>
                     </div>
 
@@ -62,7 +62,7 @@
                             </ol>
                         </div>
                     </div>
-                    {{ form }}
+                    {{ votingform }}
                     <button id="submit" type="submit" class="btn btn-success pull-right btn-lg col-xs-4 col-sm-3 col-md-2 " >{% bootstrap_icon "ok" %} {%trans 'Submit' %}</button>
                 </form>
             <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom btn-lg col-xs-4 col-sm-3 col-md-2 ">{% bootstrap_icon "list" %} {% trans 'Back to the poll' %}</a>
@@ -72,7 +72,7 @@
 
                 <form action="" method="post">
                     {% csrf_token %}
-                    {% bootstrap_form_errors form %}
+                    {% bootstrap_form_errors votingform %}
                     <div class="table-responsive">
                         <table class="table poll-table responsive"  >
                             <thead >
@@ -121,10 +121,10 @@
                                 <td class="border text-right" >
 
                                     <div class="form-group">
-                                        {% bootstrap_form form1 show_label=False %}
+                                        {% bootstrap_form nicknameform show_label=False %}
                                     </div>
                                 </td>
-                                {% for field in form %}
+                                {% for field in votingform %}
 
                                     <td >
                                         {% bootstrap_field field show_label=False %}
