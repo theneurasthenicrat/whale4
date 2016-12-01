@@ -100,7 +100,7 @@
             {% else %}
             {% if v.modify %}
           <td class="controls">
-            <a href="{% url 'updateVote' pk=poll.id voter=v.id %}" >{% bootstrap_icon "pencil" %}</a>
+            <a href="{% url 'updateVote' poll.id v.id %}" >{% bootstrap_icon "pencil" %}</a>
 	    
             <a href="#" class="remove" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">{% bootstrap_icon "remove" %}</a>
             <div class="modal fade" id="myModal{{ forloop.counter }}" role="dialog">
@@ -114,7 +114,7 @@
                     <p>{% trans 'Do you really want to delete this vote?' %}</p>
                   </div>
                   <div class="modal-footer">
-                    <a href="{% url 'deleteVote' pk=poll.id voter=v.id %}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
+                    <a href="{% url 'deleteVote' poll.id v.id %}" class="btn btn-ok ">{% trans 'OK' %} {% bootstrap_icon "ok" %} </a >
                     <button type="button" class="btn btn-cancel" data-dismiss="modal">{% trans 'Cancel'%} {% bootstrap_icon "remove" %}</button>
                   </div>
 		  

@@ -30,6 +30,16 @@ from polls.utils import days_months, voters_undefined, scoring_method,\
 # decorators #################################################################
 
 
+def with_valid_poll(init_fn):
+    """This decorator transforms a poll_id into an
+    actual poll object (or returns a 404 error if such
+    a poll does not exist)..."""
+    def _wrapped(request, poll_id, *args, **kwargs):
+        print(poll_id)
+        poll = get_object_or_404(VotingPoll, id=poll_id)
+        return init_fn(request, poll, *args, **kwargs)
+    return _wrapped
+
 def with_admin_rights(fn):
     def wrapped(request, pk,*args, **kwargs):
         poll = get_object_or_404(VotingPoll, id=pk)
@@ -39,28 +49,33 @@ def with_admin_rights(fn):
         return fn(request,pk,*args, **kwargs)
     return wrapped
 
+def with_voter_rights(init_fn):
+    """This decorator transforms a voter_id into an
+    actual voter object (or returns a 404 error if such
+    a voter does not exist)...
 
-def with_voter_rights(fn):
-    def wrapped(request, pk,voter):
-        poll = get_object_or_404(VotingPoll, id=pk)
-        user = get_object_or_404(User, id=voter)
-        if poll.ballot_type =="Experimental":
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
+    def _wrapped(request, poll, voter_id, *args, **kwargs):
+        voter = get_object_or_404(User, id=voter_id)
+        if poll.ballot_type == "Experimental":
             messages.error(request, mark_safe(_('Experimental vote can not be updated')))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
-        if poll.ballot_type =="Secret" :
-            if "user" in request.session and request.session["user"]==user.id:
-                return fn(request, pk, voter)
+        if poll.ballot_type == "Secret":
+            if "user" in request.session and request.session["user"] == voter.id:
+                return init_fn(request, poll, voter, *args, **kwargs)
             else:
                 messages.error(request, mark_safe(_('This is not your vote')))
                 return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
 
-        if not (isinstance(user,WhaleUser)) or (request.user is not None and request.user.id == user.id):
-            return fn(request, pk, voter)
+        if not (isinstance(voter, WhaleUser)) or\
+           (request.user is not None and request.user.id == voter.id):
+            return init_fn(request, poll, voter, *args, **kwargs)
         else:
             messages.error(request, mark_safe(_('This is not your vote')))
             return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
 
-    return wrapped
+    return _wrapped
 
 
 def with_view_rights(fn):
@@ -444,7 +459,7 @@ def vote(request, pk):
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     if votes:
         messages.info(request,  mark_safe(_('you have already voted, now you can update your vote')))
-        return redirect(reverse_lazy(update_vote, kwargs={'poll_id': poll.id, 'voter_id': voter.id}))
+        return redirect(reverse_lazy(update_vote, args=[poll.id, voter.id]))
 
     form = VotingForm(candidates, preference_model,poll)
 
@@ -475,26 +490,24 @@ def vote(request, pk):
 
     return render(request, 'polls/vote.html', locals())
 
-
 @certificate_required
+@with_valid_poll
 @with_voter_rights
-def update_vote(request, poll_id, voter_id):
-    """This function creates modifies an existing vote.
+def update_vote(request, poll, voter):
+    """This function modifies an existing vote.
 
     Arguments:
     - the originating HTTP request
-    - the poll's id
-    - the concerned voter's id"""
+    - the poll concerned
+    - the voter concerned"""
 
     # First we get all the objects we need:
-    # poll, list of candidates, voter, scores given by this voter
-    poll = VotingPoll.objects.get(id=poll_id)
+    # list of candidates, preference model, scores given by the voter
     candidates = Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
         candidates = list(candidates)
         shuffle(candidates)
     preference_model = preference_model_from_text(poll.preference_model, len(candidates))
-    voter = User.objects.get(id=voter_id)
     scores = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
 
     # Creates the dictionnary of initial values
@@ -546,11 +559,10 @@ def update_vote(request, poll_id, voter_id):
 
 
 @certificate_required
+@with_valid_poll
 @with_voter_rights
-def delete_vote(request, pk, voter):
+def delete_vote(request, poll, voter):
 
-    poll = get_object_or_404(VotingPoll, id=pk)
-    voter = get_object_or_404(User, id=voter)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).filter(voter=voter.id)
     votes.delete()
     if poll.ballot_type=="Secret":
