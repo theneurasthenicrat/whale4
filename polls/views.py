@@ -100,29 +100,40 @@ def with_viewing_rights(init_fn):
     return _wrapped
 
 
-def certificate_required(fn):
-    def wrapped(request, pk, *args, **kwargs):
+def certificate_required(init_fn):
+    """This decorator enriches a function by performing
+    an initial check to determine whether a certificate
+    is required and not provided.
+
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
+    def _wrapped(request, poll, *args, **kwargs):
         path = request.get_full_path()
-        poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.ballot_type=="Secret" and "user" not in request.session:
+        if poll.ballot_type == "Secret" and "user" not in request.session:
             return redirect("{url}?next={path}".format(
-                url = reverse_lazy(certificate, kwargs={'pk': poll.id, }),
-                path = str(path)))
-        return fn(request, pk, *args, **kwargs)
-    return wrapped
+                url=reverse_lazy(certificate, kwargs={'pk': poll.id, }),
+                path=str(path)))
+        return init_fn(request, poll, *args, **kwargs)
+    return _wrapped
 
 
-def status_required(fn):
-    def wrapped(request, pk, *args, **kwargs):
-        poll = get_object_or_404(VotingPoll, id=pk)
-        if poll.ballot_type=="Experimental" and (  poll.option_blocking_poll and not poll.status_poll):
+def status_required(init_fn):
+    """This decorator enriches a function by performing
+    an initial check to determine whether a poll is currently
+    blocked or not (concerns experimental polls).
+
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
+    def _wrapped(request, poll, *args, **kwargs):
+        if poll.ballot_type == "Experimental" and\
+           (poll.option_blocking_poll and not poll.status_poll):
             messages.error(request, mark_safe(_("the poll is blocked")))
             return redirect(reverse_lazy('redirectPage'))
-        return fn(request, pk, *args, **kwargs)
-    return wrapped
+        return init_fn(request, poll, *args, **kwargs)
+    return _wrapped
 
 
-def minimum_candidates_required(fn):
+def minimum_candidates_required(init_fn):
     """This decorator checks whether there are enough candidates
     in the poll (at least 2). Otherwise it returns an error.
 
@@ -133,7 +144,7 @@ def minimum_candidates_required(fn):
         if candidates.count() < 2:
             messages.error(request, mark_safe(_('You must add at least two candidates')))
             return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
-        return fn(request, poll, *args, **kwargs)
+        return init_fn(request, poll, *args, **kwargs)
     return _wrapped
 
 
@@ -410,12 +421,12 @@ def delete_anonymous(request, poll, voter_id):
     return redirect(reverse_lazy(success, kwargs={'pk': poll.pk}))
 
 
-def certificate(request, pk):
+@with_valid_poll
+def certificate(request, poll):
     next_url = None
     if request.GET:
         next_url = request.GET['next']
 
-    poll = get_object_or_404(VotingPoll, id=pk)
     form = BallotForm()
     if request.method == 'POST':
         form = BallotForm(request.POST)
@@ -438,9 +449,9 @@ def certificate(request, pk):
 
 # vote modification (create/update/delete) #####################################
 
+@with_valid_poll
 @certificate_required
 @status_required
-@with_valid_poll
 def vote(request, poll):
     """This function creates a new vote.
 
@@ -532,8 +543,8 @@ def vote(request, poll):
         'months': months
     })
 
-@certificate_required
 @with_valid_poll
+@certificate_required
 @with_voter_rights
 def update_vote(request, poll, voter):
     """This function modifies an existing vote.
@@ -600,8 +611,8 @@ def update_vote(request, poll, voter):
     })
 
 
-@certificate_required
 @with_valid_poll
+@certificate_required
 @with_voter_rights
 def delete_vote(request, poll, voter):
     """This function deletes an existing vote.
@@ -738,12 +749,12 @@ def _view_poll_as_preflib(poll):
     return response
 
 
-def result_all(request, pk ):
-    poll = get_object_or_404(VotingPoll, id=pk)
+@with_valid_poll
+def result_all(request, poll):
     return render(request, 'polls/all_result.html', locals())
 
-
-def result_view(request, pk ,method):
+@with_valid_poll
+def result_view(request, poll, method):
     poll = get_object_or_404(VotingPoll, id=pk)
     method=int(method)
     voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).annotate(
@@ -790,8 +801,8 @@ def result_view(request, pk ,method):
     return render(request, 'polls/detail_result.html', locals())
 
 
-def result_scores(request, pk,method):
-    poll = get_object_or_404(VotingPoll, id=pk)
+@with_valid_poll
+def result_scores(request, poll, method):
     candidates = Candidate.objects.filter(poll_id=poll.id)
     votes = VotingScore.objects.filter(candidate__poll__id=poll.id).values('voter__id','candidate__id','value')
     voters = VotingScore.objects.values_list('voter__id', flat=True).filter(candidate__poll__id=poll.id)
@@ -820,8 +831,8 @@ def result_scores(request, pk,method):
     return HttpResponse(json.dumps(data, indent=4, sort_keys=True), content_type="application/json")
 
 
-def data_page(request, pk ):
-    poll = get_object_or_404(VotingPoll, id=pk)
+@with_valid_poll
+def data_page(request, poll):
     return render(request, 'polls/data.html', locals())
 
 
