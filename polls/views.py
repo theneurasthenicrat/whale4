@@ -39,14 +39,18 @@ def with_valid_poll(init_fn):
         return init_fn(request, poll, *args, **kwargs)
     return _wrapped
 
-def with_admin_rights(fn):
-    def wrapped(request, pk,*args, **kwargs):
-        poll = get_object_or_404(VotingPoll, id=pk)
+def with_admin_rights(init_fn):
+    """This decorator checks whether the request.user has administration
+    rights on the poll.
+
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
+    def _wrapped(request, poll, *args, **kwargs):
         if request.user is None or request.user != poll.admin:
             messages.error(request, mark_safe(_("you are not the poll administrator")))
             return redirect(reverse_lazy('redirectPage'))
-        return fn(request,pk,*args, **kwargs)
-    return wrapped
+        return init_fn(request, poll, *args, **kwargs)
+    return _wrapped
 
 def with_voter_rights(init_fn):
     """This decorator transforms a voter_id into an
@@ -76,11 +80,13 @@ def with_voter_rights(init_fn):
 
     return _wrapped
 
-
 def with_viewing_rights(init_fn):
     """This decorator enriches a function by performing
     an initial check to determine whether the user
-    has the right to see the requested poll."""
+    has the right to see the requested poll.
+
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
     def _wrapped(request, poll, *args, **kwargs):
         if poll.ballot_type == "Experimental"\
            and (not request.user or request.user != poll.admin):
@@ -117,14 +123,18 @@ def status_required(fn):
 
 
 def minimum_candidates_required(fn):
-    def wrapped(request, pk, *args, **kwargs):
-        poll = get_object_or_404(VotingPoll, id=pk)
-        candidates =  Candidate.objects.filter(poll_id=poll.id)
+    """This decorator checks whether there are enough candidates
+    in the poll (at least 2). Otherwise it returns an error.
+
+    The decorator assumes that a valid poll has been
+    specified as first argument..."""
+    def _wrapped(request, poll, *args, **kwargs):
+        candidates = Candidate.objects.filter(poll_id=poll.id)
         if candidates.count() < 2:
             messages.error(request, mark_safe(_('You must add at least two candidates')))
             return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
-        return fn(request, pk, *args, **kwargs)
-    return wrapped
+        return fn(request, poll, *args, **kwargs)
+    return _wrapped
 
 
 # views ######################################################################
@@ -161,17 +171,17 @@ def choice(request):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
 @minimum_candidates_required
-def admin_poll(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def admin_poll(request, poll):
     request.session["update"] = 1
     return render(request, 'polls/admin.html',locals())
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def reset_poll(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def reset_poll(request, poll):
     VotingScore.objects.filter(candidate__poll__id=poll.id).delete()
     messages.success(request, mark_safe(_('Poll successfully reset.')))
     return render(request, 'polls/admin.html', locals())
@@ -204,9 +214,9 @@ def new_poll(request, choice ):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def update_voting_poll(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def update_voting_poll(request, poll):
     update_poll=True
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
@@ -232,9 +242,9 @@ def update_voting_poll(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def delete_poll(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def delete_poll(request, poll):
     admin=request.user.id
     poll.delete()
     messages.success(request, mark_safe(_('Your poll has been deleted!')))
@@ -242,10 +252,10 @@ def delete_poll(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
 @minimum_candidates_required
-def option(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def option(request, poll):
     form = OptionForm(instance=poll)
     if request.method == 'POST':
         form = OptionForm(request.POST, instance=poll)
@@ -257,9 +267,9 @@ def option(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_viewing_rights
-def status(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def status(request, poll):
     form = StatusForm(instance=poll)
     if request.method == 'POST':
         form = StatusForm(request.POST,instance=poll)
@@ -271,9 +281,9 @@ def status(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def manage_candidate(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def manage_candidate(request, poll):
     if poll.option_modify:
         if poll.poll_type != 'Date':
             return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
@@ -285,9 +295,9 @@ def manage_candidate(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def candidate_create(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def candidate_create(request, poll):
     candidates = Candidate.objects.filter(poll_id=poll.id)
     form = CandidateForm()
 
@@ -311,9 +321,9 @@ def candidate_create(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def date_candidate_create(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def date_candidate_create(request, poll):
     candidates = DateCandidate.objects.filter(poll_id=poll.id)
     form = DateForm()
 
@@ -343,9 +353,9 @@ def date_candidate_create(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def delete_candidate(request, pk, cand):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def delete_candidate(request, poll, cand):
     candidate = get_object_or_404(Candidate, id=cand)
     candidate.delete()
     messages.success(request,  mark_safe(_('Candidate has been deleted (%(c)s)!') % {'c': candidate.candidate}))
@@ -353,9 +363,9 @@ def delete_candidate(request, pk, cand):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def success(request, pk):
-    poll = get_object_or_404(VotingPoll, id=pk)
+def success(request, poll):
     if "update" in request.session:
         update_poll = False if int(request.session["update"]) == 1 else True
     if poll.ballot_type=="Secret":
@@ -389,14 +399,14 @@ def success(request, pk):
 
 
 @login_required
+@with_valid_poll
 @with_admin_rights
-def delete_anonymous(request,pk,voter):
-    poll = get_object_or_404(VotingPoll, id=pk)
-    voter = get_object_or_404(WhaleUserAnonymous, id=voter)
+def delete_anonymous(request, poll, voter_id):
+    voter = get_object_or_404(WhaleUserAnonymous, id=voter_id)
     if "user" in request.session:
         del request.session["user"]
     voter.delete()
-    messages.success(request,  mark_safe(_('anonymous voter has been deleted!')))
+    messages.success(request, mark_safe(_('anonymous voter has been deleted!')))
     return redirect(reverse_lazy(success, kwargs={'pk': poll.pk}))
 
 
