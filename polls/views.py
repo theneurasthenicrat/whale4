@@ -148,30 +148,30 @@ def minimum_candidates_required(init_fn):
     return _wrapped
 
 
-# views ######################################################################
-
+# default view pages ###########################################################
 
 def bad_request(request):
-    return render(request,'polls/error.html',status=400)
-
+    """Returns the default page displayed for a bad HTTP request."""
+    return render(request, 'polls/error.html', status=400)
 
 def permission_denied(request):
-    return render(request,'polls/error.html',status=403)
-
+    """Returns the default page displayed for a permission denied error."""
+    return render(request, 'polls/error.html', status=403)
 
 def page_not_found(request):
-    return render(request,'polls/error.html',status=404)
-
+    """Returns the default page displayed for a page not found error."""
+    return render(request, 'polls/error.html', status=404)
 
 def server_error(request):
-    return render(request,'polls/error.html',status=500)
-
+    """Returns the default page displayed for a server error."""
+    return render(request, 'polls/error.html', status=500)
 
 def home(request):
+    """Returns the home page."""
     return render(request, 'polls/home.html')
 
-
 def redirect_page(request):
+    """Goes to the redirect page (almost empty template)."""
     return render(request, 'polls/redirectPage.html')
 
 
