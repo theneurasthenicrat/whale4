@@ -308,49 +308,53 @@ def invitation(request, poll): ################################### PAGE 4
         'poll': poll
     })
 
+# Poll administration views ####################################################
 
 @login_required
 @with_valid_poll
 @with_admin_rights
 @minimum_candidates_required
 def admin_poll(request, poll):
+    """Renders the main poll administration page."""
     request.session["update"] = 1
-    return render(request, 'polls/admin.html',locals())
+    return render(request, 'polls/admin.html', {'poll': poll})
 
 @login_required
 @with_valid_poll
 @with_admin_rights
 def reset_poll(request, poll):
+    """Resets a poll (deletes all the votes). Be careful with this
+    function..."""
     VotingScore.objects.filter(candidate__poll__id=poll.id).delete()
     messages.success(request, mark_safe(_('Poll successfully reset.')))
-    return render(request, 'polls/admin.html', locals())
-
-
+    return render(request, 'polls/admin.html', {'poll': poll})
 
 @login_required
 @with_valid_poll
 @with_admin_rights
 def delete_poll(request, poll):
-    admin=request.user.id
+    """Deletes a poll and all the votes and candidates in cascade.
+    Be careful with this function..."""
+    admin = request.user.id
     poll.delete()
     messages.success(request, mark_safe(_('Your poll has been deleted!')))
-    return redirect(reverse_lazy( 'accountPoll', args=(admin, )))
-
-
+    return redirect(reverse_lazy('accountPoll', args=(admin, )))
 
 @login_required
 @with_valid_poll
 @with_viewing_rights
 def status(request, poll):
+    """Renders the page dedicated to the status of an experimental
+    poll (blocked, ready...). Not sure this page is really useful
+    in the end..."""
     form = StatusForm(instance=poll)
     if request.method == 'POST':
-        form = StatusForm(request.POST,instance=poll)
+        form = StatusForm(request.POST, instance=poll)
         if form.is_valid():
             poll = form.save()
             messages.success(request, mark_safe(_('Status is successfully changed!')))
             return redirect(reverse_lazy(admin_poll, args=(poll.id, )))
-    return render(request, 'polls/status_poll.html',locals())
-
+    return render(request, 'polls/status_poll.html', {'poll': poll, 'form': form})
 
 @login_required
 @with_valid_poll
