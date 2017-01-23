@@ -185,6 +185,69 @@ def choose_poll_type(request):
     request.session["update"] = 0
     return render(request, 'polls/new_poll.html')
 
+@login_required
+def new_poll(request, choice):
+    """Renders the very first poll creation page.
+    Concerns general parameters. Also works for poll update."""
+    form = VotingPollForm()
+    # I am not sure update is really necessary here
+    # I leave that for the moment, but it should be checked...
+    if "update" in request.session:
+        update_poll = int(request.session["update"]) != 1
+
+    if request.method == 'POST':
+        form = VotingPollForm(request.POST)
+        if form.is_valid():
+            poll = form.save(commit=False)
+            poll.admin = request.user
+            if int(choice) == 21:
+                poll.poll_type = 'Date'
+            if int(choice) == 22:
+                poll.ballot_type = 'Secret'
+            if int(choice) == 23:
+                poll.ballot_type = 'Experimental'
+
+            poll.save()
+            messages.success(request, mark_safe(_('General parameters successfully created!')))
+            return redirect(reverse_lazy(manage_candidate, args=(poll.pk, )))
+    return render(request, 'polls/parameters_poll.html', {
+        'form': form,
+        'update_poll': update_poll
+    })
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def update_voting_poll(request, poll):
+    """Renders the general parameters options configuration
+    page for poll update."""
+    update_poll = True
+    # I am not sure update is really necessary here
+    # I leave that for the moment, but it should be checked...
+    if "update" in request.session:
+        update_poll = int(request.session["update"]) != 1
+
+    # Really necessary ?
+    form = VotingPollForm(instance=poll) if update_poll else PollUpdateForm(instance=poll)
+
+    if request.method == 'POST':
+        form = VotingPollForm(request.POST, instance=poll) if update_poll\
+               else PollUpdateForm(request.POST, instance=poll)
+        if form.is_valid():
+            poll = form.save(commit=False)
+            if not update_poll:
+                close_now_option = form.cleaned_data['close_now']
+                if close_now_option:
+                    poll.closing_date = date.today()
+            poll.save()
+            if update_poll:
+                messages.success(request, mark_safe(_('General parameters successfully updated!')))
+                return redirect(reverse_lazy(manage_candidate, args=(poll.pk, )))
+            else:
+                messages.success(request, mark_safe(_('Parameters are successfully updated!')))
+                return redirect(reverse_lazy(admin_poll, args=(poll.pk, )))
+    return render(request, 'polls/parameters_poll.html', locals())
+
 
 @login_required
 @with_valid_poll
@@ -202,59 +265,6 @@ def reset_poll(request, poll):
     messages.success(request, mark_safe(_('Poll successfully reset.')))
     return render(request, 'polls/admin.html', locals())
 
-
-@login_required
-def new_poll(request, choice ):
-
-    form = VotingPollForm()
-
-    if "update" in request.session:
-        update_poll = False if int(request.session["update"]) == 1 else True
-
-    if request.method == 'POST':
-        form =  VotingPollForm(request.POST)
-        if form.is_valid():
-            poll = form.save(commit=False)
-            poll.admin = request.user
-            if int(choice) == 21:
-                poll.poll_type = 'Date'
-            if int(choice) == 22:
-                poll.ballot_type = 'Secret'
-            if int(choice) ==23:
-                poll.ballot_type = 'Experimental'
-
-            poll.save()
-            messages.success(request, mark_safe(_('General parameters successfully created!')))
-            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/parameters_poll.html', locals())
-
-
-@login_required
-@with_valid_poll
-@with_admin_rights
-def update_voting_poll(request, poll):
-    update_poll=True
-    if "update" in request.session:
-        update_poll = False if int(request.session["update"]) == 1 else True
-
-    form = VotingPollForm(instance=poll) if update_poll else PollUpdateForm(instance=poll)
-
-    if request.method == 'POST':
-        form = VotingPollForm(request.POST, instance=poll)if update_poll else PollUpdateForm(request.POST,instance=poll)
-        if form.is_valid():
-            poll = form.save(commit=False)
-            if "update" in request.session and int(request.session["update"]) == 1:
-                close_now_option = form.cleaned_data['close_now']
-                if close_now_option:
-                    poll.closing_date= date.today()
-            poll.save()
-            if update_poll:
-                messages.success(request, mark_safe(_('General parameters successfully updated!')))
-                return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.pk}))
-            else:
-                messages.success(request, mark_safe(_('Parameters are successfully updated!')))
-                return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.pk}))
-    return render(request, 'polls/parameters_poll.html', locals())
 
 
 @login_required
@@ -302,9 +312,9 @@ def status(request, poll):
 def manage_candidate(request, poll):
     if poll.option_modify:
         if poll.poll_type != 'Date':
-            return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(candidate_create, args=(poll.id, )))
         else:
-            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(date_candidate_create, args=(poll.id, )))
     else:
         messages.error(request, mark_safe(_('Add or remove candidates is not allowed!')))
         return redirect(reverse_lazy('redirectPage'))
