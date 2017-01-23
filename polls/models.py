@@ -57,29 +57,30 @@ class VotingPoll(Poll):
     def voting_profile(self):
         candidate_indexes = {c.id: index for (index, c) in enumerate(self.candidates.all())}
         nb_candidates = self.candidates.count()
-        iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
-                        .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
-                        .order_by('last_modification', 'candidate'))
+        if nb_candidates:
+            iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
+                            .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
+                            .order_by('last_modification', 'candidate'))
 
-        content_type = ContentType.objects.get_for_model(WhaleUser).id
+            content_type = ContentType.objects.get_for_model(WhaleUser).id
 
-        finished = False
-        while not finished:
-            try:
-                scores = [UNDEFINED_VALUE] * nb_candidates
-                for _ in range(nb_candidates):
-                    current = next(iterator)
-                    scores[candidate_indexes[current['candidate__id']]] = current['value']
+            finished = False
+            while not finished:
+                try:
+                    scores = [UNDEFINED_VALUE] * nb_candidates
+                    for _ in range(nb_candidates):
+                        current = next(iterator)
+                        scores[candidate_indexes[current['candidate__id']]] = current['value']
 
-                yield {
-                    'id': current['voter__id'],
-                    'nickname': (current['voter__nickname'] if self.ballot_type != 'Secret'
-                                 else '(Anonymous)'),
-                    'scores': scores,
-                    'whaleuser': current['voter__polymorphic_ctype'] == content_type
-                }
-            except StopIteration:
-                finished = True
+                    yield {
+                        'id': current['voter__id'],
+                        'nickname': (current['voter__nickname'] if self.ballot_type != 'Secret'
+                                     else '(Anonymous)'),
+                        'scores': scores,
+                        'whaleuser': current['voter__polymorphic_ctype'] == content_type
+                    }
+                except StopIteration:
+                    finished = True
 
     def nb_voters(self):
         """Returns the number of voters of the poll (performs a DB query)."""

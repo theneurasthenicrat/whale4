@@ -12,8 +12,8 @@ from django.template.loader import get_template
 from django.template import Context
 from django.utils.safestring import mark_safe
 from operator import itemgetter
-from datetime import datetime,date
-from random import  shuffle
+from datetime import datetime, date
+from random import shuffle
 
 from django.db.models import Count
 
@@ -219,7 +219,7 @@ def new_poll(request, choice): ################################### PAGE 1
 @login_required
 @with_valid_poll
 @with_admin_rights
-def update_voting_poll(request, poll): ########################### PAGE 2
+def update_voting_poll(request, poll): ########################### PAGE 1
     """Renders the general parameters options configuration
     page for poll update."""
     update_poll = True
@@ -308,6 +308,108 @@ def invitation(request, poll): ################################### PAGE 4
         'poll': poll
     })
 
+
+# Candidate management (PAGE 2) ################################################
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def manage_candidate(request, poll):
+    """The main entry point for candidate managements. Basically redirects
+    to the relevant page (date or normal) or displays an error message if
+    adding or removing candidates is not allowed."""
+    if poll.option_modify:
+        if poll.poll_type != 'Date':
+            return redirect(reverse_lazy(candidate_create, args=(poll.id, )))
+        else:
+            return redirect(reverse_lazy(date_candidate_create, args=(poll.id, )))
+    else:
+        messages.error(request, mark_safe(_('Add or remove candidates is not allowed!')))
+        return redirect(reverse_lazy('redirectPage'))
+
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def candidate_create(request, poll):
+    """Manage candidates for a classical poll."""
+    candidates = Candidate.objects.filter(poll_id=poll.id)
+    form = CandidateForm()
+
+    update_poll = "update" in request.session and int(request.session["update"]) != 1
+
+    if request.method == 'POST':
+        form = CandidateForm(request.POST)
+        if form.is_valid():
+            candidate = form.save(commit=False)
+            candidate.poll = poll
+            if any(str(c) == str(candidate) for c in candidates):
+                messages.error(request,
+                               mark_safe(_('Candidates must be distinct (%(c)s)')
+                                         % {'c': candidate.candidate}))
+            else:
+                candidate.save()
+                voters_undefined(poll)
+                messages.success(request,
+                                 mark_safe(_('Candidate %(c)s successfully added!')
+                                           % {'c': candidate.candidate}))
+        return redirect(reverse_lazy(candidate_create, args=(poll.pk, )))
+    return render(request, 'polls/candidate.html', {
+        'form': form,
+        'poll': poll,
+        'update_poll': update_poll,
+        'candidates': candidates
+    })
+
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def date_candidate_create(request, poll):
+    """Manage candidates for a date poll."""
+    candidates = DateCandidate.objects.filter(poll_id=poll.id)
+    form = DateForm()
+
+    update_poll = "update" in request.session and int(request.session["update"]) != 1
+
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            dates = form.cleaned_data['dates']
+            label = form.cleaned_data['candidate']
+            for cand_date in dates:
+                candidate = DateCandidate()
+                candidate.poll = poll
+                candidate.date = cand_date
+                candidate.candidate = label
+                if any(str(c.date) == str(cand_date)
+                       and str(c) == str(candidate.candidate) for c in candidates):
+                    messages.error(request, mark_safe(_('Candidates must be distinct (%(c)s)')
+                                                      % {'c': candidate.candidate}))
+                else:
+                    candidate.save()
+                    voters_undefined(poll)
+                    messages.success(request, mark_safe(_('Candidates are successfully added!')))
+            return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
+
+    return render(request, 'polls/date_candidate.html', {
+        'form': form,
+        'poll': poll,
+        'update_poll': update_poll
+    })
+
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def delete_candidate(request, poll, cand_id):
+    """Delete a candidate."""
+    candidate = get_object_or_404(Candidate, id=cand_id)
+    candidate.delete()
+    messages.success(request, mark_safe(_('Candidate has been deleted (%(c)s)!')
+                                        % {'c': candidate.candidate}))
+    return redirect(reverse_lazy(manage_candidate, args=(poll.id, )))
+
 # Poll administration views ####################################################
 
 @login_required
@@ -359,90 +461,6 @@ def status(request, poll):
 @login_required
 @with_valid_poll
 @with_admin_rights
-def manage_candidate(request, poll):
-    if poll.option_modify:
-        if poll.poll_type != 'Date':
-            return redirect(reverse_lazy(candidate_create, args=(poll.id, )))
-        else:
-            return redirect(reverse_lazy(date_candidate_create, args=(poll.id, )))
-    else:
-        messages.error(request, mark_safe(_('Add or remove candidates is not allowed!')))
-        return redirect(reverse_lazy('redirectPage'))
-
-
-@login_required
-@with_valid_poll
-@with_admin_rights
-def candidate_create(request, poll):
-    candidates = Candidate.objects.filter(poll_id=poll.id)
-    form = CandidateForm()
-
-    if "update" in request.session:
-        update_poll = False if int(request.session["update"]) == 1 else True
-
-    if request.method == 'POST':
-        form = CandidateForm(request.POST)
-        if form.is_valid():
-            candidate = form.save(commit=False)
-            candidate.poll = poll
-            equal_candidate=[c for c in candidates if str(c) == str(candidate)]
-            if equal_candidate:
-                messages.error(request, mark_safe(_('Candidates must be distinct (%(c)s)') % {'c': candidate.candidate}))
-            else:
-                candidate.save()
-                voters_undefined(poll)
-                messages.success(request, mark_safe(_('Candidate %(c)s successfully added!') % {'c': candidate.candidate}))
-        return redirect(reverse_lazy(candidate_create, args=(poll.pk, )))
-    return render(request, 'polls/candidate.html', locals())
-
-
-@login_required
-@with_valid_poll
-@with_admin_rights
-def date_candidate_create(request, poll):
-    candidates = DateCandidate.objects.filter(poll_id=poll.id)
-    form = DateForm()
-
-    if "update" in request.session:
-        update_poll = False if int(request.session["update"]) == 1 else True
-    if request.method == 'POST':
-        form = DateForm(request.POST)
-        if form.is_valid() :
-            dates = form.cleaned_data['dates']
-            label = form.cleaned_data['candidate']
-            for date in dates:
-                candidate = DateCandidate()
-                candidate.poll = poll
-                candidate.date = date
-                candidate.candidate=label
-                for c in candidates:
-                    if str(c.date) == str(date)and c.candidate == candidate.candidate:
-                        messages.error(request,  mark_safe(_('Candidates must be distinct (%(c)s)') % {'c': candidate.candidate}))
-                        return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
-                candidate.save()
-
-            voters_undefined(poll)
-            messages.success(request,  mark_safe(_('Candidates are successfully added!')))
-            return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
-
-    return render(request, 'polls/date_candidate.html',locals())
-
-
-@login_required
-@with_valid_poll
-@with_admin_rights
-def delete_candidate(request, poll, cand):
-    candidate = get_object_or_404(Candidate, id=cand)
-    candidate.delete()
-    messages.success(request,  mark_safe(_('Candidate has been deleted (%(c)s)!') % {'c': candidate.candidate}))
-    return redirect(reverse_lazy(manage_candidate, args=(poll.id, )))
-
-
-
-
-@login_required
-@with_valid_poll
-@with_admin_rights
 def delete_anonymous(request, poll, voter_id):
     voter = get_object_or_404(WhaleUserAnonymous, id=voter_id)
     if "user" in request.session:
@@ -477,6 +495,7 @@ def certificate(request, poll):
                 return redirect(reverse_lazy('certificate', args=(poll.id, )))
 
     return render(request, 'polls/certificate.html', locals())
+
 
 # vote modification (create/update/delete) #####################################
 
@@ -722,7 +741,7 @@ def view_poll(request, poll):
         'days': days,
         'months': months,
         'is_closed': is_closed,
-        'col_width': int(85 / len(candidates))
+        'col_width': 85 if not candidates else int(85 / len(candidates))
     })
 
 

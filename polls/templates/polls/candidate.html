@@ -31,7 +31,7 @@
          {% endif %}
             <div class="container-fluid ">
 
-             {% if  update_poll and poll.option_choice %}
+             {% if poll.option_choice %}
                 <div class=" well-lg col-md-7 ">
                     <form action="" method="post" >
                         {% csrf_token %}
@@ -90,7 +90,7 @@
             </div>
             {% if update_poll %}
                 <a href="{% url 'updatePoll' poll.id %}" class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url advancedParameters' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+                <a href="{% url 'advancedParameters' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             {% else %}
                <a href="{% url 'admin' poll.id %}"  class="btn btn-custom pull-right "> {% trans 'Back to admin page' %}</a>
             {% endif %}
