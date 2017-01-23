@@ -26,6 +26,7 @@ from polls.models import VotingPoll, Candidate, preference_model_from_text, Voti
 from polls.utils import days_months, voters_undefined, scoring_method,\
     condorcet_method, runoff_method, randomized_method
 
+from whale4.settings import BASE_URL, EMAIL_FROM
 
 # decorators ###################################################################
 
@@ -178,7 +179,7 @@ def redirect_page(request):
 # Poll creation views ##########################################################
 
 @login_required
-def choose_poll_type(request):
+def choose_poll_type(request): ################################### PAGE 0
     """Renders the first page for a poll creation.
     This page asks for the poll type to create
     (classic, date, experimental...)."""
@@ -186,7 +187,7 @@ def choose_poll_type(request):
     return render(request, 'polls/new_poll.html')
 
 @login_required
-def new_poll(request, choice):
+def new_poll(request, choice): ################################### PAGE 1
     """Renders the very first poll creation page.
     Concerns general parameters. Also works for poll update."""
     form = VotingPollForm()
@@ -218,7 +219,7 @@ def new_poll(request, choice):
 @login_required
 @with_valid_poll
 @with_admin_rights
-def update_voting_poll(request, poll):
+def update_voting_poll(request, poll): ########################### PAGE 2
     """Renders the general parameters options configuration
     page for poll update."""
     update_poll = True
@@ -253,7 +254,7 @@ def update_voting_poll(request, poll):
 @with_valid_poll
 @with_admin_rights
 @minimum_candidates_required
-def advanced_parameters(request, poll):
+def advanced_parameters(request, poll):  ######################### PAGE 3
     """Renders the advanced parameters option page."""
     form = OptionForm(instance=poll)
     if request.method == 'POST':
@@ -261,8 +262,51 @@ def advanced_parameters(request, poll):
         if form.is_valid():
             poll = form.save()
             messages.success(request, mark_safe(_('Options are successfully added!')))
-            return redirect(reverse_lazy(success, args=(poll.id, )))
+            return redirect(reverse_lazy(invitation, args=(poll.id, )))
     return render(request, 'polls/option.html', locals())
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+def invitation(request, poll): ################################### PAGE 4
+    """Renders the very last poll creation page.
+    This page is mostly dedicated to the invitation of voters."""
+    update_poll = "update" in request.session and int(request.session["update"]) != 1
+    invited_voters = None if poll.ballot_type != "Secret"\
+                     else WhaleUserAnonymous.objects.filter(poll=poll.id)
+    if request.method == 'POST':
+        form = InviteForm(request.POST)
+        if form.is_valid():
+            for email in form.cleaned_data['email']:
+                certi = WhaleUserAnonymous.id_generator()
+                WhaleUserAnonymous.objects.create(
+                    nickname=WhaleUserAnonymous.nickname_generator(poll.id),
+                    email=email,
+                    certificate=WhaleUserAnonymous.encodeAES(certi),
+                    poll=poll
+                )
+                subject = '[Whale4] Invitation to participate in election #' + str(poll.pk)
+                htmly = get_template('polls/email.html')
+                url = BASE_URL + reverse_lazy("vote", args=(str(poll.pk), ))
+                data = {'poll': poll, 'certi': certi, 'url': url}
+                txt_content = (
+                    _('Email text template with url %(url)s and certificate %(certi)s.')
+                ) % data
+                html_content = htmly.render(Context(data))
+                msg = EmailMultiAlternatives(subject, txt_content, EMAIL_FROM, [email])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+
+            messages.success(request, mark_safe(_('Invited voters successfully added!')))
+            return redirect(reverse_lazy(invitation, args=(poll.id, )))
+    else:
+        form = InviteForm()
+    return render(request, 'polls/invite.html', {
+        'update_poll': update_poll,
+        'invited_voters': invited_voters,
+        'form': form,
+        'poll': poll
+    })
 
 
 @login_required
@@ -390,40 +434,6 @@ def delete_candidate(request, poll, cand):
     return redirect(reverse_lazy(manage_candidate, args=(poll.id, )))
 
 
-@login_required
-@with_valid_poll
-@with_admin_rights
-def success(request, poll):
-    if "update" in request.session:
-        update_poll = False if int(request.session["update"]) == 1 else True
-    if poll.ballot_type=="Secret":
-        inviters = WhaleUserAnonymous.objects.filter(poll=poll.id)
-    if request.method == 'POST':
-        form = InviteForm(request.POST)
-        if form.is_valid():
-            emails =form.cleaned_data['email']
-
-            for email in emails:
-                certi = WhaleUserAnonymous.id_generator()
-                inviter = WhaleUserAnonymous.objects.create(
-                    nickname=WhaleUserAnonymous.nickname_generator(poll.id) , email=email,
-                    certificate=WhaleUserAnonymous.encodeAES(certi),poll=poll
-                )
-                subject, from_email, to = '[Whale4] Invitation to participate in election #' + str(poll.pk), 'whale4.ad@gmail.com', email
-                htmly = get_template('polls/email.html')
-                url="http://strokes.imag.fr/whale4/polls/vote/"+str(poll.pk)
-                d = {'poll': poll, 'certi':certi,'url':url}
-                txt_content = (_('Email text template with url %(url)s and certificate %(certi)s.')) % d
-                html_content = htmly.render(Context(d))
-                msg = EmailMultiAlternatives(subject, txt_content, from_email, [to])
-                msg.attach_alternative(html_content, "text/html")
-                msg.send()
-
-            messages.success(request, mark_safe(_('Invited voters successfully added!')))
-            return redirect(reverse_lazy(success, args=(poll.id, )))
-    else:
-        form = InviteForm()
-    return render(request, 'polls/invite.html', locals())
 
 
 @login_required
@@ -435,7 +445,7 @@ def delete_anonymous(request, poll, voter_id):
         del request.session["user"]
     voter.delete()
     messages.success(request, mark_safe(_('anonymous voter has been deleted!')))
-    return redirect(reverse_lazy(success, args=(poll.pk, )))
+    return redirect(reverse_lazy(invitation, args=(poll.pk, )))
 
 
 @with_valid_poll

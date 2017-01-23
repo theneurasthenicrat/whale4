@@ -59,7 +59,7 @@
                                         <div class="well-sm">
                                             <h4>{% trans 'List of current voters' %}</h4>
                                                 <ol class="list-group">
-                                                    {% for v in inviters %}
+                                                    {% for v in invited_voters %}
                                                         <li class="list-group-item">
                                                             {{ v.email}}
                                                             <button type="button" data-toggle="modal" data-target="#myModal{{ forloop.counter }}" class="close">&times;</button>

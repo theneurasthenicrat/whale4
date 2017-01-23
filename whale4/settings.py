@@ -129,4 +129,6 @@ EMAIL_HOST_PASSWORD = whale4.secret_settings.EMAIL_HOST_PASSWORD
 EMAIL_PORT = whale4.secret_settings.EMAIL_PORT
 EMAIL_USE_TLS = whale4.secret_settings.EMAIL_USE_TLS
 EMAIL_BACKEND = whale4.secret_settings.EMAIL_BACKEND
+EMAIL_FROM = whale4.secret_settings.EMAIL_FROM
 
+BASE_URL = whale4.secret_settings.BASE_URL
