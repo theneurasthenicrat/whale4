@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^register/$', views.Register.as_view(), name='register'),
     url(r'^contact/$', views.ContactView.as_view(), name='contact'),
     url(r'^$', home, name='home'),
-    url(r'^accountPoll/(?P<pk>' + uuid4 + ')/$', views.WhaleUserDetail.as_view(), name='accountPoll'),
+    url(r'^accountPoll/(' + uuid4 + ')/$', views.WhaleUserDetail.as_view(), name='accountPoll'),
 ]

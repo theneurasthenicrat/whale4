@@ -63,20 +63,20 @@ def with_voter_rights(init_fn):
         voter = get_object_or_404(User, id=voter_id)
         if poll.ballot_type == "Experimental":
             messages.error(request, mark_safe(_('Experimental vote can not be updated')))
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(view_poll, args=(poll.id, )))
         if poll.ballot_type == "Secret":
             if "user" in request.session and request.session["user"] == voter.id:
                 return init_fn(request, poll, voter, *args, **kwargs)
             else:
                 messages.error(request, mark_safe(_('This is not your vote')))
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+                return redirect(reverse_lazy(view_poll, args=(poll.id, )))
 
         if not (isinstance(voter, WhaleUser)) or\
            (request.user is not None and request.user.id == voter.id):
             return init_fn(request, poll, voter, *args, **kwargs)
         else:
             messages.error(request, mark_safe(_('This is not your vote')))
-            return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(view_poll, args=(poll.id, )))
 
     return _wrapped
 
@@ -111,7 +111,7 @@ def certificate_required(init_fn):
         path = request.get_full_path()
         if poll.ballot_type == "Secret" and "user" not in request.session:
             return redirect("{url}?next={path}".format(
-                url=reverse_lazy(certificate, kwargs={'pk': poll.id, }),
+                url=reverse_lazy(certificate, kwargs={'pk': poll.id}),
                 path=str(path)))
         return init_fn(request, poll, *args, **kwargs)
     return _wrapped
@@ -143,7 +143,7 @@ def minimum_candidates_required(init_fn):
         candidates = Candidate.objects.filter(poll_id=poll.id)
         if candidates.count() < 2:
             messages.error(request, mark_safe(_('You must add at least two candidates')))
-            return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id,}))
+            return redirect(reverse_lazy(manage_candidate, args=(poll.id, )))
         return init_fn(request, poll, *args, **kwargs)
     return _wrapped
 
@@ -274,7 +274,7 @@ def delete_poll(request, poll):
     admin=request.user.id
     poll.delete()
     messages.success(request, mark_safe(_('Your poll has been deleted!')))
-    return redirect(reverse_lazy( 'accountPoll', kwargs={'pk': admin}))
+    return redirect(reverse_lazy( 'accountPoll', args=(admin, )))
 
 
 @login_required
@@ -288,7 +288,7 @@ def option(request, poll):
         if form.is_valid():
             poll = form.save()
             messages.success(request,  mark_safe(_('Options are successfully added!')))
-            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(success, args=(poll.id, )))
     return render(request, 'polls/option.html', locals())
 
 
@@ -302,7 +302,7 @@ def status(request, poll):
         if form.is_valid():
             poll = form.save()
             messages.success(request, mark_safe(_('Status is successfully changed!')))
-            return redirect(reverse_lazy(admin_poll, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(admin_poll, args=(poll.id, )))
     return render(request, 'polls/status_poll.html',locals())
 
 
@@ -342,7 +342,7 @@ def candidate_create(request, poll):
                 candidate.save()
                 voters_undefined(poll)
                 messages.success(request, mark_safe(_('Candidate %(c)s successfully added!') % {'c': candidate.candidate}))
-        return redirect(reverse_lazy(candidate_create, kwargs={'pk': poll.pk}))
+        return redirect(reverse_lazy(candidate_create, args=(poll.pk, )))
     return render(request, 'polls/candidate.html', locals())
 
 
@@ -368,12 +368,12 @@ def date_candidate_create(request, poll):
                 for c in candidates:
                     if str(c.date) == str(date)and c.candidate == candidate.candidate:
                         messages.error(request,  mark_safe(_('Candidates must be distinct (%(c)s)') % {'c': candidate.candidate}))
-                        return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
+                        return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
                 candidate.save()
 
             voters_undefined(poll)
             messages.success(request,  mark_safe(_('Candidates are successfully added!')))
-            return redirect(reverse_lazy(date_candidate_create, kwargs={'pk': poll.pk}))
+            return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
 
     return render(request, 'polls/date_candidate.html',locals())
 
@@ -385,7 +385,7 @@ def delete_candidate(request, poll, cand):
     candidate = get_object_or_404(Candidate, id=cand)
     candidate.delete()
     messages.success(request,  mark_safe(_('Candidate has been deleted (%(c)s)!') % {'c': candidate.candidate}))
-    return redirect(reverse_lazy(manage_candidate, kwargs={'pk': poll.id}))
+    return redirect(reverse_lazy(manage_candidate, args=(poll.id, )))
 
 
 @login_required
@@ -418,7 +418,7 @@ def success(request, poll):
                 msg.send()
 
             messages.success(request, mark_safe(_('Invited voters successfully added!')))
-            return redirect(reverse_lazy(success, kwargs={'pk': poll.id}))
+            return redirect(reverse_lazy(success, args=(poll.id, )))
     else:
         form = InviteForm()
     return render(request, 'polls/invite.html', locals())
@@ -433,7 +433,7 @@ def delete_anonymous(request, poll, voter_id):
         del request.session["user"]
     voter.delete()
     messages.success(request, mark_safe(_('anonymous voter has been deleted!')))
-    return redirect(reverse_lazy(success, kwargs={'pk': poll.pk}))
+    return redirect(reverse_lazy(success, args=(poll.pk, )))
 
 
 @with_valid_poll
@@ -458,7 +458,7 @@ def certificate(request, poll):
 
             except:
                 messages.error (request,  mark_safe(_('your certificate is incorrect')))
-                return redirect(reverse_lazy('certificate', kwargs={'pk': poll.id}))
+                return redirect(reverse_lazy('certificate', args=(poll.id, )))
 
     return render(request, 'polls/certificate.html', locals())
 
@@ -477,7 +477,7 @@ def vote(request, poll):
 
     if poll.is_closed():
         messages.error(request, mark_safe(_('poll closed, you cannot vote anymore')))
-        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.id}))
+        return redirect(reverse_lazy(view_poll, args=(poll.id, )))
 
     # First we get all the objects we need:
     # list of candidates, preference model, scores given by the voter
@@ -536,13 +536,14 @@ def vote(request, poll):
             if poll.ballot_type == "Secret":
                 return redirect(reverse_lazy(
                     view_poll_secret,
-                    kwargs={'pk': poll.pk, 'voter':voter.id}
+                    args=(poll.pk, ),
+                    kwargs={'voter':voter.id}
                 ))
             else:
                 if poll.ballot_type == "Experimental" and poll.option_blocking_poll:
                     poll.status_poll = False
                     poll.save()
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+                return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
     else: # a GET request...
         voting_form = VotingForm(candidates, preference_model, poll)
         nickname_form = NickNameForm(read_only_nickname, initial={'nickname': voter.nickname})
@@ -609,10 +610,11 @@ def update_vote(request, poll, voter):
             if poll.ballot_type == "Secret":
                 return redirect(reverse_lazy(
                     view_poll_secret,
-                    kwargs={'pk': poll.pk, 'voter': voter.id}
+                    args=(poll.pk, ),
+                    kwargs={'voter': voter.id}
                 ))
             else:
-                return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+                return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
 
     days, months = days_months(candidates) if poll.poll_type == 'Date' else [], []
 
@@ -646,9 +648,11 @@ def delete_vote(request, poll, voter):
     messages.success(request, mark_safe(_('Your vote has been deleted!')))
     # Then we redirect to the poll view page...
     if poll.ballot_type == "Secret":
-        return redirect(reverse_lazy(view_poll_secret, kwargs={'pk': poll.pk, 'voter': voter.id}))
+        return redirect(reverse_lazy(view_poll_secret,
+                                     args=(poll.pk, ),
+                                     kwargs={'voter': voter.id}))
     else:
-        return redirect(reverse_lazy(view_poll, kwargs={'pk': poll.pk}))
+        return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
 
 
 # different views on the polls #################################################
@@ -777,7 +781,7 @@ def result_view(request, poll, method):
 
     len_voters = len(list(set(voters)))
 
-    url_poll = str(reverse_lazy(result_scores, kwargs={'pk': poll.id, 'method': method}))
+    url_poll = str(reverse_lazy(result_scores, args=(poll.id, ), kwargs={'method': method}))
     
     if method ==1:
 
@@ -798,7 +802,7 @@ def result_view(request, poll, method):
                      {'value': 'simpson', 'name': _('Simpson')}]
         explanation = mark_safe(_('condorcet method explanation'))
         url_poll = "{url}?aggregate=majority".format(
-            url = reverse_lazy(view_poll, kwargs={'pk': poll.id, }))
+            url = reverse_lazy(view_poll, args=(poll.id, )))
 
     if method == 3:
         title = _('runoff method title')
