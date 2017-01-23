@@ -175,8 +175,13 @@ def redirect_page(request):
     return render(request, 'polls/redirectPage.html')
 
 
+# Poll creation views ##########################################################
+
 @login_required
-def choice(request):
+def choose_poll_type(request):
+    """Renders the first page for a poll creation.
+    This page asks for the poll type to create
+    (classic, date, experimental...)."""
     request.session["update"] = 0
     return render(request, 'polls/new_poll.html')
 
