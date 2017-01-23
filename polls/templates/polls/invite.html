@@ -22,7 +22,7 @@
                 <ol class="nav nav-pills-custom">
                     <li><a href="{% url 'updatePoll' poll.id %}">{% trans 'General parameters' %} <i class="fa fa-chevron-right"></i></a></li>
                     <li><a href="{% url 'manageCandidate' poll.id %}">{% trans 'Add candidates' %} <i class="fa fa-chevron-right"></i></a></li>
-                    <li><a href="{% url 'option' poll.id %}">{% trans 'Advanced parameters' %} <i class="fa fa-chevron-right"></i></a></li>
+                    <li><a href="{% url 'advancedParameters' poll.id %}">{% trans 'Advanced parameters' %} <i class="fa fa-chevron-right"></i></a></li>
                     <li class="active"><a href="#">{% trans 'Invite' %}</a></li>
                 </ol>
             </div>
@@ -185,7 +185,7 @@
                 </div>
             {% endif %}
          {% if update_poll %}
-            <a href="{% url 'option' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
+            <a href="{% url 'advancedParameters' poll.id %}"  class="btn btn-custom previous">{% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
               <a href="{% url 'viewPoll' poll.id %}"  class="btn btn-custom next">{% trans 'Go to the poll' %} {% bootstrap_icon "menu-right" %}</a>
 
           {% else %}

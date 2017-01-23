@@ -98,7 +98,7 @@
             </div>
             {% if update_poll %}
                 <a href="{% url 'updatePoll' poll.id %}" class="btn btn-custom previous"> {% bootstrap_icon "menu-left" %} {% trans 'Previous' %}</a>
-                <a href="{% url 'option' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
+                <a href="{% url 'advancedParameters' poll.id  %}" class="btn btn-custom next">{% trans 'Next' %} {% bootstrap_icon "menu-right" %}</a >
             {% else %}
                 <a href="{% url 'admin' poll.id %}"  class="btn btn-custom pull-right">{% bootstrap_icon "undo" %} {% trans 'Back to admin page' %}</a>
             {% endif %}

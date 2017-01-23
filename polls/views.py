@@ -253,6 +253,22 @@ def update_voting_poll(request, poll):
 @with_valid_poll
 @with_admin_rights
 @minimum_candidates_required
+def advanced_parameters(request, poll):
+    """Renders the advanced parameters option page."""
+    form = OptionForm(instance=poll)
+    if request.method == 'POST':
+        form = OptionForm(request.POST, instance=poll)
+        if form.is_valid():
+            poll = form.save()
+            messages.success(request, mark_safe(_('Options are successfully added!')))
+            return redirect(reverse_lazy(success, args=(poll.id, )))
+    return render(request, 'polls/option.html', locals())
+
+
+@login_required
+@with_valid_poll
+@with_admin_rights
+@minimum_candidates_required
 def admin_poll(request, poll):
     request.session["update"] = 1
     return render(request, 'polls/admin.html',locals())
@@ -276,20 +292,6 @@ def delete_poll(request, poll):
     messages.success(request, mark_safe(_('Your poll has been deleted!')))
     return redirect(reverse_lazy( 'accountPoll', args=(admin, )))
 
-
-@login_required
-@with_valid_poll
-@with_admin_rights
-@minimum_candidates_required
-def option(request, poll):
-    form = OptionForm(instance=poll)
-    if request.method == 'POST':
-        form = OptionForm(request.POST, instance=poll)
-        if form.is_valid():
-            poll = form.save()
-            messages.success(request,  mark_safe(_('Options are successfully added!')))
-            return redirect(reverse_lazy(success, args=(poll.id, )))
-    return render(request, 'polls/option.html', locals())
 
 
 @login_required
