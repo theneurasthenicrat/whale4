@@ -67,8 +67,15 @@ $(window).resize(function(){
       
       {% if method == 1 %}
       <div class="form-group" id="controlApproval">
-        <label class=" control-label" for ='approval'> {% trans 'Approval threshold' %}:</label>	    
+        <label class=" control-label" for='approval'> {% trans 'Approval threshold' %}:</label>	    
         <select id="approval" class="form-control"></select>
+      </div>
+      <div class="form-group" id="controlPalette">
+        <label class=" control-label" for='palette'> {% trans 'Color palette' %}:</label>	    
+        <select id="palette" class="form-control">
+	  <option value="classical">{% trans 'Classical' %}</option>
+	  <option value="grayscale">{% trans 'Grayscale' %}</option>
+	</select>
       </div>
       {% endif %}
       

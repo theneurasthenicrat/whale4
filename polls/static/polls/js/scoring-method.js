@@ -1,3 +1,24 @@
+var color_palettes_bar = {
+    "classical": ["red", "#e1dd38", "green"],
+    "grayscale": ["#000", "#444", "#888"]
+};
+
+var color_palettes_line = {
+    "classical": d3.scale.category20(),
+    "grayscale": function(i) {var tab = ["#000", "#444", "#888"]; return tab[i % 3];}
+};
+
+var dasharray_palettes_line = {
+    "classical": function(i) {return "0";},
+    "grayscale": function(i) {var tab = ["0", "5, 5", "1, 5", "1, 5", "0", "5, 5", "0", "5, 5", "1, 5"]; return tab[i % tab.length];}
+}
+
+var strokewidth_palettes_line = {
+    "classical": function(i) {return "1";},
+    "grayscale": function(i) {var tab = ["1", "2", "3", "3", "1", "2", "2", "3", "1"]; return tab[i % tab.length];}
+}
+
+
 function scoring_plot(scoring) {
 
     d3.select("#controlApproval").style("visibility","hidden");
@@ -55,7 +76,7 @@ function bar_chart(data) {
         y = d3.scale.linear().range([height, 0]).domain([Math.min(0, yMin),Math.max(0, yMax) ]),
         xAxis = d3.svg.axis().scale(x).orient("bottom"),
         yAxis = d3.svg.axis().scale(y).orient("left"),
-        color = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([yMin,yMean,yMax]);
+        color = d3.scale.linear().range(color_palettes_bar[d3.select("#palette").node().value]).domain([yMin,yMean,yMax]);
 
     d3.select("svg").remove();
 
@@ -133,8 +154,10 @@ function curve_approval(data) {
         y = d3.scale.linear().range([height, 0]).domain([0, d3.max(data, function(d) { return d.y; })]),
         xAxis = d3.svg.axis().scale(x).orient("bottom").innerTickSize(-height).outerTickSize(0),
         yAxis = d3.svg.axis().scale(y).orient("left"),
-        color = d3.scale.category10(),
-        line = d3.svg.line().x(function(d) { return x(d.x)+x.rangeBand()/2; }).y(function(d) { return y(d.y); }).interpolate("monotone");
+        color = color_palettes_line[d3.select("#palette").node().value],
+        dasharray = dasharray_palettes_line[d3.select("#palette").node().value],
+        strokewidth = strokewidth_palettes_line[d3.select("#palette").node().value],
+        line = d3.svg.line().x(function(d) { return x(d.x)+x.rangeBand()/2; }).y(function(d) { return y(d.y); });//.interpolate("monotone");
 
     d3.select("svg").remove();
 
@@ -157,20 +180,33 @@ function curve_approval(data) {
     var n=dataNest.length;
 
     dataNest.forEach(function(d,i) {
+        svg.append("line")
+	    .attr("x1", 5)
+	    .attr("y1", 0)
+	    .attr("x2", 30)
+	    .attr("y2", 0)
+            .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + (n-i)*30 + ")" )
+	    .style("stroke-dasharray", dasharray(i))
+	    .style("stroke-width", strokewidth(i))
+	    .style("stroke",  color(i) );
 
         svg.append("path")
             .attr("class", "line")
             .attr("d", line(d.values))
             .attr("fill","none")
-            .style("stroke",  color(d.key) );
+	    .style("stroke-dasharray", dasharray(i))
+	    .style("stroke-width", strokewidth(i))
+            .style("stroke",  color(i) );
 
         svg.append("text")
-            .attr("x", 10)
+            .attr("x", 35)
             .attr("transform",  "translate(" +( x(d.values[d.values.length -1].x)+x.rangeBand()/2) + "," + (n-i)*30 + ")" )
             .attr("dy", "0.35em")
-            .style("fill",  color(d.key) )
+            .style("fill",  color(i) )
             .text( d.key);
 
+
+	
     });
 
     svg.append("g")

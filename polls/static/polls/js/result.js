@@ -13,6 +13,7 @@ function drawGraph() {
 	d3.select("#option").on("change", function() {return updateGraph(data);});
 	
 	d3.select("#approval").on("change", function() {return updateGraph(data);});
+	d3.select("#palette").on("change", function() {return updateGraph(data);});
 	d3.select("#graph_type").on("change", function() {return updateGraph(data);});
 	
 	d3.select(window).on('resize', function() {return updateGraph(data);});
