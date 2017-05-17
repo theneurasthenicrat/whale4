@@ -516,7 +516,9 @@ def vote(request, poll):
 
     # First we get all the objects we need:
     # list of candidates, preference model, scores given by the voter
-    candidates = Candidate.objects.filter(poll_id=poll.id)
+    candidates = DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'\
+                 else poll.candidates.all()
+#    candidates = Candidate.objects.filter(poll_id=poll.id)
     if poll.option_shuffle:
         candidates = list(candidates)
         shuffle(candidates)
@@ -809,14 +811,14 @@ def result_all(request, poll):
 
 @with_valid_poll
 def result_view(request, poll, method):
-    poll = get_object_or_404(VotingPoll, id=pk)
+    #poll = get_object_or_404(VotingPoll, id=pk)
     method=int(method)
     voters = VotingScore.objects.values_list('voter', flat=True).filter(candidate__poll__id=poll.id).annotate(
         vote=Count('voter'))
 
     len_voters = len(list(set(voters)))
 
-    url_poll = str(reverse_lazy(result_scores, args=(poll.id, ), kwargs={'method': method}))
+    url_poll = str(reverse_lazy(result_scores, args=(poll.id, method)))
     
     if method ==1:
 

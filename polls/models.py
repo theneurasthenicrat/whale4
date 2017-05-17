@@ -61,7 +61,9 @@ class VotingPoll(Poll):
             iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
                             .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
                             .order_by('last_modification', 'candidate'))
-
+            ##### ATTENTION, BUG ICI !!!!
+            ##### IL FAUT RÉORDONNER LES CANDIDATS SELON LA DATE !!!
+            
             content_type = ContentType.objects.get_for_model(WhaleUser).id
 
             finished = False
