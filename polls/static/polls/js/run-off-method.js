@@ -1,3 +1,9 @@
+var color_palettes = {
+    "classical": ["red", "#e1dd38", "green"],
+    "grayscale": ["#000", "#444", "#888"]
+};
+
+
 function runoff_plot(runoff) {
     var option= d3.select("#option").node().value;
     var round_text=d3.select("#round").property("value");
@@ -15,7 +21,7 @@ function runoff_plot(runoff) {
             list = runoff.trm_list;
 
     }
-    var colorTab = [ "red","#e1dd38","green"],
+    var colorTab = color_palettes[d3.select("#palette").node().value],
         width = $("#graph").width()-150,
         height = window.innerHeight/2;
 

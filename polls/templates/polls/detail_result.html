@@ -70,13 +70,6 @@ $(window).resize(function(){
         <label class=" control-label" for='approval'> {% trans 'Approval threshold' %}:</label>	    
         <select id="approval" class="form-control"></select>
       </div>
-      <div class="form-group" id="controlPalette">
-        <label class=" control-label" for='palette'> {% trans 'Color palette' %}:</label>	    
-        <select id="palette" class="form-control">
-	  <option value="classical">{% trans 'Classical' %}</option>
-	  <option value="grayscale">{% trans 'Grayscale' %}</option>
-	</select>
-      </div>
       {% endif %}
       
       {% if method == 2 %}
@@ -89,6 +82,14 @@ $(window).resize(function(){
       </div>	  
       {% endif %}      
       {% endif %}
+      <div class="form-group" id="controlPalette">
+        <label class=" control-label" for='palette'> {% trans 'Color palette' %}:</label>	    
+        <select id="palette" class="form-control">
+	  <option value="classical">{% trans 'Classical' %}</option>
+	  <option value="grayscale">{% trans 'Grayscale' %}</option>
+	</select>
+      </div>
+
     </form>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin2">
       <a data-toggle="collapse" href="#explanation" class="btn btn-custom col-xs-12 col-sm-12 col-md-12 col-lg-12" >{% bootstrap_icon "info-sign" %} {% trans 'More about the' %} {{ title }}</a>
