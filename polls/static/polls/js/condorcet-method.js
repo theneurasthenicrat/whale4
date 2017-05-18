@@ -1,3 +1,23 @@
+var color_palettes_weak = {
+    "classical": ["red", "#e1dd38", "green"],
+    "grayscale": ["#888", "#444", "#000"]
+};
+
+var neutral_palettes = {
+    "classical": "#3375b3",
+    "grayscale": "#000"
+}
+    
+
+var color_palettes_strong = {
+    "classical": ["red", "#e1dd38", "green"],
+    "grayscale": ["#fff", "#888", "#000"]
+};
+
+var color_palettes_stroke = {
+    "classical": function(i) {return "#000";},
+    "grayscale": function(i) {return (i <= 0.5 ? "#000" : "#fff");}
+}
 
 function condorcet_plot(data) {
     var option = d3.select("#option").node().value;
@@ -72,13 +92,12 @@ function node_link(data) {
     var nodes = candidates.map(function(d, i) {return {"name": d, "value": scores[i]};});
     var links = create_links(matrix);
 
-    var colorTab = ["red", "#e1dd38", "green"];
     var minNodeValue = d3.min(scores);
     var minlinkValue = d3.min(links, function (d) {return d.value;});
     var meanNodeValue = d3.mean(scores);
     var maxNodeValue = d3.max(scores);
     var maxlinkValue = d3.max(links, function (d) {return d.value;});
-    var color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(colorTab);
+    var color = d3.scale.linear().domain([minNodeValue, meanNodeValue, maxNodeValue]).range(color_palettes_weak[d3.select("#palette").node().value]);
     var strokeRange = d3.scale.linear().domain([minlinkValue, maxlinkValue]).range([0.5,3]);
     
     var force = d3.layout.force()
@@ -188,12 +207,14 @@ function matrix_graph(data){
     var width = smallest_dim - margin.right - margin.left;
     var height = smallest_dim - margin.top - margin.bottom;
     var duel_text=d3.select("#duel_text").property("value");
-    var colorTab = ["red", "#e1dd38", "green"];
     
     var orders = d3.range(n).sort(function(a, b) { return data.scores[b] - data.scores[a]; });
     orders.push(n); // We do this because we need another column for the scores...
-    var color_scores = d3.scale.linear().domain([d3.min(data.scores),d3.mean(data.scores),d3.max(data.scores)]).range(colorTab);
-    var color_majority = d3.scale.linear().domain([0, m / 2, m]).range(colorTab);
+    var color_scores = d3.scale.linear().domain([d3.min(data.scores),d3.mean(data.scores),d3.max(data.scores)]).range(color_palettes_weak[d3.select("#palette").node().value]);
+    var color_majority = d3.scale.linear().domain([0, m / 2, m]).range(color_palettes_strong[d3.select("#palette").node().value]);
+    var color_neutral = neutral_palettes[d3.select("#palette").node().value];
+    var stroke = function(i) {return color_palettes_stroke[d3.select("#palette").node().value](d3.scale.linear().domain([0, m]).range([0, 1])(i));};
+    console.log(stroke(d3.min(data.scores)));
     var x = d3.scale.ordinal().rangeBands([0, smallest_dim-margin.right-margin.left]).domain(orders);
     var z = d3.scale.linear().domain([0, 4]).clamp(true);
     
@@ -220,7 +241,7 @@ function matrix_graph(data){
         .attr("height", x.rangeBand())
     	.style("stroke", "#fff")
         .style("stroke-width", function(d) {return x.rangeBand() > 25 ? "2" : "0";})
-        .style("fill", "#3375b3");
+        .style("fill", color_neutral);
 
     row.append("text")
         .attr("x", -6)
@@ -237,7 +258,7 @@ function matrix_graph(data){
         .attr("dy", ".32em")
         .attr("text-anchor", "middle")
 	.transition()
-        .style("fill", "white")
+        .style("fill", "#fff")
         .text(function (d, i) {return x.rangeBand() > 18 ? data.scores[i] : "";});
 
     
@@ -285,7 +306,7 @@ function matrix_graph(data){
             .attr("dy", ".32em")
             .attr("text-anchor", "middle")
 	    .transition()
-            .style("fill", "white")
+            .style("fill", function(d, i) {return stroke(d);})
             .text(function (d) {return x.rangeBand() > 18 ? d : "";});
     }
 }
