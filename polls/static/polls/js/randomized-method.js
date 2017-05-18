@@ -1,3 +1,7 @@
+var color_palettes = {
+    "classical": ["red", "#e1dd38", "green"],
+    "grayscale": ["#888", "#444", "#000"]
+};
 
 
 
@@ -10,7 +14,7 @@ function randomized(data){
         width = $("#graph").width() - margin.right - margin.left,
         height = window.innerHeight/1.4- margin.top - margin.bottom;
 
-    var colorRange = d3.scale.linear().range(["red", "#e1dd38", "green"]).domain([1,(round+1)/2,round+1]);
+    var colorRange = d3.scale.linear().range(color_palettes[d3.select("#palette").node().value]).domain([1,(round+1)/2,round+1]);
 
     var i = 0;
 
