@@ -323,16 +323,18 @@ def runoff_compute( cand,list_cand, round1,order):
         n = len(cand)
     order.reverse()
 
-    for candi in list_cand:
-        for x in candi:
-            index =order.index(x['id'])
-            x['letter'] = letter[index]
+#    for candi in list_cand:
+#        for x in candi:
+#            index =order.index(x['id'])
+#            x['letter'] = letter[index]
     return list_cand
 
 
 
 
 def runoff_method(candidates,list_voters,scores):
+    letters = list(string.ascii_uppercase)
+
     round=[]
 
     for v in list_voters:
@@ -342,7 +344,7 @@ def runoff_method(candidates,list_voters,scores):
         round.append(d)
 
     round1 = copy.deepcopy(round)
-    cand = [{"id": str(c.id),  'name': str(c), 'letter': "", 'plurality': 0, 'borda': 0} for c in candidates]
+    cand = [{"id": str(c.id),  'name': str(c), 'letter': letters[i], 'plurality': 0, 'borda': 0} for i, c in enumerate(candidates)]
     stv = runoff_compute(cand, [], round,[])
 
     trm=[copy.deepcopy(stv[0])]
@@ -356,7 +358,7 @@ def runoff_method(candidates,list_voters,scores):
                 if x["id"] == last:
                     h.remove(x)
 
-    cand1 = [{"id": x["id"], 'name': x["name"], 'letter': "", 'plurality': 0, 'borda': 0} for x in trm[0][0:2]]
+    cand1 = [{"id": x["id"], 'name': x["name"], 'letter': x['letter'], 'plurality': 0, 'borda': 0} for x in trm[0][0:2]]
     order1.reverse()
     trm = runoff_compute(cand1,trm,round1,order1)
 
