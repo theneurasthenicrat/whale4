@@ -106,7 +106,7 @@ class VotingPoll(Poll):
         candidate i to candidate j."""
         profile = self.voting_profile_matrix()
         nb_candidates = len(profile[0])
-        print(profile)
+#        print(profile)
         if not profile:
             nb_candidates = self.candidates.count()
         matrix = [[0] * nb_candidates for _ in range(nb_candidates)]
