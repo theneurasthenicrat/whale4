@@ -10,6 +10,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('file', type=argparse.FileType('r'))
+        parser.add_argument('user_id')
         parser.add_argument('title')
         parser.add_argument('description')
 
@@ -19,7 +20,7 @@ class Command(BaseCommand):
         poll = VotingPoll(
             title=options['title'],
             description=options['description'],
-            admin=WhaleUser.objects.get(id='b6bc6c9f-e2f5-4a7c-92a8-95ad819c4064'),
+            admin=WhaleUser.objects.get(id=options['user_id']),
             preference_model=poll_object['preferenceModel']['id'],
             closing_date = date.today()
         )
