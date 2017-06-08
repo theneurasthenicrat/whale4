@@ -10,6 +10,7 @@ d3.select("#Shuffle_randomized").style("visibility","hidden");
 
 function drawGraph() {
     d3.json(url, function(error, data) {
+	d3.select("#waiter").style("display", "none");
 	d3.select("#option").on("change", function() {return updateGraph(data);});
 	
 	d3.select("#approval").on("change", function() {return updateGraph(data);});
