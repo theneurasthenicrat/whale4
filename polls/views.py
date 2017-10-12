@@ -377,6 +377,7 @@ def date_candidate_create(request, poll):
         if form.is_valid():
             dates = form.cleaned_data['dates']
             label = form.cleaned_data['candidate']
+            nb_added = 0
             for cand_date in dates:
                 candidate = DateCandidate()
                 candidate.poll = poll
@@ -389,7 +390,9 @@ def date_candidate_create(request, poll):
                 else:
                     candidate.save()
                     voters_undefined(poll)
-                    messages.success(request, mark_safe(_('Candidates are successfully added!')))
+                    nb_added += 1
+            if nb_added > 0:
+                messages.success(request, mark_safe(_('Candidates are successfully added!')))
             return redirect(reverse_lazy(date_candidate_create, args=(poll.pk, )))
 
     return render(request, 'polls/date_candidate.html', {
