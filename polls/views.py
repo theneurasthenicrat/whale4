@@ -395,7 +395,8 @@ def date_candidate_create(request, poll):
     return render(request, 'polls/date_candidate.html', {
         'form': form,
         'poll': poll,
-        'update_poll': update_poll
+        'update_poll': update_poll,
+        'candidates': candidates
     })
 
 
