@@ -74,7 +74,7 @@
                                                                             <p>{% blocktrans with c=v.email %}Do you really want to delete "{{ c }}"?{% endblocktrans %}</p>
                                                                         </div>
                                                                         <div class="modal-footer">
-                                                                            <a href="{% url 'deleteAnonymous' pk=poll.pk voter=v.id%}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>
+                                                                            <a href="{% url 'deleteAnonymous' poll.pk v.id%}" class="btn btn-custom "><i class="fa fa-send"></i>{% trans 'OK' %}</a>
                                                                             <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
                                                                         </div>
 

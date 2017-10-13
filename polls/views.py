@@ -3,7 +3,7 @@
 import json
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
@@ -112,7 +112,7 @@ def certificate_required(init_fn):
         path = request.get_full_path()
         if poll.ballot_type == "Secret" and "user" not in request.session:
             return redirect("{url}?next={path}".format(
-                url=reverse_lazy(certificate, kwargs={'pk': poll.id}),
+                url=reverse_lazy(certificate, args=(poll.id,)),
                 path=str(path)))
         return init_fn(request, poll, *args, **kwargs)
     return _wrapped
@@ -287,7 +287,7 @@ def invitation(request, poll): ################################### PAGE 4
                 )
                 subject = '[Whale4] Invitation to participate in election #' + str(poll.pk)
                 htmly = get_template('polls/email.html')
-                url = BASE_URL + reverse_lazy("vote", args=(str(poll.pk), ))
+                url = BASE_URL + reverse("vote", args=(str(poll.pk), ))
                 data = {'poll': poll, 'certi': certi, 'url': url}
                 txt_content = (
                     _('Email text template with url %(url)s and certificate %(certi)s.')
@@ -577,8 +577,7 @@ def vote(request, poll):
             if poll.ballot_type == "Secret":
                 return redirect(reverse_lazy(
                     view_poll_secret,
-                    args=(poll.pk, ),
-                    kwargs={'voter':voter.id}
+                    args=(poll.pk, voter.id)
                 ))
             else:
                 if poll.ballot_type == "Experimental" and poll.option_blocking_poll:
@@ -652,8 +651,7 @@ def update_vote(request, poll, voter):
             if poll.ballot_type == "Secret":
                 return redirect(reverse_lazy(
                     view_poll_secret,
-                    args=(poll.pk, ),
-                    kwargs={'voter': voter.id}
+                    args=(poll.pk, voter.id)
                 ))
             else:
                 return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
@@ -691,8 +689,7 @@ def delete_vote(request, poll, voter):
     # Then we redirect to the poll view page...
     if poll.ballot_type == "Secret":
         return redirect(reverse_lazy(view_poll_secret,
-                                     args=(poll.pk, ),
-                                     kwargs={'voter': voter.id}))
+                                     args=(poll.pk, voter.id)))
     else:
         return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
 
