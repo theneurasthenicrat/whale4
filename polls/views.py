@@ -589,7 +589,7 @@ def vote(request, poll):
         voting_form = VotingForm(candidates, preference_model, poll)
         nickname_form = NickNameForm(read_only_nickname, initial={'nickname': voter.nickname})
 
-    days, months = days_months(candidates) if poll.poll_type == 'Date' else [], []
+    days, months = days_months(candidates) if poll.poll_type == 'Date' else ([], [])
 
     return render(request, 'polls/vote.html', {
         'poll': poll,
@@ -657,7 +657,7 @@ def update_vote(request, poll, voter):
             else:
                 return redirect(reverse_lazy(view_poll, args=(poll.pk, )))
 
-    days, months = days_months(candidates) if poll.poll_type == 'Date' else [], []
+    days, months = days_months(candidates) if poll.poll_type == 'Date' else ([], [])
 
     return render(request, 'polls/vote.html', {
         'poll': poll,
