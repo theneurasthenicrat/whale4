@@ -613,7 +613,8 @@ def update_vote(request, poll, voter):
 
     # First we get all the objects we need:
     # list of candidates, preference model, scores given by the voter
-    candidates = Candidate.objects.filter(poll_id=poll.id)
+    candidates = DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'\
+                 else poll.candidates.all()
     if poll.option_shuffle:
         candidates = list(candidates)
         shuffle(candidates)

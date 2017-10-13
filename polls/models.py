@@ -55,14 +55,20 @@ class VotingPoll(Poll):
         return list(self.candidates.all().values_list("candidate", flat=True))
 
     def voting_profile(self):
-        candidate_indexes = {c.id: index for (index, c) in enumerate(self.candidates.all())}
+        if self.poll_type == 'Date':
+            candidate_indexes = {c.id: index for (index, c) in enumerate(DateCandidate.objects.filter(poll_id=self.id))}
+        else:
+            candidate_indexes = {c.id: index for (index, c) in enumerate(self.candidates.all())}
         nb_candidates = self.candidates.count()
         if nb_candidates:
-            iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
-                            .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
-                            .order_by('last_modification', 'candidate'))
-            ##### ATTENTION, BUG ICI !!!!
-            ##### IL FAUT RÉORDONNER LES CANDIDATS SELON LA DATE !!!
+            if self.poll_type == 'Date':
+                iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
+                                .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
+                                .order_by('last_modification', 'candidate'))
+            else:
+                iterator = iter(VotingScore.objects.filter(candidate__poll=self)\
+                                .values('voter__id', 'voter__nickname', 'voter__polymorphic_ctype', 'value', 'candidate__id')\
+                                .order_by('last_modification', 'candidate__date', 'candidate__id'))
             
             content_type = ContentType.objects.get_for_model(WhaleUser).id
 
