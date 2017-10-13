@@ -610,7 +610,7 @@ msgstr ""
 #: polls/templates/polls/candidate.html:82
 #: polls/templates/polls/date_candidate.html:88
 msgid "Not yet Candidates"
-msgstr "Pas des candidats pour l'instant"
+msgstr "Pas de candidat pour l'instant"
 
 #: polls/templates/polls/candidate.html:92
 #: polls/templates/polls/date_candidate.html:100
