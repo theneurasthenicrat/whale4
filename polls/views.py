@@ -864,9 +864,14 @@ def result_view(request, poll, method):
 
 @with_valid_poll
 def result_scores(request, poll, method):
-    candidates = Candidate.objects.filter(poll_id=poll.id)
-    votes = VotingScore.objects.filter(candidate__poll__id=poll.id).values('voter__id','candidate__id','value')
-    voters = VotingScore.objects.values_list('voter__id', flat=True).filter(candidate__poll__id=poll.id)
+    candidates = DateCandidate.objects.filter(poll_id=poll.id) if poll.poll_type == 'Date'\
+                 else Candidate.objects.filter(poll_id=self.id)
+    votes = VotingScore.objects.filter(candidate__poll__id=poll.id)\
+                               .values('voter__id','candidate__id','value')\
+                               .order_by('last_modification', 'candidate')
+    voters = VotingScore.objects.values_list('voter__id', flat=True)\
+                                .filter(candidate__poll__id=poll.id)\
+                                .order_by('last_modification', 'candidate')
     list_voters =list(set(voters))
 
     scores = {}
