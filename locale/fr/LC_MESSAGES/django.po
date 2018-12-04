@@ -788,7 +788,7 @@ msgid "What is Whale left"
 msgstr ""
 "<p>Whale<sup>4</sup> est une application Web dédiée à la décision collective "
 "et au vote « profane », et devrait vous aider à vous décider collectivement "
-"entre plusieurs options. Vous pouvez à cet effet <a href=\"/polls/choice"
+"entre plusieurs options. Vous pouvez à cet effet <a href=\"/polls/choosePollType"
 "\">créer un sondage</a>, inviter des gens à y participer, et visualiser les "
 "résultats.</p>"
 

@@ -216,7 +216,7 @@ def round_randomized(scores,list_voters,cand1,cand2,*parameters):
 
         if scores[str(v)][cand1["value"]] > scores[str(v)][cand2["value"]] :
             sum1 = sum1 + 1
-        else:
+        elif scores[str(v)][cand1["value"]] < scores[str(v)][cand2["value"]]:
             sum2 = sum2 + 1
     if sum1 > sum2:
         parent = cand1
