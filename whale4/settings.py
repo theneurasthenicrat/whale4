@@ -132,3 +132,4 @@ EMAIL_BACKEND = whale4.secret_settings.EMAIL_BACKEND
 EMAIL_FROM = whale4.secret_settings.EMAIL_FROM
 
 BASE_URL = whale4.secret_settings.BASE_URL
+
