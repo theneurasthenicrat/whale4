@@ -7,7 +7,10 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from polymorphic.models import PolymorphicModel
-from polymorphic.manager import PolymorphicManager
+try:
+    from polymorphic.managers import PolymorphicManager
+except ImportError:
+    from polymorphic.manager import PolymorphicManager
 import uuid
 from Crypto.Cipher import AES
 import base64
