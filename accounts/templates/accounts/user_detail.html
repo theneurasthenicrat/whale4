@@ -7,7 +7,9 @@
     <div class="container ">
         <div class="well">
           <h2>{% trans 'Welcome'  %} {{ whaleuser.nickname }}</h2>
-	  <a href="{% url 'change_password' %}">{% trans 'Update your password'  %}</a>
+	  <div style="text-align: center;">
+	    <a href="{% url 'change_password' %}">{% trans 'Update your password'  %}</a>
+	  </div>
 	</div>
 	
         <div class="well">
