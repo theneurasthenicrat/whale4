@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^contact/$', views.ContactView.as_view(), name='contact'),
     url(r'^$', home, name='home'),
     url(r'^accountPoll/(?P<pk>' + uuid4 + ')/$', views.WhaleUserDetail.as_view(), name='accountPoll'),
+    url(r'^password/$', views.change_password, name='change_password')
 ]
