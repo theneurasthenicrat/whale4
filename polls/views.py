@@ -426,7 +426,7 @@ def delete_candidate(request, poll, cand_id):
 def admin_poll(request, poll):
     """Renders the main poll administration page."""
     request.session["update"] = 1
-    return render(request, 'polls/admin.html', {'poll': poll})
+    return render(request, 'polls/admin.html', {'poll': poll, 'nb_voters': poll.nb_voters()})
 
 @login_required
 @with_valid_poll
@@ -436,7 +436,7 @@ def reset_poll(request, poll):
     function..."""
     VotingScore.objects.filter(candidate__poll__id=poll.id).delete()
     messages.success(request, mark_safe(_('Poll successfully reset.')))
-    return render(request, 'polls/admin.html', {'poll': poll})
+    return render(request, 'polls/admin.html', {'poll': poll, 'nb_voters': poll.nb_voters()})
 
 @login_required
 @with_valid_poll
