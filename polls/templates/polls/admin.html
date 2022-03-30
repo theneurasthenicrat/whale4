@@ -8,7 +8,7 @@
         <div class="well">
             <h2>{% trans 'Update your poll' %}</h2>
             <h3>{% blocktrans with title=poll.title %}Poll "{{ title }}"{% endblocktrans %}</h3>
-	    <p>{% blocktrans count counter=nb_voters %}{{ counter }} voter have participated in this poll.{% plural %}{{ counter }} voters have participated in this poll.{% endblocktrans %}</p>
+	    <p style="text-align: center;">{% blocktrans count counter=nb_voters %}{{ counter }} voter have participated in this poll.{% plural %}{{ counter }} voters have participated in this poll.{% endblocktrans %}</p>
         </div>
         <div class="list-group choice">
             <a  href="{% url 'updatePoll' poll.id %}"  class="list-group-item " >
