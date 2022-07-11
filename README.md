@@ -8,7 +8,7 @@ sealed ballots), tell people to vote, and visualize the results.
 
 Whale4 allows you to choose amongst several preference expression
 modes (ordinal, qualitative, approval, numerical), and is based on
-[voting theory](https://en.wikipedia.org/wiki/Voting_theory\) to
+[voting theory](https://en.wikipedia.org/wiki/Voting_theory) to
 enlighten your decision.
 
 Whale4 is a [free](http://www.fsf.org/) project: you can download the
