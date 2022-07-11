@@ -11,8 +11,8 @@ class LoginForm(forms.Form):
 
 
 class UserCreationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Enter your password')}),label=_('Password *'))
-    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Confirm your password')}),label=_('Password confirmation *'))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Enter your password'), 'autocomplete': 'new-password'}),label=_('Password *'))
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': _('Confirm your password'), 'autocomplete': 'new-password'}),label=_('Password confirmation *'))
 
     class Meta:
         model = WhaleUser
