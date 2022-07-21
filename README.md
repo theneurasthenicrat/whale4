@@ -8,10 +8,10 @@ sealed ballots), tell people to vote, and visualize the results.
 
 Whale4 allows you to choose amongst several preference expression
 modes (ordinal, qualitative, approval, numerical), and is based on
-[voting theory] (https://en.wikipedia.org/wiki/Voting_theory\) to
+[voting theory](https://en.wikipedia.org/wiki/Voting_theory) to
 enlighten your decision.
 
-Whale4 is a [free] (http://www.fsf.org/) project: you can download the
+Whale4 is a [free](http://www.fsf.org/) project: you can download the
 source code and use it as you wish to (see license).
 
 Whale4 can be used directly from the web application page. However,
@@ -22,15 +22,14 @@ dedicated to people who want to do that.
 License
 -------
 
-Whale4 is released under the [General Public License, version 3]
-(https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE).
+Whale4 is released under the [General Public License, version 3](https://github.com/theneurasthenicrat/whale4/blob/master/LICENSE).
 
 Requirements
 ------------
 
 - python >= 2.7
 - django >= 1.8
-- [django-bootstrap3] (https://github.com/dyve/django-bootstrap3)
+- [django-bootstrap3](https://github.com/dyve/django-bootstrap3)
 - pycrypto
 - GNU gettext (for translation matters)
 - A Database Management System (for instance Postgres) and its
@@ -62,8 +61,7 @@ Complete installation example under Debian GNU/Linux
 #### Create User and Database
 
 There are different ways of creating users and databases with Postgres
-(see [the Postgres documentation]
-(http://www.postgresql.org/docs/current/static/) for more
+(see [the Postgres documentation](http://www.postgresql.org/docs/current/static/) for more
 information). In any case, you will have to connect to your postgres
 cluster as a postgres user. Usually, if you do not know the password
 of this user, you can proceed as follows:
@@ -163,8 +161,7 @@ If necessary, enable the WSGI module for Apache2:
     sudo a2enmod wsgi
 
 Then, configure Apache to interpret your application using the WSGI
-module, using [this documentation page]
-(https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/modwsgi/)
+module, using [this documentation page](https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/modwsgi/)
 for instance.
 
 As a matter of example, you can create a file called

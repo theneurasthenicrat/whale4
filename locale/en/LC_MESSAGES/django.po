@@ -806,7 +806,7 @@ msgstr ""
 
 #: polls/templates/polls/home.html:140
 msgid "Who is behind Whale"
-msgstr "Who is behind?"
+msgstr "Who is behind Whale?"
 
 #: polls/templates/polls/home.html:146
 msgid "Who is behind Whale desc"
