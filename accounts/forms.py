@@ -2,7 +2,7 @@ from django import forms
 from django.forms import widgets
 from accounts.models import WhaleUser
 from django.core.mail import send_mail
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class LoginForm(forms.Form):

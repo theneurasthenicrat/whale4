@@ -8,7 +8,7 @@ try:
 except ImportError:
     from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.http import HttpResponse
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -154,15 +154,15 @@ def minimum_candidates_required(init_fn):
 
 # default view pages ###########################################################
 
-def bad_request(request):
+def bad_request(request, exception):
     """Returns the default page displayed for a bad HTTP request."""
     return render(request, 'polls/error.html', status=400)
 
-def permission_denied(request):
+def permission_denied(request, exception):
     """Returns the default page displayed for a permission denied error."""
     return render(request, 'polls/error.html', status=403)
 
-def page_not_found(request):
+def page_not_found(request, exception):
     """Returns the default page displayed for a page not found error."""
     return render(request, 'polls/error.html', status=404)
 
@@ -295,7 +295,7 @@ def invitation(request, poll): ################################### PAGE 4
                 txt_content = (
                     _('Email text template with url %(url)s and certificate %(certi)s.')
                 ) % data
-                html_content = htmly.render(Context(data))
+                html_content = htmly.render(data)
                 msg = EmailMultiAlternatives(subject, txt_content, EMAIL_FROM, [email])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()

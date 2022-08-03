@@ -1,4 +1,4 @@
-from django.conf.urls import  include, url
+from django.urls import  include, re_path
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from polls.views import home
@@ -10,11 +10,11 @@ handler404 = 'polls.views.page_not_found'
 handler500 = 'polls.views.server_error'
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^polls/', include('polls.urls')),
-    url(r'^accounts/', include('accounts.urls')),
-    url(r'^$',home, name='home'),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^polls/', include('polls.urls')),
+    re_path(r'^accounts/', include('accounts.urls')),
+    re_path(r'^$',home, name='home'),
+    re_path(r'^i18n/', include('django.conf.urls.i18n')),
 
 
 ]

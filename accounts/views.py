@@ -4,9 +4,9 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth import authenticate, login, logout
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import CreateView,FormView
 from django.views.generic import DetailView
 from django.utils.decorators import method_decorator

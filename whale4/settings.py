@@ -22,10 +22,10 @@ import whale4.secret_settings
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = whale4.secret_settings.SECRET_KEY
 
-DEBUG = False
+DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost', 'whale.imag.fr', 'lig-whale.imag.fr']
+ALLOWED_HOSTS = ['localhost', 'whale.imag.fr', 'lig-whale.imag.fr', '127.0.0.1']
 
 
 # Application definition
@@ -44,12 +44,11 @@ INSTALLED_APPS = (
 
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -71,6 +70,11 @@ TEMPLATES = [
         },
     },
 ]
+
+# Fixing auto-field warnings. cf:
+# https://dev.to/weplayinternet/upgrading-to-django-3-2-and-fixing-defaultautofield-warnings-518n
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 
@@ -109,7 +113,8 @@ LANGUAGES = (
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'whale4/static'),
+                    ]
 APPEND_SLASH = True
 
 LOGIN_URL = 'login'

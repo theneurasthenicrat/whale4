@@ -8,7 +8,7 @@ from django import forms
 import re
 from django.core.validators import validate_email
 from django.forms import CharField, Textarea
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class BasePollForm(ModelForm):

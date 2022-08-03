@@ -5,7 +5,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from polymorphic.models import PolymorphicModel
 try:
     from polymorphic.managers import PolymorphicManager
@@ -28,7 +28,7 @@ pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
 unpad = lambda s: s[:-1]
 
 # create a cipher object using the secret key
-cipher = AES.new(whale4.settings.SECRET_KEY)
+cipher = AES.new(whale4.settings.SECRET_KEY.encode('utf-8'), AES.MODE_ECB)
 
 
 # models #####################################################################
@@ -92,7 +92,7 @@ class WhaleUserAnonymous(UserAnonymous):
 
     @staticmethod
     def encodeAES(s, c=cipher):
-        return base64.b64encode(c.encrypt(pad(s)))
+        return base64.b64encode(c.encrypt(pad(s).encode('utf-8')))
 
     @staticmethod
     def decodeAES(e, c=cipher):
