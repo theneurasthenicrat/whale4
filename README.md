@@ -47,7 +47,7 @@ Getting Started
 
 3. Run the application using ``make run``
 
-4. Open the application in a web browser at ``http://localhost:8000/`` 
+4. Open the application in a web browser at ``http://localhost:8000/``
 
 Complete installation example under Debian GNU/Linux
 ---------------
@@ -56,7 +56,7 @@ Complete installation example under Debian GNU/Linux
 
 #### Install Postgres
 
-    sudo apt-get postgresql
+    sudo apt-get install postgresql
 
 #### Create User and Database
 
@@ -68,14 +68,12 @@ of this user, you can proceed as follows:
 
 1. First, connect as root: ``sudo -s``
 
-2. Then connect as postgres user: ``su - postgres``
+2. Then run Postgres client as postgres user: ``su -u postgres psql``
 
-3. Finally run Postgres client: ``psql``
-	
 When you are connected, you can create a DB user using the following
 SQL command:
 
-    CREATE USER whale4 WITH ENCRYPTED PASSWORD '*********';
+    CREATE USER whale WITH ENCRYPTED PASSWORD '*********';
 
 Then you can create the database using the following SQL command:
 
@@ -86,7 +84,7 @@ as follows:
 
 1. log out from the database (type Ctrl-D or \q)
 
-2. log in as follows: ``psql -U whale4 -d whale4``
+2. log in as follows: ``psql -U whale -d whale4``
 
 ### Installing Python3 and the required libraries
 
@@ -94,7 +92,7 @@ If Python3 is not installed in your machine, install it (together with
 pip3, which will be needed to install some libraries):
 
     sudo apt-get install python3 python3-pip
-	
+
 You will also need the following packages (that you can install with
 apt-get or another package manager like pip for instance):
 
@@ -107,7 +105,7 @@ PyPI package manager.
 
 If you plan to use Postgres as DBMS, also install:
 
-    sudo apt-get install python3-psycopg2	
+    sudo apt-get install python3-psycopg2
 
 This one is not in the packages of standard GNU/Linux distributions
 but can be install using pip:
@@ -133,7 +131,7 @@ Postgres DB connection:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'whale4',
             'USER': 'whale',
-            'PASSWORD': '0lds.ef!',
+            'PASSWORD': 'whale',
             'HOST': 'localhost',
             'PORT': '5432' # (change according to your server settings)
         }
@@ -146,7 +144,7 @@ Postgres DB connection:
 To run the application, type
 
     make run
-	
+
 Then, open the application in a web browser at
 ``http://localhost:8000/``.
 
@@ -155,7 +153,7 @@ Then, open the application in a web browser at
 Install the WSGI module for Apache2:
 
     sudo apt-get install libapache2-mod-wsgi-py3
-	
+
 If necessary, enable the WSGI module for Apache2:
 
     sudo a2enmod wsgi
@@ -170,13 +168,13 @@ configuration statements:
 
     WSGIScriptAlias /whale4 /var/www/whale4/whale4/wsgi.py
     WSGIPythonPath /var/www/whale4
-    
+
     Alias /static/ /var/www/whale4/polls/static/
-    
+
     <Directory /var/www/whale4/polls/static>
             Require all granted
     </Directory>
-    
+
     <Directory /var/www/whale4/whale4>
             <Files wsgi.py>
                     Require all granted
@@ -186,10 +184,10 @@ configuration statements:
 Then you can enable the site using:
 
     sudo a2ensite whale4
-	
+
 Finally restart your Apache2 server using:
 
 	sudo service apache2 restart
 
 And your application should be accessible using the following URL:
-http://yourserver.yourdomain/whale4/
+<http://yourserver.yourdomain/whale4/>
