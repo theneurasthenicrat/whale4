@@ -28,3 +28,8 @@ EMAIL_FROM = 'what appears in the FROM field here'
 BASE_URL = 'the application base URL here'
 
 SECRET_KEY = '16 characters secret key here'
+
+
+ALLOWED_HOSTS = []  # Add here any host that you want to allow
+DEBUG = True  # Do not forget to change this in production!
+

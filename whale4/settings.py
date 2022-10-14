@@ -22,10 +22,10 @@ import whale4.secret_settings
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = whale4.secret_settings.SECRET_KEY
 
-DEBUG = True
+DEBUG = whale4.secret_settings.DEBUG
 
 
-ALLOWED_HOSTS = ['localhost', 'whale.imag.fr', 'lig-whale.imag.fr', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] + whale4.secret_settings.ALLOWED_HOSTS
 
 
 # Application definition
