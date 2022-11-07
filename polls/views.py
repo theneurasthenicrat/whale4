@@ -540,7 +540,7 @@ def vote(request, poll):
     else:
         if poll.ballot_type == "Experimental":
             voter = UserAnonymous(nickname=UserAnonymous.nickname_generator(poll.id), poll=poll)
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             voter = request.user
         else:
             read_only_nickname = False
@@ -628,7 +628,7 @@ def update_vote(request, poll, voter):
     initial = {'value' + str(score.candidate.id): score.value for score in scores}
 
     # This variable determines whether the nickname can be set or not
-    read_only_nickname = poll.ballot_type == "Secret" or request.user.is_authenticated()
+    read_only_nickname = poll.ballot_type == "Secret" or request.user.is_authenticated
 
     # The two forms in the page (nickname, voting form)
     voting_form = VotingForm(candidates, preference_model, poll, initial=initial)
