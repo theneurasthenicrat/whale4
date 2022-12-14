@@ -20,14 +20,15 @@ from polls.models import VotingPoll
 
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import PasswordResetView
 from whale4.settings import EMAIL_FROM
 
 
 def password_reset(request):
-    return auth_views.password_reset(request,
-                                     template_name='accounts/password_reset_form.html',
-                                     from_email=EMAIL_FROM)
+    return PasswordResetView(
+        template_name='accounts/password_reset_form.html',
+        from_email=EMAIL_FROM)
+
 
 def change_password(request):
     if request.method == 'POST':

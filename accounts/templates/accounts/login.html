@@ -20,6 +20,9 @@
                               </button>
                             </div>
 			    <div class="text-center">
+			      {% trans 'Forgot your password?' %} <a href="{% url 'password_reset' %}"> {% trans 'Reset your password' %}</a>
+			    </div>
+			    <div class="text-center">
 			      {% trans 'No account yet?' %} <a href="{% url 'register' %}"> {% trans 'Create one' %}</a>
 			    </div>
                         </form>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 09:51+0000\n"
+"POT-Creation-Date: 2022-12-14 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,12 +91,87 @@ msgid "Log in"
 msgstr "Se connecter"
 
 #: accounts/templates/accounts/login.html:23
+msgid "Forgot your password?"
+msgstr "Mot de passe oublié ?"
+
+#: accounts/templates/accounts/login.html:23
+msgid "Reset your password"
+msgstr "Réinitialiser le mot de passe"
+
+#: accounts/templates/accounts/login.html:26
 msgid "No account yet?"
 msgstr "Pas encore de compte ?"
 
-#: accounts/templates/accounts/login.html:23
+#: accounts/templates/accounts/login.html:26
 msgid "Create one"
 msgstr "En créer un"
+
+#: accounts/templates/accounts/password_reset_complete.html:6
+msgid "Your new password has been set."
+msgstr "Votre mot de passe a bien été modifié."
+
+#: accounts/templates/accounts/password_reset_confirm.html:11
+msgid "Set a new password"
+msgstr "Changez votre mot de passe"
+
+#: accounts/templates/accounts/password_reset_confirm.html:15
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: accounts/templates/accounts/password_reset_confirm.html:21
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Le lien de réinitialisation est invalide. Il est fort possible que ce soit "
+"dû au fait qu'il a déjà été utilisé auparavant. Demandez une nouvelle "
+"réinitialisation du mot de passe."
+
+#: accounts/templates/accounts/password_reset_done.html:6
+msgid ""
+"We have sent you reset password link on your email. Please check your email."
+msgstr ""
+"Un lien de réinitialisation a été envoyé. Vérifiez votre boîte aux lettres."
+
+#: accounts/templates/accounts/password_reset_email.html:2
+#, python-format
+msgid ""
+"Hey, You're receiving this email because you requested a password reset for "
+"your user account at %(site_name)s."
+msgstr ""
+"Bonjour, vous recevez ce message car vous avez demandé la réinitialisation "
+"de votre mot de passe sur le site %(site_name)."
+
+#: accounts/templates/accounts/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+"Rendez-vous sur la page suivante et choisissez un nouveau mot de passe :"
+
+#: accounts/templates/accounts/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "Votre nom d'utilisateur (si jamais vous l'avez oublié) :"
+
+#: accounts/templates/accounts/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "Merci !"
+
+#: accounts/templates/accounts/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "L'équipe Whale"
+
+#: accounts/templates/accounts/password_reset_form.html:9
+msgid "Reset password"
+msgstr "Réinitialiser le mot de passe"
+
+#: accounts/templates/accounts/password_reset_form.html:15
+msgid "Send link"
+msgstr "Envoyer le lien"
+
+#: accounts/templates/accounts/password_reset_subject.txt:2
+#, python-format
+msgid "Password reset on %(site_name)s"
+msgstr ""
 
 #: accounts/templates/accounts/register.html:9
 msgid "Create a new account"
@@ -168,26 +243,26 @@ msgstr "Êtes vous certain de vouloir effacer votre vote pour ce sondage ?"
 msgid "You did not participate in any poll yet."
 msgstr "Vous n'avez pris part à aucun sondage pour le moment."
 
-#: accounts/views.py:55
+#: accounts/views.py:56
 msgid "Your account has been successfully created."
 msgstr ""
 "<h4>Bienvenue !</h4><p>Votre compte a bien été créé. La Baleine vous "
 "souhaite la bienvenue</p>"
 
-#: accounts/views.py:71
+#: accounts/views.py:72
 #, python-format
 msgid "You are logged in as %(username)s"
 msgstr ""
 "<h4>Connexion réussie !</h4><p>Vous êtes connecté en tant que %(username)s.</"
 "p><p>Whalecome...</p>"
 
-#: accounts/views.py:77
+#: accounts/views.py:78
 msgid "unknown WhaleUser or bad password."
 msgstr ""
 "<h4>Navré, mais...</h4><p>...ce nom d'utilisateur est inconnu ou bien le mot "
 "de passe est erroné.</p><p>Essayez donc à nouveau.</p>"
 
-#: accounts/views.py:85
+#: accounts/views.py:86
 msgid "You have been successfully logged out."
 msgstr ""
 "<h4>Déconnexion réussie</h4><p>Vous êtes déconnecté de la Baleine.</"
@@ -810,11 +885,11 @@ msgstr ""
 msgid "What is Whale right"
 msgstr ""
 "<p>Whale<sup>4</sup> propose plusieurs modes d'expression des préférences, "
-"et s'appuie sur la <a href=\"https://fr.wikipedia.org/wiki/Syst%C3%A8me_"
-"%C3%A9lectoral\">théorie du vote</a> pour éclairer les résultats.</"
-"p><p>Whale<sup>4</sup> est un projet <a href=\"http://www.fsf.org/\">libre</"
-"a> : vous pouvez en télécharger le code et l'utiliser comme bon vous semble."
-"</p>"
+"et s'appuie sur la <a href=\"https://fr.wikipedia.org/wiki/"
+"Syst%C3%A8me_%C3%A9lectoral\">théorie du vote</a> pour éclairer les "
+"résultats.</p><p>Whale<sup>4</sup> est un projet <a href=\"http://www.fsf."
+"org/\">libre</a> : vous pouvez en télécharger le code et l'utiliser comme "
+"bon vous semble.</p>"
 
 #: polls/templates/polls/home.html:141
 msgid "Who is behind Whale"
@@ -870,8 +945,8 @@ msgstr ""
 
 #: polls/templates/polls/invite.html:52
 #: polls/templates/polls/parameters_poll.html:37
-#: polls/templates/polls/status_poll.html:17
-#: polls/templates/polls/vote.html:66 polls/templates/polls/vote.html:147
+#: polls/templates/polls/status_poll.html:17 polls/templates/polls/vote.html:66
+#: polls/templates/polls/vote.html:147
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -1042,8 +1117,8 @@ msgstr "Candidats non classés"
 
 #: polls/templates/polls/vote.html:54
 msgid ""
-" You can put back a sorted candidate <span class=\"label label-default"
-"\">right</span>\n"
+" You can put back a sorted candidate <span class=\"label label-"
+"default\">right</span>\n"
 "                                to the pool of unsorted candidates <span "
 "class=\"label label-default\">left</span>  by clicking on it."
 msgstr ""
@@ -1362,43 +1437,10 @@ msgstr ""
 "candidats ex-aequo à un tour donné sont départagés aléatoirement. Le tirage "
 "initial du premier tour est aléatoire."
 
-#: whale4/settings.py:102
+#: whale4/settings.py:106
 msgid "French"
 msgstr "Français"
 
-#: whale4/settings.py:103
+#: whale4/settings.py:107
 msgid "English"
 msgstr "Anglais"
-
-#~ msgid "The number of participants is:"
-#~ msgstr "Le nombre de participants est:"
-
-#, fuzzy
-#~| msgid "Email text template with url %(url)s and certificate %(certi)s."
-#~ msgid "\"Email text template with url %(url)s and certificate %(certi)s."
-#~ msgstr ""
-#~ "Dear voter,You have been invited to participate to a vote on the "
-#~ "Whale4platform.If you want to vote, follow the following link:"
-#~ "%(url)sThen, enter your personal certificate which is the following one:"
-#~ "%(certi)s.The Whale thanks you for using Whale4."
-
-#~ msgid "--"
-#~ msgstr "--"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "0"
-#~ msgstr "0"
-
-#~ msgid "+"
-#~ msgstr "+"
-
-#~ msgid "++"
-#~ msgstr "++"
-
-#~ msgid "no"
-#~ msgstr "non"
-
-#~ msgid "yes"
-#~ msgstr "oui"
