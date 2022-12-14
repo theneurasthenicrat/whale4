@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
     <div class="alert alert-danger" role="alert">
-        <strong>{{ title }}</strong> {{ message }}
-        <p> you have an error</p>
+        <strong>{% trans 'Woops...' %}</strong>
+        <p>{% trans 'Whale sadly crashed unexpectedly and refused to execute your request. Either there is a bad thing happening to the server, or the Whale keeper did a bad job developing the application. In either case you can contact us and report the problem. We will respectively try to fix the server or the developer.' %}</p>
     </div>
 {% endblock %}

@@ -46,5 +46,5 @@ class ContactForm(forms.Form):
     def send_email_contact(self):
         data=self.cleaned_data
 
-        send_mail('message from  '+data[ 'name'],data['message'], data['email'],['whale4.ad@gmail.com'],
+        send_mail('message from  '+data[ 'name'],data['message'], data['email'],['sylvain.bouveret@imag.fr'],
                    fail_silently=False)
