@@ -25,6 +25,45 @@
     <script src="{% static 'polls/js/bootstrap.min.js' %}"></script>
   </head>
   <body id="page-top" class="index">
+  <script type="text/javascript">
+	function getCookie(cname) {
+		let name = cname + "=";
+		let ca = document.cookie.split(';');
+		for(let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+	
+	function dismiss() {
+		const div = document.getElementById("whale5Banner");
+		div.classList.add("dismissed");
+		const exdate = new Date();
+		exdate.setDate(exdate.getDate() + 7); // Reminder every week...
+		document.cookie = "banner=dismissed; path=/; expires=" + exdate.toUTCString(); 
+	}
+
+	function dismissOnLoad() {
+		const dismiss = getCookie("banner") == "dismissed";
+		if (!dismiss) {
+			const div = document.getElementById("whale5Banner");
+			div.classList.remove("dismissed");
+		}
+	}
+	
+	window.addEventListener('load', dismissOnLoad)
+  </script>
+  <div id="whale5Banner" class="dismissed">
+	  {% trans '<strong>Important notice!</strong><br/><br/>A new version of Whale is available!<br/><a href="https://whale5.imag.fr/">https://whale5.imag.fr/</a><br/>Whale4 will be discontinued by the end of June 2026. Please use Whale5 to organize your new polls.' %}
+	  <br/><br/>
+	  <span class="dismiss" onClick="dismiss()">{% bootstrap_icon "chevron-up" %}</span>
+	</div>
     <!-- Navigation -->
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
       <div class="container">
